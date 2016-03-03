@@ -8,4 +8,6 @@ import javax.swing.*;
 public class Login {
     private JTextField brukernavnTextField;
     private JPasswordField passordPasswordField;
+    private JButton loginButton;
+    private JButton cancelButton;
 }
