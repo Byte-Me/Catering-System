@@ -11,15 +11,13 @@ import static javax.swing.JOptionPane.*;
  * Created by olekristianaune on 03.03.2016.
  */
 public class Login extends JFrame{
-    private JTextField brukernavnTextField;
-    private JPasswordField passordPasswordField;
+    private JTextField usernameTextField;
+    private JPasswordField passwordPasswordField;
     private JButton loginButton;
     private JButton cancelButton;
     private JPanel mainPanel;
 
     public Login() {
-
-
 
         setContentPane(mainPanel);
 
@@ -29,17 +27,22 @@ public class Login extends JFrame{
         loginButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Gjør noe her
 
-                char[] inputPass = passordPasswordField.getPassword();
+                char[] inputPass = passwordPasswordField.getPassword();
 
-                System.out.println("brukernavn: " + brukernavnTextField.getText());
-                System.out.println("passord: " + inputPass);
+                // For debugging only
+                // System.out.println("brukernavn: " + brukernavnTextField.getText());
+                // System.out.println("passord: " + inputPass);
 
-                if (brukernavnTextField.getText().equals("bruker") && isCorrectPassword(inputPass)) {
-                    showMessageDialog(null, "Innlogget");
+                if (usernameTextField.getText().equals("bruker") && isCorrectPassword(inputPass)) {
+                    // Logged in :)
+
+                    // Open the main window
+                    MainWindow mainWindow = new MainWindow();
+
+                    setVisible(false); //you can't see me!
+                    dispose(); //Destroy the JFrame object
                 } else {
-
                     showMessageDialog(null, "Kunne ikke logge inn.");
                 }
 
@@ -50,8 +53,9 @@ public class Login extends JFrame{
         cancelButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Gjør noe her
-                showMessageDialog(null, "Cancel");
+                // What happens on cancel?
+                setVisible(false);
+                dispose();
             }
         });
 
