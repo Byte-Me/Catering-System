@@ -1,9 +1,11 @@
 package Database;
 
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import Encryption.*;
 
 /**
  * Created by Evdal on 03.03.2016.
@@ -15,7 +17,7 @@ import java.sql.Statement;
 public class UserLoginFromDatabase {
     private DatabaseConnection classConnect = new DatabaseConnection();
     private Connection connection;
-    private Statement scentence = null;
+    private Statement scentence;
     private final int passColumnNumber = 1; // NBNB skal endres.
 
     public static int NO_ACCESS = -1;
@@ -26,18 +28,8 @@ public class UserLoginFromDatabase {
 
 
 
-    public UserLoginFromDatabase(){
-        Connection connection = classConnect.getConnection();
-        try {
-            Statement scentence = connection.createStatement();
-        }
-        catch (SQLException SQLe){
-            SQLe.getMessage();
-        }
+    // public UserLoginFromDatabase(){
 
-        // Check if connection is NULL!!! NB! NB!
-
-    }
 
     /*
         Users are stored in their own table in the database.
@@ -48,21 +40,38 @@ public class UserLoginFromDatabase {
         returned, their password or username was wrong.
 
      */
-    public int login(String user, String pass) throws SQLException {
+    public int login(String user, String pass) throws Exception {
+        Connection connection = classConnect.getConnection();
+
+        Statement scentence = connection.createStatement();
+
+        // Check if connection is NULL!!! NB! NB!
+
+        //Testbruker:
+
+        //username = bruker
+        //password = password
+
         ResultSet res = null;
         if(scentence != null) {
             try {
-                res = scentence.executeQuery("select username, password, access_level from users " +
+                res = scentence.executeQuery("select username, hash, salt, access_level from user " +
                         "where username = '" + user + "';");
-                if (pass.equals(res.getString(passColumnNumber))) { // denne må endres!!
-                    return res.getInt("access_level");
+                if(res.next()) {
+                    Encryption encrypt = new Encryption();
+                    if(encrypt.passDecoding(pass, res.getString("salt"), res.getString("hash")));{
+                        return res.getInt("access_level");
+                    }
                 }
             }
             catch (SQLException e){
+                e.printStackTrace();
                 return -1;
             }
 
         }
+
         return -1;
     }
+
 }
