@@ -14,26 +14,25 @@ import Encryption.*;
  * send statement to usertable.
  *
  */
-public class UserLoginFromDatabase {
-    private DatabaseConnection classConnect = new DatabaseConnection();
-    private Connection connection;
-    private Statement scentence;
-    private final int passColumnNumber = 1; // NBNB skal endres.
+public class LoginManagement extends Management{
 
-    public static int NO_ACCESS = -1;
-    public static int ADMIN_ACCESS = 0;
-    public static int SALES_ACCESS = 1;
-    public static int CHEF_ACCESS = 2;
-    public static int DRIVER_ACCESS = 3;
+
+    public static final int NO_ACCESS = -1;
+    public static final int ADMIN_ACCESS = 0;
+    public static final int SALES_ACCESS = 1;
+    public static final int CHEF_ACCESS = 2;
+    public static final int DRIVER_ACCESS = 3;
 
 
 
-    // public UserLoginFromDatabase(){
+    public LoginManagement() throws Exception{
+        super();
+    }
 
 
     /*
         Users are stored in their own table in the database.
-        They have information such as username, password and
+        They have information such as username, password(Hash and salt) as well as
         access-level.
 
         login returns an int, which is their access-level, if -1 is
@@ -41,11 +40,7 @@ public class UserLoginFromDatabase {
 
      */
     public int login(String user, String pass) throws Exception {
-        Connection connection = classConnect.getConnection();
 
-        Statement scentence = connection.createStatement();
-
-        // Check if connection is NULL!!! NB! NB!
 
         //Testbruker:
 
@@ -53,9 +48,9 @@ public class UserLoginFromDatabase {
         //password = password
 
         ResultSet res = null;
-        if(scentence != null) {
+        if(getScentence() != null) {
             try {
-                res = scentence.executeQuery("select username, hash, salt, access_level from user " +
+                res = getScentence().executeQuery("select username, hash, salt, access_level from user " +
                         "where username = '" + user + "';");
                 if(res.next()) {
                     Encryption encrypt = new Encryption();
