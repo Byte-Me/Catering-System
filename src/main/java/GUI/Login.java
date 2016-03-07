@@ -3,6 +3,8 @@ package GUI;
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Arrays;
+
 import static javax.swing.JOptionPane.*;
 
 /**
@@ -17,6 +19,8 @@ public class Login extends JFrame{
 
     public Login() {
 
+
+
         setContentPane(mainPanel);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -26,7 +30,20 @@ public class Login extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Gjør noe her
-                showMessageDialog(null, "Login");
+
+                char[] inputPass = passordPasswordField.getPassword();
+
+                System.out.println("brukernavn: " + brukernavnTextField.getText());
+                System.out.println("passord: " + inputPass);
+
+                if (brukernavnTextField.getText().equals("bruker") && isCorrectPassword(inputPass)) {
+                    showMessageDialog(null, "Innlogget");
+                } else {
+
+                    showMessageDialog(null, "Kunne ikke logge inn.");
+                }
+
+
             }
         });
 
@@ -39,5 +56,20 @@ public class Login extends JFrame{
         });
 
         setVisible(true);
+    }
+
+    private boolean isCorrectPassword(char[] input) {
+        boolean isCorrect = true;
+        char[] correctPassword = {'p', 'a', 's', 's'};
+
+        if (input.length != correctPassword.length) {
+            isCorrect = false;
+        } else {
+            isCorrect = Arrays.equals(input, correctPassword);
+        }
+        //Zero out the password.
+        Arrays.fill(correctPassword,'0');
+
+        return isCorrect;
     }
 }

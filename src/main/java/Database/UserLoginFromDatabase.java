@@ -12,6 +12,7 @@ import java.sql.Statement;
  * send statement to usertable.
  *
  */
+
 public class UserLoginFromDatabase {
     private DatabaseConnection classConnect = new DatabaseConnection();
     private Connection connection;
@@ -23,8 +24,6 @@ public class UserLoginFromDatabase {
     public static int SALES_ACCESS = 1;
     public static int CHEF_ACCESS = 2;
     public static int DRIVER_ACCESS = 3;
-
-
 
     public UserLoginFromDatabase(){
         Connection connection = classConnect.getConnection();

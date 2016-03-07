@@ -59,13 +59,15 @@ public static void main(String[]args) throws Exception{
 
  */
 
-class TravelingSalesman {
+public class TravelingSalesman {
 
     private ArrayList<double[]> bestRoute;
-    private String startAdress;
+    private double[] startAdress;
+    private String startPoint;
 
-    public TravelingSalesman(String startAdress){
-        this.startAdress = startAdress;
+    public TravelingSalesman(String startAdress) throws Exception {
+        this.startAdress = geoCoder(startAdress, 0);
+        startPoint = startAdress;
     }
 
     //Hentet en del fra http://stackoverflow.com/questions/11703827/brute-force-algorithm-for-the-traveling-salesman-problem-in-java
@@ -73,7 +75,6 @@ class TravelingSalesman {
             (ArrayList<double[]> r,
              ArrayList<double[]> citiesNotInRoute) throws Exception
     {
-        double[] startPoint = geoCoder(startAdress, 0);
         if(!citiesNotInRoute.isEmpty())
         {
             for(int i = 0; i<citiesNotInRoute.size(); i++)
@@ -90,8 +91,8 @@ class TravelingSalesman {
         }
         else //if(citiesNotInRoute.isEmpty())
         {
-            r.add(0, startPoint);
-            r.add(startPoint);
+            r.add(0, startAdress);
+            r.add(startAdress);
             if(sumDistance(bestRoute) > sumDistance(r) ) {
                 bestRoute = r;
            //     System.out.println(sumDistance(bestRoute));
@@ -174,20 +175,20 @@ class TravelingSalesman {
         positions.remove(0);
         positions.remove(positions.size()-1);
         positions.trimToSize();
-        out.add(startAdress);
+        out.add(startPoint);
         for(double[] pos : positions) {
             out.add(originAdressList.get((int)pos[2]));
         }
-        out.add(startAdress);
+        out.add(startPoint);
         return out;
 
     }
     public String getStartAdress(){
-        return startAdress;
+        return startPoint;
     }
 
     public void setStartAdress(String startAdress){
-        this.startAdress = startAdress;
+        this.startPoint = startAdress;
     }
     public ArrayList<double[]> getBestRoute(){
         return bestRoute;
