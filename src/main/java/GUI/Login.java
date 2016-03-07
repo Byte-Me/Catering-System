@@ -60,7 +60,7 @@ public class Login extends JFrame{
 
     private boolean isCorrectPassword(char[] input) {
         boolean isCorrect = true;
-        char[] correctPassword = {'p', 'a', 's', 's'};
+        char[] correctPassword = "pass".toCharArray();
 
         if (input.length != correctPassword.length) {
             isCorrect = false;
