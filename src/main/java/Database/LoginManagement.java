@@ -14,8 +14,9 @@ import Encryption.*;
  * send statement to usertable.
  *
  */
-public class LoginManagement extends Management{
 
+
+public class LoginManagement extends Management{
 
     public static final int NO_ACCESS = -1;
     public static final int ADMIN_ACCESS = 0;
@@ -24,11 +25,9 @@ public class LoginManagement extends Management{
     public static final int DRIVER_ACCESS = 3;
 
 
-
     public LoginManagement() throws Exception{
         super();
     }
-
 
     /*
         Users are stored in their own table in the database.

@@ -14,5 +14,6 @@
     <orderEntry type="library" scope="TEST" name="Arquillian JUnit:Release" level="project" />
     <orderEntry type="library" name="com.google.code.geocoder-java:geocoder-java:0.16" level="project" />
     <orderEntry type="library" name="jfree:jfreechart:1.0.13" level="project" />
+    <orderEntry type="library" name="mysql:mysql-connector-java:5.1.38" level="project" />
   </component>
 </module>
