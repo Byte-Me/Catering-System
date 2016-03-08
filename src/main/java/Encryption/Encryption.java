@@ -27,8 +27,7 @@ public class Encryption {
 
     }
 
-
-    private ArrayList<String> passEncoding(String password) throws Exception {
+    public String[] passEncoding(String password) throws Exception {
         Random rand = new Random();
         byte[] salt = new byte[16];
         rand.nextBytes(salt);
@@ -36,9 +35,9 @@ public class Encryption {
         SecretKeyFactory f = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
         byte[] hash = f.generateSecret(spec).getEncoded();
         Base64.Encoder enc = Base64.getEncoder();
-        ArrayList<String> out = new ArrayList<String>();
-        out.add(enc.encodeToString(salt));
-        out.add(enc.encodeToString(hash));
+        String[] out = new String[2];
+        out[0] = (enc.encodeToString(salt));
+        out[1] = (enc.encodeToString(hash));
 
         return out;
     }
@@ -57,8 +56,8 @@ public class Encryption {
 
     public static void main(String[] args) throws Exception {
         Encryption en = new Encryption();
-        ArrayList<String> passInfo = en.passEncoding("password");
-        if (en.passDecoding("password", passInfo.get(0), passInfo.get(1))) System.out.println("Success!");
+        String[] passInfo = en.passEncoding("password");
+        if (en.passDecoding("password", passInfo[0], passInfo[1])) System.out.println("Success!");
         //}*/
     }
 }

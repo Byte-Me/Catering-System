@@ -13,18 +13,6 @@ import java.util.List;
  * Created by Evdal on 07.03.2016.
  */
 
-
-import com.google.code.geocoder.Geocoder;
-import com.google.code.geocoder.GeocoderRequestBuilder;
-import com.google.code.geocoder.model.GeocodeResponse;
-import com.google.code.geocoder.model.GeocoderRequest;
-import com.google.code.geocoder.model.GeocoderResult;
-
-import java.util.ArrayList;
-import java.util.*;
-
-
-
 /*
 Eksample program:
 
