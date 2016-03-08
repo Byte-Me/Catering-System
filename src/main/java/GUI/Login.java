@@ -1,5 +1,7 @@
 package GUI;
 
+import Database.*;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -17,6 +19,8 @@ public class Login extends JFrame{
     private JButton cancelButton;
     private JPanel mainPanel;
 
+    private UserLoginFromDatabase dbconnect = new UserLoginFromDatabase();
+
     public Login() {
 
         setContentPane(mainPanel);
@@ -28,13 +32,24 @@ public class Login extends JFrame{
             @Override
             public void actionPerformed(ActionEvent e) {
 
-                char[] inputPass = passwordPasswordField.getPassword();
+                String inputUsr = usernameTextField.getText();
+                String inputPass = new String(passwordPasswordField.getPassword());
 
-                // For debugging only
-                // System.out.println("brukernavn: " + brukernavnTextField.getText());
-                // System.out.println("passord: " + inputPass);
+                System.out.println(inputUsr);
+                System.out.println(inputPass);
 
-                if (usernameTextField.getText().equals("bruker") && isCorrectPassword(inputPass)) {
+                int userType = -1;
+
+
+                try {
+                    userType = dbconnect.login(inputUsr, inputPass);
+                } catch (Exception ex) {
+                    System.out.println(ex);
+                }
+
+                System.out.println(userType);
+
+                if ( userType >= 0) {
                     // Logged in :)
 
                     // Open the main window
