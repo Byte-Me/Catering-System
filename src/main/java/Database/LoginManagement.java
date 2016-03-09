@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import Encryption.*;
+import org.apache.commons.dbutils.DbUtils;
 
 /**
  * Created by Evdal on 03.03.2016.
@@ -46,23 +47,29 @@ public class LoginManagement extends Management{
         //username = bruker
         //password = password
 
+        //username = Even
+        //password = pass
+
         ResultSet res = null;
-        if(getScentence() != null) {
-            try {
-                res = getScentence().executeQuery("select username, hash, salt, access_level from user " +
-                        "where username = '" + user + "';");
-                if(res.next()) {
-                    Encryption encrypt = new Encryption();
-                    if(encrypt.passDecoding(pass, res.getString("salt"), res.getString("hash")));{
-                        return res.getInt("access_level");
-                    }
+        try {
+            setUp();
+            res = getScentence().executeQuery("select username, hash, salt, access_level from user " +
+                    "where username = '" + user + "';");
+            if(res.next()) {
+                Encryption encrypt = new Encryption();
+                if(encrypt.passDecoding(pass, res.getString("hash"), res.getString("salt"))){
+                    return res.getInt("access_level");
                 }
             }
-            catch (SQLException e){
-                e.printStackTrace();
-                return -1;
-            }
-
+        }
+        catch (SQLException e){
+           //     e.printStackTrace();
+            return -1;
+        }
+        finally {
+            DbUtils.closeQuietly(res);
+            DbUtils.closeQuietly(getScentence());
+            DbUtils.closeQuietly(getConnection());
         }
 
         return -1;

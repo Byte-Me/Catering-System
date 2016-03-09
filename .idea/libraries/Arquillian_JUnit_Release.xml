@@ -1,6 +1,5 @@
 <component name="libraryTable">
-  <library name="Arquillian JUnit:Release" type="repository">
-    <properties maven-id="org.jboss.arquillian.junit:arquillian-junit-container:RELEASE" />
+  <library name="Arquillian JUnit:Release">
     <CLASSES>
       <root url="jar://$MAVEN_REPOSITORY$/org/jboss/arquillian/junit/arquillian-junit-container/1.1.11.Final/arquillian-junit-container-1.1.11.Final.jar!/" />
       <root url="jar://$MAVEN_REPOSITORY$/org/jboss/arquillian/junit/arquillian-junit-core/1.1.11.Final/arquillian-junit-core-1.1.11.Final.jar!/" />

@@ -54,19 +54,19 @@ public class TravelingSalesman {
     private String startPoint;
 
     public TravelingSalesman(String startAdress) throws Exception {
+
         this.startAdress = geoCoder(startAdress, 0);
         startPoint = startAdress;
+
+
     }
 
     //Hentet en del fra http://stackoverflow.com/questions/11703827/brute-force-algorithm-for-the-traveling-salesman-problem-in-java
     public void bruteForceFindBestRoute
-            (ArrayList<double[]> r,
-             ArrayList<double[]> citiesNotInRoute) throws Exception
-    {
-        if(!citiesNotInRoute.isEmpty())
-        {
-            for(int i = 0; i<citiesNotInRoute.size(); i++)
-            {
+    (ArrayList<double[]> r,
+     ArrayList<double[]> citiesNotInRoute) throws Exception {
+        if (!citiesNotInRoute.isEmpty()) {
+            for (int i = 0; i < citiesNotInRoute.size(); i++) {
                 double[] justRemoved =
                         (double[]) citiesNotInRoute.remove(0);
                 ArrayList<double[]> newRoute =
@@ -76,55 +76,56 @@ public class TravelingSalesman {
                 bruteForceFindBestRoute(newRoute, citiesNotInRoute);
                 citiesNotInRoute.add(justRemoved);
             }
-        }
-        else //if(citiesNotInRoute.isEmpty())
+        } else //if(citiesNotInRoute.isEmpty())
         {
             r.add(0, startAdress);
             r.add(startAdress);
-            if(sumDistance(bestRoute) > sumDistance(r) ) {
+            if (sumDistance(bestRoute) > sumDistance(r)) {
                 bestRoute = r;
-           //     System.out.println(sumDistance(bestRoute));
 
 
             }
         }
 
+
     }
-    public double sumDistance(ArrayList <double[]> positions){
-        if(positions == null) return 99999.9;                   //A better solution may be wanted.
+
+    public double sumDistance(ArrayList<double[]> positions) {
+        if (positions == null) return 99999.9;                   //A better solution may be wanted.
         ArrayList<Double> lengths = distancesInKM(positions);
         double sum = 0;
-        for(double length : lengths){
+        for (double length : lengths) {
             sum += length;
         }
         return sum;
     }
 
 
-
-    private ArrayList distancesInKM(ArrayList<double[]> positions){
+    private ArrayList distancesInKM(ArrayList<double[]> positions) {
         ArrayList ut = new ArrayList();
-        for(int i = 0; i<positions.size()-1;i++){
+        for (int i = 0; i < positions.size() - 1; i++) {
             ut.add(haversine(positions.get(i)[0], positions.get(i)[1],
-                    positions.get(i+1)[0], positions.get(i+1)[1]));
+                    positions.get(i + 1)[0], positions.get(i + 1)[1]));
         }
         return ut;
     }
+
     //Haversine function retrieved from the internet.
     public static final double R = 6372.8; // In kilometers
+
     private double haversine(double lat1, double lon1, double lat2, double lon2) {
         double dLat = Math.toRadians(lat2 - lat1);
         double dLon = Math.toRadians(lon2 - lon1);
         lat1 = Math.toRadians(lat1);
         lat2 = Math.toRadians(lat2);
 
-        double a = Math.pow(Math.sin(dLat / 2),2) + Math.pow(Math.sin(dLon / 2),2) * Math.cos(lat1) * Math.cos(lat2);
+        double a = Math.pow(Math.sin(dLat / 2), 2) + Math.pow(Math.sin(dLon / 2), 2) * Math.cos(lat1) * Math.cos(lat2);
         double c = 2 * Math.asin(Math.sqrt(a));
         return R * c;
     }
 
 
-    private double[] geoCoder(String adress, int index) throws Exception{
+    private double[] geoCoder(String adress, int index) throws Exception {
         double[] out = new double[3];
         final Geocoder geocoder = new Geocoder();
         GeocoderRequest geocoderRequest = new GeocoderRequestBuilder().setAddress(adress).getGeocoderRequest();
@@ -136,8 +137,7 @@ public class TravelingSalesman {
         try {
             latitude = results.get(0).getGeometry().getLocation().getLat().doubleValue();
             longitude = results.get(0).getGeometry().getLocation().getLng().doubleValue();
-        }
-        catch (IndexOutOfBoundsException e){
+        } catch (IndexOutOfBoundsException e) {
             System.err.println("Issue with geocoding the string: " + adress + ". Try checking for typos.");
         }
 
@@ -147,38 +147,42 @@ public class TravelingSalesman {
         return out;
     }
 
-    public ArrayList<double[]> createPositionsArray(ArrayList<String> adresses )throws Exception{
+    public ArrayList<double[]> createPositionsArray(ArrayList<String> adresses) throws Exception {
+
         ArrayList<double[]> out = new ArrayList<double[]>();
 
-        for (int i= 0; i<adresses.size();i++){
+        for (int i = 0; i < adresses.size(); i++) {
             out.add(geoCoder(adresses.get(i), i));
         }
         return out;
 
     }
+
     public ArrayList<String> positionsToAdresses(ArrayList<double[]> inPositions,
-                                                        ArrayList<String> originAdressList){
+                                                 ArrayList<String> originAdressList) {
         ArrayList<String> out = new ArrayList<String>();
         ArrayList<double[]> positions = (ArrayList<double[]>) inPositions.clone();
         positions.remove(0);
-        positions.remove(positions.size()-1);
+        positions.remove(positions.size() - 1);
         positions.trimToSize();
         out.add(startPoint);
-        for(double[] pos : positions) {
-            out.add(originAdressList.get((int)pos[2]));
+        for (double[] pos : positions) {
+            out.add(originAdressList.get((int) pos[2]));
         }
         out.add(startPoint);
         return out;
 
     }
-    public String getStartAdress(){
+
+    public String getStartAdress() {
         return startPoint;
     }
 
-    public void setStartAdress(String startAdress){
+    public void setStartAdress(String startAdress) {
         this.startPoint = startAdress;
     }
-    public ArrayList<double[]> getBestRoute(){
+
+    public ArrayList<double[]> getBestRoute() {
         return bestRoute;
     }
 }
