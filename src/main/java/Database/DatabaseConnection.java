@@ -13,12 +13,19 @@ public class DatabaseConnection {
     private final String databasedriver = "com.mysql.jdbc.Driver";
     private final String databasename = "jdbc:mysql://mysql.stud.iie.ntnu.no:3306/" + username +
             "?user=" + username + "&password=" + password;
-    private final Connection connection = null;
+    private Connection connection = null;
 
     public DatabaseConnection() {
 
         try {
-            Connection connection = DriverManager.getConnection(databasename);
+            Class.forName(databasedriver);
+        } catch (ClassNotFoundException cnfe) {
+            System.err.println(cnfe);
+            cnfe.printStackTrace();
+        }
+
+        try {
+            connection = DriverManager.getConnection(databasename);
         } catch (SQLException SQLe) {
             SQLe.getMessage();
         }
