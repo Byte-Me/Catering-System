@@ -1,6 +1,10 @@
 package GUI;
 
 import javax.swing.*;
+import javax.swing.event.TableModelListener;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.text.MaskFormatter;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -17,14 +21,17 @@ public class MainWindow extends JFrame {
     private JPanel chef;
     private JPanel administration;
     private JPanel sale;
-    private JList userList;
     private JButton addUserButton;
+    private JTable userTable;
+    private JFormattedTextField fromDate;
+    private JFormattedTextField toDate;
+    private JButton getStatisticsButton;
 
+    private static DefaultTableModel model;
 
     public MainWindow(int userType) {
         setContentPane(mainPanel);
-
-        setupAdministration();
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         // Create GUI for specific user type
         switch (userType) {
@@ -54,22 +61,93 @@ public class MainWindow extends JFrame {
             default:
         }
 
+        // Setup the different panels
+        setupAdministration();
+        setupStatistics();
 
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         pack();
-
-
+        setSize(800, 400);
+        setLocationRelativeTo(null);
 
         setVisible(true);
     }
 
     private void setupAdministration() {
 
-        addUserButton.addActionListener(new ActionListener() {
+        addUserButton.addActionListener(new ActionListener() { // Button action listener
             public void actionPerformed(ActionEvent e) {
-                AddUser addUser = new AddUser();
+                new AddUser(mainPanel.getParent());
             }
         });
 
+        String[] header = {"First Name", "Last Name", "Email", "Username", "User Type"}; // Header titles
+
+        model = new DefaultTableModel(); // Model of the table
+        model.setColumnIdentifiers(header); // Add header to columns
+
+        userTable.setModel(model); // Add model to table
+
+        // TODO - testdata (remove)
+        model.addRow(new Object[]{"Ole Kristian", "Aune", "noe@noe.com", "ole", "Admin"});
+        model.addRow(new Object[]{"Even", "Dalen", "noeannet@noeannet.com", "even", "Admin"});
+
+    }
+
+    private void setupStatistics() {
+
+        try {
+            final MaskFormatter maskFormatter = new MaskFormatter("##/##/##"); // Defining format pattern
+            //maskFormatter.setPlaceholderCharacter('_');
+            maskFormatter.setPlaceholder("00-00-00"); // Placeholder
+
+            fromDate.setFormatterFactory(new JFormattedTextField.AbstractFormatterFactory() { // Add format to field
+                @Override
+                public JFormattedTextField.AbstractFormatter getFormatter(JFormattedTextField tf) {
+                    return maskFormatter;
+                }
+            });
+
+            toDate.setFormatterFactory(new JFormattedTextField.AbstractFormatterFactory() { // Add format to field
+                @Override
+                public JFormattedTextField.AbstractFormatter getFormatter(JFormattedTextField tf) {
+                    return maskFormatter;
+                }
+            });
+
+        } catch(Exception e) {
+            System.err.println(e);
+        }
+
+
+        getStatisticsButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                String fDate = fromDate.getText();
+                String tDate = toDate.getText();
+
+                System.out.println("From: " + fDate + " To: " + tDate);
+            }
+        });
+
+
+    }
+
+    //FIXME - logikk skal ikke ligge her, kun GUI
+    public static void addUser(String fName, String lName, String email, String uName, int uNum) {
+        String uType = "";
+        switch (uNum) {
+            case 0:
+                uType = "Admin";
+                break;
+            case 1:
+                uType = "Sale";
+                break;
+            case 2:
+                uType = "Driver";
+                break;
+            case 3:
+                uType = "Chef";
+                break;
+        }
+        model.addRow(new Object[]{fName, lName, email, uName, uType});
     }
 }

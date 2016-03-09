@@ -1,6 +1,9 @@
 package GUI;
 
+import Database.UserManagement;
+
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -18,11 +21,12 @@ public class AddUser extends JFrame {
     private JButton cancelButton;
     private JButton addUserButton;
 
-    public AddUser() {
+    public AddUser(Container parent) {
         setContentPane(mainPane);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         mainPane.getRootPane().setDefaultButton(addUserButton);
         pack();
+        setLocationRelativeTo(parent);
 
         // Setting up the userType select box
         userType.addItem("Admin");
@@ -32,7 +36,19 @@ public class AddUser extends JFrame {
 
         addUserButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                //TODO
+                String fName = firstName.getText();
+                String lName = lastName.getText();
+                String mail = email.getText();
+                int type = userType.getSelectedIndex();
+                String uName = userName.getText();
+                String pass = password.getText();
+
+                //FIXME - brukes kun for GUI test
+                MainWindow.addUser(fName, lName, mail, uName, type);
+
+                setVisible(false);
+                dispose();
+
             }
         });
 

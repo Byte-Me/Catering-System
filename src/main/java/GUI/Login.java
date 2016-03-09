@@ -27,6 +27,7 @@ public class Login extends JFrame{
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainPanel.getRootPane().setDefaultButton(loginButton);
         pack();
+        setLocationRelativeTo(null);
 
         loginButton.addActionListener(new ActionListener() {
             @Override
@@ -35,16 +36,11 @@ public class Login extends JFrame{
                 String inputUsr = usernameTextField.getText();
                 String inputPass = new String(passwordPasswordField.getPassword());
 
-                System.out.println(inputUsr);
-                System.out.println(inputPass);
-
                 int userType = -1;
 
 
                 try {
-                    System.out.println("Før dbconnect");
                     dbconnect = new LoginManagement();
-                    System.out.println("Etter dbconnect");
                     if (dbconnect.connected()) {
                         userType = dbconnect.login(inputUsr, inputPass);
                     } else {
@@ -54,7 +50,6 @@ public class Login extends JFrame{
                     System.out.println(ex);
                 }
 
-                System.out.println(userType);
 
                 if ( userType >= 0) {
                     // Logged in :)
