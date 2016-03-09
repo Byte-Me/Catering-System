@@ -24,8 +24,8 @@ public class Login extends JFrame{
     public Login() {
 
         setContentPane(mainPanel);
-
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        mainPanel.getRootPane().setDefaultButton(loginButton);
         pack();
 
         loginButton.addActionListener(new ActionListener() {
@@ -60,7 +60,7 @@ public class Login extends JFrame{
                     // Logged in :)
 
                     // Open the main window
-                    MainWindow mainWindow = new MainWindow();
+                    MainWindow mainWindow = new MainWindow(userType);
 
                     setVisible(false); //you can't see me!
                     dispose(); //Destroy the JFrame object
