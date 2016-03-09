@@ -45,32 +45,39 @@ public class TestJUnitDB{
 
     }
     @Test
-    public void loginTestValid(){
+    public void loginTest(){
         int valid = 0;
+        int invalid = 0;
+
         try {
             valid = logi.login(validUser[0], validUser[1]);
+            invalid = logi.login(invalidUser[0], invalidUser[1]);
+
         }
         catch (Exception e){
             System.err.println("Issue with databaseconnections! ");
             e.printStackTrace();
         }
         assertEquals(ACCESS, valid);
+        assertEquals(NO_ACCESS, invalid);
+
+
 
     }
+
     @Test
-    public void loginTestInvalid(){
-        int invalid = 0;
-        try {
-            invalid = logi.login(invalidUser[0], invalidUser[1]);
+    public void createUser(){
+        boolean validUser = false;
+        boolean invalidUser = true;
+        try{
+            validUser = user.registerUser("Even", "passord", "email", 1);
         }
         catch (Exception e){
             System.err.println("Issue with databaseconnections! ");
             e.printStackTrace();
         }
-        assertEquals(NO_ACCESS, invalid);
-
+        assertTrue(validUser);
     }
-
     @After
     public void objTearDown(){
         validUser = null;
@@ -78,12 +85,16 @@ public class TestJUnitDB{
     }
     @AfterClass
     public static void DBTearDown(){
-        cust = null;
-        deli = null;
-        food = null;
-        logi = null;
-        orde = null;
-        user = null;
+
+        try {
+            cust.closeConnection();
+            deli.closeConnection();
+            food.closeConnection();
+            logi.closeConnection();
+            orde.closeConnection();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

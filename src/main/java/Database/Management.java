@@ -19,7 +19,8 @@ public abstract class Management {
         if(scentence != null)return true;
         else return false;
     }
-    protected void closeConnection()throws Exception{
+    public void closeConnection()throws Exception{
+        scentence.close();
         connection.close();
     }
 
