@@ -52,6 +52,7 @@ public class LoginManagement extends Management{
         ResultSet res = null;
         if(getScentence() != null) {
             try {
+                setUp();
                 res = getScentence().executeQuery("select username, hash, salt, access_level from user " +
                         "where username = '" + user + "';");
                 if(res.next()) {
@@ -64,6 +65,9 @@ public class LoginManagement extends Management{
             catch (SQLException e){
                 e.printStackTrace();
                 return -1;
+            }
+            finally {
+                closeConnection();
             }
 
         }

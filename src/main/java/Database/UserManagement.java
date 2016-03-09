@@ -13,11 +13,22 @@ public class UserManagement extends Management{
 
     public boolean registerUser(String username, String password, String email, int accessLevel)throws Exception{
         Encryption enc = new Encryption();
+        int rowChanged = 0;
         String[] saltHash = enc.passEncoding(password);
-        int rowChanged = getScentence().executeUpdate("INSERT INTO user VALUES(DEFAULT, '" + username +
-                "', '" + saltHash[0] + "', '" + saltHash[1] + "', '" + email + "', " + accessLevel + ");");
+        try {
+            rowChanged = getScentence().executeUpdate("INSERT INTO user VALUES(DEFAULT, '" + username +
+                    "', '" + saltHash[0] + "', '" + saltHash[1] + "', '" + email + "', " + accessLevel + ");");
+        }
+        catch(Exception e){
+            System.err.println("Issue with creating user.");
+            e.printStackTrace();
+        }
+        finally {
+            closeConnection();
+        }
         if(rowChanged > 0)return true;
         return false;
+
     }
 
     public static void main(String[] args) throws Exception{

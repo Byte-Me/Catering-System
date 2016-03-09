@@ -9,19 +9,37 @@ import java.sql.Statement;
 public abstract class Management {
     private Connection connection;
     private Statement scentence;
+    DatabaseConnection c;
 
     public Management() throws Exception{
         DatabaseConnection c = new DatabaseConnection();
-        connection = c.getConnection();
-        scentence = connection.createStatement();
+
     }
     public boolean connected(){
         if(scentence != null)return true;
         else return false;
     }
-    public void closeConnection()throws Exception{
-        scentence.close();
-        connection.close();
+    public void setUp()throws Exception{
+        try {
+            connection = c.getConnection();
+            scentence = connection.createStatement();
+        }
+        catch (Exception e){
+            System.err.println("Connection to database failed.");
+            e.printStackTrace();
+            closeConnection();
+        }
+
+    }
+    public void closeConnection(){
+        try {
+            scentence.close();
+            connection.close();
+        }
+        catch (Exception e){
+            System.err.println("Closing database failed.");
+            e.printStackTrace();
+        }
     }
 
     public Connection getConnection() {

@@ -178,6 +178,7 @@ public class TravelingSalesman {
     public void setStartAdress(String startAdress){
         this.startPoint = startAdress;
     }
+
     public ArrayList<double[]> getBestRoute(){
         return bestRoute;
     }
