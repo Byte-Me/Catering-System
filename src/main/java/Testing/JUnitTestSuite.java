@@ -9,7 +9,9 @@ import org.junit.runners.Suite;
 //JUnit Suite Test
 @RunWith(Suite.class)
 @Suite.SuiteClasses({
-        TestJUnitDB.class
+        TestJUnitDB.class,
+        TestJUnitEncryption.class,
+        TestJUnitDelivery.class
 })
 public class JUnitTestSuite {
 }

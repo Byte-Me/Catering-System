@@ -55,8 +55,8 @@ public class TestJUnitDB{
 
         }
         catch (Exception e){
-            System.err.println("Issue with databaseconnections! ");
-            e.printStackTrace();
+            System.err.println("Issue with databaseconnections.");
+      //      e.printStackTrace();
         }
         assertEquals(ACCESS, valid);
         assertEquals(NO_ACCESS, invalid);
@@ -87,11 +87,7 @@ public class TestJUnitDB{
     public static void DBTearDown(){
 
         try {
-            cust.closeConnection();
-            deli.closeConnection();
-            food.closeConnection();
-            logi.closeConnection();
-            orde.closeConnection();
+
         } catch (Exception e) {
             e.printStackTrace();
         }

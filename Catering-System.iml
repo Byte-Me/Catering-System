@@ -19,5 +19,6 @@
     <orderEntry type="library" name="jcommon-1.0.23" level="project" />
     <orderEntry type="library" name="junit-4.10" level="project" />
     <orderEntry type="library" name="mysql-connector-java-5.1.38-bin" level="project" />
+    <orderEntry type="library" name="DBUtils" level="project" />
   </component>
 </module>
