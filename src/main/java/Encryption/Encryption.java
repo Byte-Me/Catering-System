@@ -18,6 +18,9 @@ public class Encryption {
 
         byte[] hashPass = stringToByte(hashString);
 
+
+
+
         KeySpec spec = new PBEKeySpec(pass.toCharArray(), salt, 65536, 128);
         SecretKeyFactory f = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
         byte[] hash = f.generateSecret(spec).getEncoded();
@@ -57,7 +60,7 @@ public class Encryption {
     public static void main(String[] args) throws Exception {
         Encryption en = new Encryption();
         String[] passInfo = en.passEncoding("password");
-        if (en.passDecoding("password", passInfo[0], passInfo[1])) System.out.println("Success!");
+        if (en.passDecoding("password", "2oUGF8AAgobU1E3rcAtyiw==", "oQaZgG266KjDzEkGTgXYMQ==")) System.out.println("Success!");
         //}*/
     }
 }

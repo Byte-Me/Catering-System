@@ -15,5 +15,9 @@
     <orderEntry type="library" name="com.google.code.geocoder-java:geocoder-java:0.16" level="project" />
     <orderEntry type="library" name="jfree:jfreechart:1.0.13" level="project" />
     <orderEntry type="library" name="mysql:mysql-connector-java:5.1.38" level="project" />
+    <orderEntry type="library" name="geocoder-java-0.16" level="project" />
+    <orderEntry type="library" name="jcommon-1.0.23" level="project" />
+    <orderEntry type="library" name="junit-4.10" level="project" />
+    <orderEntry type="library" name="mysql-connector-java-5.1.38-bin" level="project" />
   </component>
 </module>

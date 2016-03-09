@@ -16,6 +16,7 @@ public class UserManagement extends Management{
         String[] saltHash = enc.passEncoding(password);
         int rowChanged = getScentence().executeUpdate("INSERT INTO user VALUES(DEFAULT, '" + username +
                 "', '" + saltHash[0] + "', '" + saltHash[1] + "', '" + email + "', " + accessLevel + ");");
+        closeConnection();
         if(rowChanged > 0)return true;
         return false;
     }

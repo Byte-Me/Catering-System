@@ -46,6 +46,9 @@ public class LoginManagement extends Management{
         //username = bruker
         //password = password
 
+        //username = Even
+        //password = pass
+
         ResultSet res = null;
         if(getScentence() != null) {
             try {
@@ -53,7 +56,7 @@ public class LoginManagement extends Management{
                         "where username = '" + user + "';");
                 if(res.next()) {
                     Encryption encrypt = new Encryption();
-                    if(encrypt.passDecoding(pass, res.getString("salt"), res.getString("hash")));{
+                    if(encrypt.passDecoding(pass, res.getString("hash"), res.getString("salt"))){
                         return res.getInt("access_level");
                     }
                 }

@@ -19,6 +19,9 @@ public abstract class Management {
         if(scentence != null)return true;
         else return false;
     }
+    protected void closeConnection()throws Exception{
+        connection.close();
+    }
 
     public Connection getConnection() {
         return connection;
