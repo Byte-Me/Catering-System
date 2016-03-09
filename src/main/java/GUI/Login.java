@@ -19,7 +19,7 @@ public class Login extends JFrame{
     private JButton cancelButton;
     private JPanel mainPanel;
 
-    private UserLoginFromDatabase dbconnect = new UserLoginFromDatabase();
+    private LoginManagement dbconnect;
 
     public Login() {
 
@@ -42,7 +42,14 @@ public class Login extends JFrame{
 
 
                 try {
-                    userType = dbconnect.login(inputUsr, inputPass);
+                    System.out.println("Før dbconnect");
+                    dbconnect = new LoginManagement();
+                    System.out.println("Etter dbconnect");
+                    if (dbconnect.connected()) {
+                        userType = dbconnect.login(inputUsr, inputPass);
+                    } else {
+                        System.out.println("Ikke tilkoblet!");
+                    }
                 } catch (Exception ex) {
                     System.out.println(ex);
                 }
