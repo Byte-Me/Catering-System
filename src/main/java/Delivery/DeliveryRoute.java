@@ -13,10 +13,11 @@ import com.google.code.geocoder.model.GeocodeResponse;
 import com.google.code.geocoder.model.GeocoderRequest;
 import com.google.code.geocoder.model.GeocoderResult;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DeliveryRoute {
+public class DeliveryRoute {/*
     public static void main (String[] args)throws Exception{
 
         ArrayList<String> test = new ArrayList<String>();
@@ -41,14 +42,19 @@ public class DeliveryRoute {
 
 
     }
+*/
 
-
-    public static double[] geoCoder(String adress, int index) throws Exception{
+    public static double[] geoCoder(String adress, int index){
         double[] out = new double[3];
         final Geocoder geocoder = new Geocoder();
         GeocoderRequest geocoderRequest = new GeocoderRequestBuilder().setAddress(adress).getGeocoderRequest();
-
-        GeocodeResponse geocoderResponse = geocoder.geocode(geocoderRequest);
+        GeocodeResponse geocoderResponse = null;
+        try {
+            geocoderResponse = geocoder.geocode(geocoderRequest);
+        }
+        catch (IOException ioe){
+            System.err.println("Issue with geocoding adress: " + adress);
+        }
         List<GeocoderResult> results = geocoderResponse.getResults();
         double latitude = results.get(0).getGeometry().getLocation().getLat().doubleValue();
         double longitude = results.get(0).getGeometry().getLocation().getLng().doubleValue();

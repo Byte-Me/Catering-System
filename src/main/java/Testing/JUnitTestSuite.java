@@ -3,7 +3,10 @@ package Testing;
 /**
  * Created by Evdal on 09.03.2016.
  */
+import org.junit.runner.JUnitCore;
+import org.junit.runner.Result;
 import org.junit.runner.RunWith;
+import org.junit.runner.notification.Failure;
 import org.junit.runners.Suite;
 
 //JUnit Suite Test
@@ -11,7 +14,9 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses({
         TestJUnitDB.class,
         TestJUnitEncryption.class,
-        TestJUnitDelivery.class
+        TestJUnitDelivery.class,
+        TestJUnitGraph.class
 })
 public class JUnitTestSuite {
+
 }

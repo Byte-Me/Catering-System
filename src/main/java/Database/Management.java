@@ -13,7 +13,7 @@ public abstract class Management {
     private Statement scentence;
     private DatabaseConnection c;
 
-    public Management() throws Exception{
+    public Management(){
         //DatabaseConnection c; //new DatabaseConnection();
 
     }
@@ -21,20 +21,22 @@ public abstract class Management {
         if(scentence != null)return true;
         else return false;
     }
-    public void setUp()throws Exception {
+    public void setUp(){
         try {
             c = new DatabaseConnection();
             connection = c.getConnection();
             scentence = connection.createStatement();
         } catch (Exception e) {
             System.err.println("Connecting to database failed.");
+            DbUtils.closeQuietly(scentence);
+            DbUtils.closeQuietly(connection);
             //    e.printStackTrace();
         }
     }
     public void closeConnection(){
         try {
-            DbUtils.close(scentence);
-            DbUtils.close(connection);
+            DbUtils.closeQuietly(scentence);
+            DbUtils.closeQuietly(connection);
         }
         catch (Exception e){
             System.err.println("Problem with closing connection");
