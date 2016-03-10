@@ -40,7 +40,7 @@ public class TestJUnitDB{
     }
     @Before
     public void objSetUp(){
-        validUser = new String[]{"bruker","password"}; ; //Accesslvl 1
+        validUser = new String[]{"Even","passord"}; ; //Accesslvl 1
         invalidUser = new String[]{"bruker", "pass"}; //accesslvl -1
 
     }
@@ -70,16 +70,25 @@ public class TestJUnitDB{
         boolean validUser = false;
         boolean invalidUser = true;
         try{
-            validUser = user.registerUser("Even", "passord", "email", 1);
+            validUser = user.registerUser("Even", "Dalen", "EvenDale", "passord", "email", "1234545", 1);
+            invalidUser = user.registerUser("Even", "Dalen", "EvenD", "passord", "email", "1234545", 1);
+
         }
         catch (Exception e){
             System.err.println("Issue with databaseconnections! ");
             e.printStackTrace();
         }
         assertTrue(validUser);
+        assertFalse(invalidUser);
     }
     @Test
-
+    public void getUsers() {
+        assertNotNull(user.userInfo());
+    }
+    @Test
+    public void updateFName(){
+        assertTrue(user.updateUserInfoFName("kris", "Kristaffer"));
+    }
     @After
     public void objTearDown(){
         validUser = null;
