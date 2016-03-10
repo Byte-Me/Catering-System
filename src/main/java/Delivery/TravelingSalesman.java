@@ -153,7 +153,14 @@ public class TravelingSalesman {
         out[2] = index;
         return out;
     }
-
+    /*
+        1. Brukere
+        2. Kunder
+        3. Ordre
+        4. Ingredienser
+        5. Oppskrifter
+        6.
+     */
 
     //Returns null if there is an issue with geocoding adresses. This needs too be handled in elsewhere.
     public ArrayList<double[]> createPositionsArray(ArrayList<String> adresses){

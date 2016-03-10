@@ -1,7 +1,11 @@
 package Database;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+
 import Encryption.*;
 import org.apache.commons.dbutils.DbUtils;
 
@@ -12,15 +16,16 @@ public class UserManagement extends Management {
         super();
     }
 
-    public boolean registerUser(String username, String password, String email, int accessLevel) {
+    public boolean registerUser(String firstname, String lastname, String username,
+                                String password, String email, String phone, int accessLevel) {
         Encryption enc = new Encryption();
-        int rowChanged = 0;
+        int rowChanged = 0; //
         if(super.setUp()) {
-
             try {
                 String[] saltHash = enc.passEncoding(password);
                 rowChanged = getScentence().executeUpdate("INSERT INTO user VALUES(DEFAULT, '" + username +
-                        "', '" + saltHash[0] + "', '" + saltHash[1] + "', '" + email + "', " + accessLevel + ");");
+                        "', '" + saltHash[0] + "', '" + saltHash[1] + "', '" + firstname + "', '" + lastname
+                        + "', '" + phone + "', '" + email + "', " + accessLevel + ");");
             } catch (Exception e) {
                 System.err.println("Issue with creating user.");
                 //  e.printStackTrace();
@@ -35,6 +40,43 @@ public class UserManagement extends Management {
         return false;
 
     }
+    public ArrayList<Object[]> userInfo(){
+
+        ResultSet res = null;
+        ArrayList<Object[]> out = new ArrayList<Object[]>();
+        if(super.setUp()){
+            try {
+                res = getScentence().executeQuery("select first_name, last_name, email, phone, username, access_level from user;");
+                while(res.next()) {
+                    Object[] obj = new Object[6];
+                    obj[0] = res.getString("first_name");
+                    obj[1] = res.getString("last_name");
+                    obj[2] = res.getString("email");
+                    obj[3] = res.getString("phone");
+                    obj[4] = res.getString("username");
+                    obj[5] = res.getString("access_level");
+                    out.add(obj);
+                }
+            }
+            catch (SQLException e){
+                System.err.println("Issue with executing SQL scentence.");
+                return null;
+            }
+        }
+        else{
+            return null;
+        }
+        return out;
+    }
+
+
+    /*
+    TODO:
+        UserInfo: ArrayList med objectarrays for alle brukere. Firstname, lastname, email, phone, username, usertype
+        Endre INSERT og SELECT setninger til de nye tabellene.
+
+     */
+
 }
 /*
     public static void main(String[] args){
