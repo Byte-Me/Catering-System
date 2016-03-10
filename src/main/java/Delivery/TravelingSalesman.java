@@ -125,21 +125,25 @@ public class TravelingSalesman {
     }
 
 
-    private double[] geoCoder(String adress, int index) throws Exception {
-        double[] out = new double[3];
+    private double[] geoCoder(String adress, int index){
+        double[] out = null;
         final Geocoder geocoder = new Geocoder();
         GeocoderRequest geocoderRequest = new GeocoderRequestBuilder().setAddress(adress).getGeocoderRequest();
-
-        GeocodeResponse geocoderResponse = geocoder.geocode(geocoderRequest);
-        List<GeocoderResult> results = geocoderResponse.getResults();
         double latitude = 0;
         double longitude = 0;
+        GeocodeResponse geocoderResponse = null;
+        List<GeocoderResult> results = null;
+
+
         try {
+            results = geocoderResponse.getResults();
+            geocoderResponse = geocoder.geocode(geocoderRequest);
             latitude = results.get(0).getGeometry().getLocation().getLat().doubleValue();
             longitude = results.get(0).getGeometry().getLocation().getLng().doubleValue();
-        } catch (IndexOutOfBoundsException e) {
+        } catch (Exception e) {
             System.err.println("Issue with geocoding the string: " + adress + ". Try checking for typos.");
         }
+
 
         out[0] = latitude;
         out[1] = longitude;
@@ -147,7 +151,7 @@ public class TravelingSalesman {
         return out;
     }
 
-    public ArrayList<double[]> createPositionsArray(ArrayList<String> adresses) throws Exception {
+    public ArrayList<double[]> createPositionsArray(ArrayList<String> adresses){
 
         ArrayList<double[]> out = new ArrayList<double[]>();
 
