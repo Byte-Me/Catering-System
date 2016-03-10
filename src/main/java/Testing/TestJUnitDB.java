@@ -78,6 +78,8 @@ public class TestJUnitDB{
         }
         assertTrue(validUser);
     }
+    @Test
+
     @After
     public void objTearDown(){
         validUser = null;

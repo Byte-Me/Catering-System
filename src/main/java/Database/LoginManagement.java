@@ -51,25 +51,24 @@ public class LoginManagement extends Management{
         //password = pass
 
         ResultSet res = null;
-        try {
-            setUp();
-            res = getScentence().executeQuery("select username, hash, salt, access_level from user " +
-                    "where username = '" + user + "';");
-            if(res.next()) {
-                Encryption encrypt = new Encryption();
-                if(encrypt.passDecoding(pass, res.getString("hash"), res.getString("salt"))){
-                    return res.getInt("access_level");
+        if(super.setUp()) {
+            try {
+
+                res = getScentence().executeQuery("select username, hash, salt, access_level from user " +
+                        "where username = '" + user + "';");
+                if (res.next()) {
+                    Encryption encrypt = new Encryption();
+                    if (encrypt.passDecoding(pass, res.getString("hash"), res.getString("salt"))) {
+                        return res.getInt("access_level");
+                    }
                 }
+            } catch (Exception e) {
+                //     e.printStackTrace();
+                System.err.println("Issue with SQL connection.");
+                return -1;
+            } finally {
+                super.closeConnection();
             }
-        }
-        catch (Exception e){
-           //     e.printStackTrace();
-            return -1;
-        }
-        finally {
-            DbUtils.closeQuietly(res);
-            DbUtils.closeQuietly(getScentence());
-            DbUtils.closeQuietly(getConnection());
         }
 
         return -1;
