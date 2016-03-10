@@ -26,7 +26,7 @@ public class LoginManagement extends Management{
     public static final int DRIVER_ACCESS = 3;
 
 
-    public LoginManagement() throws Exception{
+    public LoginManagement(){
         super();
     }
 
@@ -39,7 +39,7 @@ public class LoginManagement extends Management{
         returned, their password or username was wrong.
 
      */
-    public int login(String user, String pass) throws Exception {
+    public int login(String user, String pass){
 
 
         //Testbruker:
@@ -62,7 +62,7 @@ public class LoginManagement extends Management{
                 }
             }
         }
-        catch (SQLException e){
+        catch (Exception e){
            //     e.printStackTrace();
             return -1;
         }
