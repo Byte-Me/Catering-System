@@ -29,7 +29,7 @@ public class Login extends JFrame{
         pack();
 
         loginButton.addActionListener(new ActionListener() {
-            @Override
+
             public void actionPerformed(ActionEvent e) {
 
                 String inputUsr = usernameTextField.getText();
@@ -41,18 +41,10 @@ public class Login extends JFrame{
                 int userType = -1;
 
 
-                try {
-                    System.out.println("Før dbconnect");
-                    dbconnect = new LoginManagement();
-                    System.out.println("Etter dbconnect");
-                    if (dbconnect.connected()) {
-                        userType = dbconnect.login(inputUsr, inputPass);
-                    } else {
-                        System.out.println("Ikke tilkoblet!");
-                    }
-                } catch (Exception ex) {
-                    System.out.println(ex);
-                }
+
+                dbconnect = new LoginManagement();
+                userType = dbconnect.login(inputUsr, inputPass);
+
 
                 System.out.println(userType);
 
@@ -73,7 +65,7 @@ public class Login extends JFrame{
         });
 
         cancelButton.addActionListener(new ActionListener() {
-            @Override
+
             public void actionPerformed(ActionEvent e) {
                 // What happens on cancel?
                 setVisible(false);

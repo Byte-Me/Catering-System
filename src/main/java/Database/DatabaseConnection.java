@@ -21,15 +21,12 @@ public class DatabaseConnection {
 
         try {
             Class.forName(databasedriver);
-        } catch (ClassNotFoundException cnfe) {
-            System.err.println(cnfe);
-            cnfe.printStackTrace();
-        }
-
-        try {
             connection = DriverManager.getConnection(databasename);
+        } catch (ClassNotFoundException cnfe) {
+            System.err.println("Issue with database driver.");
+            //cnfe.printStackTrace();
         } catch (SQLException SQLe) {
-            SQLe.getMessage();
+            System.err.println("Issue with connecting to database.");
         }
 
     }

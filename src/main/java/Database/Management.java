@@ -21,7 +21,7 @@ public abstract class Management {
         if(scentence != null)return true;
         else return false;
     }
-    public void setUp(){
+    public boolean setUp(){
         try {
             c = new DatabaseConnection();
             connection = c.getConnection();
@@ -31,7 +31,10 @@ public abstract class Management {
             DbUtils.closeQuietly(scentence);
             DbUtils.closeQuietly(connection);
             //    e.printStackTrace();
+            return false;
         }
+        if(connection == null || scentence == null) return false;
+        else return true;
     }
     public void closeConnection(){
         try {

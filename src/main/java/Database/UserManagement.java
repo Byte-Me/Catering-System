@@ -15,19 +15,21 @@ public class UserManagement extends Management {
     public boolean registerUser(String username, String password, String email, int accessLevel) {
         Encryption enc = new Encryption();
         int rowChanged = 0;
+        if(super.setUp()) {
 
-        try {
-            String[] saltHash = enc.passEncoding(password);
-            setUp();
-            rowChanged = getScentence().executeUpdate("INSERT INTO user VALUES(DEFAULT, '" + username +
-                    "', '" + saltHash[0] + "', '" + saltHash[1] + "', '" + email + "', " + accessLevel + ");");
-        } catch (Exception e) {
-            System.err.println("Issue with creating user.");
-            //  e.printStackTrace();
-        } finally {
-            DbUtils.closeQuietly(getScentence());
-            DbUtils.closeQuietly(getConnection());
+            try {
+                String[] saltHash = enc.passEncoding(password);
+                rowChanged = getScentence().executeUpdate("INSERT INTO user VALUES(DEFAULT, '" + username +
+                        "', '" + saltHash[0] + "', '" + saltHash[1] + "', '" + email + "', " + accessLevel + ");");
+            } catch (Exception e) {
+                System.err.println("Issue with creating user.");
+                //  e.printStackTrace();
+                return false;
+            } finally {
+                DbUtils.closeQuietly(getScentence());
+                DbUtils.closeQuietly(getConnection());
 
+            }
         }
         if (rowChanged > 0) return true;
         return false;
