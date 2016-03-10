@@ -1,11 +1,21 @@
 package Food;
 
+import Database.FoodManagement;
+
+import java.util.ArrayList;
+
 /**
  * Created by Evdal on 07.03.2016.
  *
  * When adding recipe, if an ingredient cannot be found, the
  *
- */
+ *//*
 public class AddRecipe {
-
+    public boolean addRecipe(String name, ArrayList<String> ingredients){
+        FoodManagement food = new FoodManagement();
+        for(String ing : ingredients){
+            if(food.getScentence().executeQuery("").next());
+        }
+    }
 }
+*/
