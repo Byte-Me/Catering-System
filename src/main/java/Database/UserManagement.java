@@ -23,6 +23,13 @@ public class UserManagement extends Management {
         if (super.setUp()) {
             try {
                 String[] saltHash = enc.passEncoding(password);
+                try {
+                    ResultSet res = getScentence().executeQuery("SELECT username FROM user WHERE username = '" + username + "';");
+                    if(res.next()) return false;
+                }
+                catch (Exception e){
+
+                }
                 rowChanged = getScentence().executeUpdate("INSERT INTO user VALUES(DEFAULT, '" + username +
                         "', '" + saltHash[0] + "', '" + saltHash[1] + "', '" + firstname + "', '" + lastname
                         + "', '" + phone + "', '" + email + "', " + accessLevel + ");");

@@ -70,17 +70,24 @@ public class TestJUnitDB{
         boolean validUser = false;
         boolean invalidUser = true;
         try{
-            validUser = user.registerUser("Even", "Dalen", "Even", "passord", "email", "1234545", 1);
+            validUser = user.registerUser("Even", "Dalen", "EvenDal", "passord", "email", "1234545", 1);
+            invalidUser = user.registerUser("Even", "Dalen", "EvenD", "passord", "email", "1234545", 1);
+
         }
         catch (Exception e){
             System.err.println("Issue with databaseconnections! ");
             e.printStackTrace();
         }
         assertTrue(validUser);
+        assertFalse(invalidUser);
     }
     @Test
-    public void getUsers(){
+    public void getUsers() {
         assertNotNull(user.userInfo());
+    }
+    @Test
+    public void updateFName(){
+        assertTrue(user.updateUserInfoFName("kris", "Kristaffer"));
     }
     @After
     public void objTearDown(){
