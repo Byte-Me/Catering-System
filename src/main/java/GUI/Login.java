@@ -41,14 +41,12 @@ public class Login extends JFrame{
 
                 try {
                     dbconnect = new LoginManagement();
-                    if (dbconnect.connected()) {
-                        userType = dbconnect.login(inputUsr, inputPass);
-                    } else {
-                        System.out.println("Ikke tilkoblet!");
-                    }
+                    userType = dbconnect.login(inputUsr, inputPass);
                 } catch (Exception ex) {
                     System.out.println(ex);
                 }
+
+                System.out.println(userType);
 
 
                 if ( userType >= 0) {

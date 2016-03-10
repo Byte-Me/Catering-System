@@ -26,6 +26,8 @@ public class MainWindow extends JFrame {
     private JFormattedTextField fromDate;
     private JFormattedTextField toDate;
     private JButton getStatisticsButton;
+    private JButton addCustomerButton;
+    private JTable customerTable;
 
     private static DefaultTableModel model;
 
@@ -40,7 +42,7 @@ public class MainWindow extends JFrame {
                 break;
             case 1:
                 // Sale
-                //tabbedPane1.remove(administration);
+                tabbedPane1.remove(administration);
                 tabbedPane1.remove(chef);
                 tabbedPane1.remove(driver);
                 break;
@@ -64,6 +66,7 @@ public class MainWindow extends JFrame {
         // Setup the different panels
         setupAdministration();
         setupStatistics();
+        setupSale();
 
         pack();
         setSize(800, 400);
@@ -90,6 +93,27 @@ public class MainWindow extends JFrame {
         // TODO - testdata (remove)
         model.addRow(new Object[]{"Ole Kristian", "Aune", "noe@noe.com", "ole", "Admin"});
         model.addRow(new Object[]{"Even", "Dalen", "noeannet@noeannet.com", "even", "Admin"});
+
+    }
+
+    private void setupSale() {
+
+        addCustomerButton.addActionListener(new ActionListener() { // Button action listener
+            public void actionPerformed(ActionEvent e) {
+                //new AddUser(mainPanel.getParent());
+            }
+        });
+
+        String[] header = {"Name", "Email", "Phone"}; // Header titles
+
+        model = new DefaultTableModel(); // Model of the table
+        model.setColumnIdentifiers(header); // Add header to columns
+
+        customerTable.setModel(model); // Add model to table
+
+        // TODO - testdata (remove)
+        model.addRow(new Object[]{"Some Curporation LTD", "noe@noe.com", "45987700"});
+        model.addRow(new Object[]{"Johan Olsen", "noeannet@noeannet.com", "91482099"});
 
     }
 
@@ -142,10 +166,10 @@ public class MainWindow extends JFrame {
                 uType = "Sale";
                 break;
             case 2:
-                uType = "Driver";
+                uType = "Chef";
                 break;
             case 3:
-                uType = "Chef";
+                uType = "Driver";
                 break;
         }
         model.addRow(new Object[]{fName, lName, email, uName, uType});

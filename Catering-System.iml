@@ -7,18 +7,14 @@
       <sourceFolder url="file://$MODULE_DIR$/src/main/java" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/src/main/resources" type="java-resource" />
       <sourceFolder url="file://$MODULE_DIR$/src/test/java" isTestSource="true" />
+      <excludeFolder url="file://$MODULE_DIR$/src/main/java/Testing" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" scope="TEST" name="Arquillian JUnit:Release" level="project" />
     <orderEntry type="library" name="com.google.code.geocoder-java:geocoder-java:0.16" level="project" />
     <orderEntry type="library" name="jfree:jfreechart:1.0.13" level="project" />
     <orderEntry type="library" name="mysql:mysql-connector-java:5.1.38" level="project" />
-    <orderEntry type="library" name="geocoder-java-0.16" level="project" />
-    <orderEntry type="library" name="jcommon-1.0.23" level="project" />
-    <orderEntry type="library" name="junit-4.10" level="project" />
-    <orderEntry type="library" name="mysql-connector-java-5.1.38-bin" level="project" />
-    <orderEntry type="library" name="DBUtils" level="project" />
+    <orderEntry type="library" name="commons-dbutils:commons-dbutils:1.6" level="project" />
   </component>
 </module>

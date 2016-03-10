@@ -21,6 +21,8 @@ public class AddUser extends JFrame {
     private JButton cancelButton;
     private JButton addUserButton;
 
+    UserManagement userManagement;
+
     public AddUser(Container parent) {
         setContentPane(mainPane);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -42,6 +44,13 @@ public class AddUser extends JFrame {
                 int type = userType.getSelectedIndex();
                 String uName = userName.getText();
                 String pass = password.getText();
+
+                try {
+                    userManagement = new UserManagement();
+                    userManagement.registerUser(uName, pass, mail, type); // Legg til bruker i database
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                }
 
                 //FIXME - brukes kun for GUI test
                 MainWindow.addUser(fName, lName, mail, uName, type);
