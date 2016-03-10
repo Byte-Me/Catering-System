@@ -94,12 +94,106 @@ public class UserManagement extends Management {
         if(rowChanged > 0) return true;
         return false;
     }
+    public boolean updateUserInfoLName(String username, String newData) {
+        int rowChanged = 0;
+        if (super.setUp()) {
+            try {
+                rowChanged = getScentence().executeUpdate("UPDATE user SET last_name = '" + newData + "' WHERE username = '" + username + "';");
+            } catch (SQLException e) {
+                System.err.println("Issue with executing database update.");
+                return false;
+
+            } finally {
+                DbUtils.closeQuietly(getScentence());
+                DbUtils.closeQuietly(getConnection());
+
+
+            }
+        }
+        if(rowChanged > 0) return true;
+        return false;
+    }
+    public boolean updateUserInfoUsername(String username, String newData) {
+        int rowChanged = 0;
+        if (super.setUp()) {
+            try {
+                rowChanged = getScentence().executeUpdate("UPDATE user SET username = '" + newData + "' WHERE username = '" + username + "';");
+            } catch (SQLException e) {
+                System.err.println("Issue with executing database update.");
+                return false;
+
+            } finally {
+                DbUtils.closeQuietly(getScentence());
+                DbUtils.closeQuietly(getConnection());
+
+
+            }
+        }
+        if(rowChanged > 0) return true;
+        return false;
+    }
+    public boolean updateUserInfoPhone(String username, String newData) {
+        int rowChanged = 0;
+        if (super.setUp()) {
+            try {
+                rowChanged = getScentence().executeUpdate("UPDATE user SET phone = '" + newData + "' WHERE username = '" + username + "';");
+            } catch (SQLException e) {
+                System.err.println("Issue with executing database update.");
+                return false;
+
+            } finally {
+                DbUtils.closeQuietly(getScentence());
+                DbUtils.closeQuietly(getConnection());
+
+
+            }
+        }
+        if(rowChanged > 0) return true;
+        return false;
+    }
+    public boolean updateUserInfoEmail(String username, String newData) {
+        int rowChanged = 0;
+        if (super.setUp()) {
+            try {
+                rowChanged = getScentence().executeUpdate("UPDATE user SET email = '" + newData + "' WHERE username = '" + username + "';");
+            } catch (SQLException e) {
+                System.err.println("Issue with executing database update.");
+                return false;
+
+            } finally {
+                DbUtils.closeQuietly(getScentence());
+                DbUtils.closeQuietly(getConnection());
+
+
+            }
+        }
+        if(rowChanged > 0) return true;
+        return false;
+    }
+    public boolean updateUserInfoAccessLevel(String username, int newData) {
+        int rowChanged = 0;
+        if (super.setUp()) {
+            try {
+                rowChanged = getScentence().executeUpdate("UPDATE user SET access_level = '" + newData + "' WHERE username = '" + username + "';");
+            } catch (SQLException e) {
+                System.err.println("Issue with executing database update.");
+                return false;
+
+            } finally {
+                DbUtils.closeQuietly(getScentence());
+                DbUtils.closeQuietly(getConnection());
+
+
+            }
+        }
+        if(rowChanged > 0) return true;
+        return false;
+    }
+
 }
 
     /*
     TODO:
-        UserInfo: ArrayList med objectarrays for alle brukere. Firstname, lastname, email, phone, username, usertype
-        Endre INSERT og SELECT setninger til de nye tabellene.
 
      */
 

@@ -70,7 +70,7 @@ public class TestJUnitDB{
         boolean validUser = false;
         boolean invalidUser = true;
         try{
-            validUser = user.registerUser("Even", "Dalen", "EvenDal", "passord", "email", "1234545", 1);
+            validUser = user.registerUser("Even", "Dalen", "EvenDale", "passord", "email", "1234545", 1);
             invalidUser = user.registerUser("Even", "Dalen", "EvenD", "passord", "email", "1234545", 1);
 
         }
