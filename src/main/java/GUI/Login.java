@@ -30,7 +30,7 @@ public class Login extends JFrame{
         setLocationRelativeTo(null);
 
         loginButton.addActionListener(new ActionListener() {
-            @Override
+
             public void actionPerformed(ActionEvent e) {
 
                 String inputUsr = usernameTextField.getText();
@@ -38,13 +38,9 @@ public class Login extends JFrame{
 
                 int userType = -1;
 
+                dbconnect = new LoginManagement();
+                userType = dbconnect.login(inputUsr, inputPass);
 
-                try {
-                    dbconnect = new LoginManagement();
-                    userType = dbconnect.login(inputUsr, inputPass);
-                } catch (Exception ex) {
-                    System.out.println(ex);
-                }
 
                 System.out.println(userType);
 
@@ -66,7 +62,7 @@ public class Login extends JFrame{
         });
 
         cancelButton.addActionListener(new ActionListener() {
-            @Override
+
             public void actionPerformed(ActionEvent e) {
                 // What happens on cancel?
                 setVisible(false);

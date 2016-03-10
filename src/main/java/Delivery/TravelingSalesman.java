@@ -6,6 +6,7 @@ import com.google.code.geocoder.model.GeocodeResponse;
 import com.google.code.geocoder.model.GeocoderRequest;
 import com.google.code.geocoder.model.GeocoderResult;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -126,37 +127,54 @@ public class TravelingSalesman {
 
 
     private double[] geoCoder(String adress, int index){
-        double[] out = null;
+        double[] out = new double[3];
         final Geocoder geocoder = new Geocoder();
         GeocoderRequest geocoderRequest = new GeocoderRequestBuilder().setAddress(adress).getGeocoderRequest();
         double latitude = 0;
         double longitude = 0;
         GeocodeResponse geocoderResponse = null;
-        List<GeocoderResult> results = null;
-
 
         try {
-            results = geocoderResponse.getResults();
             geocoderResponse = geocoder.geocode(geocoderRequest);
+            List<GeocoderResult> results = geocoderResponse.getResults();
             latitude = results.get(0).getGeometry().getLocation().getLat().doubleValue();
             longitude = results.get(0).getGeometry().getLocation().getLng().doubleValue();
-        } catch (Exception e) {
-            System.err.println("Issue with geocoding the string: " + adress + ". Try checking for typos.");
         }
+        catch (IOException ioe){
+            System.out.println("Issue with IO.");
+            return null;
 
-
+       } catch (Exception e) {
+            System.err.println("Issue with geocoding the string: " + adress + ". Try checking for typos.");
+            return null;
+        }
         out[0] = latitude;
         out[1] = longitude;
         out[2] = index;
         return out;
     }
+    /*
+        1. Brukere
+        2. Kunder
+        3. Ordre
+        4. Ingredienser
+        5. Oppskrifter
+        6.
+     */
 
+    //Returns null if there is an issue with geocoding adresses. This needs too be handled in elsewhere.
     public ArrayList<double[]> createPositionsArray(ArrayList<String> adresses){
 
         ArrayList<double[]> out = new ArrayList<double[]>();
 
         for (int i = 0; i < adresses.size(); i++) {
-            out.add(geoCoder(adresses.get(i), i));
+            try {
+                out.add(geoCoder(adresses.get(i), i));
+            }
+            catch (Exception e){
+                System.err.println("Issue with GeoCoding: " + adresses.get(i));
+                return null;
+            }
         }
         return out;
 

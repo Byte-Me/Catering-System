@@ -29,6 +29,7 @@ public class Encryption {
         }
         catch (Exception e){
             System.err.println("Issue with secret key factory in password decryption.");
+            return false;
         }
 
         if (Arrays.equals(hashPass, hash)) return true;
@@ -48,6 +49,7 @@ public class Encryption {
         }
         catch (Exception e){
             System.err.println("Issue with SecretKeyFactory in password encrpytion.");
+            return null;
         }
 
         Base64.Encoder enc = Base64.getEncoder();
