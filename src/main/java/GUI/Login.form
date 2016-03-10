@@ -31,7 +31,7 @@
                 <properties>
                   <horizontalAlignment value="11"/>
                   <horizontalTextPosition value="11"/>
-                  <text value="Vennligst fyll inn brukernavn og passord for å logge inn"/>
+                  <text value="Please fill in your credentials to login"/>
                 </properties>
               </component>
             </children>
@@ -50,7 +50,7 @@
                 </constraints>
                 <properties>
                   <labelFor value="8a510"/>
-                  <text value="&amp;Brukernavn:"/>
+                  <text value="Username: "/>
                 </properties>
               </component>
               <component id="8a510" class="javax.swing.JTextField" binding="usernameTextField">
@@ -59,7 +59,9 @@
                     <preferred-size width="250" height="-1"/>
                   </grid>
                 </constraints>
-                <properties/>
+                <properties>
+                  <text value="Ole"/>
+                </properties>
               </component>
               <hspacer id="90931">
                 <constraints>
@@ -82,7 +84,7 @@
                 </constraints>
                 <properties>
                   <labelFor value="e87c9"/>
-                  <text value="&amp;Passord:"/>
+                  <text value="Password: "/>
                 </properties>
               </component>
               <component id="e87c9" class="javax.swing.JPasswordField" binding="passwordPasswordField">
@@ -91,7 +93,9 @@
                     <preferred-size width="250" height="-1"/>
                   </grid>
                 </constraints>
-                <properties/>
+                <properties>
+                  <text value="pass"/>
+                </properties>
               </component>
               <hspacer id="b053e">
                 <constraints>
@@ -108,20 +112,21 @@
             <properties/>
             <border type="none"/>
             <children>
-              <component id="317c5" class="javax.swing.JButton" binding="loginButton" default-binding="true">
+              <component id="3f0e" class="javax.swing.JButton" binding="cancelButton" default-binding="true">
                 <constraints>
                   <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <text value="&amp;Login"/>
+                  <text value="&amp;Cancel"/>
                 </properties>
               </component>
-              <component id="3f0e" class="javax.swing.JButton" binding="cancelButton" default-binding="true">
+              <component id="317c5" class="javax.swing.JButton" binding="loginButton" default-binding="true">
                 <constraints>
                   <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <text value="&amp;Cancel"/>
+                  <selected value="false"/>
+                  <text value="&amp;Login"/>
                 </properties>
               </component>
             </children>
