@@ -20,6 +20,7 @@ public class AddUser extends JFrame {
     private JPanel mainPane;
     private JButton cancelButton;
     private JButton addUserButton;
+    private JTextField phone;
 
     UserManagement userManagement;
 

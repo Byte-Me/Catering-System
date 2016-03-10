@@ -1,12 +1,16 @@
 package GUI;
 
 import javax.swing.*;
+import javax.swing.event.TableColumnModelListener;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 import javax.swing.text.MaskFormatter;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Enumeration;
 
 import static javax.swing.JOptionPane.showMessageDialog;
 
@@ -28,8 +32,20 @@ public class MainWindow extends JFrame {
     private JButton getStatisticsButton;
     private JButton addCustomerButton;
     private JTable customerTable;
+    private JTextField serachOrdersText;
+    private JButton searchOrdersButton;
+    private JList drivingList;
+    private JPanel mapPanel;
+    private JTable prepareTable;
+    private JTable ingredientTable;
+    private JButton generateShoppingListButton;
+    private JButton addRecipeButton;
 
-    private static DefaultTableModel model;
+    private static DefaultTableModel userModel;
+    private static DefaultTableModel customerModel;
+    private static DefaultListModel<String> driverModel;
+    private static DefaultTableModel prepareModel;
+    private static DefaultTableModel ingredientModel;
 
     public MainWindow(int userType) {
         setContentPane(mainPanel);
@@ -67,9 +83,11 @@ public class MainWindow extends JFrame {
         setupAdministration();
         setupStatistics();
         setupSale();
+        setupDriver();
+        setupChef();
 
         pack();
-        setSize(800, 400);
+        setSize(1000, 600);
         setLocationRelativeTo(null);
 
         setVisible(true);
@@ -85,14 +103,14 @@ public class MainWindow extends JFrame {
 
         String[] header = {"First Name", "Last Name", "Email", "Username", "User Type"}; // Header titles
 
-        model = new DefaultTableModel(); // Model of the table
-        model.setColumnIdentifiers(header); // Add header to columns
+        userModel = new DefaultTableModel(); // Model of the table
+        userModel.setColumnIdentifiers(header); // Add header to columns
 
-        userTable.setModel(model); // Add model to table
+        userTable.setModel(userModel); // Add model to table
 
         // TODO - testdata (remove)
-        model.addRow(new Object[]{"Ole Kristian", "Aune", "noe@noe.com", "ole", "Admin"});
-        model.addRow(new Object[]{"Even", "Dalen", "noeannet@noeannet.com", "even", "Admin"});
+        userModel.addRow(new Object[]{"Ole Kristian", "Aune", "noe@noe.com", "ole", "Admin"});
+        userModel.addRow(new Object[]{"Even", "Dalen", "noeannet@noeannet.com", "even", "Admin"});
 
     }
 
@@ -100,29 +118,29 @@ public class MainWindow extends JFrame {
 
         addCustomerButton.addActionListener(new ActionListener() { // Button action listener
             public void actionPerformed(ActionEvent e) {
-                //new AddUser(mainPanel.getParent());
+                // TODO - make action for the button
             }
         });
 
         String[] header = {"Name", "Email", "Phone"}; // Header titles
 
-        model = new DefaultTableModel(); // Model of the table
-        model.setColumnIdentifiers(header); // Add header to columns
+        customerModel = new DefaultTableModel(); // Model of the table
+        customerModel.setColumnIdentifiers(header); // Add header to columns
 
-        customerTable.setModel(model); // Add model to table
+        customerTable.setModel(customerModel); // Add model to table
 
         // TODO - testdata (remove)
-        model.addRow(new Object[]{"Some Curporation LTD", "noe@noe.com", "45987700"});
-        model.addRow(new Object[]{"Johan Olsen", "noeannet@noeannet.com", "91482099"});
+        customerModel.addRow(new Object[]{"Some Curporation LTD", "noe@noe.com", "45987700"});
+        customerModel.addRow(new Object[]{"Johan Olsen", "noeannet@noeannet.com", "91482099"});
 
     }
 
     private void setupStatistics() {
 
         try {
-            final MaskFormatter maskFormatter = new MaskFormatter("##/##/##"); // Defining format pattern
+            final MaskFormatter maskFormatter = new MaskFormatter("##/##/####"); // Defining format pattern
             //maskFormatter.setPlaceholderCharacter('_');
-            maskFormatter.setPlaceholder("00-00-00"); // Placeholder
+            maskFormatter.setPlaceholder("00-00-0000"); // Placeholder
 
             fromDate.setFormatterFactory(new JFormattedTextField.AbstractFormatterFactory() { // Add format to field
                 @Override
@@ -155,6 +173,45 @@ public class MainWindow extends JFrame {
 
     }
 
+    private void setupDriver() {
+
+        driverModel = new DefaultListModel<String>(); // Model of the list
+        drivingList.setModel(driverModel); // Add model to jList
+
+        // TODO - testdata (remove)
+        driverModel.addElement("Some Curporation LTD    Adresseveien 4, Sted, Land  91482099");
+
+    }
+
+    private void setupChef() {
+
+        String[] prepareHeader = {"Quantity", "Recipe", "Notes", "Ready for delivery"}; // Header titles
+        String[] ingredientHeader = {"Ingredient", "Quantity", "Unit"}; // Header titles
+
+        prepareModel = new DefaultTableModel() {
+            public Class<?> getColumnClass(int columnIndex) {
+                return getValueAt(0, columnIndex).getClass();
+            }
+        }; // Model of the table
+        ingredientModel = new DefaultTableModel(); // Model of the table
+
+        prepareModel.setColumnIdentifiers(prepareHeader); // Add header to columns
+        ingredientModel.setColumnIdentifiers(ingredientHeader); // Add header to columns
+
+        prepareTable.setModel(prepareModel); // Add model to table
+        ingredientTable.setModel(ingredientModel); // Add model to table
+
+
+
+        // TODO - testdata (remove)
+        prepareModel.addRow(new Object[]{3, "Paella", "Without seafood", false});
+
+        // TODO - testdata (remove)
+        ingredientModel.addRow(new Object[]{"Suagr", 200, "grams"});
+        ingredientModel.addRow(new Object[]{"Meatballs", 3000, "pieces"});
+
+    }
+
     //FIXME - logikk skal ikke ligge her, kun GUI
     public static void addUser(String fName, String lName, String email, String uName, int uNum) {
         String uType = "";
@@ -172,6 +229,6 @@ public class MainWindow extends JFrame {
                 uType = "Driver";
                 break;
         }
-        model.addRow(new Object[]{fName, lName, email, uName, uType});
+        userModel.addRow(new Object[]{fName, lName, email, uName, uType});
     }
 }
