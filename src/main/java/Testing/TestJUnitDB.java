@@ -70,7 +70,7 @@ public class TestJUnitDB{
         boolean validUser = false;
         boolean invalidUser = true;
         try{
-            validUser = user.registerUser("Even", "Dalen", "EvenDale", "passord", "email", "1234545", 1);
+            validUser = user.registerUser("Even", "Dalen", "EvenDalen!!", "passord", "email", "1234545", 1);
             invalidUser = user.registerUser("Even", "Dalen", "EvenD", "passord", "email", "1234545", 1);
 
         }
@@ -85,9 +85,30 @@ public class TestJUnitDB{
     public void getUsers() {
         assertNotNull(user.userInfo());
     }
-    @Test
-    public void updateFName(){
+    @Ignore
+    public void updateUsers(){
         assertTrue(user.updateUserInfoFName("kris", "Kristaffer"));
+        assertTrue(user.updateUserInfoLName("kris", "Aasss"));
+        assertTrue(user.updateUserInfoUsername("kris", "kris"));
+        assertTrue(user.updateUserInfoPhone("kris", "000000"));
+        assertTrue(user.updateUserInfoEmail("kris", "Kristaffer@kris.chrisP"));
+        assertTrue(user.updateUserInfoAccessLevel("kris", 3));
+    }
+    @Test
+    public void getIngredients(){
+        assertNotNull(food.getIngredients());
+    }
+    @Ignore
+    public void addRecipe(){
+        assertNotNull(food.getIngredients());
+    }
+    @Ignore
+    public void addIngredients(){
+        assertTrue(food.addIngredient("Potet", 100, "kg"));
+    }
+    @Test
+    public void searchUser(){
+        assertNotNull(user.userSearch("Even"));
     }
     @After
     public void objTearDown(){
@@ -96,7 +117,6 @@ public class TestJUnitDB{
     }
     @AfterClass
     public static void DBTearDown(){
-
         try {
 
         } catch (Exception e) {
