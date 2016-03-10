@@ -1,6 +1,7 @@
 package GUI;
 
 import Database.UserManagement;
+import HelperClasses.TableCellListener;
 
 import javax.swing.*;
 import javax.swing.event.TableColumnModelListener;
@@ -16,7 +17,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Enumeration;
 
-import static javax.swing.JOptionPane.showMessageDialog;
+import static javax.swing.JOptionPane.*;
 
 /**
  * Created by olekristianaune on 07.03.2016.
@@ -58,6 +59,8 @@ public class MainWindow extends JFrame {
     private static DefaultListModel<String> driverModel;
     private static DefaultTableModel prepareModel;
     private static DefaultTableModel ingredientModel;
+
+    private static UserManagement userManagement = new UserManagement();
 
     public MainWindow(int userType) {
         setContentPane(mainPanel);
@@ -120,19 +123,72 @@ public class MainWindow extends JFrame {
 
         userTable.setModel(userModel); // Add model to table
 
+        // What happens when a cell in the table is changed?
+        Action action = new AbstractAction() {
+            public void actionPerformed(ActionEvent e) {
+                int usernameColumn = 4;
+                TableCellListener tcl = (TableCellListener)e.getSource();
+
+                int option = showOptionDialog(null,
+                        "Edit value " + tcl.getOldValue() + " to " + tcl.getNewValue() + "?",
+                        "Edit " + userModel.getColumnName(tcl.getColumn()),
+                        YES_NO_OPTION,
+                        INFORMATION_MESSAGE,
+                        null,
+                        new Object[]{"No", "Yes"},
+                        "Yes");
+
+                // If yes, ubdate database
+                if (option == 1) {
+                    switch (tcl.getColumn()) {
+                        case 0:
+                            userManagement.updateUserInfoFName((String)userModel.getValueAt(tcl.getRow(), usernameColumn), (String)tcl.getNewValue());
+                            break;
+                        case 1:
+                            userManagement.updateUserInfoLName((String)userModel.getValueAt(tcl.getRow(), usernameColumn), (String)tcl.getNewValue());
+                            break;
+                        case 2:
+                            userManagement.updateUserInfoEmail((String)userModel.getValueAt(tcl.getRow(), usernameColumn), (String)tcl.getNewValue());
+                            break;
+                        case 3:
+                            userManagement.updateUserInfoPhone((String)userModel.getValueAt(tcl.getRow(), usernameColumn), (String)tcl.getNewValue());
+                            break;
+                        case 4:
+                            userManagement.updateUserInfoUsername((String)userModel.getValueAt(tcl.getRow(), usernameColumn), (String)tcl.getNewValue());
+                            break;
+                        case 5:
+                            userManagement.updateUserInfoAccessLevel((String)userModel.getValueAt(tcl.getRow(), usernameColumn), Integer.parseInt((String)tcl.getNewValue()));
+                            break;
+                        default:
+                            System.err.println(userTable.getColumnName(tcl.getColumn()) + " does not yet have an implemetation.");
+                    }
+
+                }
+
+                // Update user table from database
+                updateUsers();
+            }
+        };
+
+        TableCellListener tcl = new TableCellListener(userTable, action);
+
         updateUsers();
 
     }
 
     public static void updateUsers() {
 
-        UserManagement userManagement = new UserManagement();
+        // Get users from database
         ArrayList<Object[]> users = userManagement.userInfo();
 
-        for(int i = 0; i < userModel.getRowCount(); i++) {
-            userModel.removeRow(i);
+        // Empties entries of Users table
+        if (userModel.getRowCount() > 0) {
+            for (int i = userModel.getRowCount() - 1; i > -1; i--) {
+                userModel.removeRow(i);
+            }
         }
 
+        // Add users from arraylist to table
         for (Object[] user : users) {
             userModel.addRow(user);
         }
