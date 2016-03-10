@@ -1,7 +1,10 @@
 package GUI;
 
+import Database.UserManagement;
+
 import javax.swing.*;
 import javax.swing.event.TableColumnModelListener;
+import javax.swing.event.TableModelEvent;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
@@ -10,6 +13,7 @@ import javax.swing.table.TableModel;
 import javax.swing.text.MaskFormatter;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Enumeration;
 
 import static javax.swing.JOptionPane.showMessageDialog;
@@ -32,14 +36,22 @@ public class MainWindow extends JFrame {
     private JButton getStatisticsButton;
     private JButton addCustomerButton;
     private JTable customerTable;
-    private JTextField serachOrdersText;
-    private JButton searchOrdersButton;
     private JList drivingList;
     private JPanel mapPanel;
     private JTable prepareTable;
     private JTable ingredientTable;
     private JButton generateShoppingListButton;
     private JButton addRecipeButton;
+    private JButton searchCustomersButton;
+    private JButton searchUsersButton;
+    private JTable table1;
+    private JButton searchOrdersButton;
+    private JTextField serachOrders;
+    private JButton addOrderButton;
+    private JTextField searchCustomers;
+    private JButton deleteCustomersButton;
+    private JTextField searchUsers;
+    private JButton deleteUsersButton;
 
     private static DefaultTableModel userModel;
     private static DefaultTableModel customerModel;
@@ -101,17 +113,29 @@ public class MainWindow extends JFrame {
             }
         });
 
-        String[] header = {"First Name", "Last Name", "Email", "Username", "User Type"}; // Header titles
+        String[] header = {"First Name", "Last Name", "Email", "Phone", "Username", "User Type"}; // Header titles
 
         userModel = new DefaultTableModel(); // Model of the table
         userModel.setColumnIdentifiers(header); // Add header to columns
 
         userTable.setModel(userModel); // Add model to table
 
-        // TODO - testdata (remove)
-        userModel.addRow(new Object[]{"Ole Kristian", "Aune", "noe@noe.com", "ole", "Admin"});
-        userModel.addRow(new Object[]{"Even", "Dalen", "noeannet@noeannet.com", "even", "Admin"});
+        updateUsers();
 
+    }
+
+    public static void updateUsers() {
+
+        UserManagement userManagement = new UserManagement();
+        ArrayList<Object[]> users = userManagement.userInfo();
+
+        for(int i = 0; i < userModel.getRowCount(); i++) {
+            userModel.removeRow(i);
+        }
+
+        for (Object[] user : users) {
+            userModel.addRow(user);
+        }
     }
 
     private void setupSale() {
@@ -212,23 +236,4 @@ public class MainWindow extends JFrame {
 
     }
 
-    //FIXME - logikk skal ikke ligge her, kun GUI
-    public static void addUser(String fName, String lName, String email, String uName, int uNum) {
-        String uType = "";
-        switch (uNum) {
-            case 0:
-                uType = "Admin";
-                break;
-            case 1:
-                uType = "Sale";
-                break;
-            case 2:
-                uType = "Chef";
-                break;
-            case 3:
-                uType = "Driver";
-                break;
-        }
-        userModel.addRow(new Object[]{fName, lName, email, uName, uType});
-    }
 }

@@ -6,6 +6,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 /**
  * Created by olekristianaune on 09.03.2016.
@@ -42,19 +43,17 @@ public class AddUser extends JFrame {
                 String fName = firstName.getText();
                 String lName = lastName.getText();
                 String mail = email.getText();
+                String phoneNr = phone.getText();
                 int type = userType.getSelectedIndex();
                 String uName = userName.getText();
                 String pass = password.getText();
 
-                try {
-                    userManagement = new UserManagement();
-                    userManagement.registerUser(uName, pass, mail, type); // Legg til bruker i database
-                } catch (Exception e1) {
-                    e1.printStackTrace();
-                }
 
-                //FIXME - brukes kun for GUI test
-                MainWindow.addUser(fName, lName, mail, uName, type);
+                userManagement = new UserManagement();
+                // TODO - legg inn sjekk for om registrering var vellykket
+                userManagement.registerUser(fName, lName, uName, pass, mail, phoneNr, type); // Legg til bruker i database
+
+                MainWindow.updateUsers();
 
                 setVisible(false);
                 dispose();
