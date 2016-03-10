@@ -65,7 +65,7 @@ public class TestJUnitDB{
 
     }
 
-    @Test
+    @Test // fungerer bare dersom brukernavn på validUser endres til noe som ikke allerede finnes.
     public void createUser(){
         boolean validUser = false;
         boolean invalidUser = true;
@@ -85,7 +85,7 @@ public class TestJUnitDB{
     public void getUsers() {
         assertNotNull(user.userInfo());
     }
-    @Ignore
+    @Ignore // TODO: username fungerer ikke?
     public void updateUsers(){
         assertTrue(user.updateUserInfoFName("kris", "Kristaffer"));
         assertTrue(user.updateUserInfoLName("kris", "Aasss"));
@@ -98,11 +98,11 @@ public class TestJUnitDB{
     public void getIngredients(){
         assertNotNull(food.getIngredients());
     }
-    @Ignore
+    @Ignore // må fikse ingredienser først
     public void addRecipe(){
         assertNotNull(food.getIngredients());
     }
-    @Ignore
+    @Ignore // Feil med database
     public void addIngredients(){
         assertTrue(food.addIngredient("Potet", 100, "kg"));
     }
