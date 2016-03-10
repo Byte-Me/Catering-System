@@ -13,8 +13,8 @@ import java.util.ArrayList;
 public class AddRecipe {
     public boolean addRecipe(String name, ArrayList<String> ingredients){
         FoodManagement food = new FoodManagement();
-        for(String ing : ingredients){
-            if(food.getScentence().executeQuery("").next());
+        ArrayList<Object[]> dbIng = food.getIngredients();
+
         }
     }
 }

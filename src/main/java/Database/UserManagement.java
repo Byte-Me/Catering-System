@@ -53,6 +53,7 @@ public class UserManagement extends Management {
         ResultSet res = null;
         ArrayList<Object[]> out = new ArrayList<Object[]>();
         if (super.setUp()) {
+
             try {
                 res = getScentence().executeQuery("select first_name, last_name, email, phone, username, access_level from user;");
                 while (res.next()) {
@@ -62,7 +63,7 @@ public class UserManagement extends Management {
                     obj[2] = res.getString("email");
                     obj[3] = res.getString("phone");
                     obj[4] = res.getString("username");
-                    obj[5] = res.getString("access_level");
+                    obj[5] = res.getInt("access_level");
                     out.add(obj);
                 }
             } catch (SQLException e) {
@@ -188,6 +189,33 @@ public class UserManagement extends Management {
         }
         if(rowChanged > 0) return true;
         return false;
+    }
+    public ArrayList<Object[]> userSearch(String searchTerm){
+        ResultSet res = null;
+        ArrayList<Object[]> out = new ArrayList<Object[]>();
+        if(setUp()) {
+            try {
+                res = getScentence().executeQuery("SELECT username, first_name, last_name, phone, email, access_level FROM user WHERE username LIKE '%" + searchTerm + "%' OR first_name LIKE '%" + searchTerm + "%' OR last_name LIKE '%" + searchTerm + "%' OR phone LIKE '%" + searchTerm + "%' OR email LIKE '%" + searchTerm + "%' OR access_level LIKE '%" + searchTerm + "%';");
+                System.out.println("Hei");
+                while (res.next()) {
+                    Object[] obj = new Object[6];
+                    obj[0] = res.getString("first_name");
+                    obj[1] = res.getString("last_name");
+                    obj[2] = res.getString("email");
+                    obj[3] = res.getString("phone");
+                    obj[4] = res.getString("username");
+                    obj[5] = res.getString("access_level");
+                }
+            } catch (Exception e) {
+                System.err.println("Issue with search");
+                return null;
+            } finally {
+                DbUtils.closeQuietly(getScentence());
+                DbUtils.closeQuietly(getConnection());
+            }
+            return out;
+        }
+        return null;
     }
 
 }
