@@ -102,13 +102,13 @@ public class TestJUnitDB{
     public void getIngredients(){
         assertNotNull(food.getIngredients());
     }
-    @Ignore // må fikse ingredienser først
+    @Ignore
     public void addRecipe(){
         assertNotNull(food.getIngredients());
     }
-    @Ignore // Feil med database
+    @Test
     public void addIngredients(){
-        assertTrue(food.addIngredient("Potet", 100, "kg"));
+        assertTrue(food.addIngredient("Barn", 100, "kg", 0));
     }
     @Test
     public void searchUser(){

@@ -100,13 +100,13 @@ public class FoodManagement extends Management{
     /*
     TODO: Problem med databasen, kan ikke legge til grocery pga foreign keys.
      */
-    public boolean addIngredient(String name, int price, String unit){
+    public boolean addIngredient(String name, int price, String unit, int quantity){
         if(setUp()) {
             int res = 0;
 
             try {
                 System.out.println("INSERT INTO grocery VALUES(DEFAULT, '" + name + "', " + price + ", '" + unit + "', 0);");
-                res = getScentence().executeUpdate("INSERT INTO grocery VALUES(DEFAULT, '" + name + "', '" + price + "', '" + unit + "', 0);");
+                res = getScentence().executeUpdate("INSERT INTO grocery VALUES(DEFAULT, '" + name + "', '" + price + "', '" + unit + "', '" + quantity + "');");
 
             } catch (Exception e) {
                 System.err.println("Issue with adding ingredient.");
