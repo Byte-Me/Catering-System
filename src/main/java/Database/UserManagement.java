@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import Encryption.*;
 import org.apache.commons.dbutils.DbUtils;
@@ -53,8 +54,10 @@ public class UserManagement extends Management {
         ResultSet res = null;
         ArrayList<Object[]> out = new ArrayList<Object[]>();
         if (super.setUp()) {
+
             try {
-                res = getScentence().executeQuery("select first_name, last_name, email, phone, username, access_level from user;");
+                res = getScentence().executeQuery("select first_name, last_name, email, phone, username, access_level" +
+                        " from user order by last_name;");
                 while (res.next()) {
                     Object[] obj = new Object[6];
                     obj[0] = res.getString("first_name");
@@ -62,17 +65,16 @@ public class UserManagement extends Management {
                     obj[2] = res.getString("email");
                     obj[3] = res.getString("phone");
                     obj[4] = res.getString("username");
-                    obj[5] = res.getString("access_level");
+                    obj[5] = res.getInt("access_level");
                     out.add(obj);
                 }
             } catch (SQLException e) {
                 System.err.println("Issue with executing SQL scentence.");
                 return null;
             }
-        } else {
-            return null;
-        }
-        return out;
+            return out;
+        } else return null;
+
     }
 
     public boolean updateUserInfoFName(String username, String newData) {
@@ -189,11 +191,55 @@ public class UserManagement extends Management {
         if(rowChanged > 0) return true;
         return false;
     }
+    public ArrayList<Object[]> userSearch(String searchTerm){
+        ResultSet res = null;
+        ArrayList<Object[]> out = new ArrayList<Object[]>();
+        if(setUp()) {
+            try {
+                res = getScentence().executeQuery("SELECT username, first_name, last_name, phone, email, access_level" +
+                        " FROM user WHERE username LIKE '%" + searchTerm + "%' OR first_name LIKE '%"
+                        + searchTerm + "%' OR last_name LIKE '%" + searchTerm + "%' OR phone LIKE '%" + searchTerm +
+                        "%' OR email LIKE '%" + searchTerm + "%' OR access_level LIKE '%" + searchTerm + "%' ORDER BY last_name;");
+                //System.out.println("Hei");
+
+                while (res.next()) {
+                    Object[] obj = new Object[6];
+                    obj[0] = res.getString("first_name");
+                    obj[1] = res.getString("last_name");
+                    obj[2] = res.getString("email");
+                    obj[3] = res.getString("phone");
+                    obj[4] = res.getString("username");
+                    obj[5] = res.getString("access_level");
+                    out.add(obj);
+                }
+            } catch (Exception e) {
+                System.err.println("Issue with search.");
+                return null;
+            } finally {
+                DbUtils.closeQuietly(getScentence());
+                DbUtils.closeQuietly(getConnection());
+            }
+
+            return out;
+        }
+        else return null;
+    }/*
+    public boolean deleteUser(){
+        ResultSet res = null;
+        if(setUp()){
+            try{
+                res = getScentence().executeUpdate("UPDATE user SET active = ")
+            }
+            catch (Exception e){
+                System.err.println("Issue with deleting user.");
+            }
+        }
+    }*/
 
 }
 
     /*
-    TODO:
+    TODO: Delete user.
 
      */
 

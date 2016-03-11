@@ -1,11 +1,11 @@
 package GUI;
 
+import Database.CustomerManagement;
 import Database.UserManagement;
+import HelperClasses.TableCellListener;
 
 import javax.swing.*;
-import javax.swing.event.TableColumnModelListener;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
+import javax.swing.event.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
@@ -13,10 +13,11 @@ import javax.swing.table.TableModel;
 import javax.swing.text.MaskFormatter;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Enumeration;
 
-import static javax.swing.JOptionPane.showMessageDialog;
+import static javax.swing.JOptionPane.*;
 
 /**
  * Created by olekristianaune on 07.03.2016.
@@ -42,8 +43,6 @@ public class MainWindow extends JFrame {
     private JTable ingredientTable;
     private JButton generateShoppingListButton;
     private JButton addRecipeButton;
-    private JButton searchCustomersButton;
-    private JButton searchUsersButton;
     private JTable table1;
     private JButton searchOrdersButton;
     private JTextField serachOrders;
@@ -58,6 +57,9 @@ public class MainWindow extends JFrame {
     private static DefaultListModel<String> driverModel;
     private static DefaultTableModel prepareModel;
     private static DefaultTableModel ingredientModel;
+
+    private static UserManagement userManagement = new UserManagement();
+    private static CustomerManagement customerManagement = new CustomerManagement();
 
     public MainWindow(int userType) {
         setContentPane(mainPanel);
@@ -94,7 +96,8 @@ public class MainWindow extends JFrame {
         // Setup the different panels
         setupAdministration();
         setupStatistics();
-        setupSale();
+        setupCustomer();
+        setupOrders();
         setupDriver();
         setupChef();
 
@@ -105,6 +108,7 @@ public class MainWindow extends JFrame {
         setVisible(true);
     }
 
+    // Create Users Pane
     private void setupAdministration() {
 
         addUserButton.addActionListener(new ActionListener() { // Button action listener
@@ -119,46 +123,253 @@ public class MainWindow extends JFrame {
         userModel.setColumnIdentifiers(header); // Add header to columns
 
         userTable.setModel(userModel); // Add model to table
+        userTable.setAutoCreateRowSorter(true); // Auto sort table by row
+
+        // What happens when a cell in the table is changed?
+        Action action = new AbstractAction() {
+            public void actionPerformed(ActionEvent e) {
+                int usernameColumn = 4;
+                TableCellListener tcl = (TableCellListener)e.getSource();
+
+                int option = showOptionDialog(null,
+                        "Change " + userModel.getColumnName(tcl.getColumn()) + " from '" + tcl.getOldValue() + "' to '" + tcl.getNewValue() + "'?",
+                        "Edit " + userModel.getColumnName(tcl.getColumn()),
+                        YES_NO_OPTION,
+                        INFORMATION_MESSAGE,
+                        null,
+                        new Object[]{"Yes", "No"},
+                        "No");
+
+                // If yes, ubdate database
+                if (option == 0) {
+                    switch (tcl.getColumn()) {
+                        case 0:
+                            userManagement.updateUserInfoFName((String)userModel.getValueAt(tcl.getRow(), usernameColumn), (String)tcl.getNewValue());
+                            break;
+                        case 1:
+                            userManagement.updateUserInfoLName((String)userModel.getValueAt(tcl.getRow(), usernameColumn), (String)tcl.getNewValue());
+                            break;
+                        case 2:
+                            userManagement.updateUserInfoEmail((String)userModel.getValueAt(tcl.getRow(), usernameColumn), (String)tcl.getNewValue());
+                            break;
+                        case 3:
+                            userManagement.updateUserInfoPhone((String)userModel.getValueAt(tcl.getRow(), usernameColumn), (String)tcl.getNewValue());
+                            break;
+                        case 4:
+                            userManagement.updateUserInfoUsername((String)userModel.getValueAt(tcl.getRow(), usernameColumn), (String)tcl.getNewValue());
+                            break;
+                        case 5:
+                            userManagement.updateUserInfoAccessLevel((String)userModel.getValueAt(tcl.getRow(), usernameColumn), Integer.parseInt((String)tcl.getNewValue()));
+                            break;
+                        default:
+                            System.err.println(userTable.getColumnName(tcl.getColumn()) + " does not yet have an implemetation.");
+                    }
+
+                }
+
+                // Update user table from database
+                updateUsers();
+            }
+        };
+        TableCellListener tcl = new TableCellListener(userTable, action);
+
+
+        // Serach field input changed?
+        searchUsers.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                searchFieldChange();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                searchFieldChange();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                searchFieldChange();
+            }
+
+            private void searchFieldChange() {
+                String searchTerm = searchUsers.getText();
+
+                ArrayList<Object[]> searchResult = userManagement.userSearch(searchTerm);
+
+                updateUsers(searchResult);
+            }
+        });
 
         updateUsers();
 
     }
 
+    // Update Users function
     public static void updateUsers() {
 
-        UserManagement userManagement = new UserManagement();
+        // Get users from database
         ArrayList<Object[]> users = userManagement.userInfo();
 
-        for(int i = 0; i < userModel.getRowCount(); i++) {
-            userModel.removeRow(i);
+        // Empties entries of Users table
+        if (userModel.getRowCount() > 0) {
+            for (int i = userModel.getRowCount() - 1; i > -1; i--) {
+                userModel.removeRow(i);
+            }
         }
 
+        // Add users from arraylist to table
         for (Object[] user : users) {
             userModel.addRow(user);
         }
     }
 
-    private void setupSale() {
+    public static void updateUsers(ArrayList<Object[]> users) {
+
+        // Empties entries of Users table
+        if (userModel.getRowCount() > 0) {
+            for (int i = userModel.getRowCount() - 1; i > -1; i--) {
+                userModel.removeRow(i);
+            }
+        }
+
+        // Add users from arraylist to table
+        for (Object[] user : users) {
+            userModel.addRow(user);
+        }
+    }
+
+    // Creating Customer Pane
+    private void setupCustomer() {
 
         addCustomerButton.addActionListener(new ActionListener() { // Button action listener
             public void actionPerformed(ActionEvent e) {
-                // TODO - make action for the button
+                new AddCustomer(mainPanel.getParent());
             }
         });
 
-        String[] header = {"Name", "Email", "Phone"}; // Header titles
+        String[] header = {"Name", "Email", "Phone", "Address"}; // Header titles
 
         customerModel = new DefaultTableModel(); // Model of the table
         customerModel.setColumnIdentifiers(header); // Add header to columns
 
         customerTable.setModel(customerModel); // Add model to table
+        customerTable.setAutoCreateRowSorter(true);
 
-        // TODO - testdata (remove)
-        customerModel.addRow(new Object[]{"Some Curporation LTD", "noe@noe.com", "45987700"});
-        customerModel.addRow(new Object[]{"Johan Olsen", "noeannet@noeannet.com", "91482099"});
+        // What happens when a cell in the table is changed?
+        Action action = new AbstractAction() {
+            public void actionPerformed(ActionEvent e) {
+                int usernameColumn = 4;
+                TableCellListener tcl = (TableCellListener)e.getSource();
+
+                int option = showOptionDialog(null,
+                        "Change " + customerTable.getColumnName(tcl.getColumn()) + " from '" + tcl.getOldValue() + "' to '" + tcl.getNewValue() + "'?",
+                        "Edit " + customerTable.getColumnName(tcl.getColumn()),
+                        YES_NO_OPTION,
+                        INFORMATION_MESSAGE,
+                        null,
+                        new Object[]{"Yes", "No"},
+                        "No");
+
+                // If yes, ubdate database
+
+                /*
+                if (option == 0) {
+                    switch (tcl.getColumn()) {
+                        case 0:
+                            customerManagement.updateCustomerInfoName((String)userModel.getValueAt(tcl.getRow(), usernameColumn), (String)tcl.getNewValue());
+                            break;
+                        case 1:
+                            customerManagement.updateCustomerInfoEmail((String)userModel.getValueAt(tcl.getRow(), usernameColumn), (String)tcl.getNewValue());
+                            break;
+                        case 2:
+                            customerManagement.updateCustomerInfoPhone((String)userModel.getValueAt(tcl.getRow(), usernameColumn), (String)tcl.getNewValue());
+                            break;
+                        case 3:
+                            customerManagement.updateCustomerInfoAddress((String)userModel.getValueAt(tcl.getRow(), usernameColumn), (String)tcl.getNewValue());
+                            break;
+                        default:
+                            System.err.println(customerTable.getColumnName(tcl.getColumn()) + " does not yet have an implemetation.");
+                    }
+
+                }
+                */
+
+                // Update user table from database
+                updateCustomer();
+            }
+        };
+        TableCellListener tcl = new TableCellListener(customerTable, action); //TODO: Find out how to handle updating of combined fields
+
+        // Serach field input changed?
+        searchCustomers.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                searchFieldChange();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                searchFieldChange();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                searchFieldChange();
+            }
+
+            private void searchFieldChange() {
+                String searchTerm = searchCustomers.getText();
+
+                ArrayList<Object[]> searchResult = customerManagement.customerSearch(searchTerm);
+
+                updateCustomer(searchResult);
+            }
+        });
+
+        updateCustomer();
 
     }
 
+    // Update Users function
+    public static void updateCustomer() {
+
+        // Get users from database
+        ArrayList<Object[]> customers = customerManagement.getCustomers();
+
+        // Empties entries of Users table
+        if (customerModel.getRowCount() > 0) {
+            for (int i = customerModel.getRowCount() - 1; i > -1; i--) {
+                customerModel.removeRow(i);
+            }
+        }
+
+        // Add users from arraylist to table
+        for (Object[] customer : customers) {
+            customerModel.addRow(customer);
+        }
+    }
+
+    public static void updateCustomer(ArrayList<Object[]> customers) {
+
+        // Empties entries of Users table
+        if (customerModel.getRowCount() > 0) {
+            for (int i = customerModel.getRowCount() - 1; i > -1; i--) {
+                customerModel.removeRow(i);
+            }
+        }
+
+        // Add users from arraylist to table
+        for (Object[] customer : customers) {
+            customerModel.addRow(customer);
+        }
+    }
+
+    // Create Orders Pane
+    public void setupOrders() {
+
+    }
+
+    // Creating Statistics Pane
     private void setupStatistics() {
 
         try {

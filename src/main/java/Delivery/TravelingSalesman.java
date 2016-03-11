@@ -162,7 +162,7 @@ public class TravelingSalesman {
         6.
      */
 
-    //Returns null if there is an issue with geocoding adresses. This needs too be handled in elsewhere.
+    //Returns null if there is an issue with geocoding adresses. This needs too be handled elsewhere.
     public ArrayList<double[]> createPositionsArray(ArrayList<String> adresses){
 
         ArrayList<double[]> out = new ArrayList<double[]>();
