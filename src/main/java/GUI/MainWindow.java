@@ -253,6 +253,52 @@ public class MainWindow extends JFrame {
         customerModel.setColumnIdentifiers(header); // Add header to columns
 
         customerTable.setModel(customerModel); // Add model to table
+        customerTable.setAutoCreateRowSorter(true);
+
+        // What happens when a cell in the table is changed?
+        Action action = new AbstractAction() {
+            public void actionPerformed(ActionEvent e) {
+                int usernameColumn = 4;
+                TableCellListener tcl = (TableCellListener)e.getSource();
+
+                int option = showOptionDialog(null,
+                        "Change " + customerTable.getColumnName(tcl.getColumn()) + " from '" + tcl.getOldValue() + "' to '" + tcl.getNewValue() + "'?",
+                        "Edit " + customerTable.getColumnName(tcl.getColumn()),
+                        YES_NO_OPTION,
+                        INFORMATION_MESSAGE,
+                        null,
+                        new Object[]{"Yes", "No"},
+                        "No");
+
+                // If yes, ubdate database
+
+                /*
+                if (option == 0) {
+                    switch (tcl.getColumn()) {
+                        case 0:
+                            customerManagement.updateCustomerInfoName((String)userModel.getValueAt(tcl.getRow(), usernameColumn), (String)tcl.getNewValue());
+                            break;
+                        case 1:
+                            customerManagement.updateCustomerInfoEmail((String)userModel.getValueAt(tcl.getRow(), usernameColumn), (String)tcl.getNewValue());
+                            break;
+                        case 2:
+                            customerManagement.updateCustomerInfoPhone((String)userModel.getValueAt(tcl.getRow(), usernameColumn), (String)tcl.getNewValue());
+                            break;
+                        case 3:
+                            customerManagement.updateCustomerInfoAddress((String)userModel.getValueAt(tcl.getRow(), usernameColumn), (String)tcl.getNewValue());
+                            break;
+                        default:
+                            System.err.println(customerTable.getColumnName(tcl.getColumn()) + " does not yet have an implemetation.");
+                    }
+
+                }
+                */
+
+                // Update user table from database
+                updateCustomer();
+            }
+        };
+        TableCellListener tcl = new TableCellListener(customerTable, action); //TODO: Find out how to handle updating of combined fields
 
         // Serach field input changed?
         searchCustomers.getDocument().addDocumentListener(new DocumentListener() {
