@@ -254,7 +254,33 @@ public class MainWindow extends JFrame {
 
         customerTable.setModel(customerModel); // Add model to table
 
-        //updateCustomer();
+        // Serach field input changed?
+        searchCustomers.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                searchFieldChange();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                searchFieldChange();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                searchFieldChange();
+            }
+
+            private void searchFieldChange() {
+                String searchTerm = searchCustomers.getText();
+
+                ArrayList<Object[]> searchResult = customerManagement.customerSearch(searchTerm);
+
+                updateCustomer(searchResult);
+            }
+        });
+
+        updateCustomer();
 
     }
 
@@ -263,6 +289,21 @@ public class MainWindow extends JFrame {
 
         // Get users from database
         ArrayList<Object[]> customers = customerManagement.getCustomers();
+
+        // Empties entries of Users table
+        if (customerModel.getRowCount() > 0) {
+            for (int i = customerModel.getRowCount() - 1; i > -1; i--) {
+                customerModel.removeRow(i);
+            }
+        }
+
+        // Add users from arraylist to table
+        for (Object[] customer : customers) {
+            customerModel.addRow(customer);
+        }
+    }
+
+    public static void updateCustomer(ArrayList<Object[]> customers) {
 
         // Empties entries of Users table
         if (customerModel.getRowCount() > 0) {
