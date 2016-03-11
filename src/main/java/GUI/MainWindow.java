@@ -1,5 +1,6 @@
 package GUI;
 
+import Database.CustomerManagement;
 import Database.UserManagement;
 import HelperClasses.TableCellListener;
 
@@ -58,6 +59,7 @@ public class MainWindow extends JFrame {
     private static DefaultTableModel ingredientModel;
 
     private static UserManagement userManagement = new UserManagement();
+    private static CustomerManagement customerManagement = new CustomerManagement();
 
     public MainWindow(int userType) {
         setContentPane(mainPanel);
@@ -252,10 +254,27 @@ public class MainWindow extends JFrame {
 
         customerTable.setModel(customerModel); // Add model to table
 
-        // TODO - testdata (remove)
-        customerModel.addRow(new Object[]{"Some Curporation LTD", "noe@noe.com", "45987700", "Street 3, City"});
-        customerModel.addRow(new Object[]{"Johan Olsen", "noeannet@noeannet.com", "91482099", "Citystreet 27a, Town"});
+        //updateCustomer();
 
+    }
+
+    // Update Users function
+    public static void updateCustomer() {
+
+        // Get users from database
+        ArrayList<Object[]> customers = customerManagement.getCustomers();
+
+        // Empties entries of Users table
+        if (customerModel.getRowCount() > 0) {
+            for (int i = customerModel.getRowCount() - 1; i > -1; i--) {
+                customerModel.removeRow(i);
+            }
+        }
+
+        // Add users from arraylist to table
+        for (Object[] customer : customers) {
+            customerModel.addRow(customer);
+        }
     }
 
     // Create Orders Pane
