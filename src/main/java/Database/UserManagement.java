@@ -196,7 +196,6 @@ public class UserManagement extends Management {
         if(setUp()) {
             try {
                 res = getScentence().executeQuery("SELECT username, first_name, last_name, phone, email, access_level FROM user WHERE username LIKE '%" + searchTerm + "%' OR first_name LIKE '%" + searchTerm + "%' OR last_name LIKE '%" + searchTerm + "%' OR phone LIKE '%" + searchTerm + "%' OR email LIKE '%" + searchTerm + "%' OR access_level LIKE '%" + searchTerm + "%';");
-                System.out.println("Hei");
                 while (res.next()) {
                     Object[] obj = new Object[6];
                     obj[0] = res.getString("first_name");
@@ -205,6 +204,7 @@ public class UserManagement extends Management {
                     obj[3] = res.getString("phone");
                     obj[4] = res.getString("username");
                     obj[5] = res.getString("access_level");
+                    out.add(obj);
                 }
             } catch (Exception e) {
                 System.err.println("Issue with search");

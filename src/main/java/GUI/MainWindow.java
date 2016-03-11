@@ -4,9 +4,7 @@ import Database.UserManagement;
 import HelperClasses.TableCellListener;
 
 import javax.swing.*;
-import javax.swing.event.TableColumnModelListener;
-import javax.swing.event.TableModelEvent;
-import javax.swing.event.TableModelListener;
+import javax.swing.event.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
@@ -14,6 +12,7 @@ import javax.swing.table.TableModel;
 import javax.swing.text.MaskFormatter;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.Enumeration;
 
@@ -43,8 +42,6 @@ public class MainWindow extends JFrame {
     private JTable ingredientTable;
     private JButton generateShoppingListButton;
     private JButton addRecipeButton;
-    private JButton searchCustomersButton;
-    private JButton searchUsersButton;
     private JTable table1;
     private JButton searchOrdersButton;
     private JTextField serachOrders;
@@ -97,7 +94,8 @@ public class MainWindow extends JFrame {
         // Setup the different panels
         setupAdministration();
         setupStatistics();
-        setupSale();
+        setupCustomer();
+        setupOrders();
         setupDriver();
         setupChef();
 
@@ -108,6 +106,7 @@ public class MainWindow extends JFrame {
         setVisible(true);
     }
 
+    // Create Users Pane
     private void setupAdministration() {
 
         addUserButton.addActionListener(new ActionListener() { // Button action listener
@@ -122,6 +121,7 @@ public class MainWindow extends JFrame {
         userModel.setColumnIdentifiers(header); // Add header to columns
 
         userTable.setModel(userModel); // Add model to table
+        userTable.setAutoCreateRowSorter(true); // Auto sort table by row
 
         // What happens when a cell in the table is changed?
         Action action = new AbstractAction() {
@@ -130,16 +130,16 @@ public class MainWindow extends JFrame {
                 TableCellListener tcl = (TableCellListener)e.getSource();
 
                 int option = showOptionDialog(null,
-                        "Edit value " + tcl.getOldValue() + " to " + tcl.getNewValue() + "?",
+                        "Change " + userModel.getColumnName(tcl.getColumn()) + " from '" + tcl.getOldValue() + "' to '" + tcl.getNewValue() + "'?",
                         "Edit " + userModel.getColumnName(tcl.getColumn()),
                         YES_NO_OPTION,
                         INFORMATION_MESSAGE,
                         null,
-                        new Object[]{"No", "Yes"},
-                        "Yes");
+                        new Object[]{"Yes", "No"},
+                        "No");
 
                 // If yes, ubdate database
-                if (option == 1) {
+                if (option == 0) {
                     switch (tcl.getColumn()) {
                         case 0:
                             userManagement.updateUserInfoFName((String)userModel.getValueAt(tcl.getRow(), usernameColumn), (String)tcl.getNewValue());
@@ -169,13 +169,40 @@ public class MainWindow extends JFrame {
                 updateUsers();
             }
         };
-
         TableCellListener tcl = new TableCellListener(userTable, action);
+
+
+        // Serach field input changed?
+        searchUsers.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                searchFieldChange();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                searchFieldChange();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                searchFieldChange();
+            }
+
+            private void searchFieldChange() {
+                String searchTerm = searchUsers.getText();
+
+                ArrayList<Object[]> searchResult = userManagement.userSearch(searchTerm);
+
+                updateUsers(searchResult);
+            }
+        });
 
         updateUsers();
 
     }
 
+    // Update Users function
     public static void updateUsers() {
 
         // Get users from database
@@ -194,15 +221,31 @@ public class MainWindow extends JFrame {
         }
     }
 
-    private void setupSale() {
+    public static void updateUsers(ArrayList<Object[]> users) {
+
+        // Empties entries of Users table
+        if (userModel.getRowCount() > 0) {
+            for (int i = userModel.getRowCount() - 1; i > -1; i--) {
+                userModel.removeRow(i);
+            }
+        }
+
+        // Add users from arraylist to table
+        for (Object[] user : users) {
+            userModel.addRow(user);
+        }
+    }
+
+    // Creating Customer Pane
+    private void setupCustomer() {
 
         addCustomerButton.addActionListener(new ActionListener() { // Button action listener
             public void actionPerformed(ActionEvent e) {
-                // TODO - make action for the button
+                new AddCustomer(mainPanel.getParent());
             }
         });
 
-        String[] header = {"Name", "Email", "Phone"}; // Header titles
+        String[] header = {"Name", "Email", "Phone", "Address"}; // Header titles
 
         customerModel = new DefaultTableModel(); // Model of the table
         customerModel.setColumnIdentifiers(header); // Add header to columns
@@ -210,11 +253,17 @@ public class MainWindow extends JFrame {
         customerTable.setModel(customerModel); // Add model to table
 
         // TODO - testdata (remove)
-        customerModel.addRow(new Object[]{"Some Curporation LTD", "noe@noe.com", "45987700"});
-        customerModel.addRow(new Object[]{"Johan Olsen", "noeannet@noeannet.com", "91482099"});
+        customerModel.addRow(new Object[]{"Some Curporation LTD", "noe@noe.com", "45987700", "Street 3, City"});
+        customerModel.addRow(new Object[]{"Johan Olsen", "noeannet@noeannet.com", "91482099", "Citystreet 27a, Town"});
 
     }
 
+    // Create Orders Pane
+    public void setupOrders() {
+
+    }
+
+    // Creating Statistics Pane
     private void setupStatistics() {
 
         try {

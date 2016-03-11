@@ -42,9 +42,6 @@ public class Login extends JFrame{
                 userType = dbconnect.login(inputUsr, inputPass);
 
 
-                System.out.println(userType);
-
-
                 if ( userType >= 0) {
                     // Logged in :)
 
