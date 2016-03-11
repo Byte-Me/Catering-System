@@ -17,15 +17,13 @@ public class CustomerManagement extends Management{
             ArrayList<Object[]> out = new ArrayList<Object[]>();
             ResultSet res = null;
             try{
-                res = getScentence().executeQuery("SELECT * " +
-                        "FROM customer;");  //WHERE status = 1 : Status 1 for akttiv og 0 for inaktiv
+                res = getScentence().executeQuery("SELECT * FROM customer WHERE status = 1"); //Status 1 for aktiv og 0 for inaktiv
                 while(res.next()) {
                     Object[] obj = new Object[4];
-                    obj[0] = res.getString("last_name") + ", " + res.getString("first_name");
+                    obj[0] = res.getString("name");
                     obj[1] = res.getString("email");
                     obj[2] = res.getString("phone");
-                    obj[3] = res.getString("street") + " " + res.getString("street_number") + ", "
-                            + res.getString("postal_code") + " " + res.getString("city");
+                    obj[3] = res.getString("adress");
                     out.add(obj);
                 }
 
@@ -47,18 +45,16 @@ public class CustomerManagement extends Management{
         ArrayList<Object[]> out = new ArrayList<Object[]>();
         if(setUp()) {
             try {
-                res = getScentence().executeQuery("SELECT * FROM customer WHERE first_name LIKE '%" + searchTerm + "%' OR last_name LIKE '%"
-                        + searchTerm + "%' OR email LIKE '%" + searchTerm + "%' OR phone LIKE '%" + searchTerm +
-                        "%' OR city LIKE '%" + searchTerm + "%' OR postal_code LIKE '%" + searchTerm + "%' OR street LIKE '%" +
-                        searchTerm + "%' ORDER BY last_name;");
+                res = getScentence().executeQuery("SELECT * FROM customer WHERE name LIKE '%" + searchTerm + "%' OR email LIKE '%" +
+                        searchTerm + "%' OR phone LIKE '%" + searchTerm +
+                        "%' OR adress LIKE '%" + searchTerm + "%' AND status = 1 ORDER BY name;");
 
                 while (res.next()){
                     Object[] obj = new Object[4];
-                    obj[0] = res.getString("last_name") + ", " + res.getString("first_name");
+                    obj[0] = res.getString("name");
                     obj[1] = res.getString("email");
                     obj[2] = res.getString("phone");
-                    obj[3] = res.getString("street") + " " + res.getString("street_number") + ", "
-                            + res.getString("postal_code") + " " + res.getString("city");
+                    obj[3] = res.getString("adress");
                     out.add(obj);
                 }
 
@@ -73,6 +69,44 @@ public class CustomerManagement extends Management{
             return out;
         }
         else return null;
+    }
+    private boolean addCustomer(String name, String email, String phone, String adress) {
+        if (setUp()) {
+            int res = 0;
+            try{
+
+                res = getScentence().executeUpdate("INSERT INTO customer VALUES(DEFAULT, '" + name + "', '" + email + "', '" + phone +
+                        "', '" + adress + "', DEFAULT);");
+                System.out.println("Etter");
+
+            }
+            catch (Exception e){
+                System.err.println("Issue with adding customer.");
+            }
+            finally{
+                DbUtils.closeQuietly(getScentence());
+                DbUtils.closeQuietly(getConnection());
+            }
+            if(res > 0) return true;
+            else return false;
+        }
+        else return false;
+    }
+    public boolean addCustomerCompany(String name, String email, String phone, String streetAdress, String postCode, String city){
+        String adress = adressFormatter(streetAdress, postCode, city);
+        if(addCustomer(name, email, phone, adress)) return true;
+        else return false;
+
+
+    }
+    public boolean addCustomerPerson(String firstname, String lastname, String email, String phone,
+                                  String streetAdress, String postCode, String city){
+
+        String adress = adressFormatter(streetAdress, postCode, city);
+        String name = nameFormatter(firstname, lastname);
+        if(addCustomer(name, email, phone, adress)) return true;
+        else return false;
+
     }
 
 
