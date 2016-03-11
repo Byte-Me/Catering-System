@@ -17,8 +17,6 @@ public class CustomerManagement extends Management{
             ArrayList<Object[]> out = new ArrayList<Object[]>();
             ResultSet res = null;
             try{
-                System.out.println("SELECT * " +
-                        "FROM customer;");
                 res = getScentence().executeQuery("SELECT * " +
                         "FROM customer;");  //WHERE status = 1 : Status 1 for akttiv og 0 for inaktiv
                 while(res.next()) {
@@ -40,6 +38,38 @@ public class CustomerManagement extends Management{
                 DbUtils.closeQuietly(getScentence());
                 DbUtils.closeQuietly(getScentence());
             }
+            return out;
+        }
+        else return null;
+    }
+    public ArrayList<Object[]> customerSearch(String searchTerm){
+        ResultSet res = null;
+        ArrayList<Object[]> out = new ArrayList<Object[]>();
+        if(setUp()) {
+            try {
+                res = getScentence().executeQuery("SELECT * FROM customer WHERE first_name LIKE '%" + searchTerm + "%' OR last_name LIKE '%"
+                        + searchTerm + "%' OR email LIKE '%" + searchTerm + "%' OR phone LIKE '%" + searchTerm +
+                        "%' OR city LIKE '%" + searchTerm + "%' OR postal_code LIKE '%" + searchTerm + "%' OR street LIKE '%" +
+                        searchTerm + "%' ORDER BY last_name;");
+
+                while (res.next()){
+                    Object[] obj = new Object[4];
+                    obj[0] = res.getString("last_name") + ", " + res.getString("first_name");
+                    obj[1] = res.getString("email");
+                    obj[2] = res.getString("phone");
+                    obj[3] = res.getString("street") + " " + res.getString("street_number") + ", "
+                            + res.getString("postal_code") + " " + res.getString("city");
+                    out.add(obj);
+                }
+
+            } catch (Exception e) {
+                System.err.println("Issue with search.");
+                return null;
+            } finally {
+                DbUtils.closeQuietly(getScentence());
+                DbUtils.closeQuietly(getConnection());
+            }
+
             return out;
         }
         else return null;

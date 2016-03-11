@@ -114,6 +114,10 @@ public class TestJUnitDB{
     public void searchUser(){
         assertNotNull(user.userSearch("Even"));
     }
+    @Test
+    public void searchCustomer(){
+        assertNotNull(cust.customerSearch("Even"));
+    }
     @After
     public void objTearDown(){
         validUser = null;
