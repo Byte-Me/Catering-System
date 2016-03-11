@@ -21,7 +21,7 @@ public class Encryption {
 
 
 
-        byte[] hash = new byte[0];
+        byte[] hash = null;
         KeySpec spec = new PBEKeySpec(pass.toCharArray(), salt, 65536, 128);
         try {
             SecretKeyFactory f = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");

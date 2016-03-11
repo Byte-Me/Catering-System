@@ -95,6 +95,10 @@ public class TestJUnitDB{
         assertTrue(user.updateUserInfoAccessLevel("kris", 3));
     }
     @Test
+    public void getCustomers(){
+        assertNotNull(cust.getCustomers());
+    }
+    @Test
     public void getIngredients(){
         assertNotNull(food.getIngredients());
     }

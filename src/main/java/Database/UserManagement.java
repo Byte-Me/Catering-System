@@ -56,7 +56,8 @@ public class UserManagement extends Management {
         if (super.setUp()) {
 
             try {
-                res = getScentence().executeQuery("select first_name, last_name, email, phone, username, access_level from user;");
+                res = getScentence().executeQuery("select first_name, last_name, email, phone, username, access_level" +
+                        " from user order by last_name;");
                 while (res.next()) {
                     Object[] obj = new Object[6];
                     obj[0] = res.getString("first_name");
@@ -195,7 +196,10 @@ public class UserManagement extends Management {
         ArrayList<Object[]> out = new ArrayList<Object[]>();
         if(setUp()) {
             try {
-                res = getScentence().executeQuery("SELECT username, first_name, last_name, phone, email, access_level FROM user WHERE username LIKE '%" + searchTerm + "%' OR first_name LIKE '%" + searchTerm + "%' OR last_name LIKE '%" + searchTerm + "%' OR phone LIKE '%" + searchTerm + "%' OR email LIKE '%" + searchTerm + "%' OR access_level LIKE '%" + searchTerm + "%';");
+                res = getScentence().executeQuery("SELECT username, first_name, last_name, phone, email, access_level" +
+                        " FROM user WHERE username LIKE '%" + searchTerm + "%' OR first_name LIKE '%"
+                        + searchTerm + "%' OR last_name LIKE '%" + searchTerm + "%' OR phone LIKE '%" + searchTerm +
+                        "%' OR email LIKE '%" + searchTerm + "%' OR access_level LIKE '%" + searchTerm + "%' ORDER BY last_name;");
                 //System.out.println("Hei");
                 while (res.next()) {
                     Object[] obj = new Object[6];
