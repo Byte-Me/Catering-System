@@ -65,7 +65,7 @@ public class TestJUnitDB{
 
     }
 
-    @Test
+    @Test // fungerer bare dersom brukernavn på validUser endres til noe som ikke allerede finnes.
     public void createUser(){
         boolean validUser = false;
         boolean invalidUser = true;
@@ -85,7 +85,7 @@ public class TestJUnitDB{
     public void getUsers() {
         assertNotNull(user.userInfo());
     }
-    @Ignore
+    @Ignore // TODO: username fungerer ikke?
     public void updateUsers(){
         assertTrue(user.updateUserInfoFName("kris", "Kristaffer"));
         assertTrue(user.updateUserInfoLName("kris", "Aasss"));
@@ -95,6 +95,10 @@ public class TestJUnitDB{
         assertTrue(user.updateUserInfoAccessLevel("kris", 3));
     }
     @Test
+    public void getCustomers(){
+        assertNotNull(cust.getCustomers());
+    }
+    @Test
     public void getIngredients(){
         assertNotNull(food.getIngredients());
     }
@@ -102,13 +106,17 @@ public class TestJUnitDB{
     public void addRecipe(){
         assertNotNull(food.getIngredients());
     }
-    @Ignore
+    @Test
     public void addIngredients(){
-        assertTrue(food.addIngredient("Potet", 100, "kg"));
+        assertTrue(food.addIngredient("Barn", 100, "kg", 0));
     }
     @Test
     public void searchUser(){
         assertNotNull(user.userSearch("Even"));
+    }
+    @Test
+    public void searchCustomer(){
+        assertNotNull(cust.customerSearch("Even"));
     }
     @After
     public void objTearDown(){
