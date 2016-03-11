@@ -47,7 +47,15 @@ public abstract class Management {
 
 
 
-    }/*
+    }
+    protected String adressFormatter(String city, String postal_code, String street){
+        return street + ", " + postal_code + " " + city + ", Norway";
+    }
+    protected String nameFormatter(String firstname, String lastname){
+        return lastname + ", " + firstname;
+    }
+
+    /*
     public void closeConnection(){
         try {
 

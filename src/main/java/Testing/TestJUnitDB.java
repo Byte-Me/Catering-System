@@ -118,6 +118,13 @@ public class TestJUnitDB{
     public void searchCustomer(){
         assertNotNull(cust.customerSearch("Even"));
     }
+    @Test
+    public void addCustomer(){
+        assertTrue(cust.addCustomerPerson("Even", "Dalen", "Even@dalen.no", "12345", "Toppenhaugberget 60", "1356", "Bekkestua"));
+
+        //String firstname, String lastname, String email, String phone,
+        //String streetAdress, String postCode, String city
+    }
     @After
     public void objTearDown(){
         validUser = null;
