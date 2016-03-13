@@ -1,6 +1,7 @@
 package GUI;
 
 import Database.UserManagement;
+import GUI.WindowPanels.Users;
 
 import javax.swing.*;
 import java.awt.*;
@@ -53,7 +54,7 @@ public class AddUser extends JFrame {
                 // TODO - legg inn sjekk for om registrering var vellykket
                 userManagement.registerUser(fName, lName, uName, pass, mail, phoneNr, type); // Legg til bruker i database
 
-                MainWindow.updateUsers();
+                Users.updateUsers();
 
                 setVisible(false);
                 dispose();
