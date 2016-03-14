@@ -1,13 +1,14 @@
 package GUI;
 
-import Database.*;
+import Database.LoginManagement;
+import Database.UserManagement;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
 
-import static javax.swing.JOptionPane.*;
+import static javax.swing.JOptionPane.showMessageDialog;
 
 /**
  * Created by olekristianaune on 03.03.2016.
@@ -46,7 +47,7 @@ public class Login extends JFrame{
                     // Logged in :)
 
                     // Open the main window
-                    MainWindow mainWindow = new MainWindow(userType);
+                    MainWindow mainWindow = new MainWindow(UserManagement.UserType.valueOf(userType));
 
                     setVisible(false); //you can't see me!
                     dispose(); //Destroy the JFrame object

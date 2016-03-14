@@ -12,6 +12,31 @@ import org.apache.commons.dbutils.DbUtils;
 
 public class UserManagement extends Management {
 
+    // Defines the User Types
+    public enum UserType {
+        ADMIN, SALE, DRIVER, CHEF;
+
+        public int getValue() {
+            return super.ordinal();
+        }
+
+        public static UserType valueOf(int userTypeNr) {
+            for (UserType type : UserType.values()) {
+                if (type.ordinal() == userTypeNr) {
+                    return type;
+                }
+            }
+            return null;
+        }
+
+        @Override
+        public String toString() {
+            String constName = super.toString();
+            return constName.substring(0,1) + constName.substring(1).toLowerCase();
+        }
+
+    }
+
 
     public UserManagement() {
         super();
@@ -65,7 +90,8 @@ public class UserManagement extends Management {
                     obj[2] = res.getString("email");
                     obj[3] = res.getString("phone");
                     obj[4] = res.getString("username");
-                    obj[5] = res.getInt("access_level");
+                    // Convert access level from int to string
+                    obj[5] = UserType.valueOf((Integer.parseInt(res.getString("access_level"))));
                     out.add(obj);
                 }
             } catch (SQLException e) {
@@ -209,7 +235,8 @@ public class UserManagement extends Management {
                     obj[2] = res.getString("email");
                     obj[3] = res.getString("phone");
                     obj[4] = res.getString("username");
-                    obj[5] = res.getString("access_level");
+                    // Convert access level from int to string
+                    obj[5] = UserType.valueOf((Integer.parseInt(res.getString("access_level"))));
                     out.add(obj);
                 }
             } catch (Exception e) {

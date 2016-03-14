@@ -1,12 +1,12 @@
 package GUI;
 
 import Database.UserManagement;
+import GUI.WindowPanels.Users;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
 /**
  * Created by olekristianaune on 09.03.2016.
@@ -53,7 +53,7 @@ public class AddUser extends JFrame {
                 // TODO - legg inn sjekk for om registrering var vellykket
                 userManagement.registerUser(fName, lName, uName, pass, mail, phoneNr, type); // Legg til bruker i database
 
-                MainWindow.updateUsers();
+                Users.updateUsers();
 
                 setVisible(false);
                 dispose();

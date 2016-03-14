@@ -19,13 +19,6 @@ import org.apache.commons.dbutils.DbUtils;
 
 public class LoginManagement extends Management{
 
-    public static final int NO_ACCESS = -1;
-    public static final int ADMIN_ACCESS = 0;
-    public static final int SALES_ACCESS = 1;
-    public static final int CHEF_ACCESS = 2;
-    public static final int DRIVER_ACCESS = 3;
-
-
     public LoginManagement(){
         super();
     }
