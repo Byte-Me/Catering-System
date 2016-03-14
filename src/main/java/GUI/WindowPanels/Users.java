@@ -26,7 +26,7 @@ public class Users {
     static DefaultTableModel userModel;
 
     // Create Users Pane
-    public Users(final JPanel mainPanel, JButton addUserButton, final JTable userTable, final JTextField searchUsers) {
+    public Users(final JPanel mainPanel, JButton addUserButton, final JTable userTable, final JTextField searchUsers, JButton deleteUsersButton) {
 
         final int usernameColumnNr = 4;
         final int userTypeColumnNr = 5;

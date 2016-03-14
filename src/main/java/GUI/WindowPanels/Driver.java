@@ -10,7 +10,7 @@ public class Driver {
 
     DefaultListModel<String> driverModel;
 
-    public Driver(JList<String> drivingList) {
+    public Driver(JList<String> drivingList, JPanel mapPanel) {
 
         driverModel = new DefaultListModel<String>(); // Model of the list
         drivingList.setModel(driverModel); // Add model to jList

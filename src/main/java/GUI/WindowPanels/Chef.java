@@ -11,7 +11,7 @@ public class Chef {
     DefaultTableModel prepareModel;
     DefaultTableModel ingredientModel;
 
-    public Chef(JTable prepareTable, JTable ingredientTable) {
+    public Chef(JTable prepareTable, JTable ingredientTable, JButton generateShoppingListButton, JButton addRecipeButton) {
 
         String[] prepareHeader = {"Quantity", "Recipe", "Notes", "Ready for delivery"}; // Header titles
         String[] ingredientHeader = {"Ingredient", "Quantity", "Unit"}; // Header titles

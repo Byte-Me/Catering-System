@@ -46,7 +46,7 @@ public class Login extends JFrame{
                     // Logged in :)
 
                     // Open the main window
-                    MainWindow mainWindow = new MainWindow(userType);
+                    MainWindow mainWindow = new MainWindow(UserManagement.UserType.valueOf(userType));
 
                     setVisible(false); //you can't see me!
                     dispose(); //Destroy the JFrame object
