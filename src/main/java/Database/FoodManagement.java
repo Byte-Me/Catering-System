@@ -97,9 +97,6 @@ public class FoodManagement extends Management{
         else return false;
 
     }
-    /*
-    TODO: Problem med databasen, kan ikke legge til grocery pga foreign keys.
-     */
     public boolean addIngredient(String name, int price, String unit, int quantity){
         if(setUp()) {
             int res = 0;

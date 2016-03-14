@@ -1,6 +1,7 @@
 package Testing;
 
 import Database.*;
+import Delivery.CreateDeliveryRoute;
 import GUI.Login;
 import org.junit.*;
 
@@ -128,6 +129,17 @@ public class TestJUnitDB{
 
         //String firstname, String lastname, String email, String phone,
         //String streetAdress, String postCode, String city
+    }
+    @Test
+    public void getDeliverys(){
+        assertNotNull(deli.getDeliveryReady());
+        assertNotNull(deli.getAdressReady());
+
+    }
+    @Test
+    public void testDeliveryRoute(){
+        System.out.println(CreateDeliveryRoute.UseReadyOrders("Oslo, Norway"));
+        assertNotNull(CreateDeliveryRoute.UseReadyOrders("Oslo, Norway"));
     }
     @After
     public void objTearDown(){

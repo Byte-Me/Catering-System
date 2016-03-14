@@ -87,7 +87,11 @@ public class CustomerManagement extends Management{
                                 getScentence().executeQuery("COMMIT;");
                                 return false;
                             }
-                        } else return false;
+                            else {
+                                getScentence().executeQuery("COMMIT;");
+                                return false;
+                            }
+                        }
                     }
                 }else {
                     numb = getScentence().executeUpdate("INSERT INTO customer VALUES(DEFAULT, '" + name + "', '" + email + "', '" + phone +
