@@ -1,7 +1,6 @@
 package GUI.WindowPanels;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableModel;
 
 /**
  * Created by olekristianaune on 13.03.2016.
