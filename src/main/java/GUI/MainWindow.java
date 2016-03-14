@@ -1,5 +1,6 @@
 package GUI;
 
+import Database.FoodManagement;
 import Database.UserManagement;
 
 import javax.swing.*;
@@ -225,15 +226,19 @@ public class MainWindow extends JFrame {
         prepareTable.setModel(prepareModel); // Add model to table
         ingredientTable.setModel(ingredientModel); // Add model to table
 
-
-
-        // TODO - testdata (remove)
-        prepareModel.addRow(new Object[]{3, "Paella", "Without seafood", false});
-
-        // TODO - testdata (remove)
-        ingredientModel.addRow(new Object[]{"Suagr", 200, "grams"});
-        ingredientModel.addRow(new Object[]{"Meatballs", 3000, "pieces"});
-
+        updateIngredients();
     }
 
+    public static void updateIngredients() {
+        FoodManagement foodManagement = new FoodManagement();
+        ArrayList<Object[]> ingredients = foodManagement.getIngredients();
+
+        for(int i = 0; i < ingredientModel.getRowCount(); i++) {
+            ingredientModel.removeRow(i);
+        }
+
+        for (Object[] ingredient : ingredients) {
+            ingredientModel.addRow(ingredient);
+        }
+    }
 }
