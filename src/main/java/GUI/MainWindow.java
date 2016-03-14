@@ -210,6 +210,12 @@ public class MainWindow extends JFrame {
 
     private void setupChef() {
 
+        addRecipeButton.addActionListener(new ActionListener() { // Button action listener
+            public void actionPerformed(ActionEvent e) {
+                new AddRecipe(mainPanel.getParent());
+            }
+        });
+
         String[] prepareHeader = {"Quantity", "Recipe", "Notes", "Ready for delivery"}; // Header titles
         String[] ingredientHeader = {"Ingredient", "Quantity", "Unit"}; // Header titles
 
