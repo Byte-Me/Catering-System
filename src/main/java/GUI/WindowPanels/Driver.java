@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 
 import static Delivery.CreateDeliveryRoute.UseReadyOrders;
+import static Delivery.CreateDeliveryRoute.UseReadyOrdersLatLng;
+import static GUI.map.CreateMap.getMap;
 
 /**
  * Created by olekristianaune on 13.03.2016.
@@ -44,38 +46,53 @@ public class Driver {
         final Browser browser = new Browser();
         BrowserView browserView = new BrowserView(browser);
 
-        // Reduce logging
+        // Reduce logging -- doesn't work?
         LoggerProvider.setLevel(Level.OFF);
 
         mapPanel.setLayout(new BorderLayout());
         mapPanel.add(browserView, BorderLayout.CENTER);
 
-        //browser.loadURL("map.html");
-        browser.loadURL("file:///Users/olekristianaune/Documents/Mine%20Filer/Java/IntelliJ/Catering-System/src/main/java/GUI/WindowPanels/map.html");
+        browser.loadURL("file:///Users/olekristianaune/Documents/Mine%20Filer/Java/IntelliJ/Catering-System/src/main/java/GUI/map.html");
 
         generateDrivingRouteButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
-                /*
-                JSValue document = browser.executeJavaScriptAndReturnValue("document");
-                JSValue setStartPoint = document.asObject().getProperty("setStartPoint");
-                JSValue setEndPoint = document.asObject().getProperty("setEndPoint");
-                JSValue addWaypoint = document.asObject().getProperty("addWaypoint");
-                JSValue calcRoute = document.asObject().getProperty("calcRoute");
-
-                setStartPoint.asFunction().invoke(document.asObject(), 51.943571, 6.463856);
-                setEndPoint.asFunction().invoke(document.asObject(), 51.947462, 6.467941);
-                addWaypoint.asFunction().invoke(document.asObject(), 51.945032, 6.465776);
-                addWaypoint.asFunction().invoke(document.asObject(), 51.945538, 6.469413);
-
-                calcRoute.asFunction().invoke(document.asObject());
-                */
-
+                browser.executeJavaScript(getDrivingRoute());
             }
         });
+    }
+
+    private static String getDrivingRoute() {
+        ArrayList<double[]> coords = UseReadyOrdersLatLng(cateringAdress);
+        try {
+            String startPoint = "new google.maps.LatLng(" + coords.get(0)[0] + "," + coords.get(0)[1] + ")";
+            String endPoint = "new google.maps.LatLng(" + coords.get(coords.size()-1)[0] + "," + coords.get(coords.size()-1)[1] + ")";
+
+            String waypts = "[";
+            for (int i = 1; i < coords.size()-2; i++) {
+                waypts += "{location:new google.maps.LatLng(" + coords.get(i)[0] + "," + coords.get(i)[1] + "), stopover:true},";
+            }
+            waypts += "{location:new google.maps.LatLng(" + coords.get(coords.size()-2)[0] + "," + coords.get(coords.size()-2)[1] + "), stopover:true}]";
 
 
+            String output = "var request = {" +
+                    "origin:" + startPoint + "," +
+                    "destination:" + endPoint + "," +
+                    "waypoints:" + waypts + "," +
+                    "optimizeWaypoints:true," +
+                    "travelMode: google.maps.TravelMode.DRIVING" +
+                    "};" +
+                    "directionsService.route(request, function(result, status) {" +
+                    "if (status == google.maps.DirectionsStatus.OK) {" +
+                    "directionsDisplay.setDirections(result);" +
+                    "}" +
+                    "});";
+
+            return output;
+        } catch (NullPointerException npe) {
+            System.err.println("NullPointerException -- UseReadyOrdersLatLng");
+        }
+        return "";
 
     }
 }
