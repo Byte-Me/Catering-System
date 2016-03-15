@@ -24,5 +24,11 @@
     <orderEntry type="library" name="Maven: com.teamdev.jxbrowser:jxbrowser-mac:6.2" level="project" />
     <orderEntry type="library" name="license" level="project" />
     <orderEntry type="library" name="license (2)" level="project" />
+    <orderEntry type="library" name="Maven: com.teamdev.jxbrowser:jxbrowser-cross-platform:6.2" level="project" />
+    <orderEntry type="library" name="Maven: com.teamdev.jxbrowser:jxbrowser-win:6.2" level="project" />
+    <orderEntry type="library" name="Maven: com.teamdev.jxbrowser:jxbrowser:6.2" level="project" />
+    <orderEntry type="library" name="Maven: com.teamdev.jxbrowser:jxbrowser-linux32:6.2" level="project" />
+    <orderEntry type="library" name="Maven: com.teamdev.jxbrowser:jxbrowser-linux64:6.2" level="project" />
+    <orderEntry type="library" name="Maven: com.teamdev.jxbrowser:jxbrowser-mac:6.2" level="project" />
   </component>
 </module>
