@@ -98,20 +98,21 @@ public class FoodManagement extends Management{
 
     }
     public boolean addIngredient(String name, int price, String unit, int quantity){
+        int res = 0;
         if(setUp()) {
-            int res = 0;
-
             try {
-                System.out.println("INSERT INTO grocery VALUES(DEFAULT, '" + name + "', " + price + ", '" + unit + "', 0);");
-                res = getScentence().executeUpdate("INSERT INTO grocery VALUES(DEFAULT, '" + name + "', '" + price + "', '" + unit + "', '" + quantity + "');");
-
+                PreparedStatement prep = getConnection().prepareStatement("INSERT INTO grocery VALUES(DEFAULT,?,?,?,?);");
+                prep.setString(1, name);
+                prep.setInt(2, price);
+                prep.setString(3, unit);
+                prep.setInt(4, quantity);
+                res = prep.executeUpdate();
             } catch (Exception e) {
                 System.err.println("Issue with adding ingredient.");
                 return false;
             }
-            return true;
         }
-        return true;
+        return res > 0;
     }
 
 
