@@ -113,7 +113,7 @@ public class CustomerManagement extends Management{
         else return false;
     }
     public boolean addCustomerCompany(String name, String email, String phone, String streetAdress, String postCode, String city){
-        String adress = adressFormatter(streetAdress, postCode, city);
+        String adress = adressFormatter(city, postCode, streetAdress);
         if(addCustomer(name, email, phone, adress)) return true;
         else return false;
 
@@ -122,7 +122,7 @@ public class CustomerManagement extends Management{
     public boolean addCustomerPerson(String firstname, String lastname, String email, String phone,
                                   String streetAdress, String postCode, String city){
 
-        String adress = adressFormatter(streetAdress, postCode, city);
+        String adress = adressFormatter(city, postCode, streetAdress);
         String name = nameFormatter(firstname, lastname);
         if(addCustomer(name, email, phone, adress)) return true;
         else return false;
