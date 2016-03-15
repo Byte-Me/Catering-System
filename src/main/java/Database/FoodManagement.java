@@ -68,17 +68,26 @@ public class FoodManagement extends Management{
         return Integer.toString(res.getInt("recipe_id"));
     }
 
-    public boolean addRecipe(String name, ArrayList<String> ingNames){
+    public boolean addRecipe(String name, ArrayList<Object[]> ingInfo){
         int numb;
         if(setUp()){
+            ArrayList<String> names = new ArrayList<String>();
+            for(Object[] ing : ingInfo ){
+                names.add((String)ing[0]);
+            }
+            /*
+            obj[0] = ingname;
+            obj[1] = amount;
+            out.add(obj);
+             */
             try{
                 getScentence().executeUpdate("START TRANSACTION;");
-                ArrayList<Integer> IDs = getGroceryID(ingNames);
+                ArrayList<Integer> IDs = getGroceryID(names);
                 numb = getScentence().executeUpdate("INSERT INTO recipe VALUES(DEFAULT, '" + name + "');");
                 if(numb == 0)return false;
                 String recipeID = getRecipeID(name);
-                for(Integer id : IDs){
-                    numb = getScentence().executeUpdate("INSERT INTO recipe_grocery VALUES('" + recipeID + "', '" + id.toString() + "');");
+                for(int i= 0; i < IDs.size();i++){ //
+                    numb = getScentence().executeUpdate("INSERT INTO recipe_grocery VALUES('" + recipeID + "', '" + IDs.get(i) + "', " + ingInfo.get(i)[1] + "');");
                     if(numb == 0)return false;
                 }
                 getScentence().executeUpdate("COMMIT;");
