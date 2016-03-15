@@ -10,7 +10,7 @@ import java.util.ArrayList;
  */
 public class CreateDeliveryRoute {
     public static ArrayList<String> UseReadyOrders(String startAdress){
-        ArrayList<String> out = null;
+        ArrayList<String> out;
         try {
             TravelingSalesman tsp = new TravelingSalesman(startAdress);
             DeliveryManagement dm = new DeliveryManagement();

@@ -19,7 +19,7 @@ public class FoodManagement extends Management{
         super();
     }
     public ArrayList<Object[]> getIngredients(){
-        ResultSet res = null;
+        ResultSet res;
         ArrayList<Object[]> out = new ArrayList<Object[]>();
         if(setUp()){
             try{
@@ -69,7 +69,7 @@ public class FoodManagement extends Management{
     }
 
     public boolean addRecipe(String name, ArrayList<String> ingNames){
-        int numb = 0;
+        int numb;
         if(setUp()){
             try{
                 getScentence().executeUpdate("START TRANSACTION;");
@@ -113,6 +113,59 @@ public class FoodManagement extends Management{
             }
         }
         return res > 0;
+    }
+    public ArrayList<Object[]> getRecipeIngredients(){
+        ArrayList<Object[]> out = new ArrayList<Object[]>();
+        if(setUp()){
+            ResultSet res;
+            try{
+                res = getScentence().executeQuery("SELECT grocery.price, recipe_grocery.amount, grocery.name FROM grocery, recipe_grocery, `order` WHERE `order`.date = " +
+                        "CURRENT_DATE AND recipe_grocery.recipe_id = `order`.recipe_id AND grocery.grocery_id = recipe_grocery.grocery_id;");
+                while(res.next()){
+                    Object[] obj = new Object[3];
+                    obj[0] = res.getString("name");
+                    obj[1] = res.getInt("amount");
+                    obj[2] = res.getInt("price");
+                    out.add(obj);
+                }
+            }
+
+            catch (Exception e){
+                System.err.println("Issue with getting ingredients from recipes.");
+            }
+            finally {
+                DbUtils.closeQuietly(getScentence());
+                DbUtils.closeQuietly(getConnection());
+            }
+        }
+        return out;
+    }
+    public ArrayList<Object[]> getIngredientsInStorage(ArrayList<String> names){
+        ArrayList<Object[]> out = new ArrayList<Object[]>();
+        if(setUp()){
+            ResultSet res;
+            try {
+                for (String name : names) {
+                    res = getScentence().executeQuery("SELECT grocery.name, quantity FROM grocery WHERE grocery.name = '" + name + "';");
+                    if(res.next()){
+                        Object[] obj = new Object[2];
+                        obj[0] = res.getString("name");
+                        obj[1] = res.getInt("quantity");
+                        out.add(obj);
+                    }
+                    else return null;
+                }
+            }
+            catch(Exception e){
+                System.err.println("Issue with getting ingredients from storage.");
+                return null;
+            }
+            finally {
+                DbUtils.closeQuietly(getScentence());
+                DbUtils.closeQuietly(getConnection());
+            }
+        }
+        return out; // returnerer i samme rekkefølge som
     }
 
 
