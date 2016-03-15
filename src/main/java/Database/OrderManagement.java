@@ -71,5 +71,35 @@ public class OrderManagement extends Management{
         }
         return out;
     }
+    public ArrayList<Object[]> orderSearch(String searchTerm){ // TODO: IKKE TESTET!!
+        ResultSet res;
+        ArrayList<Object[]> out = new ArrayList<Object[]>();
+        if(setUp()) {
+            try {
+                res = getScentence().executeQuery("SELECT `order`.order_id, `order`.status, `order`.date, customer.name, customer.email FROM `order`, customer FROM customer WHERE order_id LIKE '%" + searchTerm + "%' OR status LIKE '%" +
+                        searchTerm + "%' OR `date` LIKE '%" + searchTerm +
+                        "%' OR `name` LIKE '%" + searchTerm + "%' OR email LIKE '%" + searchTerm + "%' AND status > 0 ORDER BY date DESC;");
+
+                while (res.next()){
+                    Object[] obj = new Object[5];
+                    obj[0] = res.getInt("order_id");
+                    obj[1] = res.getString("name");
+                    obj[2] = res.getString("email");
+                    obj[3] = res.getString("date");
+                    obj[4] = res.getInt("status");
+                    out.add(obj);
+                }
+
+            } catch (Exception e) {
+                System.err.println("Issue with search.");
+            } finally {
+                DbUtils.closeQuietly(getScentence());
+                DbUtils.closeQuietly(getConnection());
+            }
+
+        }
+        return out;
+
+    }
 }
 

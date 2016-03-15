@@ -25,7 +25,7 @@ public class FoodManagement extends Management{
         if(setUp()){
             try{
 
-                res = getScentence().executeQuery("SELECT grocery_id, name, quantity, unit FROM grocery;");
+                res = getScentence().executeQuery("SELECT grocery_id, `name`, quantity, unit FROM grocery;");
                 while (res.next()){
                     Object[] obj = new Object[3];
                     obj[0] = res.getString("name");
@@ -51,7 +51,6 @@ public class FoodManagement extends Management{
             }
 
         }
-        else return null;
         return out;
     }
     private ArrayList<Integer> getGroceryID (ArrayList<String> ingNames) throws Exception {
@@ -236,6 +235,55 @@ public class FoodManagement extends Management{
         return numb > 0;
     }
 
+    public ArrayList<Object[]> getRecipesForChef(){
+        ArrayList<Object[]> out = new ArrayList<Object[]>();
+        if(setUp()){
+            try {
+                ResultSet res = getScentence().executeQuery("SELECT recipe.name, order_recipe.portions, `order`.date, `order`.order_id FROM recipe, `order`, order_recipe " +
+                        "WHERE `order`.order_id = order_recipe.order_id AND order_recipe.recipe_id = recipe.recipe_id ORDER BY `date` DESC, order_id;");
+                while (res.next()){
+                    Object[] obj = new Object[4];
+                    obj[0] = res.getString("name");
+                    obj[1] = res.getInt("portions");
+                    obj[2] = res.getString("date");
+                    obj[3] = res.getInt("order_id");
+                    out.add(obj);
+
+                }
+            }catch (Exception e){
+                System.err.println("Issue with getting recipes.");
+            }
+            finally {
+                DbUtils.closeQuietly(getScentence());
+                DbUtils.closeQuietly(getConnection());
+            }
+        }
+        return out;
+    }
+    public ArrayList<Object[]> getIngredientsForOrder(int order_id, String recipeName){
+        ArrayList<Object[]> out = new ArrayList<Object[]>();
+        if(setUp()) {
+            try {
+                ResultSet res = getScentence().executeQuery("SELECT grocery.name, grocery.unit, recipe_grocery.amount, order_recipe.portions " +
+                        "FROM grocery, order_recipe, recipe_grocery WHERE order_recipe.order_id = " + order_id + " AND order_recipe.recipe_id = " +
+                        "recipe_grocery.recipe_id AND recipe_grocery.grocery_id = grocery.grocery_id AND recipe.name = '" + recipeName + "';");
+                while (res.next()) {
+                    Object[] obj = new Object[3];
+                    obj[0] = res.getString("name");
+                    obj[1] = res.getInt("portions") * res.getInt("amount");
+                    obj[2] = res.getString("unit");
+                    out.add(obj);
+                }
+            } catch (Exception e) {
+                System.err.println("Issue with getting ingredients from order_id.");
+            } finally {
+                DbUtils.closeQuietly(getScentence());
+                DbUtils.closeQuietly(getConnection());
+
+            }
+        }
+        return out;
+    }
 
 
 }

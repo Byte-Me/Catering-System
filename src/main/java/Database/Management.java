@@ -17,11 +17,11 @@ public abstract class Management {
         //DatabaseConnection c; //new DatabaseConnection();
 
     }
-    public boolean connected(){
+    protected boolean connected(){
         if(scentence != null)return true;
         else return false;
     }
-    public boolean setUp(){
+    protected boolean setUp(){
         try {
             c = new DatabaseConnection();
             connection = c.getConnection();
@@ -36,7 +36,7 @@ public abstract class Management {
         if(connection == null || scentence == null) return false;
         else return true;
     }
-    public void closeConnection(){
+    protected void closeConnection(){
         try {
             DbUtils.closeQuietly(scentence);
             DbUtils.closeQuietly(connection);
@@ -68,9 +68,9 @@ public abstract class Management {
         }
     }*/
 
-    public Statement getScentence() {
+    protected Statement getScentence() {
         return scentence;
     }
 
-    public Connection getConnection() { return connection; }
+    protected Connection getConnection() { return connection; }
 }
