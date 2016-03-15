@@ -23,12 +23,8 @@ public class StatisticsManagement extends Management{
         ArrayList<String> out = new ArrayList<String>();
         if(setUp()) {
             try {
-                System.err.println("SELECT `order`.date from `order` where `date` >= DATE '" + firstDate +
-                        "' AND `date` <= DATE '" + lastDate + "' order by date;");
-
                 res = getScentence().executeQuery("SELECT `order`.date from `order` where `date` >= DATE '" + firstDate +
                         "' AND `date` <= DATE '" + lastDate + "' order by date;");
-                System.out.println(out + "Hei");
 
                 while (res.next()) {
                     out.add(res.getString("date"));
