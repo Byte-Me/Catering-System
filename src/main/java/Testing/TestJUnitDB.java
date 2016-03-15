@@ -6,6 +6,7 @@ import GUI.Login;
 import org.junit.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import static org.junit.Assert.*;
 
@@ -107,10 +108,14 @@ public class TestJUnitDB{
     }
     @Test
     public void addRecipe(){
-        ArrayList<String> ing = new ArrayList<String>();
-        ing.add("Fisk");
-        ing.add("Potet");
-        assertTrue("Oppskrift", );
+        ArrayList<Object[]> ing = new ArrayList<Object[]>();
+        ing.add(new Object[]{"Potet", 1});
+        ing.add(new Object[]{"Fisk", 2});
+        for(Object[] i : ing){
+            System.out.println(Arrays.toString(i));
+        }
+
+        assertTrue(food.addRecipe("Oppskriftarererer", ing));
     }
     @Test
     public void addIngredients(){

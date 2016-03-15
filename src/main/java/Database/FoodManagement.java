@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 import java.net.URL;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Map;
 
@@ -65,7 +66,10 @@ public class FoodManagement extends Management{
     }
     private String getRecipeID(String name)throws Exception{
         ResultSet res = getScentence().executeQuery("SELECT recipe_id FROM recipe WHERE name = '" + name + "';");
-        return Integer.toString(res.getInt("recipe_id"));
+        if(res.next()) {
+            return Integer.toString(res.getInt("recipe_id"));
+        }
+        else return null;
     }
 
     public boolean addRecipe(String name, ArrayList<Object[]> ingInfo){
@@ -75,19 +79,18 @@ public class FoodManagement extends Management{
             for(Object[] ing : ingInfo ){
                 names.add((String)ing[0]);
             }
-            /*
-            obj[0] = ingname;
-            obj[1] = amount;
-            out.add(obj);
-             */
+
             try{
                 getScentence().executeUpdate("START TRANSACTION;");
                 ArrayList<Integer> IDs = getGroceryID(names);
                 numb = getScentence().executeUpdate("INSERT INTO recipe VALUES(DEFAULT, '" + name + "');");
                 if(numb == 0)return false;
                 String recipeID = getRecipeID(name);
+
+
                 for(int i= 0; i < IDs.size();i++){ //
-                    numb = getScentence().executeUpdate("INSERT INTO recipe_grocery VALUES('" + recipeID + "', '" + IDs.get(i) + "', " + ingInfo.get(i)[1] + "');");
+                    numb = getScentence().executeUpdate("INSERT INTO recipe_grocery VALUES('" + recipeID + "', '" + IDs.get(i).toString() + "', '"
+                            + ingInfo.get(i)[1] + "');");
                     if(numb == 0)return false;
                 }
                 getScentence().executeUpdate("COMMIT;");
