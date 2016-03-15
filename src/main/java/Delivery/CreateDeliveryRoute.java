@@ -10,7 +10,7 @@ import java.util.ArrayList;
  */
 public class CreateDeliveryRoute {
     public static ArrayList<String> UseReadyOrders(String startAdress){
-        ArrayList<String> out = null;
+        ArrayList<String> out;
         try {
             TravelingSalesman tsp = new TravelingSalesman(startAdress);
             DeliveryManagement dm = new DeliveryManagement();
@@ -18,6 +18,22 @@ public class CreateDeliveryRoute {
             ArrayList<double[]> positions = tsp.createPositionsArray(adressNames);
             tsp.bruteForceFindBestRoute(new ArrayList<double[]>(), positions);
             out = tsp.positionsToAdresses(tsp.getBestRoute(), adressNames);
+        }
+        catch (Exception e){
+            System.err.println("Issue with creating delivery route.");
+            return null;
+        }
+        return out;
+    }
+    public static ArrayList<double[]> UseReadyOrdersLatLng(String startAdress){
+        ArrayList<double[]> out;
+        try {
+            TravelingSalesman tsp = new TravelingSalesman(startAdress);
+            DeliveryManagement dm = new DeliveryManagement();
+            ArrayList<String> adressNames = dm.getAdressReady();
+            ArrayList<double[]> positions = tsp.createPositionsArray(adressNames);
+            tsp.bruteForceFindBestRoute(new ArrayList<double[]>(), positions);
+            out = tsp.getBestRoute();
         }
         catch (Exception e){
             System.err.println("Issue with creating delivery route.");
