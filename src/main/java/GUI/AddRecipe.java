@@ -37,6 +37,9 @@ public class AddRecipe extends JFrame {
         pack();
         setLocationRelativeTo(parent);
 
+        final int nameColumnNr = 0;
+        final int quantityColumnNr = 1;
+
         String[] ingredientHeader = {"Ingredient", "Quantity", "Unit"};
 
         inStorageModel = new DefaultTableModel(); // Model of the table
@@ -72,9 +75,8 @@ public class AddRecipe extends JFrame {
                 ArrayList<Object[]> ingInfo = new ArrayList<Object[]>();
                 for(int i = 0; i < inRecipeTable.getRowCount(); i++) {
                     Object[] obj = new Object[2];
-                    obj[0] = inRecipeTable.getValueAt(i, 0);
-                    obj[1] = inRecipeTable.getValueAt(i, 1);
-                    System.out.println(Arrays.toString(obj));
+                    obj[0] = inRecipeTable.getValueAt(i, nameColumnNr);
+                    obj[1] = inRecipeTable.getValueAt(i, quantityColumnNr);
                     ingInfo.add(obj);
                 }
                 if(foodManagement.addRecipe(recipeName, ingInfo)) {
@@ -97,40 +99,32 @@ public class AddRecipe extends JFrame {
         setVisible(true);
     }
 
-    //FIXME
     private void copyPasteData(int index, boolean left) {
         try {
             Object[] ingredient = new Object[3];
-            if (left) {
-                int unitsInRecipe = Integer.parseInt(JOptionPane.showInputDialog(null, "How many units?"));
+            if (left && inStorageTable.getSelectedRow() >= 0) {
+                int unitsInRecipe = Integer.parseInt(JOptionPane.showInputDialog(null, "How many units: "));
                 ingredient[0] = inStorageTable.getValueAt(index, 0);
                 ingredient[1] = unitsInRecipe;
                 ingredient[2] = inStorageTable.getValueAt(index, 2);
-                inRecipeModel.addRow(ingredient);
+                if (unitsInRecipe > 0 && !existsInTable(inRecipeTable, inStorageTable.getValueAt(index, 0).toString())) {
+                    inRecipeModel.addRow(ingredient);
+                } else {
+                    JOptionPane.showMessageDialog(null, "1. Units must be positive numbers.\n2. Two ingredients with the same name can\n not be used in a recipe.\n(Edit the quantity instead!)");
+                }
             } else {
                 inRecipeModel.removeRow(index);
             }
         } catch (Exception e){}
     }
 
-    private boolean existsInRecipe(JTable table, Object[] entry) {
-        // Get row and column count
+    private boolean existsInTable(JTable table, String name) {
+        // Get row count
         int rowCount = table.getRowCount();
-        int colCount = table.getColumnCount();
-
-        // Get Current Table Entry
-        String curEntry = "";
-        for (Object o : entry) {
-            String e = o.toString();
-            curEntry = curEntry + " " + e;
-        }
 
         // Check against all entries
         for (int i = 0; i < rowCount; i++) {
-            String rowEntry = "";
-            for (int j = 0; j < colCount; j++)
-                rowEntry = rowEntry + " " + table.getValueAt(i, 0).toString();
-            if (rowEntry.equalsIgnoreCase(curEntry)) {
+            if (table.getValueAt(i, 0).toString() == name) {
                 return true;
             }
         }

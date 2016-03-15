@@ -74,7 +74,6 @@ public class FoodManagement extends Management{
 
     public boolean addRecipe(String name, ArrayList<Object[]> ingInfo){
         int numb;
-        System.out.println("heim");
         if(setUp()){
             try{
                 ArrayList<String> names = new ArrayList<String>();
@@ -110,15 +109,16 @@ public class FoodManagement extends Management{
         else return false;
 
     }
-    public boolean addIngredient(String name, int price, String unit, int quantity){
+
+    public boolean addIngredient(String name, int quantity, String unit, int price){
         int res = 0;
         if(setUp()) {
             try {
                 PreparedStatement prep = getConnection().prepareStatement("INSERT INTO grocery VALUES(DEFAULT,?,?,?,?);");
                 prep.setString(1, name);
-                prep.setInt(2, price);
+                prep.setInt(2, quantity);
                 prep.setString(3, unit);
-                prep.setInt(4, quantity);
+                prep.setInt(4, price);
                 res = prep.executeUpdate();
             } catch (Exception e) {
                 System.err.println("Issue with adding ingredient.");
@@ -127,6 +127,7 @@ public class FoodManagement extends Management{
         }
         return res > 0;
     }
+
     public ArrayList<Object[]> getRecipeIngredients(){
         ArrayList<Object[]> out = new ArrayList<Object[]>();
         if(setUp()){
@@ -179,5 +180,26 @@ public class FoodManagement extends Management{
             }
         }
         return out; // returnerer i samme rekkefølge som
+    }
+
+    public boolean updateQuantity(String recipeName, String newData) throws Exception {
+        int rowChanged = 0;
+        if (super.setUp()) {
+            try {
+                int recipeID = Integer.parseInt(getRecipeID(recipeName));
+                rowChanged = getScentence().executeUpdate("UPDATE recipe_grocery SET amount = '" + newData + "' WHERE recipe_id = recipeID;");
+            } catch (SQLException e) {
+                System.err.println("Issue with executing database update.");
+                return false;
+
+            } finally {
+                DbUtils.closeQuietly(getScentence());
+                DbUtils.closeQuietly(getConnection());
+
+
+            }
+        }
+        if(rowChanged > 0) return true;
+        return false;
     }
 }

@@ -16,8 +16,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import HelperClasses.TableCellListener;
 
 import static javax.swing.JOptionPane.showMessageDialog;
+import static javax.swing.JOptionPane.showOptionDialog;
+import static javax.swing.JOptionPane.*;
 
 /**
  * Created by olekristianaune on 07.03.2016.
@@ -53,6 +56,7 @@ public class MainWindow extends JFrame {
     private JButton deleteCustomersButton;
     private JTextField searchUsers;
     private JButton deleteUsersButton;
+    private JButton addIngredientButton;
 
     private static DefaultTableModel userModel;
     private static DefaultTableModel customerModel;
@@ -210,9 +214,16 @@ public class MainWindow extends JFrame {
 
     private void setupChef() {
 
+        FoodManagement foodManagement = new FoodManagement();
         addRecipeButton.addActionListener(new ActionListener() { // Button action listener
             public void actionPerformed(ActionEvent e) {
                 new AddRecipe(mainPanel.getParent());
+            }
+        });
+
+        addIngredientButton.addActionListener(new ActionListener() { // Button action listener
+            public void actionPerformed(ActionEvent e) {
+                new AddIngredient(mainPanel.getParent());
             }
         });
 
@@ -239,7 +250,52 @@ public class MainWindow extends JFrame {
         ingredientTable.setModel(ingredientModel); // Add model to table
 
         updateIngredients();
+
+        /*
+        // What happens when a cell in the table is changed?
+        Action action = new AbstractAction() {
+            public void actionPerformed(ActionEvent e) {
+                TableCellListener tcl = (TableCellListener)e.getSource();
+                FoodManagement foodManagement = new FoodManagement();
+                int option;
+                if ((tcl.getOldValue()).equals(tcl.getNewValue())) { // Why isn't this working on dropdown?
+                    option = 1;
+                } else {
+                    option = showOptionDialog(null,
+                            "Change " + userModel.getColumnName(tcl.getColumn()) + " from '" + tcl.getOldValue() + "' to '" + tcl.getNewValue() + "'?",
+                            "Edit " + userModel.getColumnName(tcl.getColumn()),
+                            YES_NO_OPTION,
+                            INFORMATION_MESSAGE,
+                            null,
+                            new Object[]{"Yes", "No"},
+                            "No");
+                }
+
+
+                // If yes, update database
+                if (option == 0) {
+                    switch (tcl.getColumn()) {
+                        case 0:
+                            try {
+                                foodManagement.updateQuantity((String)ingredientModel.getValueAt(tcl.getRow(), 0), (String)tcl.getNewValue());
+                            } catch (Exception e1) {
+                                e1.printStackTrace();
+                            }
+                            break;
+                        default:
+                            System.err.println(userTable.getColumnName(tcl.getColumn()) + " does not yet have an implemetation.");
+                    }
+
+                }
+
+                // Update user table from database
+                //updateUsers();
+            }
+        };
+        TableCellListener tcl = new TableCellListener(userTable, action);
+        */
     }
+
 
     public static void updateIngredients() {
         FoodManagement foodManagement = new FoodManagement();
