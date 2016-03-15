@@ -12,9 +12,12 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="com.google.code.geocoder-java:geocoder-java:0.16" level="project" />
-    <orderEntry type="library" name="jfree:jfreechart:1.0.13" level="project" />
-    <orderEntry type="library" name="mysql:mysql-connector-java:5.1.38" level="project" />
-    <orderEntry type="library" name="commons-dbutils:commons-dbutils:1.6" level="project" />
+    <orderEntry type="library" exported="" name="com.google.code.geocoder-java:geocoder-java:0.16" level="project" />
+    <orderEntry type="library" exported="" name="jfree:jfreechart:1.0.13" level="project" />
+    <orderEntry type="library" exported="" name="mysql:mysql-connector-java:5.1.38" level="project" />
+    <orderEntry type="library" exported="" name="commons-dbutils:commons-dbutils:1.6" level="project" />
+    <orderEntry type="library" name="DBUtils" level="project" />
+    <orderEntry type="library" name="geocoder-java-0.16-javadoc" level="project" />
+    <orderEntry type="library" name="Driver" level="project" />
   </component>
 </module>

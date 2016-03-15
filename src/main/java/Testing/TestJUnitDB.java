@@ -2,8 +2,13 @@ package Testing;
 
 import Database.*;
 import Delivery.CreateDeliveryRoute;
+import Food.CreateShoppingList;
 import GUI.Login;
+import Statistics.OrderStatistics;
 import org.junit.*;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import static org.junit.Assert.*;
 
@@ -103,10 +108,18 @@ public class TestJUnitDB{
     public void getIngredients(){
         assertNotNull(food.getIngredients());
     }
-    @Ignore
+    @Test
     public void addRecipe(){
-        assertNotNull(food.getIngredients());
+        ArrayList<Object[]> ing = new ArrayList<Object[]>();
+        ing.add(new Object[]{"Potet", 1});
+        ing.add(new Object[]{"Fisk", 2});
+        for(Object[] i : ing){
+            System.out.println(Arrays.toString(i));
+        }
+
+        assertTrue(food.addRecipe("Oppskriftarererer", ing));
     }
+
     @Test
     public void addIngredients(){
         assertTrue(food.addIngredient("Barn", 100, "kg", 0));
@@ -137,8 +150,36 @@ public class TestJUnitDB{
 
     }
     @Test
+    public void updateOrderStatus(){
+        assertTrue(orde.updateStatus(4, 1)); // 4 = ID, 1 = new status
+    }
+    @Test
+    public void getOrders(){
+        ArrayList<Object[]> obj = orde.getOrders();
+        for(Object[] o : obj){
+            System.out.println(Arrays.toString(o));
+        }
+    }
+    @Test
+    public void testOrderStatistics(){
+        OrderStatistics order = new OrderStatistics();
+        assertNotNull(order.createGraphFromOrders("2008-11-20", "2016-11-20"));
+    }
+    @Test
+    public void ingredientToStorage(){
+        Object[] ing = new Object[]{"Potet", 1};
+        assertTrue(food.addIngredientToStorage(ing));
+    }
+    @Test
+    public void ingredientFromStorage(){
+        Object[] ing = new Object[]{"Barn", 1};
+        assertTrue(food.removeIngredientFromStorage(ing));
+    }
+    @Test
     public void testDeliveryRoute(){
-        assertNotNull(CreateDeliveryRoute.UseReadyOrders("Oslo, Norway"));
+        //assertNotNull(CreateDeliveryRoute.UseReadyOrders("Oslo, Norway"));
+        //assertNotNull(CreateDeliveryRoute.UseReadyOrdersLanLat("Oslo, Norway"));
+        System.out.println(CreateDeliveryRoute.UseReadyOrdersLanLat("Oslo, Norway"));
     }
     @After
     public void objTearDown(){

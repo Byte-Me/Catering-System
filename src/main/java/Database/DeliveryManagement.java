@@ -29,13 +29,12 @@ public class DeliveryManagement extends Management{
             ArrayList<Object[]> out = new ArrayList<Object[]>();
 
             try {
-                res = getScentence().executeQuery("SELECT recipe.name, customer.phone, customer.adress FROM `order`, customer, recipe WHERE `order`.status = 3 AND `order`.customer_id = customer.customer_id " +
-                        "AND `order`.recipe_id = recipe.recipe_id;");
+                res = getScentence().executeQuery("SELECT customer.phone, customer.adress FROM `order`, customer WHERE " +
+                        "`order`.status = 3 AND `order`.customer_id = customer.customer_id;");
                 while (res.next()) {
-                    Object[] obj = new Object[3];
+                    Object[] obj = new Object[2];
                     obj[0] = res.getString("adress");
                     obj[1] = res.getString("phone");
-                    obj[2] = res.getString("phone");
                     out.add(obj);
                 }
 
@@ -57,7 +56,8 @@ public class DeliveryManagement extends Management{
             ArrayList<String> out = new ArrayList<String>();
 
             try {
-                res = getScentence().executeQuery("SELECT customer.adress FROM `order`, customer WHERE `order`.status = 3 AND `order`.customer_id = customer.customer_id;");
+                res = getScentence().executeQuery("SELECT customer.adress FROM `order`, customer WHERE "+
+                         "`order`.status = 3 AND `order`.customer_id = customer.customer_id;");
                 while (res.next()) {
                     Object[] obj = new Object[3];
                     out.add(res.getString("adress"));
