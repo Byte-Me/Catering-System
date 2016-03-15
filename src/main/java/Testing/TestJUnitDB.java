@@ -86,14 +86,14 @@ public class TestJUnitDB{
     public void getUsers() {
         assertNotNull(user.userInfo());
     }
-    @Ignore // TODO: username fungerer ikke?
+    @Test // TODO: username fungerer ikke?
     public void updateUsers(){
-        assertTrue(user.updateUserInfoFName("kris", "Kristaffer"));
-        assertTrue(user.updateUserInfoLName("kris", "Aasss"));
-        assertTrue(user.updateUserInfoUsername("kris", "kris"));
-        assertTrue(user.updateUserInfoPhone("kris", "000000"));
-        assertTrue(user.updateUserInfoEmail("kris", "Kristaffer@kris.chrisP"));
-        assertTrue(user.updateUserInfoAccessLevel("kris", 3));
+        assertTrue(user.updateUserInfoFName("krisss", "Det funket"));
+        assertTrue(user.updateUserInfoLName("krisss", "Aasss"));
+        assertTrue(user.updateUserInfoUsername("krisss", "krisss"));
+        assertTrue(user.updateUserInfoPhone("krisss", "000800"));
+        assertTrue(user.updateUserInfoEmail("krisss", "Kristaffer@kris.chrisP"));
+        assertTrue(user.updateUserInfoAccessLevel("krisss", 3));
     }
     @Test
     public void getCustomers(){
@@ -138,7 +138,6 @@ public class TestJUnitDB{
     }
     @Test
     public void testDeliveryRoute(){
-        System.out.println(CreateDeliveryRoute.UseReadyOrders("Oslo, Norway"));
         assertNotNull(CreateDeliveryRoute.UseReadyOrders("Oslo, Norway"));
     }
     @After

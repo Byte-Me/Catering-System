@@ -1,9 +1,6 @@
 package Database;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -21,7 +18,7 @@ public class UserManagement extends Management {
                                 String password, String email, String phone, int accessLevel) {
         Encryption enc = new Encryption();
         int rowChanged = 0; //
-        if (super.setUp()) {
+        if (setUp()) {
             try {
                 String[] saltHash = enc.passEncoding(password);
                 try {
@@ -53,7 +50,7 @@ public class UserManagement extends Management {
 
         ResultSet res = null;
         ArrayList<Object[]> out = new ArrayList<Object[]>();
-        if (super.setUp()) {
+        if (setUp()) {
 
             try {
                 res = getScentence().executeQuery("select first_name, last_name, email, phone, username, access_level" +
@@ -79,9 +76,14 @@ public class UserManagement extends Management {
 
     public boolean updateUserInfoFName(String username, String newData) {
         int rowChanged = 0;
-        if (super.setUp()) {
+        if (setUp()) {
             try {
-                rowChanged = getScentence().executeUpdate("UPDATE user SET first_name = '" + newData + "' WHERE username = '" + username + "';");
+                PreparedStatement prep = getConnection().prepareStatement("UPDATE user SET first_name = ? WHERE username = ?;");
+                prep.setString(1, newData);
+                prep.setString(2, username);
+
+                rowChanged = prep.executeUpdate();
+                System.out.println(rowChanged);
             } catch (SQLException e) {
                 System.err.println("Issue with executing database update.");
                 return false;
@@ -93,14 +95,18 @@ public class UserManagement extends Management {
 
             }
         }
+
         if(rowChanged > 0) return true;
         return false;
     }
     public boolean updateUserInfoLName(String username, String newData) {
         int rowChanged = 0;
-        if (super.setUp()) {
+        if (setUp()) {
             try {
-                rowChanged = getScentence().executeUpdate("UPDATE user SET last_name = '" + newData + "' WHERE username = '" + username + "';");
+                PreparedStatement prep = getConnection().prepareStatement("UPDATE user SET last_name = ? WHERE username = ?;");
+                prep.setString(1, newData);
+                prep.setString(2, username);
+                rowChanged = prep.executeUpdate();
             } catch (SQLException e) {
                 System.err.println("Issue with executing database update.");
                 return false;
@@ -117,9 +123,12 @@ public class UserManagement extends Management {
     }
     public boolean updateUserInfoUsername(String username, String newData) {
         int rowChanged = 0;
-        if (super.setUp()) {
+        if (setUp()) {
             try {
-                rowChanged = getScentence().executeUpdate("UPDATE user SET username = '" + newData + "' WHERE username = '" + username + "';");
+                PreparedStatement prep = getConnection().prepareStatement("UPDATE user SET username = ? WHERE username = ?;");
+                prep.setString(1, newData);
+                prep.setString(2, username);
+                rowChanged = prep.executeUpdate();
             } catch (SQLException e) {
                 System.err.println("Issue with executing database update.");
                 return false;
@@ -136,9 +145,12 @@ public class UserManagement extends Management {
     }
     public boolean updateUserInfoPhone(String username, String newData) {
         int rowChanged = 0;
-        if (super.setUp()) {
+        if (setUp()) {
             try {
-                rowChanged = getScentence().executeUpdate("UPDATE user SET phone = '" + newData + "' WHERE username = '" + username + "';");
+                PreparedStatement prep = getConnection().prepareStatement("UPDATE user SET phone = ? WHERE username = ?;");
+                prep.setString(1, newData);
+                prep.setString(2, username);
+                rowChanged = prep.executeUpdate();
             } catch (SQLException e) {
                 System.err.println("Issue with executing database update.");
                 return false;
@@ -155,9 +167,12 @@ public class UserManagement extends Management {
     }
     public boolean updateUserInfoEmail(String username, String newData) {
         int rowChanged = 0;
-        if (super.setUp()) {
+        if (setUp()) {
             try {
-                rowChanged = getScentence().executeUpdate("UPDATE user SET email = '" + newData + "' WHERE username = '" + username + "';");
+                PreparedStatement prep = getConnection().prepareStatement("UPDATE user SET email = ? WHERE username = ?;");
+                prep.setString(1, newData);
+                prep.setString(2, username);
+                rowChanged = prep.executeUpdate();
             } catch (SQLException e) {
                 System.err.println("Issue with executing database update.");
                 return false;
@@ -174,9 +189,12 @@ public class UserManagement extends Management {
     }
     public boolean updateUserInfoAccessLevel(String username, int newData) {
         int rowChanged = 0;
-        if (super.setUp()) {
+        if (setUp()) {
             try {
-                rowChanged = getScentence().executeUpdate("UPDATE user SET access_level = '" + newData + "' WHERE username = '" + username + "';");
+                PreparedStatement prep = getConnection().prepareStatement("UPDATE user SET access_level = ? WHERE username = ?;");
+                prep.setInt(1, newData);
+                prep.setString(2, username);
+                rowChanged = prep.executeUpdate();
             } catch (SQLException e) {
                 System.err.println("Issue with executing database update.");
                 return false;
@@ -196,11 +214,18 @@ public class UserManagement extends Management {
         ArrayList<Object[]> out = new ArrayList<Object[]>();
         if(setUp()) {
             try {
-                res = getScentence().executeQuery("SELECT username, first_name, last_name, phone, email, access_level" +
-                        " FROM user WHERE username LIKE '%" + searchTerm + "%' OR first_name LIKE '%"
-                        + searchTerm + "%' OR last_name LIKE '%" + searchTerm + "%' OR phone LIKE '%" + searchTerm +
-                        "%' OR email LIKE '%" + searchTerm + "%' OR access_level LIKE '%" + searchTerm + "%' ORDER BY last_name;");
-                //System.out.println("Hei");
+                PreparedStatement prep = getConnection().prepareStatement("SELECT username, first_name, last_name, phone, email, access_level" +
+                        " FROM user WHERE username LIKE ? OR first_name LIKE ? OR last_name LIKE ? OR phone LIKE ? OR email LIKE ? OR access_level LIKE ? ORDER BY last_name;");
+                searchTerm = "%" + searchTerm + "%";
+                prep.setString(1, searchTerm);
+                prep.setString(2, searchTerm);
+                prep.setString(3, searchTerm);
+                prep.setString(4, searchTerm);
+                prep.setString(5, searchTerm);
+                prep.setString(6, searchTerm);
+
+                res = prep.executeQuery();
+
                 while (res.next()) {
                     Object[] obj = new Object[6];
                     obj[0] = res.getString("first_name");
