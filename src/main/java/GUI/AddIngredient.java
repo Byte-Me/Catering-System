@@ -4,6 +4,7 @@ import Database.FoodManagement;
 
 import javax.swing.*;
 import javax.swing.JPanel;
+import javax.swing.border.Border;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.html.ObjectView;
 import java.awt.*;
@@ -74,8 +75,14 @@ public class AddIngredient extends JFrame {
 
                     if(nameText != null && unitText != null && quantityText > 0 && priceText > 0 && !existsInTable(toAddTable, nameText)) {
                         toAddModel.addRow(ingInfo);
+                        ingName.setText(null);
+                        quantity.setText(null);
+                        unit.setText(null);
+                        price.setText(null);
                     } else {
-                        JOptionPane.showMessageDialog(null, "1. All fields must be filled. \n2. Units and price must be positive numbers.\n3. Two ingredients with the same name can\n not be added.\n(Edit the quantity instead!)");
+                        wrongInputNumber(quantity);
+                        wrongInputNumber(price);
+                        JOptionPane.showMessageDialog(null, "Error!\n1. All fields must be filled. \n2. Units and price must be positive numbers.\n3. Two ingredients with the same name can\n not be added.\n(Edit the quantity instead!)");
                     }
                 } catch(Exception e1) {}
             }
@@ -83,7 +90,7 @@ public class AddIngredient extends JFrame {
 
         addIngredientsButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                boolean failed = false;
+                boolean ok = false;
                 // ArrayList<Object[]> ingToBeAdded = new ArrayList<Object[]>();
                 for(int i = 0; i < toAddTable.getRowCount(); i++) {
                     Object[] obj = new Object[4];
@@ -91,15 +98,15 @@ public class AddIngredient extends JFrame {
                     obj[1] = toAddTable.getValueAt(i, 1);
                     obj[2] = toAddTable.getValueAt(i, 2);
                     obj[3] = toAddTable.getValueAt(i, 3);
-                    // ingToBeAdded.add(obj);
 
-                    if(!foodManagement.addIngredient((String)obj[0], (Integer)obj[1], (String)obj[2], (Integer)obj[3])) {
-                        JOptionPane.showMessageDialog(null, "Error.\nElement " + i + " was not added.");
-                        failed = true;
+                    if(toAddTable.getRowCount() > 0 && foodManagement.addIngredient((String)obj[0], (Integer)obj[1], (String)obj[2], (Integer)obj[3])) {
+                        JOptionPane.showMessageDialog(null, "Success!");
+                        ok = true;
                     }
                 }
-                if (!failed) {
-                    JOptionPane.showMessageDialog(null, "Success!");
+                if (!ok) {
+                    JOptionPane.showMessageDialog(null, "Error!\n1. All fields must be filled. \n2. Units and price must be positive numbers.\n3. Two ingredients with the same name can\n not be added.\n(Edit the quantity instead!)");
+                } else {
                     MainWindow.updateIngredients();
                     setVisible(false);
                     dispose();
@@ -141,5 +148,12 @@ public class AddIngredient extends JFrame {
             }
         }
         return false;
+    }
+
+    private void wrongInputNumber(JTextField tf) {
+        int i = Integer.parseInt(tf.getText());
+        if(i <= 0) {
+            tf.setText(null);
+        }
     }
 }
