@@ -177,7 +177,7 @@ public class TravelingSalesman {
                 out.add(geoCoder(fix.get(i), i));
             }
             catch (Exception e){
-                System.err.println("Issue with GeoCoding: " + adresses.get(i));
+                System.err.println("Issue with GeoCoding: " + fix.get(i));
                 return null;
             }
         }
