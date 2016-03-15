@@ -152,7 +152,8 @@ public class TestJUnitDB{
 
     @Test
     public void testOrderStatistics(){
-        assertNotNull(OrderStatistics.createGraphFromOrders("2008-11-20", "2016-11-20"));
+        OrderStatistics order = new OrderStatistics();
+        assertNotNull(order.createGraphFromOrders("2008-11-20", "2016-11-20"));
     }
     @Test
     public void testDeliveryRoute(){

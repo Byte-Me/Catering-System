@@ -1,6 +1,7 @@
 package GUI;
 
 import Database.*;
+import Statistics.OrderStatistics;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
@@ -27,7 +28,6 @@ public class Login extends JFrame{
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         pack();
-
         loginButton.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent e) {
