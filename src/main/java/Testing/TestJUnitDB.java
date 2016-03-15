@@ -5,6 +5,8 @@ import Delivery.CreateDeliveryRoute;
 import GUI.Login;
 import org.junit.*;
 
+import java.util.ArrayList;
+
 import static org.junit.Assert.*;
 
 /**
@@ -103,9 +105,12 @@ public class TestJUnitDB{
     public void getIngredients(){
         assertNotNull(food.getIngredients());
     }
-    @Ignore
+    @Test
     public void addRecipe(){
-        assertNotNull(food.getIngredients());
+        ArrayList<String> ing = new ArrayList<String>();
+        ing.add("Fisk");
+        ing.add("Potet");
+        assertTrue("Oppskrift", );
     }
     @Test
     public void addIngredients(){
