@@ -1,5 +1,7 @@
 package GUI;
 
+import Statistics.OrderStatistics;
+
 import javax.swing.*;
 
 /**
@@ -14,11 +16,17 @@ public class MainWindow extends JFrame {
 
 
     public MainWindow() {
+        OrderStatistics ord = new OrderStatistics();
         setContentPane(mainPanel);
 
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         pack();
 
+        JFrame noe = new JFrame("Hei");
+        noe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        noe.add(ord.createGraphFromOrders("2016-03-11", "2016-12-16"));
+        noe.pack();
+        noe.setVisible(true);
 
 
         setVisible(true);
@@ -27,5 +35,6 @@ public class MainWindow extends JFrame {
 
     private void createUIComponents() {
         // TODO: place custom component creation code here
+
     }
 }

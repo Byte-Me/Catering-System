@@ -11,6 +11,9 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * Created by Evdal on 15.03.2016.
+ *
+ * //TODO metoden som lager grafen kan ta med alle dager/uker/mnd selv om de ikke har ordre i seg.
+ *
  */
 public class OrderStatistics {
     private SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
@@ -19,9 +22,10 @@ public class OrderStatistics {
     public JPanel createGraphFromOrders(String startDate, String endDate) {
         StatisticsManagement stat = new StatisticsManagement();
         ArrayList<String> orders = stat.getOrders(startDate, endDate);
-        ArrayList<String> yValues = new ArrayList<String>();
+        ArrayList<Double> yValues = new ArrayList<Double>();
         ArrayList<String> xValues = new ArrayList<String>();
         String curDate = "";
+        System.out.println(orders);
         try {
             curDate = orders.get(0);
         } catch (Exception e) {
@@ -33,30 +37,41 @@ public class OrderStatistics {
         try {
             int timeDiff = checkDaysBetween(startDate, endDate);
 
-            if (timeDiff > 365) {
+            if (timeDiff > 160) {
                 for (int i = 1; i < orders.size(); i++) {
                     if (isSameMonth(curDate, orders.get(i))) {
                         count++;
+                        if(i == orders.size()-1){
+                            yValues.add(Double.valueOf(count));
+                            xValues.add(getMonthName(orders.get(i)));
+                        }
                     } else {
-                        yValues.add("" + count);
+                        yValues.add(Double.valueOf(count));
                         xValues.add(getMonthName(orders.get(i - 1)));
                         curDate = orders.get(i);
                         count = 1;
                     }
                 }
+
                 chart = ChartCreator.createLineChart("Orders", "Months", "Orders per month", xValues, yValues, "orders");
             }
-            else if(timeDiff > 60){
+            else if(timeDiff > 30){
                 for (int i = 1; i < orders.size(); i++) {
                     if (isSameWeek(curDate, orders.get(i))) {
                         count++;
+                        if(i == orders.size()-1){
+                            yValues.add(Double.valueOf(count));
+                            xValues.add(getWeekName(orders.get(i)));
+                        }
                     } else {
-                        yValues.add("" + count);
+                        yValues.add(Double.valueOf(count));
                         xValues.add(getWeekName(orders.get(i - 1)));
                         curDate = orders.get(i);
                         count = 1;
                     }
                 }
+                System.out.println("Orders" + "Days" + "Orders per day" + xValues + yValues + "orders");
+
                 chart = ChartCreator.createLineChart("Orders", "Weeks", "Orders per week", xValues, yValues, "orders");
 
             }
@@ -66,8 +81,13 @@ public class OrderStatistics {
                 for (int i = 1; i < orders.size(); i++) {
                     if (orders.get(i).equals(curDate)) {
                         count++;
-                    } else {
-                        yValues.add("" + count);
+                        if(i == orders.size()-1){
+                            yValues.add(Double.valueOf(count));
+                            xValues.add(orders.get(i));
+                        }
+                    }
+                    else{
+                        yValues.add(Double.valueOf(count));
                         xValues.add(orders.get(i - 1));
                         curDate = orders.get(i);
                         count = 1;
@@ -80,6 +100,7 @@ public class OrderStatistics {
         catch (Exception e){
             System.err.println("Issue with creating graph.");
         }
+
         return chart;
     }
 
@@ -111,7 +132,7 @@ public class OrderStatistics {
     private String getWeekName(String date)throws Exception{
         Date tmp = formatter.parse(date);
         cal.setTime(tmp);
-        return cal.getDisplayName(Calendar.WEEK_OF_YEAR, Calendar.LONG, Locale.getDefault());
+        return "" + cal.get(Calendar.WEEK_OF_YEAR);
 
     }
 
