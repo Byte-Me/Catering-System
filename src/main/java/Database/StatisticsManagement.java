@@ -21,20 +21,25 @@ public class StatisticsManagement extends Management{
     public ArrayList<String> getOrders(String firstDate, String lastDate){
         ResultSet res;
         ArrayList<String> out = new ArrayList<String>();
-        try {
-            res = getScentence().executeQuery("SELECT `order`.date from `order` where `date` >= DATE '" + firstDate +
-                    "' AND `date` <= DATE '" + lastDate + "';");
-            while(res.next()){
-                out.add(res.getString("date"));
+        if(setUp()) {
+            try {
+                System.err.println("SELECT `order`.date from `order` where `date` >= DATE '" + firstDate +
+                        "' AND `date` <= DATE '" + lastDate + "' order by date;");
+
+                res = getScentence().executeQuery("SELECT `order`.date from `order` where `date` >= DATE '" + firstDate +
+                        "' AND `date` <= DATE '" + lastDate + "' order by date;");
+                System.out.println(out + "Hei");
+
+                while (res.next()) {
+                    out.add(res.getString("date"));
+                }
+            } catch (Exception e) {
+                System.err.println("Issue with getting orders");
+                return null;
+            } finally {
+                DbUtils.closeQuietly(getScentence());
+                DbUtils.closeQuietly(getConnection());
             }
-        }
-        catch (Exception e){
-            System.err.println("Issue with getting orders");
-            return null;
-        }
-        finally {
-            DbUtils.closeQuietly(getScentence());
-            DbUtils.closeQuietly(getConnection());
         }
         return out;
     }

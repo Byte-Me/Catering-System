@@ -4,6 +4,7 @@ import Database.*;
 import Delivery.CreateDeliveryRoute;
 import Food.CreateShoppingList;
 import GUI.Login;
+import Statistics.OrderStatistics;
 import org.junit.*;
 
 import java.util.ArrayList;
@@ -147,6 +148,11 @@ public class TestJUnitDB{
         assertNotNull(deli.getDeliveryReady());
         assertNotNull(deli.getAdressReady());
 
+    }
+
+    @Test
+    public void testOrderStatistics(){
+        assertNotNull(OrderStatistics.createGraphFromOrders("2008-11-20", "2016-11-20"));
     }
     @Test
     public void testDeliveryRoute(){
