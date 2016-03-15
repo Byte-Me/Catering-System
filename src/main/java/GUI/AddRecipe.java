@@ -9,6 +9,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Created by asdfLaptop on 11.03.2016.
@@ -64,6 +65,28 @@ public class AddRecipe extends JFrame {
             }
         });
 
+        addRecipeButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                foodManagement = new FoodManagement();
+                String recipeName = JOptionPane.showInputDialog(null, "Name of recipe: ");
+                ArrayList<Object[]> ingInfo = new ArrayList<Object[]>();
+                for(int i = 0; i < inRecipeTable.getRowCount(); i++) {
+                    Object[] obj = new Object[2];
+                    obj[0] = inRecipeTable.getValueAt(i, 0);
+                    obj[1] = inRecipeTable.getValueAt(i, 1);
+                    System.out.println(Arrays.toString(obj));
+                    ingInfo.add(obj);
+                }
+                if(foodManagement.addRecipe(recipeName, ingInfo)) {
+                    JOptionPane.showMessageDialog(null, "Success!");
+                } else {
+                    JOptionPane.showMessageDialog(null, "Error. Try again!");
+                }
+                setVisible(false);
+                dispose();
+            }
+        });
+
         cancelButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 setVisible(false);
@@ -76,31 +99,42 @@ public class AddRecipe extends JFrame {
 
     //FIXME
     private void copyPasteData(int index, boolean left) {
-        FoodManagement foodManagement = new FoodManagement();
-        Object[] ingredient = new Object[3];
-        int unitsInStorage = (Integer)inStorageTable.getValueAt(inStorageTable.getSelectedRow(), 1);
-        if (left) {
-            int unitsInRecipe = Integer.parseInt(JOptionPane.showInputDialog(null, "How many units?"));
-            if (unitsInStorage >= unitsInRecipe) {
+        try {
+            Object[] ingredient = new Object[3];
+            if (left) {
+                int unitsInRecipe = Integer.parseInt(JOptionPane.showInputDialog(null, "How many units?"));
                 ingredient[0] = inStorageTable.getValueAt(index, 0);
                 ingredient[1] = unitsInRecipe;
                 ingredient[2] = inStorageTable.getValueAt(index, 2);
-                if (inRecipeTable.getValueAt(index, 0) != null || ingredient[0].equals(inRecipeTable.getValueAt(index, 0))) {
-                    inRecipeTable.setValueAt(unitsInRecipe, index, 1);
-                    inStorageTable.setValueAt((unitsInStorage - unitsInRecipe), index, 1);
-                } else {
-                    inRecipeModel.addRow(ingredient);
-                }
-
+                inRecipeModel.addRow(ingredient);
+            } else {
+                inRecipeModel.removeRow(index);
             }
-        } else {
-            for(int i = 0; i < 3; i++) {
-                ingredient[i] = inRecipeTable.getValueAt(index, i);
-            }
-            inStorageTable.setValueAt((unitsInStorage + ((Integer)inRecipeTable.getValueAt(index, 1))), index, 1);
-            inRecipeModel.removeRow(inRecipeTable.getSelectedRow());
+        } catch (Exception e){}
+    }
 
+    private boolean existsInRecipe(JTable table, Object[] entry) {
+        // Get row and column count
+        int rowCount = table.getRowCount();
+        int colCount = table.getColumnCount();
+
+        // Get Current Table Entry
+        String curEntry = "";
+        for (Object o : entry) {
+            String e = o.toString();
+            curEntry = curEntry + " " + e;
         }
+
+        // Check against all entries
+        for (int i = 0; i < rowCount; i++) {
+            String rowEntry = "";
+            for (int j = 0; j < colCount; j++)
+                rowEntry = rowEntry + " " + table.getValueAt(i, 0).toString();
+            if (rowEntry.equalsIgnoreCase(curEntry)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static void updateIngredients() {

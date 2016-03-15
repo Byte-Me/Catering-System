@@ -216,6 +216,12 @@ public class MainWindow extends JFrame {
             }
         });
 
+        generateShoppingListButton.addActionListener(new ActionListener() { // Button action listener
+            public void actionPerformed(ActionEvent e) {
+                new GenerateShoppingList(mainPanel.getParent());
+            }
+        });
+
         String[] prepareHeader = {"Quantity", "Recipe", "Notes", "Ready for delivery"}; // Header titles
         String[] ingredientHeader = {"Ingredient", "Quantity", "Unit"}; // Header titles
 

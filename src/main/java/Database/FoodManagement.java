@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 import java.net.URL;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Map;
 
@@ -18,12 +19,12 @@ public class FoodManagement extends Management{
     public FoodManagement(){
         super();
     }
-
     public ArrayList<Object[]> getIngredients(){
-        ResultSet res = null;
+        ResultSet res;
         ArrayList<Object[]> out = new ArrayList<Object[]>();
         if(setUp()){
             try{
+
                 res = getScentence().executeQuery("SELECT grocery_id, name, quantity, unit FROM grocery;");
                 while (res.next()){
                     Object[] obj = new Object[3];
@@ -65,20 +66,32 @@ public class FoodManagement extends Management{
     }
     private String getRecipeID(String name)throws Exception{
         ResultSet res = getScentence().executeQuery("SELECT recipe_id FROM recipe WHERE name = '" + name + "';");
-        return Integer.toString(res.getInt("recipe_id"));
+        if(res.next()) {
+            return Integer.toString(res.getInt("recipe_id"));
+        }
+        else return null;
     }
 
-    public boolean addRecipe(String name, ArrayList<String> ingNames){
-        int numb = 0;
+    public boolean addRecipe(String name, ArrayList<Object[]> ingInfo){
+        int numb;
+        System.out.println("heim");
         if(setUp()){
             try{
+                ArrayList<String> names = new ArrayList<String>();
+                for(Object[] ing : ingInfo ){
+                    names.add((String)ing[0]);
+                }
+
                 getScentence().executeUpdate("START TRANSACTION;");
-                ArrayList<Integer> IDs = getGroceryID(ingNames);
+                ArrayList<Integer> IDs = getGroceryID(names);
                 numb = getScentence().executeUpdate("INSERT INTO recipe VALUES(DEFAULT, '" + name + "');");
                 if(numb == 0)return false;
                 String recipeID = getRecipeID(name);
-                for(Integer id : IDs){
-                    numb = getScentence().executeUpdate("INSERT INTO recipe_grocery VALUES('" + recipeID + "', '" + id.toString() + "');");
+
+
+                for(int i= 0; i < IDs.size();i++){ //
+                    numb = getScentence().executeUpdate("INSERT INTO recipe_grocery VALUES('" + recipeID + "', '" + IDs.get(i).toString() + "', '"
+                            + ingInfo.get(i)[1] + "');");
                     if(numb == 0)return false;
                 }
                 getScentence().executeUpdate("COMMIT;");
@@ -97,26 +110,74 @@ public class FoodManagement extends Management{
         else return false;
 
     }
-    /*
-    TODO: Problem med databasen, kan ikke legge til grocery pga foreign keys.
-     */
-    public boolean addIngredient(String name, int price, String unit){
+    public boolean addIngredient(String name, int price, String unit, int quantity){
+        int res = 0;
         if(setUp()) {
-            int res = 0;
-
             try {
-                System.out.println("INSERT INTO grocery VALUES(DEFAULT, '" + name + "', " + price + ", '" + unit + "', 0);");
-                res = getScentence().executeUpdate("INSERT INTO grocery VALUES(DEFAULT, '" + name + "', '" + price + "', '" + unit + "', 0);");
-
+                PreparedStatement prep = getConnection().prepareStatement("INSERT INTO grocery VALUES(DEFAULT,?,?,?,?);");
+                prep.setString(1, name);
+                prep.setInt(2, price);
+                prep.setString(3, unit);
+                prep.setInt(4, quantity);
+                res = prep.executeUpdate();
             } catch (Exception e) {
                 System.err.println("Issue with adding ingredient.");
                 return false;
             }
-            return true;
         }
-        return true;
+        return res > 0;
     }
+    public ArrayList<Object[]> getRecipeIngredients(){
+        ArrayList<Object[]> out = new ArrayList<Object[]>();
+        if(setUp()){
+            ResultSet res;
+            try{
+                res = getScentence().executeQuery("SELECT grocery.price, recipe_grocery.amount, grocery.name FROM grocery, recipe_grocery, `order` WHERE `order`.date = " +
+                        "CURRENT_DATE AND recipe_grocery.recipe_id = `order`.recipe_id AND grocery.grocery_id = recipe_grocery.grocery_id;");
+                while(res.next()){
+                    Object[] obj = new Object[3];
+                    obj[0] = res.getString("name");
+                    obj[1] = res.getInt("amount");
+                    obj[2] = res.getInt("price");
+                    out.add(obj);
+                }
+            }
 
-
-
+            catch (Exception e){
+                System.err.println("Issue with getting ingredients from recipes.");
+            }
+            finally {
+                DbUtils.closeQuietly(getScentence());
+                DbUtils.closeQuietly(getConnection());
+            }
+        }
+        return out;
+    }
+    public ArrayList<Object[]> getIngredientsInStorage(ArrayList<String> names){
+        ArrayList<Object[]> out = new ArrayList<Object[]>();
+        if(setUp()){
+            ResultSet res;
+            try {
+                for (String name : names) {
+                    res = getScentence().executeQuery("SELECT grocery.name, quantity FROM grocery WHERE grocery.name = '" + name + "';");
+                    if(res.next()){
+                        Object[] obj = new Object[2];
+                        obj[0] = res.getString("name");
+                        obj[1] = res.getInt("quantity");
+                        out.add(obj);
+                    }
+                    else return null;
+                }
+            }
+            catch(Exception e){
+                System.err.println("Issue with getting ingredients from storage.");
+                return null;
+            }
+            finally {
+                DbUtils.closeQuietly(getScentence());
+                DbUtils.closeQuietly(getConnection());
+            }
+        }
+        return out; // returnerer i samme rekkefølge som
+    }
 }

@@ -94,6 +94,7 @@ public class UserManagement extends Management {
         if(rowChanged > 0) return true;
         return false;
     }
+
     public boolean updateUserInfoLName(String username, String newData) {
         int rowChanged = 0;
         if (super.setUp()) {
