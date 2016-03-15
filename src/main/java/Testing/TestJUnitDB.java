@@ -1,6 +1,7 @@
 package Testing;
 
 import Database.*;
+import Delivery.CreateDeliveryRoute;
 import GUI.Login;
 import org.junit.*;
 
@@ -85,14 +86,14 @@ public class TestJUnitDB{
     public void getUsers() {
         assertNotNull(user.userInfo());
     }
-    @Ignore // TODO: username fungerer ikke?
+    @Test // TODO: username fungerer ikke?
     public void updateUsers(){
-        assertTrue(user.updateUserInfoFName("kris", "Kristaffer"));
-        assertTrue(user.updateUserInfoLName("kris", "Aasss"));
-        assertTrue(user.updateUserInfoUsername("kris", "kris"));
-        assertTrue(user.updateUserInfoPhone("kris", "000000"));
-        assertTrue(user.updateUserInfoEmail("kris", "Kristaffer@kris.chrisP"));
-        assertTrue(user.updateUserInfoAccessLevel("kris", 3));
+        assertTrue(user.updateUserInfoFName("krisss", "Det funket"));
+        assertTrue(user.updateUserInfoLName("krisss", "Aasss"));
+        assertTrue(user.updateUserInfoUsername("krisss", "krisss"));
+        assertTrue(user.updateUserInfoPhone("krisss", "000800"));
+        assertTrue(user.updateUserInfoEmail("krisss", "Kristaffer@kris.chrisP"));
+        assertTrue(user.updateUserInfoAccessLevel("krisss", 3));
     }
     @Test
     public void getCustomers(){
@@ -119,11 +120,25 @@ public class TestJUnitDB{
         assertNotNull(cust.customerSearch("Even"));
     }
     @Test
+    public void deleteCustomer(){
+        assertTrue(cust.deleteCustomer("even@dalen.no"));
+    }
+    @Test
     public void addCustomer(){
-        assertTrue(cust.addCustomerPerson("Even", "Dalen", "Even@dalen.no", "12345", "Toppenhaugberget 60", "1356", "Bekkestua"));
+        assertTrue(cust.addCustomerPerson("Even", "Dalen", "even@dalen.no", "12345", "Toppenhaugberget 60", "1356", "Bekkestua"));
 
         //String firstname, String lastname, String email, String phone,
         //String streetAdress, String postCode, String city
+    }
+    @Test
+    public void getDeliverys(){
+        assertNotNull(deli.getDeliveryReady());
+        assertNotNull(deli.getAdressReady());
+
+    }
+    @Test
+    public void testDeliveryRoute(){
+        assertNotNull(CreateDeliveryRoute.UseReadyOrders("Oslo, Norway"));
     }
     @After
     public void objTearDown(){
