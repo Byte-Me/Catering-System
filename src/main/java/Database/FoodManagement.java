@@ -153,6 +153,7 @@ public class FoodManagement extends Management{
         }
         return out;
     }
+
     public ArrayList<Object[]> getIngredientsInStorage(ArrayList<String> names){
         ArrayList<Object[]> out = new ArrayList<Object[]>();
         if(setUp()){
@@ -179,6 +180,60 @@ public class FoodManagement extends Management{
             }
         }
         return out; // returnerer i samme rekkefølge som
+    }
+    public boolean addIngredientToStorage(Object[] ingredient){         //ingredients[0] = name og ingredients[1] = added values
+        int numb = 0;
+        if(setUp()){
+            try {
+                getScentence().executeQuery("START TRANSACTION;");
+                ResultSet res = getScentence().executeQuery("SELECT quantity FROM grocery WHERE name = '" + ingredient[0] + "';");
+                if(res.next()) {
+                    int newQuant = res.getInt("quantity") + (Integer)ingredient[1];
+                    System.out.println("UPDATE grocery SET quantity = " + newQuant + "';");
+                    numb = getScentence().executeUpdate("UPDATE grocery SET quantity = '" + newQuant + "' WHERE name = '" + ingredient[0] + "';");
+
+
+                }
+                getScentence().executeQuery("COMMIT;");
+
+            }
+            catch (Exception e){
+                System.err.println("Issue with adding ingredient to storage");
+                return false;
+            }
+            finally {
+                DbUtils.closeQuietly(getScentence());
+                DbUtils.closeQuietly(getConnection());
+            }
+        }
+        return numb > 0;
+    }
+    public boolean removeIngredientFromStorage(Object[] ingredient){         //ingredients[0] = name og ingredients[1] = added values
+        int numb = 0;
+        if(setUp()){
+            try {
+                getScentence().executeQuery("START TRANSACTION;");
+                ResultSet res = getScentence().executeQuery("SELECT quantity FROM grocery WHERE name = '" + ingredient[0] + "';");
+                if(res.next()) {
+                    int newQuant = res.getInt("quantity") - (Integer)ingredient[1];
+                    System.out.println("UPDATE grocery SET quantity = " + newQuant + "';");
+                    numb = getScentence().executeUpdate("UPDATE grocery SET quantity = '" + newQuant + "' WHERE name = '" + ingredient[0] + "';");
+
+
+                }
+                getScentence().executeQuery("COMMIT;");
+
+            }
+            catch (Exception e){
+                System.err.println("Issue with adding ingredient to storage");
+                return false;
+            }
+            finally {
+                DbUtils.closeQuietly(getScentence());
+                DbUtils.closeQuietly(getConnection());
+            }
+        }
+        return numb > 0;
     }
 
 

@@ -1,8 +1,8 @@
 package Testing;
 
-import GUI.graph.ChartCreator;
+import Statistics.graph.ChartCreator;
 import static org.junit.Assert.*;
-import org.junit.Before;
+
 import org.junit.Test;
 
 import javax.swing.*;
