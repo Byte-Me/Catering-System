@@ -1,9 +1,14 @@
 package GUI;
 
+import Database.CustomerManagement;
+import GUI.WindowPanels.Customers;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import static javax.swing.JOptionPane.showMessageDialog;
 
 /**
  * Created by olekristianaune on 11.03.2016.
@@ -26,6 +31,8 @@ public class AddCustomer extends JFrame{
     private JButton cCancelButton;
     private JButton cAddCustomerButton;
 
+    public CustomerManagement customerManagement = new CustomerManagement();
+
     public AddCustomer(Container parent) {
 
         setContentPane(mainPanel);
@@ -34,7 +41,7 @@ public class AddCustomer extends JFrame{
         setLocationRelativeTo(parent);
 
         // Close on cancel
-        ActionListener closeWindow = new ActionListener() {
+        final ActionListener closeWindow = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 setVisible(false);
@@ -57,7 +64,18 @@ public class AddCustomer extends JFrame{
                 String pc = postalCode.getText();
                 String pcCity = city.getText();
 
-                // Kall en metode her :)
+                boolean addedCustomer = customerManagement.addCustomerPerson(fName, lName, mail, phoneNr, adr, pc, pcCity);
+
+                if (addedCustomer) {
+                    // Update customer list
+                    Customers.updateCustomer();
+
+                    // Close window
+                    setVisible(false);
+                    dispose();
+                } else {
+                    showMessageDialog(null, "Could not create user, please try again.");
+                }
             }
         });
 
@@ -70,7 +88,18 @@ public class AddCustomer extends JFrame{
                 String pc = cPostalCode.getText();
                 String pcCity = cCity.getText();
 
-                // Kall en metode her :)
+                boolean addedCustomer = customerManagement.addCustomerCompany(name, "", "", adr, pc, pcCity);
+
+                if (addedCustomer) {
+                    // Update customer list
+                    Customers.updateCustomer();
+
+                    // Close window
+                    setVisible(false);
+                    dispose();
+                } else {
+                    showMessageDialog(null, "Could not create user, please try again.");
+                }
             }
         });
 

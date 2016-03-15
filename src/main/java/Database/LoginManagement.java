@@ -1,10 +1,8 @@
 package Database;
 
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
+
 import Encryption.*;
 import org.apache.commons.dbutils.DbUtils;
 
@@ -44,10 +42,12 @@ public class LoginManagement extends Management{
         //password = pass
 
         ResultSet res = null;
-        if(super.setUp()) {
+        if(setUp()) {
             try {
-                res = getScentence().executeQuery("select username, hash, salt, access_level from user " +
-                        "where username = '" + user + "';");
+                PreparedStatement prep = getConnection().prepareStatement("select username, hash, salt, access_level from user " +
+                        "where username = ?;");
+                prep.setString(1, user);
+                res = prep.executeQuery();
                 if (res.next()) {
                     Encryption encrypt = new Encryption();
                     if (encrypt.passDecoding(pass, res.getString("hash"), res.getString("salt"))) {

@@ -72,13 +72,33 @@ public class CustomerManagement extends Management{
     }
     private boolean addCustomer(String name, String email, String phone, String adress) {
         if (setUp()) {
-            int res = 0;
+            int numb = 0;
+            ResultSet res = null;
             try{
+                getScentence().executeQuery("START TRANSACTION;");
+                res = getScentence().executeQuery("SELECT name FROM customer WHERE email = '" + email + "';");
+                if(res.next()) {
+                    res = getScentence().executeQuery("SELECT status FROM customer WHERE email = '" + email + "';");
 
-                res = getScentence().executeUpdate("INSERT INTO customer VALUES(DEFAULT, '" + name + "', '" + email + "', '" + phone +
-                        "', '" + adress + "', DEFAULT);");
-                System.out.println("Etter");
+                    if(res.next()) {
+                        if (res.getInt("status") == 0) {
+                            numb = getScentence().executeUpdate("UPDATE customer SET status = 1 WHERE email = '" + email + "';");
+                            if (numb == 0) {
+                                getScentence().executeQuery("COMMIT;");
+                                return false;
+                            }
+                            else {
+                                getScentence().executeQuery("COMMIT;");
+                                return false;
+                            }
+                        }
+                    }
+                }else {
+                    numb = getScentence().executeUpdate("INSERT INTO customer VALUES(DEFAULT, '" + name + "', '" + email + "', '" + phone +
+                            "', '" + adress + "', DEFAULT);");
+                }
 
+                getScentence().executeQuery("COMMIT;");
             }
             catch (Exception e){
                 System.err.println("Issue with adding customer.");
@@ -87,7 +107,7 @@ public class CustomerManagement extends Management{
                 DbUtils.closeQuietly(getScentence());
                 DbUtils.closeQuietly(getConnection());
             }
-            if(res > 0) return true;
+            if(numb > 0) return true;
             else return false;
         }
         else return false;
@@ -107,6 +127,23 @@ public class CustomerManagement extends Management{
         if(addCustomer(name, email, phone, adress)) return true;
         else return false;
 
+    }
+    public boolean deleteCustomer(String email){
+        if(setUp()){
+            int res = 0;
+            try{
+                res = getScentence().executeUpdate("UPDATE customer SET status = 0 WHERE email = '" + email + "';");
+            }
+            catch (Exception e){
+                System.err.println("Issue with deleting customer");
+            }
+            finally {
+                DbUtils.closeQuietly(getScentence());
+                DbUtils.closeQuietly(getConnection());
+            }
+            if(res > 0) return true;
+        }
+        return false;
     }
 
 
