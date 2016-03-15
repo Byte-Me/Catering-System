@@ -75,12 +75,12 @@ public class FoodManagement extends Management{
     public boolean addRecipe(String name, ArrayList<Object[]> ingInfo){
         int numb;
         if(setUp()){
-            ArrayList<String> names = new ArrayList<String>();
-            for(Object[] ing : ingInfo ){
-                names.add((String)ing[0]);
-            }
-
             try{
+                ArrayList<String> names = new ArrayList<String>();
+                for(Object[] ing : ingInfo ){
+                    names.add((String)ing[0]);
+                }
+
                 getScentence().executeUpdate("START TRANSACTION;");
                 ArrayList<Integer> IDs = getGroceryID(names);
                 numb = getScentence().executeUpdate("INSERT INTO recipe VALUES(DEFAULT, '" + name + "');");
@@ -131,13 +131,14 @@ public class FoodManagement extends Management{
         if(setUp()){
             ResultSet res;
             try{
-                res = getScentence().executeQuery("SELECT grocery.price, recipe_grocery.amount, grocery.name FROM grocery, recipe_grocery, `order` WHERE `order`.date = " +
+                res = getScentence().executeQuery("SELECT grocery.price, recipe_grocery.amount, grocery.name, grocery.unit FROM grocery, recipe_grocery, `order` WHERE `order`.date = " +
                         "CURRENT_DATE AND recipe_grocery.recipe_id = `order`.recipe_id AND grocery.grocery_id = recipe_grocery.grocery_id;");
                 while(res.next()){
-                    Object[] obj = new Object[3];
+                    Object[] obj = new Object[4];
                     obj[0] = res.getString("name");
                     obj[1] = res.getInt("amount");
-                    obj[2] = res.getInt("price");
+                    obj[2] = res.getString("unit");
+                    obj[3] = res.getInt("price");
                     out.add(obj);
                 }
             }

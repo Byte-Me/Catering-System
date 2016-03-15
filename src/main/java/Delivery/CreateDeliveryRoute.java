@@ -25,4 +25,20 @@ public class CreateDeliveryRoute {
         }
         return out;
     }
+    public static ArrayList<double[]> UseReadyOrdersLanLat(String startAdress){
+        ArrayList<double[]> out;
+        try {
+            TravelingSalesman tsp = new TravelingSalesman(startAdress);
+            DeliveryManagement dm = new DeliveryManagement();
+            ArrayList<String> adressNames = dm.getAdressReady();
+            ArrayList<double[]> positions = tsp.createPositionsArray(adressNames);
+            tsp.bruteForceFindBestRoute(new ArrayList<double[]>(), positions);
+            out = tsp.getBestRoute();
+        }
+        catch (Exception e){
+            System.err.println("Issue with creating delivery route.");
+            return null;
+        }
+        return out;
+    }
 }

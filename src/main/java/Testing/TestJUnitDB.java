@@ -2,6 +2,7 @@ package Testing;
 
 import Database.*;
 import Delivery.CreateDeliveryRoute;
+import Food.CreateShoppingList;
 import GUI.Login;
 import org.junit.*;
 
@@ -117,6 +118,7 @@ public class TestJUnitDB{
 
         assertTrue(food.addRecipe("Oppskriftarererer", ing));
     }
+
     @Test
     public void addIngredients(){
         assertTrue(food.addIngredient("Barn", 100, "kg", 0));
