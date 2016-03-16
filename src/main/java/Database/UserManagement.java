@@ -109,7 +109,6 @@ public class UserManagement extends Management {
                 prep.setString(2, username);
 
                 rowChanged = prep.executeUpdate();
-                System.out.println(rowChanged);
             } catch (SQLException e) {
                 System.err.println("Issue with executing database update.");
                 return false;
