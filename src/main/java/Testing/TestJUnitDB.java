@@ -45,7 +45,7 @@ public class TestJUnitDB{
     }
     @Before
     public void objSetUp(){
-        validUser = new String[]{"Even","passord"}; ; //Accesslvl 1
+        validUser = new String[]{"Even","passord"};  //Accesslvl 1
         invalidUser = new String[]{"bruker", "pass"}; //accesslvl -1
 
     }
