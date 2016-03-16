@@ -210,8 +210,7 @@ public class UserManagement extends Management {
 
             }
         }
-        if(rowChanged > 0) return true;
-        return false;
+        return rowChanged > 0;
     }
     public boolean updateUserInfoAccessLevel(String username, int newData) {
         int rowChanged = 0;

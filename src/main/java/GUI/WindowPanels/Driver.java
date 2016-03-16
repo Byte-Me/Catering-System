@@ -64,8 +64,8 @@ public class Driver {
             @Override
             public PrintStatus onPrint(PrintJob printJob) {
                 PrintSettings settings = printJob.getPrintSettings();
-                settings.setPrintToPDF(true);
-                settings.setPDFFilePath("map.pdf"); // FIXME: Lager en fil map.pdf i prosjektmappa, se om det finnes en annen løsning på dette
+                //settings.setPrintToPDF(true);
+                //settings.setPDFFilePath("map.pdf"); // FIXME: Lager en fil map.pdf i prosjektmappa, se om det finnes en annen løsning på dette
                 return PrintStatus.CONTINUE;
             }
         });

@@ -2,7 +2,9 @@ package Database;
 
 import org.apache.commons.dbutils.DbUtils;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
@@ -12,6 +14,7 @@ public class CustomerManagement extends Management{
     public CustomerManagement(){
         super();
     }
+
     public ArrayList<Object[]> getCustomers(){
         if(setUp()){
             ArrayList<Object[]> out = new ArrayList<Object[]>();
@@ -113,7 +116,7 @@ public class CustomerManagement extends Management{
         else return false;
     }
     public boolean addCustomerCompany(String name, String email, String phone, String streetAdress, String postCode, String city){
-        String adress = adressFormatter(streetAdress, postCode, city);
+        String adress = adressFormatter(city, postCode, streetAdress);
         if(addCustomer(name, email, phone, adress)) return true;
         else return false;
 
@@ -122,7 +125,7 @@ public class CustomerManagement extends Management{
     public boolean addCustomerPerson(String firstname, String lastname, String email, String phone,
                                   String streetAdress, String postCode, String city){
 
-        String adress = adressFormatter(streetAdress, postCode, city);
+        String adress = adressFormatter(city, postCode, streetAdress);
         String name = nameFormatter(firstname, lastname);
         if(addCustomer(name, email, phone, adress)) return true;
         else return false;
@@ -144,6 +147,112 @@ public class CustomerManagement extends Management{
             if(res > 0) return true;
         }
         return false;
+    }
+    public boolean updateCustomerName(String email, String newData) {
+        int rowChanged = 0;
+        if (setUp()) {
+            try {
+                PreparedStatement prep = getConnection().prepareStatement("UPDATE customer SET `name` = ? WHERE email = ?;");
+                prep.setString(1, newData);
+                prep.setString(2, email);
+                rowChanged = prep.executeUpdate();
+            } catch (SQLException e) {
+                System.err.println("Issue with executing database update.");
+                return false;
+
+            } finally {
+                DbUtils.closeQuietly(getScentence());
+                DbUtils.closeQuietly(getConnection());
+
+
+            }
+        }
+        return rowChanged > 0;
+    }
+    public boolean updateCustomerEmail(String email, String newData) {
+        int rowChanged = 0;
+        if (setUp()) {
+            try {
+                PreparedStatement prep = getConnection().prepareStatement("UPDATE customer SET email = ? WHERE email = ?;");
+                prep.setString(1, newData);
+                prep.setString(2, email);
+                rowChanged = prep.executeUpdate();
+            } catch (SQLException e) {
+                System.err.println("Issue with executing database update.");
+                return false;
+
+            } finally {
+                DbUtils.closeQuietly(getScentence());
+                DbUtils.closeQuietly(getConnection());
+
+
+            }
+        }
+        return rowChanged > 0;
+    }
+    public boolean updateCustomerPhone(String email, String newData) {
+        int rowChanged = 0;
+        if (setUp()) {
+            try {
+                PreparedStatement prep = getConnection().prepareStatement("UPDATE customer SET phone = ? WHERE email = ?;");
+                prep.setString(1, newData);
+                prep.setString(2, email);
+                rowChanged = prep.executeUpdate();
+            } catch (SQLException e) {
+                System.err.println("Issue with executing database update.");
+                return false;
+
+            } finally {
+                DbUtils.closeQuietly(getScentence());
+                DbUtils.closeQuietly(getConnection());
+
+
+            }
+        }
+        return rowChanged > 0;
+    }
+    public boolean updateCustomerAdress(String email, String streetAdress, String postCode, String city) {
+        String newData = adressFormatter(city, postCode, streetAdress);
+        int rowChanged = 0;
+        if (setUp()) {
+            try {
+                PreparedStatement prep = getConnection().prepareStatement("UPDATE customer SET adress = ? WHERE email = ?;");
+                prep.setString(1, newData);
+                prep.setString(2, email);
+                rowChanged = prep.executeUpdate();
+            } catch (SQLException e) {
+                System.err.println("Issue with executing database update.");
+                return false;
+
+            } finally {
+                DbUtils.closeQuietly(getScentence());
+                DbUtils.closeQuietly(getConnection());
+
+
+            }
+        }
+        return rowChanged > 0;
+    }
+    public boolean updateCustomerEmail(String email, int newData) {
+        int rowChanged = 0;
+        if (setUp()) {
+            try {
+                PreparedStatement prep = getConnection().prepareStatement("UPDATE customer SET status = ? WHERE email = ?;");
+                prep.setInt(1, newData);
+                prep.setString(2, email);
+                rowChanged = prep.executeUpdate();
+            } catch (SQLException e) {
+                System.err.println("Issue with executing database update.");
+                return false;
+
+            } finally {
+                DbUtils.closeQuietly(getScentence());
+                DbUtils.closeQuietly(getConnection());
+
+
+            }
+        }
+        return rowChanged > 0;
     }
 
 

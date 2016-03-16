@@ -25,7 +25,9 @@ public class CreateDeliveryRoute {
         }
         return out;
     }
+
     public static ArrayList<double[]> UseReadyOrdersLatLng(String startAdress){
+
         ArrayList<double[]> out;
         try {
             TravelingSalesman tsp = new TravelingSalesman(startAdress);

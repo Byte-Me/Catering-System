@@ -1,4 +1,4 @@
-package GUI.graph;
+package Statistics.graph;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -42,11 +42,13 @@ public class ChartCreator extends JFrame {
     */
 
     public static ChartPanel createLineChart(String title, String xTitle,
-                                             String yTitle, ArrayList xValues, ArrayList yValues, String dataInfo ) {
+                                             String yTitle, ArrayList<String> xValues, ArrayList<Double> yValues, String dataInfo ) {
 
-        if(xValues.size() != yValues.size()) return null;
+        if(xValues.size() != yValues.size()) {
+            return null;
+        }
 
-        JFreeChart lineChart = ChartFactory.createLineChart(title, xTitle, yTitle,
+        JFreeChart lineChart = ChartFactory.createLineChart3D(title, xTitle, yTitle,
                 createDataset(xValues, yValues, dataInfo), PlotOrientation.VERTICAL, true, true, false);
 
         ChartPanel chartPanel = new ChartPanel( lineChart );
@@ -66,12 +68,14 @@ public class ChartCreator extends JFrame {
 
     private static DefaultCategoryDataset createDataset(ArrayList<String> xValues,
                                                         ArrayList<Double> yValues, String dataInfo) {
+        System.out.println("Ulik str!!!");
 
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
         for(int i = 0; i<xValues.size();i++){
             dataset.addValue(yValues.get(i), dataInfo, xValues.get(i));
         }
+
         return dataset;
     }
 
