@@ -59,25 +59,6 @@ public class Driver {
         final Browser browser = new Browser();
         BrowserView browserView = new BrowserView(browser);
 
-        // Print settings, print to PDF file, mey be removed
-        browser.setPrintHandler(new PrintHandler() {
-            @Override
-            public PrintStatus onPrint(PrintJob printJob) {
-                PrintSettings settings = printJob.getPrintSettings();
-                //settings.setPrintToPDF(true);
-                //settings.setPDFFilePath("map.pdf"); // FIXME: Lager en fil map.pdf i prosjektmappa, se om det finnes en annen løsning på dette
-                return PrintStatus.CONTINUE;
-            }
-        });
-
-        // Action listener for print button, mey be removed later
-        printMapButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                browser.print();
-            }
-        });
-
         // Add browserView to JPanel "mapPanel"
         mapPanel.setLayout(new BorderLayout());
         mapPanel.add(browserView, BorderLayout.CENTER);
