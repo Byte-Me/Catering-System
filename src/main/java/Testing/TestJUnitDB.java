@@ -191,7 +191,7 @@ public class TestJUnitDB{
     public void testDeliveryRoute(){
         //assertNotNull(CreateDeliveryRoute.UseReadyOrders("Oslo, Norway"));
         //assertNotNull(CreateDeliveryRoute.UseReadyOrdersLanLat("Oslo, Norway"));
-        System.out.println(CreateDeliveryRoute.UseReadyOrdersLanLat("Oslo, Norway"));
+        System.out.println(CreateDeliveryRoute.UseReadyOrdersLatLng("Oslo, Norway"));
     }
     @After
     public void objTearDown(){
