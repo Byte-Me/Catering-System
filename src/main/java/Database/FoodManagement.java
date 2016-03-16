@@ -180,16 +180,15 @@ public class FoodManagement extends Management{
         }
         return out; // returnerer i samme rekkefølge som
     }
-    public boolean addIngredientToStorage(Object[] ingredient){         //ingredients[0] = name og ingredients[1] = added values
+    public boolean addIngredientToStorage(String name, int addedValue){         //ingredients[0] = name og ingredients[1] = added values
         int numb = 0;
         if(setUp()){
             try {
                 getScentence().executeQuery("START TRANSACTION;");
-                ResultSet res = getScentence().executeQuery("SELECT quantity FROM grocery WHERE name = '" + ingredient[0] + "';");
+                ResultSet res = getScentence().executeQuery("SELECT quantity FROM grocery WHERE name = '" + name + "';");
                 if(res.next()) {
-                    int newQuant = res.getInt("quantity") + (Integer)ingredient[1];
-                    System.out.println("UPDATE grocery SET quantity = " + newQuant + "';");
-                    numb = getScentence().executeUpdate("UPDATE grocery SET quantity = '" + newQuant + "' WHERE name = '" + ingredient[0] + "';");
+                    int newQuant = res.getInt("quantity") + addedValue;
+                    numb = getScentence().executeUpdate("UPDATE grocery SET quantity = '" + newQuant + "' WHERE name = '" + name + "';");
 
 
                 }
@@ -207,16 +206,16 @@ public class FoodManagement extends Management{
         }
         return numb > 0;
     }
-    public boolean removeIngredientFromStorage(Object[] ingredient){         //ingredients[0] = name og ingredients[1] = added values
+    public boolean removeIngredientFromStorage(String name, int subtractedValue){         //ingredients[0] = name og ingredients[1] = added values
         int numb = 0;
         if(setUp()){
             try {
                 getScentence().executeQuery("START TRANSACTION;");
-                ResultSet res = getScentence().executeQuery("SELECT quantity FROM grocery WHERE name = '" + ingredient[0] + "';");
+                ResultSet res = getScentence().executeQuery("SELECT quantity FROM grocery WHERE name = '" + name + "';");
                 if(res.next()) {
-                    int newQuant = res.getInt("quantity") - (Integer)ingredient[1];
+                    int newQuant = res.getInt("quantity") - subtractedValue;
                     System.out.println("UPDATE grocery SET quantity = " + newQuant + "';");
-                    numb = getScentence().executeUpdate("UPDATE grocery SET quantity = '" + newQuant + "' WHERE name = '" + ingredient[0] + "';");
+                    numb = getScentence().executeUpdate("UPDATE grocery SET quantity = '" + newQuant + "' WHERE name = '" + name + "';");
 
 
                 }
@@ -225,6 +224,11 @@ public class FoodManagement extends Management{
             }
             catch (Exception e){
                 System.err.println("Issue with adding ingredient to storage");
+                try {
+                    getScentence().executeQuery("ROLLBACK");
+                } catch (SQLException e1) {
+
+                }
                 return false;
             }
             finally {
