@@ -9,9 +9,11 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import static javax.swing.JOptionPane.*;
 
@@ -57,11 +59,13 @@ public class Users {
         // What happens when a cell in the table is changed?
         Action action = new AbstractAction() {
             public void actionPerformed(ActionEvent e) {
-                TableCellListener tcl = (TableCellListener)e.getSource();
+                TableCellListener tcl = (TableCellListener) e.getSource();
 
                 int option;
-                if ((tcl.getOldValue()).equals(tcl.getNewValue())) { // Why isn't this working on dropdown?
+                if ((tcl.getOldValue()).equals(tcl.getNewValue())) {
                     option = 1;
+                } else if (tcl.getColumn() == userTypeColumnNr) { // Special case for userTypeColumn to handle dropdown
+                    option = 0;
                 } else {
                     option = showOptionDialog(null,
                             "Change " + userModel.getColumnName(tcl.getColumn()) + " from '" + tcl.getOldValue() + "' to '" + tcl.getNewValue() + "'?",
