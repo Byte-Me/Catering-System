@@ -268,9 +268,13 @@ public class FoodManagement extends Management{
         ArrayList<Object[]> out = new ArrayList<Object[]>();
         if(setUp()) {
             try {
+                System.out.println("SELECT grocery.name, grocery.unit, recipe_grocery.amount, order_recipe.portions " +
+                        "FROM grocery, order_recipe, recipe_grocery WHERE order_recipe.order_id = " + order_id + " AND order_recipe.recipe_id = " +
+                        "recipe_grocery.recipe_id AND recipe_grocery.grocery_id = grocery.grocery_id AND recipe.name = '" + recipeName + "';");
                 ResultSet res = getScentence().executeQuery("SELECT grocery.name, grocery.unit, recipe_grocery.amount, order_recipe.portions " +
                         "FROM grocery, order_recipe, recipe_grocery WHERE order_recipe.order_id = " + order_id + " AND order_recipe.recipe_id = " +
                         "recipe_grocery.recipe_id AND recipe_grocery.grocery_id = grocery.grocery_id AND recipe.name = '" + recipeName + "';");
+
                 while (res.next()) {
                     Object[] obj = new Object[3];
                     obj[0] = res.getString("name");
