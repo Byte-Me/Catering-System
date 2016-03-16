@@ -12,8 +12,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-import static GUI.MainWindow.updateIngredients;
-
 /**
  * Created by asdfLaptop on 15.03.2016.
  */
@@ -107,7 +105,7 @@ public class AddIngredient extends JFrame {
                 if (!ok) {
                     JOptionPane.showMessageDialog(null, "Error!\n1. All fields must be filled. \n2. Units and price must be positive numbers.\n3. Two ingredients with the same name can\n not be added.\n(Edit the quantity instead!)");
                 } else {
-                    MainWindow.updateIngredients();
+                    updateIngredients();
                     setVisible(false);
                     dispose();
                 }

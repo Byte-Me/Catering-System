@@ -17,11 +17,12 @@ import java.util.ArrayList;
 public class Chef {
 
     DefaultTableModel prepareModel;
-    DefaultTableModel ingredientModel;
+    static DefaultTableModel ingredientModel = new DefaultTableModel();
 
-    public Chef(JPanel mainPanel, JTable prepareTable, JTable ingredientTable, JButton generateShoppingListButton, JButton addRecipeButton, JButton addIngredientButton) {
+    FoodManagement foodManagement = new FoodManagement();
 
-        FoodManagement foodManagement = new FoodManagement();
+    public Chef(final JPanel mainPanel, JTable prepareTable, JTable ingredientTable, JButton generateShoppingListButton, JButton addRecipeButton, JButton addIngredientButton) {
+
         addRecipeButton.addActionListener(new ActionListener() { // Button action listener
             public void actionPerformed(ActionEvent e) {
                 new AddRecipe(mainPanel.getParent());
@@ -48,7 +49,6 @@ public class Chef {
                 return getValueAt(0, columnIndex).getClass();
             }
         }; // Model of the table
-        ingredientModel = new DefaultTableModel(); // Model of the table
 
         prepareModel.setColumnIdentifiers(prepareHeader); // Add header to columns
         ingredientModel.setColumnIdentifiers(ingredientHeader); // Add header to columns

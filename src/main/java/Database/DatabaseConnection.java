@@ -1,7 +1,9 @@
 package Database;
-import org.apache.commons.dbutils.DbUtils;
 
-import java.sql.*;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 /**
  * Created by Evdal on 03.03.2016.
