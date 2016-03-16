@@ -19,12 +19,12 @@ public class FoodManagement extends Management{
     public FoodManagement(){
         super();
     }
+
     public ArrayList<Object[]> getIngredients(){
         ResultSet res;
         ArrayList<Object[]> out = new ArrayList<Object[]>();
         if(setUp()){
             try{
-
                 res = getScentence().executeQuery("SELECT grocery_id, `name`, quantity, unit FROM grocery;");
 
                 while (res.next()){
@@ -54,6 +54,34 @@ public class FoodManagement extends Management{
         }
         return out;
     }
+
+    public ArrayList<Object[]> getRecipes(){
+        ResultSet res;
+        ArrayList<Object[]> out = new ArrayList<Object[]>();
+        if(setUp()){
+            try{
+                res = getScentence().executeQuery("SELECT recipe_id, `name` FROM recipe;");
+
+                while (res.next()){
+                    Object[] obj = new Object[2];
+                    obj[0] = res.getString("recipe_id");
+                    obj[1] = res.getInt("name");
+                    out.add(obj);
+                }
+
+            } catch (Exception e){
+                System.err.println("Issue with getting ingredients.");
+                return null;
+            }
+            finally {
+                DbUtils.closeQuietly(getScentence());
+                DbUtils.closeQuietly(getConnection());
+            }
+
+        }
+        return out;
+    }
+
     private ArrayList<Integer> getGroceryID (ArrayList<String> ingNames) throws Exception {
         ArrayList<Integer> out = new ArrayList<Integer>();
         ResultSet res = null;
@@ -64,6 +92,7 @@ public class FoodManagement extends Management{
         }
         return out;
     }
+
     private String getRecipeID(String name)throws Exception{
         ResultSet res = getScentence().executeQuery("SELECT recipe_id FROM recipe WHERE name = '" + name + "';");
         if(res.next()) {
@@ -109,6 +138,7 @@ public class FoodManagement extends Management{
         else return false;
 
     }
+
     public boolean addIngredient(String name, int price, String unit, int quantity){
         int res = 0;
         if(setUp()) {
@@ -126,6 +156,7 @@ public class FoodManagement extends Management{
         }
         return res > 0;
     }
+
     public ArrayList<Object[]> getRecipeIngredients(){
         ArrayList<Object[]> out = new ArrayList<Object[]>();
         if(setUp()){
@@ -181,6 +212,7 @@ public class FoodManagement extends Management{
         }
         return out; // returnerer i samme rekkefølge som
     }
+
     public boolean addIngredientToStorage(String name, int addedValue){         //ingredients[0] = name og ingredients[1] = added values
         int numb = 0;
         if(setUp()){
@@ -207,6 +239,7 @@ public class FoodManagement extends Management{
         }
         return numb > 0;
     }
+
     public boolean removeIngredientFromStorage(String name, int subtractedValue){         //ingredients[0] = name og ingredients[1] = added values
         int numb = 0;
         if(setUp()){
@@ -264,6 +297,7 @@ public class FoodManagement extends Management{
         }
         return out;
     }
+
     public ArrayList<Object[]> getIngredientsForOrder(int order_id, String recipeName){
         ArrayList<Object[]> out = new ArrayList<Object[]>();
         if(setUp()) {
@@ -288,8 +322,6 @@ public class FoodManagement extends Management{
         }
         return out;
     }
-
-
 
     public boolean updateQuantity(String recipeName, String newData) throws Exception {
         int rowChanged = 0;

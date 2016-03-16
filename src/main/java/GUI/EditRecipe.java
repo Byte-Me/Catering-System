@@ -3,34 +3,35 @@ package GUI;
 import Database.FoodManagement;
 
 import javax.swing.*;
-import javax.swing.JPanel;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Arrays;
+
+import static GUI.AddRecipe.existsInTable;
+
 
 /**
- * Created by asdfLaptop on 11.03.2016.
+ * Created by asdfLaptop on 16.03.2016.
  */
-public class AddRecipe extends JFrame {
+public class EditRecipe extends JFrame {
     private JPanel mainPane;
     private JButton cancelButton;
     private JButton addRecipeButton;
     private JScrollPane inRecipe;
+    private JTable inRecipeTable;
     private JScrollPane inStorage;
+    private JTable inStorageTable;
     private JButton moveRight;
     private JButton moveLeft;
-    private JTable inStorageTable;
-    private JTable inRecipeTable;
 
     private static DefaultTableModel inStorageModel;
     private static DefaultTableModel inRecipeModel;
 
     FoodManagement foodManagement;
 
-    public AddRecipe(Container parent) {
+    public EditRecipe(Container parent) {
         setContentPane(mainPane);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         mainPane.getRootPane().setDefaultButton(addRecipeButton);
@@ -119,20 +120,7 @@ public class AddRecipe extends JFrame {
         } catch (Exception e){}
     }
 
-    public static boolean existsInTable(JTable table, String name) {
-        // Get row count
-        int rowCount = table.getRowCount();
-
-        // Check against all entries
-        for (int i = 0; i < rowCount; i++) {
-            if (table.getValueAt(i, 0).toString() == name) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public static void updateIngredients() {
+    private static void updateIngredients() {
         FoodManagement foodManagement = new FoodManagement();
         ArrayList<Object[]> ingredients = foodManagement.getIngredients();
 
