@@ -86,7 +86,7 @@ public class OrderManagement extends Management{
 
                 res = getScentence().executeQuery("SELECT `order`.order_id, customer.name ,customer.phone, customer.adress, `order`.date, `order`.status FROM `order`, customer WHERE (order_id LIKE '%" + searchTerm + "%' OR `order`.status LIKE '%" +
                         searchTerm + "%' OR `date` LIKE '%" + searchTerm +
-                        "%' OR `name` LIKE '%" + searchTerm + "%' OR email LIKE '%" + searchTerm + "%') AND `order`.status >= 0 AND `order`.customer_id = customer.customer_id ORDER BY `order`.status DESC, `date` DESC;");
+                        "%' OR `name` LIKE '%" + searchTerm + "%' OR phone LIKE '%" + searchTerm + "%' OR adress LIKE '%" + searchTerm + "%') AND `order`.status >= 0 AND `order`.customer_id = customer.customer_id ORDER BY `order`.status DESC, `date` DESC;");
 
                 while (res.next()){
                     out.add(createList(res));
