@@ -187,6 +187,12 @@ public class TravelingSalesman {
 
     public ArrayList<String> positionsToAdresses(ArrayList<double[]> inPositions,
                                                  ArrayList<String> originAdressList) {
+        ArrayList<String> fix = new ArrayList<String>();
+        for(String a : originAdressList){
+            if (!fix.contains(a)) {
+                fix.add(a);
+            }
+        }
         ArrayList<String> out = new ArrayList<String>();
         ArrayList<double[]> positions = (ArrayList<double[]>) inPositions.clone();
         positions.remove(0);
@@ -194,7 +200,7 @@ public class TravelingSalesman {
         positions.trimToSize();
         out.add(startPoint);
         for (double[] pos : positions) {
-            out.add(originAdressList.get((int) pos[2]));
+            out.add(fix.get((int) pos[2]));
         }
         out.add(startPoint);
         return out;

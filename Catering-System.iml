@@ -18,5 +18,7 @@
     <orderEntry type="library" name="DBUtils" level="project" />
     <orderEntry type="library" name="geocoder-java-0.16-javadoc" level="project" />
     <orderEntry type="library" name="Driver" level="project" />
+    <orderEntry type="library" name="geocoder-java-0.16-javadoc1" level="project" />
+    <orderEntry type="library" name="geocoder-java-0.161" level="project" />
   </component>
 </module>
