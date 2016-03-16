@@ -68,7 +68,6 @@ public class ChartCreator extends JFrame {
 
     private static DefaultCategoryDataset createDataset(ArrayList<String> xValues,
                                                         ArrayList<Double> yValues, String dataInfo) {
-        System.out.println("Ulik str!!!");
 
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 

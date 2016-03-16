@@ -21,14 +21,14 @@ public class Driver {
     private static final String cateringAdress = "Trondheim, Norway";
     static DefaultListModel<String> driverModel;
 
-    public Driver(JList<String> drivingList, JPanel mapPanel, JButton generateDrivingRouteButton, JButton printMapButton) {
+    public Driver(JList<String> drivingList, JPanel mapPanel, JButton generateDrivingRouteButton) {
 
         driverModel = new DefaultListModel<String>(); // Model of the list
         drivingList.setModel(driverModel); // Add model to jList
 
         updateDrivingRoute();
 
-        createMap(mapPanel, generateDrivingRouteButton, printMapButton);
+        createMap(mapPanel, generateDrivingRouteButton);
 
     }
 
@@ -48,7 +48,7 @@ public class Driver {
         }
     }
 
-    public void createMap(JPanel mapPanel, JButton generateDrivingRouteButton, JButton printMapButton) {
+    public void createMap(JPanel mapPanel, JButton generateDrivingRouteButton) {
 
         // Reduce logging -- doesn't work?
         LoggerProvider.getChromiumProcessLogger().setLevel(Level.OFF);
@@ -58,25 +58,6 @@ public class Driver {
         // Add a JxBrowser
         final Browser browser = new Browser();
         BrowserView browserView = new BrowserView(browser);
-
-        // Print settings, print to PDF file, mey be removed
-        browser.setPrintHandler(new PrintHandler() {
-            @Override
-            public PrintStatus onPrint(PrintJob printJob) {
-                PrintSettings settings = printJob.getPrintSettings();
-                //settings.setPrintToPDF(true);
-                //settings.setPDFFilePath("map.pdf"); // FIXME: Lager en fil map.pdf i prosjektmappa, se om det finnes en annen løsning på dette
-                return PrintStatus.CONTINUE;
-            }
-        });
-
-        // Action listener for print button, mey be removed later
-        printMapButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                browser.print();
-            }
-        });
 
         // Add browserView to JPanel "mapPanel"
         mapPanel.setLayout(new BorderLayout());

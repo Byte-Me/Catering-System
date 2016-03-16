@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 import java.net.URL;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Map;
 
@@ -50,15 +51,11 @@ public class OrderManagement extends Management{
         ArrayList<Object[]> out = new ArrayList<Object[]>();
         if(setUp()){
             try {
-                ResultSet res = getScentence().executeQuery("SELECT `order`.order_id, `order`.status, `order`.date, customer.name, customer.email FROM `order`, customer WHERE `order`.customer_id = customer.customer_id ORDER BY date DESC;");
-                while(res.next()){
-                    Object[] obj = new Object[5];
-                    obj[0] = res.getInt("order_id");
-                    obj[1] = res.getString("name");
-                    obj[2] = res.getString("email");
-                    obj[3] = res.getString("date");
-                    obj[4] = res.getInt("status");
-                    out.add(obj);
+                ResultSet res = getScentence().executeQuery("SELECT `order`.order_id, customer.name ,customer.phone, customer.adress, `order`.date, `order`.status " +
+                        "FROM `order`, customer WHERE `order`.customer_id = customer.customer_id ORDER BY `date` DESC, status DESC;");
+                while (res.next()){
+                    out.add(createList(res));
+
                 }
             }
             catch (Exception e){
@@ -71,23 +68,28 @@ public class OrderManagement extends Management{
         }
         return out;
     }
+    private Object[] createList(ResultSet res) throws Exception{
+        Object[] obj = new Object[6];
+        obj[0] = res.getInt("order_id");
+        obj[1] = res.getString("name");
+        obj[2] = res.getString("phone");
+        obj[3] = res.getString("adress");
+        obj[4] = res.getString("date");
+        obj[5] = res.getInt("status");
+        return obj;
+    }
     public ArrayList<Object[]> orderSearch(String searchTerm){ // TODO: IKKE TESTET!!
         ResultSet res;
         ArrayList<Object[]> out = new ArrayList<Object[]>();
         if(setUp()) {
             try {
-                res = getScentence().executeQuery("SELECT `order`.order_id, `order`.status, `order`.date, customer.name, customer.email FROM `order`, customer FROM customer WHERE order_id LIKE '%" + searchTerm + "%' OR status LIKE '%" +
+
+                res = getScentence().executeQuery("SELECT `order`.order_id, customer.name ,customer.phone, customer.adress, `order`.date, `order`.status FROM `order`, customer WHERE (order_id LIKE '%" + searchTerm + "%' OR `order`.status LIKE '%" +
                         searchTerm + "%' OR `date` LIKE '%" + searchTerm +
-                        "%' OR `name` LIKE '%" + searchTerm + "%' OR email LIKE '%" + searchTerm + "%' AND status > 0 ORDER BY date DESC;");
+                        "%' OR `name` LIKE '%" + searchTerm + "%' OR phone LIKE '%" + searchTerm + "%' OR adress LIKE '%" + searchTerm + "%') AND `order`.status >= 0 AND `order`.customer_id = customer.customer_id ORDER BY `order`.status DESC, `date` DESC;");
 
                 while (res.next()){
-                    Object[] obj = new Object[5];
-                    obj[0] = res.getInt("order_id");
-                    obj[1] = res.getString("name");
-                    obj[2] = res.getString("email");
-                    obj[3] = res.getString("date");
-                    obj[4] = res.getInt("status");
-                    out.add(obj);
+                    out.add(createList(res));
                 }
 
             } catch (Exception e) {
@@ -100,6 +102,69 @@ public class OrderManagement extends Management{
         }
         return out;
 
+    }
+    public boolean createOrder(String customerMail, String date, ArrayList<Object[]> recipes){ // recipes[0] = name, recipes[1] = portions.
+        if(setUp()){
+            try{
+                getScentence().executeQuery("START TRANSACTION");
+                ResultSet res = getScentence().executeQuery("SELECT customer_id FROM customer WHERE email = '" + customerMail + "';");
+                ArrayList<Integer> recipeIDs;
+                if(res.next()){
+                    int id = res.getInt("customer_id");
+                    recipeIDs = new ArrayList<Integer>();
+                    for(Object[] name : recipes){
+                        res = getScentence().executeQuery("SELECT recipe_id FROM recipe WHERE `name` = '" + name[0] + "';");
+
+                        if(res.next()){
+                            recipeIDs.add(res.getInt("recipe_id"));
+                        }
+                        else{
+                            getScentence().executeQuery("ROLLBACK");
+                            return false;
+                        }
+                    }
+                    int rowChanged = getScentence().executeUpdate("INSERT INTO `order` VALUES(DEFAULT, 1, '" + date + "', '" + id + "');");
+                    if(rowChanged > 0) {
+                        res = getScentence().executeQuery("SELECT LAST_INSERT_ID() as id;");
+                        res.next();
+                        int orderID = res.getInt("id");
+
+                        for (int i = 0; i < recipeIDs.size(); i++){
+                            rowChanged = getScentence().executeUpdate("INSERT INTO order_recipe VALUES(" + orderID + ", " + recipeIDs.get(i) +
+                                    ", '" + recipes.get(i)[1] + "');");
+                            if(rowChanged < 1){
+                                getScentence().executeQuery("ROLLBACK;");
+                                return false;
+                            }
+                        }
+                    }
+                    else{
+                        getScentence().executeQuery("ROLLBACK;");
+                        return false;
+
+                    }
+                }
+                getScentence().executeQuery("COMMIT;");
+            }
+
+            catch (Exception e){
+                System.err.println("Issue with creating order.");
+                try {
+                    getScentence().executeQuery("ROLLBACK");
+                }
+                catch (Exception ee){
+                    System.err.println("Issue with rolling back transaction.");
+                }
+                return false;
+
+            }
+            finally {
+                DbUtils.closeQuietly(getScentence());
+                DbUtils.closeQuietly(getConnection());
+            }
+        }
+        else return false;
+        return true;
     }
 }
 

@@ -1,7 +1,15 @@
 package GUI.WindowPanels;
 
+import Database.FoodManagement;
+import GUI.AddIngredient;
+import GUI.AddRecipe;
+import GUI.GenerateShoppingList;
+
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 /**
  * Created by olekristianaune on 13.03.2016.
@@ -9,9 +17,29 @@ import javax.swing.table.DefaultTableModel;
 public class Chef {
 
     DefaultTableModel prepareModel;
-    DefaultTableModel ingredientModel;
+    static DefaultTableModel ingredientModel = new DefaultTableModel();
 
-    public Chef(JTable prepareTable, JTable ingredientTable, JButton generateShoppingListButton, JButton addRecipeButton) {
+    FoodManagement foodManagement = new FoodManagement();
+
+    public Chef(final JPanel mainPanel, JTable prepareTable, JTable ingredientTable, JButton generateShoppingListButton, JButton addRecipeButton, JButton addIngredientButton) {
+
+        addRecipeButton.addActionListener(new ActionListener() { // Button action listener
+            public void actionPerformed(ActionEvent e) {
+                new AddRecipe(mainPanel.getParent());
+            }
+        });
+
+        addIngredientButton.addActionListener(new ActionListener() { // Button action listener
+            public void actionPerformed(ActionEvent e) {
+                new AddIngredient(mainPanel.getParent());
+            }
+        });
+
+        generateShoppingListButton.addActionListener(new ActionListener() { // Button action listener
+            public void actionPerformed(ActionEvent e) {
+                new GenerateShoppingList(mainPanel.getParent());
+            }
+        });
 
         String[] prepareHeader = {"Quantity", "Recipe", "Notes", "Ready for delivery"}; // Header titles
         String[] ingredientHeader = {"Ingredient", "Quantity", "Unit"}; // Header titles
@@ -21,7 +49,6 @@ public class Chef {
                 return getValueAt(0, columnIndex).getClass();
             }
         }; // Model of the table
-        ingredientModel = new DefaultTableModel(); // Model of the table
 
         prepareModel.setColumnIdentifiers(prepareHeader); // Add header to columns
         ingredientModel.setColumnIdentifiers(ingredientHeader); // Add header to columns
@@ -29,14 +56,20 @@ public class Chef {
         prepareTable.setModel(prepareModel); // Add model to table
         ingredientTable.setModel(ingredientModel); // Add model to table
 
+        updateIngredients();
 
+    }
 
-        // TODO - testdata (remove)
-        prepareModel.addRow(new Object[]{3, "Paella", "Without seafood", false});
+    public static void updateIngredients() {
+        FoodManagement foodManagement = new FoodManagement();
+        ArrayList<Object[]> ingredients = foodManagement.getIngredients();
 
-        // TODO - testdata (remove)
-        ingredientModel.addRow(new Object[]{"Suagr", 200, "grams"});
-        ingredientModel.addRow(new Object[]{"Meatballs", 3000, "pieces"});
+        for(int i = 0; i < ingredientModel.getRowCount(); i++) {
+            ingredientModel.removeRow(i);
+        }
 
+        for (Object[] ingredient : ingredients) {
+            ingredientModel.addRow(ingredient);
+        }
     }
 }

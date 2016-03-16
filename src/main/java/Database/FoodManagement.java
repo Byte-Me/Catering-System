@@ -26,6 +26,7 @@ public class FoodManagement extends Management{
             try{
 
                 res = getScentence().executeQuery("SELECT grocery_id, `name`, quantity, unit FROM grocery;");
+
                 while (res.next()){
                     Object[] obj = new Object[3];
                     obj[0] = res.getString("name");
@@ -180,16 +181,15 @@ public class FoodManagement extends Management{
         }
         return out; // returnerer i samme rekkefølge som
     }
-    public boolean addIngredientToStorage(Object[] ingredient){         //ingredients[0] = name og ingredients[1] = added values
+    public boolean addIngredientToStorage(String name, int addedValue){         //ingredients[0] = name og ingredients[1] = added values
         int numb = 0;
         if(setUp()){
             try {
                 getScentence().executeQuery("START TRANSACTION;");
-                ResultSet res = getScentence().executeQuery("SELECT quantity FROM grocery WHERE name = '" + ingredient[0] + "';");
+                ResultSet res = getScentence().executeQuery("SELECT quantity FROM grocery WHERE name = '" + name + "';");
                 if(res.next()) {
-                    int newQuant = res.getInt("quantity") + (Integer)ingredient[1];
-                    System.out.println("UPDATE grocery SET quantity = " + newQuant + "';");
-                    numb = getScentence().executeUpdate("UPDATE grocery SET quantity = '" + newQuant + "' WHERE name = '" + ingredient[0] + "';");
+                    int newQuant = res.getInt("quantity") + addedValue;
+                    numb = getScentence().executeUpdate("UPDATE grocery SET quantity = '" + newQuant + "' WHERE name = '" + name + "';");
 
 
                 }
@@ -207,16 +207,15 @@ public class FoodManagement extends Management{
         }
         return numb > 0;
     }
-    public boolean removeIngredientFromStorage(Object[] ingredient){         //ingredients[0] = name og ingredients[1] = added values
+    public boolean removeIngredientFromStorage(String name, int subtractedValue){         //ingredients[0] = name og ingredients[1] = added values
         int numb = 0;
         if(setUp()){
             try {
                 getScentence().executeQuery("START TRANSACTION;");
-                ResultSet res = getScentence().executeQuery("SELECT quantity FROM grocery WHERE name = '" + ingredient[0] + "';");
+                ResultSet res = getScentence().executeQuery("SELECT quantity FROM grocery WHERE name = '" + name + "';");
                 if(res.next()) {
-                    int newQuant = res.getInt("quantity") - (Integer)ingredient[1];
-                    System.out.println("UPDATE grocery SET quantity = " + newQuant + "';");
-                    numb = getScentence().executeUpdate("UPDATE grocery SET quantity = '" + newQuant + "' WHERE name = '" + ingredient[0] + "';");
+                    int newQuant = res.getInt("quantity") - subtractedValue;
+                    numb = getScentence().executeUpdate("UPDATE grocery SET quantity = '" + newQuant + "' WHERE name = '" + name + "';");
 
 
                 }
@@ -225,6 +224,11 @@ public class FoodManagement extends Management{
             }
             catch (Exception e){
                 System.err.println("Issue with adding ingredient to storage");
+                try {
+                    getScentence().executeQuery("ROLLBACK");
+                } catch (SQLException e1) {
+
+                }
                 return false;
             }
             finally {
@@ -286,4 +290,25 @@ public class FoodManagement extends Management{
     }
 
 
+
+    public boolean updateQuantity(String recipeName, String newData) throws Exception {
+        int rowChanged = 0;
+        if (super.setUp()) {
+            try {
+                int recipeID = Integer.parseInt(getRecipeID(recipeName));
+                rowChanged = getScentence().executeUpdate("UPDATE recipe_grocery SET amount = '" + newData + "' WHERE recipe_id = recipeID;");
+            } catch (SQLException e) {
+                System.err.println("Issue with executing database update.");
+                return false;
+
+            } finally {
+                DbUtils.closeQuietly(getScentence());
+                DbUtils.closeQuietly(getConnection());
+
+
+            }
+        }
+        if(rowChanged > 0) return true;
+        return false;
+    }
 }

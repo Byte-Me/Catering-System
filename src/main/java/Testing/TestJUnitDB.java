@@ -113,9 +113,6 @@ public class TestJUnitDB{
         ArrayList<Object[]> ing = new ArrayList<Object[]>();
         ing.add(new Object[]{"Potet", 1});
         ing.add(new Object[]{"Fisk", 2});
-        for(Object[] i : ing){
-            System.out.println(Arrays.toString(i));
-        }
 
         assertTrue(food.addRecipe("Oppskriftarererer", ing));
     }
@@ -156,9 +153,7 @@ public class TestJUnitDB{
     @Test
     public void getOrders(){
         ArrayList<Object[]> obj = orde.getOrders();
-        for(Object[] o : obj){
-            System.out.println(Arrays.toString(o));
-        }
+        assertTrue(!obj.isEmpty());
     }
     @Test
     public void testOrderStatistics(){
@@ -167,24 +162,40 @@ public class TestJUnitDB{
     }
     @Test
     public void ingredientToStorage(){
-        Object[] ing = new Object[]{"Potet", 1};
-        assertTrue(food.addIngredientToStorage(ing));
+        assertTrue(food.addIngredientToStorage("Potet", 1));
     }
     @Test
-    public void ingredientFromStorage(){
-        Object[] ing = new Object[]{"Barn", 1};
-        assertTrue(food.removeIngredientFromStorage(ing));
+    public void removeIngredientFromStorage(){
+        assertTrue(food.removeIngredientFromStorage("Barn", 1));
     }
     @Test
+    public void getIngredientsToChef(){
+        ArrayList<Object[]> obj = food.getRecipesForChef();
+        assertTrue(!obj.isEmpty());
+    }
+    @Test
+    public void addOrder(){
+        ArrayList<Object[]> obj = new ArrayList<Object[]>();
+        obj.add(new Object[]{"Fiskepinner", 5});
+        obj.add(new Object[]{"Barnesuppe", 2});
+        assertTrue(orde.createOrder("Test@Test", "2016-03-21", obj));
+    }
+    @Ignore
     public void testDeliveryRoute(){
         //assertNotNull(CreateDeliveryRoute.UseReadyOrders("Oslo, Norway"));
         //assertNotNull(CreateDeliveryRoute.UseReadyOrdersLanLat("Oslo, Norway"));
-        System.out.println(CreateDeliveryRoute.UseReadyOrdersLanLat("Oslo, Norway"));
+        System.out.println(CreateDeliveryRoute.UseReadyOrdersLatLng("Oslo, Norway"));
     }
     @After
     public void objTearDown(){
         validUser = null;
         invalidUser = null;
+    }
+    @Test
+    public void searchOrder(){
+        ArrayList<Object[]> obj = orde.orderSearch("2016");
+
+        assertTrue(!obj.isEmpty());
     }
     @AfterClass
     public static void DBTearDown(){

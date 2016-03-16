@@ -73,7 +73,7 @@ public class CustomerManagement extends Management{
         }
         else return null;
     }
-    private boolean addCustomer(String name, String email, String phone, String adress) {
+    private boolean addCustomer(String name, String email, String phone, String adress, int status) {
         if (setUp()) {
             int numb = 0;
             ResultSet res = null;
@@ -85,7 +85,7 @@ public class CustomerManagement extends Management{
 
                     if(res.next()) {
                         if (res.getInt("status") == 0) {
-                            numb = getScentence().executeUpdate("UPDATE customer SET status = 1 WHERE email = '" + email + "';");
+                            numb = getScentence().executeUpdate("UPDATE customer SET status = " + status + " WHERE email = '" + email + "';");
                             if (numb == 0) {
                                 getScentence().executeQuery("COMMIT;");
                                 return false;
@@ -117,7 +117,7 @@ public class CustomerManagement extends Management{
     }
     public boolean addCustomerCompany(String name, String email, String phone, String streetAdress, String postCode, String city){
         String adress = adressFormatter(city, postCode, streetAdress);
-        if(addCustomer(name, email, phone, adress)) return true;
+        if(addCustomer(name, email, phone, adress, 2)) return true;
         else return false;
 
 
@@ -127,7 +127,7 @@ public class CustomerManagement extends Management{
 
         String adress = adressFormatter(city, postCode, streetAdress);
         String name = nameFormatter(firstname, lastname);
-        if(addCustomer(name, email, phone, adress)) return true;
+        if(addCustomer(name, email, phone, adress, 1)) return true;
         else return false;
 
     }

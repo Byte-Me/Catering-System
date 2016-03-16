@@ -14,7 +14,7 @@ public class Storage {
         FoodManagement food = new FoodManagement();
         for(Object[] i : ing){
             Object[] tmp = new Object[]{i[0], i[1]}; //name , quantity
-            if(!food.removeIngredientFromStorage(tmp)){
+            if(!food.removeIngredientFromStorage((String)i[0], (Integer)i[1])){
                 return false;
             }
         }
