@@ -64,8 +64,8 @@ public class FoodManagement extends Management{
 
                 while (res.next()){
                     Object[] obj = new Object[2];
-                    obj[0] = res.getString("recipe_id");
-                    obj[1] = res.getInt("name");
+                    obj[0] = res.getInt("recipe_id");
+                    obj[1] = res.getString("name");
                     out.add(obj);
                 }
 
