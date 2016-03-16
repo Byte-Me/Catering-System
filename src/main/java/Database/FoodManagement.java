@@ -214,7 +214,6 @@ public class FoodManagement extends Management{
                 ResultSet res = getScentence().executeQuery("SELECT quantity FROM grocery WHERE name = '" + name + "';");
                 if(res.next()) {
                     int newQuant = res.getInt("quantity") - subtractedValue;
-                    System.out.println("UPDATE grocery SET quantity = " + newQuant + "';");
                     numb = getScentence().executeUpdate("UPDATE grocery SET quantity = '" + newQuant + "' WHERE name = '" + name + "';");
 
 

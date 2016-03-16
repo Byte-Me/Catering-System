@@ -113,9 +113,6 @@ public class TestJUnitDB{
         ArrayList<Object[]> ing = new ArrayList<Object[]>();
         ing.add(new Object[]{"Potet", 1});
         ing.add(new Object[]{"Fisk", 2});
-        for(Object[] i : ing){
-            System.out.println(Arrays.toString(i));
-        }
 
         assertTrue(food.addRecipe("Oppskriftarererer", ing));
     }
@@ -156,9 +153,7 @@ public class TestJUnitDB{
     @Test
     public void getOrders(){
         ArrayList<Object[]> obj = orde.getOrders();
-        for(Object[] o : obj){
-            System.out.println(Arrays.toString(o));
-        }
+        assertTrue(!obj.isEmpty());
     }
     @Test
     public void testOrderStatistics(){
@@ -170,15 +165,13 @@ public class TestJUnitDB{
         assertTrue(food.addIngredientToStorage("Potet", 1));
     }
     @Test
-    public void ingredientFromStorage(){
+    public void removeIngredientFromStorage(){
         assertTrue(food.removeIngredientFromStorage("Barn", 1));
     }
     @Test
     public void getIngredientsToChef(){
         ArrayList<Object[]> obj = food.getRecipesForChef();
-        for(Object[] o : obj){
-            System.out.println(Arrays.toString(o));
-        }
+        assertTrue(!obj.isEmpty());
     }
     @Test
     public void addOrder(){
@@ -197,6 +190,12 @@ public class TestJUnitDB{
     public void objTearDown(){
         validUser = null;
         invalidUser = null;
+    }
+    @Test
+    public void searchOrder(){
+        ArrayList<Object[]> obj = orde.orderSearch("2016");
+
+        assertTrue(!obj.isEmpty());
     }
     @AfterClass
     public static void DBTearDown(){

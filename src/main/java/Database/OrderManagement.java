@@ -51,16 +51,11 @@ public class OrderManagement extends Management{
         ArrayList<Object[]> out = new ArrayList<Object[]>();
         if(setUp()){
             try {
-                ResultSet res = getScentence().executeQuery("SELECT `order`.order_id, `order`.status, `order`.date, customer.name, customer.email " +
+                ResultSet res = getScentence().executeQuery("SELECT `order`.order_id, customer.name ,customer.phone, customer.adress, `order`.date, `order`.status " +
                         "FROM `order`, customer WHERE `order`.customer_id = customer.customer_id ORDER BY `date` DESC, status DESC;");
-                while(res.next()){
-                    Object[] obj = new Object[5];
-                    obj[0] = res.getInt("order_id");
-                    obj[1] = res.getString("name");
-                    obj[2] = res.getString("email");
-                    obj[3] = res.getString("date");
-                    obj[4] = res.getInt("status");
-                    out.add(obj);
+                while (res.next()){
+                    out.add(createList(res));
+
                 }
             }
             catch (Exception e){
@@ -73,23 +68,28 @@ public class OrderManagement extends Management{
         }
         return out;
     }
+    private Object[] createList(ResultSet res) throws Exception{
+        Object[] obj = new Object[6];
+        obj[0] = res.getInt("order_id");
+        obj[1] = res.getString("name");
+        obj[2] = res.getString("phone");
+        obj[3] = res.getString("adress");
+        obj[4] = res.getString("date");
+        obj[5] = res.getInt("status");
+        return obj;
+    }
     public ArrayList<Object[]> orderSearch(String searchTerm){ // TODO: IKKE TESTET!!
         ResultSet res;
         ArrayList<Object[]> out = new ArrayList<Object[]>();
         if(setUp()) {
             try {
-                res = getScentence().executeQuery("SELECT `order`.order_id, `order`.status, `order`.date, customer.name, customer.email FROM `order`, customer FROM customer WHERE order_id LIKE '%" + searchTerm + "%' OR status LIKE '%" +
+
+                res = getScentence().executeQuery("SELECT `order`.order_id, customer.name ,customer.phone, customer.adress, `order`.date, `order`.status FROM `order`, customer WHERE (order_id LIKE '%" + searchTerm + "%' OR `order`.status LIKE '%" +
                         searchTerm + "%' OR `date` LIKE '%" + searchTerm +
-                        "%' OR `name` LIKE '%" + searchTerm + "%' OR email LIKE '%" + searchTerm + "%' AND status > 0 ORDER BY date DESC, status DESC;");
+                        "%' OR `name` LIKE '%" + searchTerm + "%' OR email LIKE '%" + searchTerm + "%') AND `order`.status >= 0 AND `order`.customer_id = customer.customer_id ORDER BY `order`.status DESC, `date` DESC;");
 
                 while (res.next()){
-                    Object[] obj = new Object[5];
-                    obj[0] = res.getInt("order_id");
-                    obj[1] = res.getString("name");
-                    obj[2] = res.getString("email");
-                    obj[3] = res.getString("date");
-                    obj[4] = res.getInt("status");
-                    out.add(obj);
+                    out.add(createList(res));
                 }
 
             } catch (Exception e) {
