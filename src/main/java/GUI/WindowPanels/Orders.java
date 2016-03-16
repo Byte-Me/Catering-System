@@ -18,7 +18,7 @@ public class Orders {
 
     public Orders(JTable ordersTable, final JTextField searchOrders, JButton addOrderButton) {
 
-        String[] headers = {"Id", "Name", "Email", "Date", "Status"};
+        String[] headers = {"Id", "Name", "Phone", "Address", "Date", "Status"};
 
         orderModel = new DefaultTableModel();
         orderModel.setColumnIdentifiers(headers);
