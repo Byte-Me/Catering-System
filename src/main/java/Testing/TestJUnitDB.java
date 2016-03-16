@@ -180,11 +180,14 @@ public class TestJUnitDB{
         obj.add(new Object[]{"Barnesuppe", 2});
         assertTrue(orde.createOrder("Test@Test", "2016-03-21", obj));
     }
-    @Ignore
+    @Test
     public void testDeliveryRoute(){
         //assertNotNull(CreateDeliveryRoute.UseReadyOrders("Oslo, Norway"));
         //assertNotNull(CreateDeliveryRoute.UseReadyOrdersLanLat("Oslo, Norway"));
+        System.out.println(CreateDeliveryRoute.UseReadyOrders("Oslo, Norway"));
+
         System.out.println(CreateDeliveryRoute.UseReadyOrdersLatLng("Oslo, Norway"));
+
     }
     @After
     public void objTearDown(){
