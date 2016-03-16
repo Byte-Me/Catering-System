@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 import java.net.URL;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Map;
 
@@ -101,23 +102,28 @@ public class OrderManagement extends Management{
         }
         return out;
 
-    }//TODO: IKKE TESTET!!!
-    public boolean createOrder(String customer, String date, ArrayList<Object[]> recipes){ // recipes[0] = name, recipes[1] = portions.
+    }
+    public boolean createOrder(String customerMail, String date, ArrayList<Object[]> recipes){ // recipes[0] = name, recipes[1] = portions.
         if(setUp()){
             try{
                 getScentence().executeQuery("START TRANSACTION");
-                ResultSet res = getScentence().executeQuery("SELECT customer_id FROM customer WHERE name = '" + customer + "';");
+                ResultSet res = getScentence().executeQuery("SELECT customer_id FROM customer WHERE email = '" + customerMail + "';");
                 ArrayList<Integer> recipeIDs;
                 if(res.next()){
                     int id = res.getInt("customer_id");
                     recipeIDs = new ArrayList<Integer>();
                     for(Object[] name : recipes){
-                        res = getScentence().executeQuery("SELECT recipe_id from recipe WHERE name = '" + name[0] + "';");
+                        res = getScentence().executeQuery("SELECT recipe_id FROM recipe WHERE `name` = '" + name[0] + "';");
+
                         if(res.next()){
                             recipeIDs.add(res.getInt("recipe_id"));
                         }
+                        else{
+                            getScentence().executeQuery("ROLLBACK");
+                            return false;
+                        }
                     }
-                    int rowChanged = getScentence().executeUpdate("INSERT INTO `order` VALUES(DEFAULT, 1, '" + date + "', " + id + "');");
+                    int rowChanged = getScentence().executeUpdate("INSERT INTO `order` VALUES(DEFAULT, 1, '" + date + "', '" + id + "');");
                     if(rowChanged > 0) {
                         res = getScentence().executeQuery("SELECT LAST_INSERT_ID() as id;");
                         res.next();
@@ -142,13 +148,14 @@ public class OrderManagement extends Management{
             }
 
             catch (Exception e){
-                System.err.println("I");
+                System.err.println("Issue with creating order.");
                 try {
                     getScentence().executeQuery("ROLLBACK");
                 }
                 catch (Exception ee){
-
+                    System.err.println("Issue with rolling back transaction.");
                 }
+                return false;
 
             }
             finally {
