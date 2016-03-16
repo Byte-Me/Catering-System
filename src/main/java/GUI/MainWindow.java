@@ -29,7 +29,7 @@ public class MainWindow extends JFrame {
     private JTable prepareTable;
     private JTable ingredientTable;
     private JButton generateShoppingListButton;
-    private JButton addRecipeButton;
+    private JButton recipesButton;
     private JTable ordersTable;
     private JTextField searchOrders;
     private JButton addOrderButton;
@@ -52,7 +52,7 @@ public class MainWindow extends JFrame {
         Customers customersPanel = new Customers(mainPanel, addCustomerButton, customerTable, searchCustomers, deleteCustomersButton);
         Orders ordersPanel = new Orders(mainPanel, ordersTable, searchOrders, addOrderButton);
         Driver driverPanel = new Driver(drivingList, mapPanel, generateDrivingRouteButton);
-        Chef chefPanel = new Chef(mainPanel, prepareTable, ingredientTable, generateShoppingListButton, addRecipeButton, addIngredientButton);
+        Chef chefPanel = new Chef(mainPanel, prepareTable, ingredientTable, generateShoppingListButton, recipesButton, addIngredientButton);
 
         // Remove panes the user does not have access to;
         switch (userType) {
