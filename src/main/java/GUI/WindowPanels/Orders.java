@@ -1,11 +1,15 @@
 package GUI.WindowPanels;
 
 import Database.OrderManagement;
+import GUI.AddOrder;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 /**
@@ -16,7 +20,7 @@ public class Orders {
     static OrderManagement orderManagement = new OrderManagement();
     static DefaultTableModel orderModel;
 
-    public Orders(JTable ordersTable, final JTextField searchOrders, JButton addOrderButton) {
+    public Orders(final JPanel mainPanel, JTable ordersTable, final JTextField searchOrders, JButton addOrderButton) {
 
         String[] headers = {"Id", "Name", "Phone", "Address", "Date", "Status"};
 
@@ -25,6 +29,13 @@ public class Orders {
 
         ordersTable.setModel(orderModel);
         ordersTable.setAutoCreateRowSorter(true);
+
+        addOrderButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new AddOrder(mainPanel.getParent());
+            }
+        });
 
         searchOrders.getDocument().addDocumentListener(new DocumentListener() {
             @Override
