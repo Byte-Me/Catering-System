@@ -164,12 +164,15 @@ public class TravelingSalesman {
 
     //Returns null if there is an issue with geocoding adresses. This needs too be handled elsewhere.
     public ArrayList<double[]> createPositionsArray(ArrayList<String> adresses){
+
         ArrayList<String> fix = new ArrayList<String>();
-        for(String a : adresses){
-            if (!fix.contains(a)) {
-                fix.add(a);
+
+        for (String address : adresses) {
+            if (!fix.contains(address)) {
+                fix.add(address);
             }
         }
+
         ArrayList<double[]> out = new ArrayList<double[]>();
 
         for (int i = 0; i < fix.size(); i++) {
