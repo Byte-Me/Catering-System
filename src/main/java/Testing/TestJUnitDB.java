@@ -165,6 +165,16 @@ public class TestJUnitDB{
         assertNotNull(order.createStatsFromOrders("2008-11-20", "2016-11-20"));
     }
     @Test
+    public void testHansMetode(){
+        ArrayList<Object[]> obj = food.getRecipes();
+        assertTrue(!obj.isEmpty());
+    }
+    @Test
+    public void getIngredientsFromRecipes(){
+        ArrayList<Object[]> obj = food.getIngredientsFromRecipe(110);
+        assertTrue(!obj.isEmpty());
+    }
+    @Test
     public void ingredientToStorage(){
         assertTrue(food.addIngredientToStorage("Potet", 1));
     }
