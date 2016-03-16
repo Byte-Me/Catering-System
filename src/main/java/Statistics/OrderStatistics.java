@@ -26,7 +26,6 @@ public class OrderStatistics extends Statistics{
         ArrayList<Double> yValues = new ArrayList<Double>();
         ArrayList<String> xValues = new ArrayList<String>();
         String curDate = "";
-        System.out.println(orders);
         try {
             curDate = orders.get(0);
         } catch (Exception e) {
@@ -71,8 +70,6 @@ public class OrderStatistics extends Statistics{
                         count = 1;
                     }
                 }
-                System.out.println("Orders" + "Days" + "Orders per day" + xValues + yValues + "orders");
-
                 chart = ChartCreator.createLineChart("Orders", "Weeks", "Orders per week", xValues, yValues, "orders");
 
             }
