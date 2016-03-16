@@ -21,14 +21,14 @@ public class Driver {
     private static final String cateringAdress = "Trondheim, Norway";
     static DefaultListModel<String> driverModel;
 
-    public Driver(JList<String> drivingList, JPanel mapPanel, JButton generateDrivingRouteButton, JButton printMapButton) {
+    public Driver(JList<String> drivingList, JPanel mapPanel, JButton generateDrivingRouteButton) {
 
         driverModel = new DefaultListModel<String>(); // Model of the list
         drivingList.setModel(driverModel); // Add model to jList
 
         updateDrivingRoute();
 
-        createMap(mapPanel, generateDrivingRouteButton, printMapButton);
+        createMap(mapPanel, generateDrivingRouteButton);
 
     }
 
@@ -48,7 +48,7 @@ public class Driver {
         }
     }
 
-    public void createMap(JPanel mapPanel, JButton generateDrivingRouteButton, JButton printMapButton) {
+    public void createMap(JPanel mapPanel, JButton generateDrivingRouteButton) {
 
         // Reduce logging -- doesn't work?
         LoggerProvider.getChromiumProcessLogger().setLevel(Level.OFF);

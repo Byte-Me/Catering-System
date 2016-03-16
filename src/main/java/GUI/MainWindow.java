@@ -1,10 +1,10 @@
 package GUI;
 
+import Database.FoodManagement;
 import Database.UserManagement;
 import GUI.WindowPanels.*;
 
 import javax.swing.*;
-
 
 /**
  * Created by olekristianaune on 07.03.2016.
@@ -38,7 +38,7 @@ public class MainWindow extends JFrame {
     private JTextField searchUsers;
     private JButton deleteUsersButton;
     private JButton generateDrivingRouteButton;
-    private JButton printMapButton;
+    private JButton addIngredientButton;
 
 
     public MainWindow(UserManagement.UserType userType) {
@@ -51,8 +51,8 @@ public class MainWindow extends JFrame {
         Users usersPanel = new Users(mainPanel, addUserButton, userTable, searchUsers, deleteUsersButton);
         Customers customersPanel = new Customers(mainPanel, addCustomerButton, customerTable, searchCustomers, deleteCustomersButton);
         Orders ordersPanel = new Orders(ordersTable, searchOrders, addOrderButton);
-        Driver driverPanel = new Driver(drivingList, mapPanel, generateDrivingRouteButton, printMapButton);
-        Chef chefPanel = new Chef(prepareTable, ingredientTable, generateShoppingListButton, addRecipeButton);
+        Driver driverPanel = new Driver(drivingList, mapPanel, generateDrivingRouteButton);
+        Chef chefPanel = new Chef(mainPanel, prepareTable, ingredientTable, generateShoppingListButton, addRecipeButton, addIngredientButton);
 
         // Remove panes the user does not have access to;
         switch (userType) {
@@ -89,5 +89,4 @@ public class MainWindow extends JFrame {
 
         setVisible(true); // Show the window
     }
-
 }
