@@ -43,6 +43,7 @@ public class CustomerManagement extends Management{
         }
         else return null;
     }
+
     public ArrayList<Object[]> customerSearch(String searchTerm){
         ResultSet res = null;
         ArrayList<Object[]> out = new ArrayList<Object[]>();

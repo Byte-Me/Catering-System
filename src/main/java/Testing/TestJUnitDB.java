@@ -2,13 +2,10 @@ package Testing;
 
 import Database.*;
 import Delivery.CreateDeliveryRoute;
-import Food.CreateShoppingList;
-import GUI.Login;
-import Statistics.OrderStatistics;
+import Statistics.*;
 import org.junit.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import static org.junit.Assert.*;
 
@@ -22,6 +19,7 @@ public class TestJUnitDB{
     private static LoginManagement logi;
     private static OrderManagement orde;
     private static UserManagement user;
+    private static SubscriptionManagement subs;
 
     private String[] validUser = new String[2];
     private String[] invalidUser = new String[2];
@@ -38,6 +36,7 @@ public class TestJUnitDB{
             logi = new LoginManagement();
             orde = new OrderManagement();
             user = new UserManagement();
+            subs = new SubscriptionManagement();
         }
         catch(Exception e) {
             System.err.println("Issue with databaseconnections! ");
@@ -134,6 +133,11 @@ public class TestJUnitDB{
         assertTrue(cust.deleteCustomer("even@dalen.no"));
     }
     @Test
+    public void getSubscription(){
+        ArrayList<Object[]> obj = subs.getSubscriptions();
+        assertTrue(!obj.isEmpty());
+    }
+    @Test
     public void addCustomer(){
         assertTrue(cust.addCustomerPerson("Even", "Dalen", "even@dalen.no", "12345", "Toppenhaugberget 60", "1356", "Bekkestua"));
 
@@ -158,7 +162,7 @@ public class TestJUnitDB{
     @Test
     public void testOrderStatistics(){
         OrderStatistics order = new OrderStatistics();
-        assertNotNull(order.createGraphFromOrders("2008-11-20", "2016-11-20"));
+        assertNotNull(order.createStatsFromOrders("2008-11-20", "2016-11-20"));
     }
     @Test
     public void ingredientToStorage(){

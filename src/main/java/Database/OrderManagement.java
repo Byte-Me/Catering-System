@@ -1,5 +1,6 @@
 package Database;
 
+import Database.Management;
 import org.apache.commons.dbutils.DbUtils;
 
 import java.io.InputStream;
@@ -15,7 +16,7 @@ import java.util.Map;
 /**
  * Created by Evdal on 07.03.2016.
  */
-public class OrderManagement extends Management{
+public class OrderManagement extends Management {
     public OrderManagement(){
         super();
     }/*

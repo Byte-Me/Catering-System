@@ -20,7 +20,7 @@ public class OrderStatistics extends Statistics{
 
 
 
-    public JPanel createGraphFromOrders(String startDate, String endDate) {
+    public Object[] createStatsFromOrders(String startDate, String endDate) {
         StatisticsManagement stat = new StatisticsManagement();
         ArrayList<String> orders = stat.getOrders(startDate, endDate);
         ArrayList<Double> yValues = new ArrayList<Double>();
@@ -98,9 +98,17 @@ public class OrderStatistics extends Statistics{
         catch (Exception e){
             System.err.println("Issue with creating graph.");
         }
-
-        return chart;
+        double sumOrders = 0;
+        for(double value : yValues){
+            sumOrders += value;
+        }
+        return new Object[]{chart, sumOrders};
     }
-
-
 }
+
+/*
+ID, day_name
+1, Monday
+2, Tuesday
+3.
+ */
