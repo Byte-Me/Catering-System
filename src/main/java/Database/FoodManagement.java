@@ -26,7 +26,7 @@ public class FoodManagement extends Management{
         if(setUp()){
             try{
 
-                res = getScentence().executeQuery("SELECT grocery_id, `name`, quantity, unit FROM grocery;");
+                res = getScentence().executeQuery("SELECT grocery_id, `name`, quantity, unit FROM grocery;"); //
 
                 while (res.next()){
                     Object[] obj = new Object[3];
