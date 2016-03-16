@@ -1,10 +1,11 @@
 package Database;
 
 
-import java.sql.*;
 
 import Encryption.*;
-import org.apache.commons.dbutils.DbUtils;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 /**
  * Created by Evdal on 03.03.2016.
