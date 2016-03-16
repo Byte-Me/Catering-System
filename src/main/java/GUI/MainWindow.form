@@ -49,7 +49,7 @@
                       </grid>
                     </constraints>
                     <properties>
-                      <toolTipText value="dd/mm/yy"/>
+                      <toolTipText value="yyyy-mm-dd"/>
                     </properties>
                   </component>
                   <component id="df99e" class="javax.swing.JLabel">
@@ -68,7 +68,7 @@
                       </grid>
                     </constraints>
                     <properties>
-                      <toolTipText value="dd/mm/yy"/>
+                      <toolTipText value="yyyy-mm-dd"/>
                     </properties>
                   </component>
                   <component id="5a88b" class="javax.swing.JButton" binding="getStatisticsButton" default-binding="true">
@@ -426,12 +426,12 @@
                   <grid row="0" column="1" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
               </hspacer>
-              <component id="6ac26" class="javax.swing.JButton" binding="addRecipeButton" default-binding="true">
+              <component id="6ac26" class="javax.swing.JButton" binding="recipesButton" default-binding="true">
                 <constraints>
                   <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <text value="Add Recipe"/>
+                  <text value="Recipes"/>
                 </properties>
               </component>
               <component id="1be9a" class="javax.swing.JButton" binding="addIngredientButton" default-binding="true">

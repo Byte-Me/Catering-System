@@ -4,6 +4,7 @@ import Database.FoodManagement;
 import GUI.AddIngredient;
 import GUI.AddRecipe;
 import GUI.GenerateShoppingList;
+import GUI.Recipes;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -21,11 +22,11 @@ public class Chef {
 
     FoodManagement foodManagement = new FoodManagement();
 
-    public Chef(final JPanel mainPanel, JTable prepareTable, JTable ingredientTable, JButton generateShoppingListButton, JButton addRecipeButton, JButton addIngredientButton) {
+    public Chef(final JPanel mainPanel, JTable prepareTable, JTable ingredientTable, JButton generateShoppingListButton, JButton recipesButton, JButton addIngredientButton) {
 
-        addRecipeButton.addActionListener(new ActionListener() { // Button action listener
+        recipesButton.addActionListener(new ActionListener() { // Button action listener
             public void actionPerformed(ActionEvent e) {
-                new AddRecipe(mainPanel.getParent());
+                new Recipes(mainPanel.getParent());
             }
         });
 
