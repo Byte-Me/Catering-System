@@ -101,7 +101,7 @@
             <properties/>
             <border type="none"/>
             <children>
-              <component id="4db8b" class="javax.swing.JList" binding="recepies">
+              <component id="4db8b" class="javax.swing.JList" binding="recipesList">
                 <constraints/>
                 <properties/>
               </component>
