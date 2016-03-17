@@ -2,12 +2,17 @@ package Database;
 
 import org.apache.commons.dbutils.DbUtils;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
  * Created by Evdal on 16.03.2016.
  */
+
+        //TODO: create enum with subscription_type, 1 = weekly, 2 = monthly;
+
 public class SubscriptionManagement extends Management{
     public SubscriptionManagement(){super();}
 
@@ -43,4 +48,63 @@ public class SubscriptionManagement extends Management{
         obj[4] = res.getInt("sub_type"); // 0 = weekly, 1 = monthly.
         return obj;
     }
+    public int containsSubOrder(int subId){
+        int orders = 0;
+        if(setUp()){
+            try{
+                ResultSet res = getScentence().executeQuery("SELECT count(order_id) as orders from `order` WHERE " +
+                        "sub_id = " + subId + ";");
+                if(res.next()){
+                    orders = res.getInt("orders");
+                }
+            }
+            catch (Exception e){
+                System.err.println("Issue with subscriptions.");
+
+            }
+            finally {
+                DbUtils.closeQuietly(getScentence());
+                DbUtils.closeQuietly(getConnection());
+            }
+        }
+        return 0;
+    }
+    public int createSubscription(int custID, String dateFrom, String dateTo, int type){ //type = 1 = weekly, type = 2 = monthly
+        int subid = -1;
+        if(setUp()){
+            try {
+                getScentence().executeQuery("START TRANSACTION");
+                PreparedStatement prep = getConnection().prepareStatement("INSERT INTO subscription VALUES (DEFAULT,?,?,?,?)");
+                prep.setInt(1, custID);
+                prep.setString(2, dateTo);
+                prep.setString(3, dateFrom);
+                prep.setInt(4, type);
+                prep.executeUpdate();
+                ResultSet res = getScentence().executeQuery("SELECT LAST_INSERT_ID() as id;");
+                if(res.next()){
+                    subid = res.getInt("id");
+                }
+
+            } catch (SQLException e) {
+                System.err.println("Issue with creating subscription");
+                try {
+                    getScentence().executeQuery("ROLLBACK");
+                } catch (SQLException e1) {
+                    System.err.println("Issue with rolling back subscription transaction.");
+                }
+            } finally {
+                try {
+                    getScentence().executeQuery("COMMIT;");
+                } catch (SQLException e) {
+                }
+                DbUtils.closeQuietly(getScentence());
+                DbUtils.closeQuietly(getConnection());
+
+            }
+
+        }
+        return subid;
+    }
+
+
 }

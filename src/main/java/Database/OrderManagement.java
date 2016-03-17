@@ -104,47 +104,69 @@ public class OrderManagement extends Management {
         return out;
 
     }
-    public boolean createOrder(String customerMail, String date, ArrayList<Object[]> recipes){ // recipes[0] = name, recipes[1] = portions.
-        if(setUp()){
-            try{
+    public boolean createOrder(String customerMail, String date, ArrayList<Object[]> recipes, String note){
+        int id = -1;
+        try {
+            if(setUp()) {
                 getScentence().executeQuery("START TRANSACTION");
                 ResultSet res = getScentence().executeQuery("SELECT customer_id FROM customer WHERE email = '" + customerMail + "';");
-                ArrayList<Integer> recipeIDs;
-                if(res.next()){
-                    int id = res.getInt("customer_id");
-                    recipeIDs = new ArrayList<Integer>();
-                    for(Object[] name : recipes){
-                        res = getScentence().executeQuery("SELECT recipe_id FROM recipe WHERE `name` = '" + name[0] + "';");
+                if (res.next()) {
+                    id = res.getInt("customer_id");
+                }
+            }
 
-                        if(res.next()){
-                            recipeIDs.add(res.getInt("recipe_id"));
-                        }
-                        else{
-                            getScentence().executeQuery("ROLLBACK");
-                            return false;
-                        }
-                    }
-                    int rowChanged = getScentence().executeUpdate("INSERT INTO `order` VALUES(DEFAULT, 1, '" + date + "', '" + id + "');");
-                    if(rowChanged > 0) {
-                        res = getScentence().executeQuery("SELECT LAST_INSERT_ID() as id;");
-                        res.next();
-                        int orderID = res.getInt("id");
-
-                        for (int i = 0; i < recipeIDs.size(); i++){
-                            rowChanged = getScentence().executeUpdate("INSERT INTO order_recipe VALUES(" + orderID + ", " + recipeIDs.get(i) +
-                                    ", '" + recipes.get(i)[1] + "');");
-                            if(rowChanged < 1){
-                                getScentence().executeQuery("ROLLBACK;");
-                                return false;
-                            }
-                        }
-                    }
-                    else{
-                        getScentence().executeQuery("ROLLBACK;");
-                        return false;
-
+            if(!createOrderSub(id, date, recipes, note, -1)) return false;
+        } catch (Exception e) {
+            System.err.println("Issue with registering order.");
+            return false;
+        } finally {
+            DbUtils.closeQuietly(getScentence());
+            DbUtils.closeQuietly(getConnection());
+        }
+        return true;
+    }
+    public boolean createOrderSub(int id, String date, ArrayList<Object[]> recipes, String note, int subId){ // recipes[0] = name, recipes[1] = portions.
+        if(setUp()){
+            try{
+                ResultSet res;
+                ArrayList<Integer> recipeIDs = new ArrayList<Integer>();
+                getScentence().executeQuery("START TRANSACTION;");
+                int rowChanged = getScentence().executeUpdate("INSERT INTO `order` VALUES(DEFAULT, 1, '" + date + "', " + id + ", '"+ note + "', "+ subId + ");");
+                int orderID = 0;
+                if(rowChanged > 0) {
+                    res = getScentence().executeQuery("SELECT LAST_INSERT_ID() as id;");
+                    if(res.next()) {
+                        orderID = res.getInt("id");
                     }
                 }
+                else{
+                    getScentence().executeQuery("ROLLBACK;");
+                    return false;
+
+                }
+                for(Object[] name : recipes) {
+
+                    res = getScentence().executeQuery("SELECT recipe_id FROM recipe WHERE name = '" + name[0] + "';");
+
+                    if (res.next()) {
+                        recipeIDs.add(res.getInt("recipe_id"));
+                    } else {
+                        getScentence().executeQuery("ROLLBACK");
+
+                        return false;
+                    }
+                }
+
+
+                for (int i = 0; i < recipeIDs.size(); i++) {
+                    rowChanged = getScentence().executeUpdate("INSERT INTO order_recipe VALUES(" + orderID + ", " + recipeIDs.get(i) +
+                            ", '" + recipes.get(i)[1] + "');");
+                    if (!(rowChanged > 0)) {
+                        getScentence().executeQuery("ROLLBACK;");
+                        return false;
+                    }
+                }
+
                 getScentence().executeQuery("COMMIT;");
             }
 
@@ -163,6 +185,7 @@ public class OrderManagement extends Management {
                 DbUtils.closeQuietly(getScentence());
                 DbUtils.closeQuietly(getConnection());
             }
+
         }
         else return false;
         return true;
