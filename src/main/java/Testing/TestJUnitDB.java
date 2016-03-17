@@ -3,6 +3,7 @@ package Testing;
 import Database.*;
 import Delivery.CreateDeliveryRoute;
 import Statistics.*;
+import Subscription.Subscriptions;
 import org.junit.*;
 
 import java.util.ArrayList;
@@ -47,6 +48,13 @@ public class TestJUnitDB{
     public void objSetUp(){
         validUser = new String[]{"Even","passord"};  //Accesslvl 1
         invalidUser = new String[]{"bruker", "pass"}; //accesslvl -1
+
+    }
+    @Test
+    public void checkActiveSubscriptions(){
+        Subscriptions upt = new Subscriptions();
+        assertTrue(upt.checkSubscriptionActive("2016-03-10", "2016-04-01"));
+        assertFalse(upt.checkSubscriptionActive("2016-03-10", "2016-03-15"));
 
     }
     @Test
@@ -190,9 +198,19 @@ public class TestJUnitDB{
     @Test
     public void addOrder(){
         ArrayList<Object[]> obj = new ArrayList<Object[]>();
-        obj.add(new Object[]{"Fiskepinner", 5});
-        obj.add(new Object[]{"Barnesuppe", 2});
-        assertTrue(orde.createOrder("Test@Test", "2016-03-21", obj));
+        obj.add(new Object[]{"Catfish", 5});
+        obj.add(new Object[]{"Potatodog", 2});
+        assertTrue(orde.createOrder("Test@Test", "2016-03-21", obj, "Uten makrell"));
+    }
+    @Test
+    //int custID, String dateFrom, String dateTo, int weeksBetween, ArrayList<Object[][]> recipesWithDay, String note
+    public void testCreateSubs(){
+        ArrayList<Object[][]> obj = new ArrayList<Object[][]>();
+        obj.add(new Object[][]{{"Catfish", "Potatodog"},{2, 3},{2}});
+        obj.add(new Object[][]{{"Catfish"},{3},{5}});
+        Subscriptions upt = new Subscriptions();
+        upt.createSubscription(7, "2016-03-17", "2016-04-08", 1, obj, "Uten banan");
+
     }
     @Test
     public void testDeliveryRoute(){
