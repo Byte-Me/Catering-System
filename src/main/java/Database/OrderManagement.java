@@ -1,5 +1,6 @@
 package Database;
 
+import Database.Management;
 import org.apache.commons.dbutils.DbUtils;
 
 
@@ -10,7 +11,7 @@ import java.util.ArrayList;
 /**
  * Created by Evdal on 07.03.2016.
  */
-public class OrderManagement extends Management{
+public class OrderManagement extends Management {
     public OrderManagement(){
         super();
     }/*
@@ -21,9 +22,23 @@ public class OrderManagement extends Management{
             }
         }
     }*/
+    public enum OrdStatus{
+        INACTIVE(0),
+        ACTIVE(1),
+        READY_FOR_DELIVERY(2),
+        DELIVERED(3);
+
+        private int value;
+        private OrdStatus(int value){
+            this.value = value;
+        }
+        public int getValue(){
+            return value;
+        }
+    }
     public boolean updateStatus(int orderID, int newStatus){
         int numb = 0;
-        if(newStatus < 0 || newStatus > 3) { // 0 = inactive, 1 = active, 2 = ready for delivery, 3 = delivered
+        if(newStatus <= OrdStatus.INACTIVE.getValue() || newStatus >= OrdStatus.DELIVERED.getValue()) {
             return false;
         }
 
@@ -45,9 +60,12 @@ public class OrderManagement extends Management{
     public ArrayList<Object[]> getOrders(){
         ArrayList<Object[]> out = new ArrayList<Object[]>();
         if(setUp()){
+
+            //Henter info fra ordre der ordren ikke er merket som inaktiv.
             try {
                 ResultSet res = getScentence().executeQuery("SELECT `order`.order_id, customer.name ,customer.phone, customer.adress, `order`.date, `order`.status " +
-                        "FROM `order`, customer WHERE `order`.customer_id = customer.customer_id ORDER BY `date` DESC, status DESC;");
+                        "FROM `order`, customer WHERE `order`.customer_id = customer.customer_id AND order.status >= "+OrdStatus.ACTIVE.getValue()+
+                        "ORDER BY `date` DESC, status DESC;");
                 while (res.next()){
                     out.add(createList(res));
 
@@ -73,7 +91,7 @@ public class OrderManagement extends Management{
         obj[5] = res.getInt("status");
         return obj;
     }
-    public ArrayList<Object[]> orderSearch(String searchTerm){ // TODO: IKKE TESTET!!
+    public ArrayList<Object[]> orderSearch(String searchTerm){
         ResultSet res;
         ArrayList<Object[]> out = new ArrayList<Object[]>();
         if(setUp()) {
@@ -81,7 +99,9 @@ public class OrderManagement extends Management{
 
                 res = getScentence().executeQuery("SELECT `order`.order_id, customer.name ,customer.phone, customer.adress, `order`.date, `order`.status FROM `order`, customer WHERE (order_id LIKE '%" + searchTerm + "%' OR `order`.status LIKE '%" +
                         searchTerm + "%' OR `date` LIKE '%" + searchTerm +
-                        "%' OR `name` LIKE '%" + searchTerm + "%' OR phone LIKE '%" + searchTerm + "%' OR adress LIKE '%" + searchTerm + "%') AND `order`.status >= 0 AND `order`.customer_id = customer.customer_id ORDER BY `order`.status DESC, `date` DESC;");
+                        "%' OR `name` LIKE '%" + searchTerm + "%' OR phone LIKE '%" + searchTerm + "%' OR adress LIKE '%" + searchTerm +
+                        "%') AND `order`.status >= "+OrdStatus.ACTIVE.getValue()+
+                        " AND `order`.customer_id = customer.customer_id ORDER BY `order`.status DESC, `date` DESC;");
 
                 while (res.next()){
                     out.add(createList(res));
@@ -98,47 +118,74 @@ public class OrderManagement extends Management{
         return out;
 
     }
-    public boolean createOrder(String customerMail, String date, ArrayList<Object[]> recipes){ // recipes[0] = name, recipes[1] = portions.
-        if(setUp()){
-            try{
+    public boolean createOrder(String customerMail, String date, ArrayList<Object[]> recipes, String note){
+        int id = -1;
+        try {
+            if(setUp()) {
                 getScentence().executeQuery("START TRANSACTION");
                 ResultSet res = getScentence().executeQuery("SELECT customer_id FROM customer WHERE email = '" + customerMail + "';");
-                ArrayList<Integer> recipeIDs;
-                if(res.next()){
-                    int id = res.getInt("customer_id");
-                    recipeIDs = new ArrayList<Integer>();
-                    for(Object[] name : recipes){
-                        res = getScentence().executeQuery("SELECT recipe_id FROM recipe WHERE `name` = '" + name[0] + "';");
+                if (res.next()) {
+                    id = res.getInt("customer_id");
+                }
+                //Metode ment for GUI, her slipper man å sende inn en subscription id, og metoden finner Customer ID selv.
+                //Deretter kalles create order for subscription med de nye verdiene.
+            }
 
-                        if(res.next()){
-                            recipeIDs.add(res.getInt("recipe_id"));
-                        }
-                        else{
-                            getScentence().executeQuery("ROLLBACK");
-                            return false;
-                        }
-                    }
-                    int rowChanged = getScentence().executeUpdate("INSERT INTO `order` VALUES(DEFAULT, 1, '" + date + "', '" + id + "');");
-                    if(rowChanged > 0) {
-                        res = getScentence().executeQuery("SELECT LAST_INSERT_ID() as id;");
-                        res.next();
-                        int orderID = res.getInt("id");
+            if(!createOrderSub(id, date, recipes, note, -1)) return false; //-1 er verdien som blir satt dersom det ikke finnes en
+                                                                            //subscription.
+        } catch (Exception e) {
+            System.err.println("Issue with registering order.");
+            return false;
+        } finally {
+            DbUtils.closeQuietly(getScentence());
+            DbUtils.closeQuietly(getConnection());
+        }
+        return true;
+    }
+    public boolean createOrderSub(int id, String date, ArrayList<Object[]> recipes, String note, int subId){ // recipes[0] = name, recipes[1] = portions.
+        if(setUp()){
+            try{
+                ResultSet res;
+                ArrayList<Integer> recipeIDs = new ArrayList<Integer>();
+                getScentence().executeQuery("START TRANSACTION;");
+                int rowChanged = getScentence().executeUpdate("INSERT INTO `order` VALUES(DEFAULT, "+OrdStatus.ACTIVE.getValue()
+                        +", '" + date + "', " + id + ", '"+ note + "', "+ subId + ");"); //Legger inn orderen med status aktiv.
 
-                        for (int i = 0; i < recipeIDs.size(); i++){
-                            rowChanged = getScentence().executeUpdate("INSERT INTO order_recipe VALUES(" + orderID + ", " + recipeIDs.get(i) +
-                                    ", '" + recipes.get(i)[1] + "');");
-                            if(rowChanged < 1){
-                                getScentence().executeQuery("ROLLBACK;");
-                                return false;
-                            }
-                        }
-                    }
-                    else{
-                        getScentence().executeQuery("ROLLBACK;");
-                        return false;
-
+                int orderID = 0;
+                if(rowChanged > 0) {
+                    res = getScentence().executeQuery("SELECT LAST_INSERT_ID() as id;"); // Henter den autoinkrementerte verdien.
+                    if(res.next()) {
+                        orderID = res.getInt("id");
                     }
                 }
+                else{
+                    getScentence().executeQuery("ROLLBACK;");
+                    return false;
+
+                }
+                for(Object[] name : recipes) {
+
+                    res = getScentence().executeQuery("SELECT recipe_id FROM recipe WHERE name = '" + name[0] + "';");
+
+                    if (res.next()) {
+                        recipeIDs.add(res.getInt("recipe_id")); //Henter oppskrifts IDer for å koble oppskrifter med ordre.
+                    } else {
+                        getScentence().executeQuery("ROLLBACK");
+
+                        return false;
+                    }
+                }
+
+
+                for (int i = 0; i < recipeIDs.size(); i++) {
+                    rowChanged = getScentence().executeUpdate("INSERT INTO order_recipe VALUES(" + orderID + ", " + recipeIDs.get(i) +
+                            ", '" + recipes.get(i)[1] + "');");
+                    if (!(rowChanged > 0)) {
+                        getScentence().executeQuery("ROLLBACK;");
+                        return false;
+                    }
+                }
+
                 getScentence().executeQuery("COMMIT;");
             }
 
@@ -157,6 +204,7 @@ public class OrderManagement extends Management{
                 DbUtils.closeQuietly(getScentence());
                 DbUtils.closeQuietly(getConnection());
             }
+
         }
         else return false;
         return true;
