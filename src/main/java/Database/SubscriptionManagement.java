@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import static Database.OrderManagement.*;
 
 /**
  * Created by Evdal on 16.03.2016.
@@ -69,7 +70,7 @@ public class SubscriptionManagement extends Management{
         }
         return 0;
     }
-    public int createSubscription(int custID, String dateFrom, String dateTo, int type){ //type = 1 = weekly, type = 2 = monthly
+    public int createSubscription(int custID, String dateFrom, String dateTo, int frequency){
         int subid = -1;
         if(setUp()){
             try {
@@ -78,7 +79,7 @@ public class SubscriptionManagement extends Management{
                 prep.setInt(1, custID);
                 prep.setString(2, dateTo);
                 prep.setString(3, dateFrom);
-                prep.setInt(4, type);
+                prep.setInt(4, frequency);
                 prep.executeUpdate();
                 ResultSet res = getScentence().executeQuery("SELECT LAST_INSERT_ID() as id;");
                 if(res.next()){
@@ -92,6 +93,7 @@ public class SubscriptionManagement extends Management{
                 } catch (SQLException e1) {
                     System.err.println("Issue with rolling back subscription transaction.");
                 }
+                return -1;
             } finally {
                 try {
                     getScentence().executeQuery("COMMIT;");
@@ -104,6 +106,49 @@ public class SubscriptionManagement extends Management{
 
         }
         return subid;
+    }
+    public boolean increaseSubLength(int subId, String dateTo){
+        int out = -1;
+        if(setUp()){
+            String dateFrom = null;
+            int frequency = 0;
+            int custId = 0;
+            try {
+                ResultSet res = getScentence().executeQuery("SELECT date_to, customer_id, sub_type FROM subscription WHERE sub_id = "+subId+";");
+                if(res.next()) {
+                    dateFrom = res.getString("date_to"); //Henter den gamle til_datoen TODO: test for duplicate orders!
+                    frequency = res.getInt("sub_type");
+                    custId = res.getInt("customer_id");
+
+                }
+                out = createSubscription(custId, dateFrom,dateTo, frequency);
+            } catch (SQLException e) {
+                System.err.println("Issue with getting data from subId");
+                return false;
+            } finally {
+                DbUtils.closeQuietly(getScentence());
+                DbUtils.closeQuietly(getScentence());
+            }
+        }
+        return out > -1;
+
+    }
+    public boolean deleteSubscription(int subId){ //setter orderstatus på alle ordre med riktig sub_id etter dagens dato til inaktiv
+        if(setUp()){
+            try {
+                int res = getScentence().executeUpdate("UPDATE `order` SET status = "+ OrdStatus.INACTIVE.getValue()+
+                        " WHERE sub_id = "+subId+" AND `date` >= CURRENT_DATE;");
+            }
+            catch (Exception e){
+                System.err.println("Issue with deleting subscription."); //TODO: Cancel subscription in sub table aswell.
+                return false;
+            }
+            finally {
+                DbUtils.closeQuietly(getScentence());
+                DbUtils.closeQuietly(getConnection());
+            }
+        }
+        return true;
     }
 
 
