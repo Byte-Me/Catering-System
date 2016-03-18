@@ -2,15 +2,9 @@ package Database;
 
 import org.apache.commons.dbutils.DbUtils;
 
-import java.io.InputStream;
-import java.io.Reader;
-import java.math.BigDecimal;
-import java.net.URL;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Map;
+
 
 /**
  * Created by Evdal on 07.03.2016.
