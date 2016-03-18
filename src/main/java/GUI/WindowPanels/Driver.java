@@ -1,7 +1,6 @@
 package GUI.WindowPanels;
 
 import com.teamdev.jxbrowser.chromium.*;
-import com.teamdev.jxbrowser.chromium.PrintJob;
 import com.teamdev.jxbrowser.chromium.swing.BrowserView;
 
 import javax.swing.*;
