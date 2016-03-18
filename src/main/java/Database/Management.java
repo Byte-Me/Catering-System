@@ -23,7 +23,6 @@ public abstract class Management {
         else return false;
     }
     protected boolean setUp(){
-        if (c != null) return true;
         try {
             c = new DatabaseConnection();
             connection = c.getConnection();
