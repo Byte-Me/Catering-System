@@ -1,6 +1,7 @@
 package Database;
 
 import org.apache.commons.dbutils.DbUtils;
+import org.omg.PortableInterceptor.INACTIVE;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,12 +16,27 @@ public class CustomerManagement extends Management{
         super();
     }
 
+    public static enum CustStatus{
+        INACTIVE(0),
+        ACTIVE(1);
+
+        private int value;
+
+        private CustStatus(int value){
+            this.value = value;
+        }
+        public int getValue(){
+            return value;
+        }
+
+    }
+
     public ArrayList<Object[]> getCustomers(){
         if(setUp()){
             ArrayList<Object[]> out = new ArrayList<Object[]>();
             ResultSet res = null;
             try{
-                res = getScentence().executeQuery("SELECT * FROM customer WHERE status = 1"); //Status 1 for aktiv og 0 for inaktiv
+                res = getScentence().executeQuery("SELECT * FROM customer WHERE status = "+CustStatus.ACTIVE.getValue()+";"); //Status 1 for aktiv og 0 for inaktiv
                 while(res.next()) {
                     Object[] obj = new Object[4];
                     obj[0] = res.getString("name");
@@ -43,6 +59,7 @@ public class CustomerManagement extends Management{
         }
         else return null;
     }
+
     public ArrayList<Object[]> customerSearch(String searchTerm){
         ResultSet res = null;
         ArrayList<Object[]> out = new ArrayList<Object[]>();
@@ -50,7 +67,7 @@ public class CustomerManagement extends Management{
             try {
                 res = getScentence().executeQuery("SELECT * FROM customer WHERE name LIKE '%" + searchTerm + "%' OR email LIKE '%" +
                         searchTerm + "%' OR phone LIKE '%" + searchTerm +
-                        "%' OR adress LIKE '%" + searchTerm + "%' AND status = 1 ORDER BY name;");
+                        "%' OR adress LIKE '%" + searchTerm + "%' AND status = "+CustStatus.ACTIVE.getValue()+" ORDER BY name;");
 
                 while (res.next()){
                     Object[] obj = new Object[4];
@@ -84,7 +101,7 @@ public class CustomerManagement extends Management{
                     res = getScentence().executeQuery("SELECT status FROM customer WHERE email = '" + email + "';");
 
                     if(res.next()) {
-                        if (res.getInt("status") == 0) {
+                        if (res.getInt("status") == CustStatus.ACTIVE.getValue()) {
                             numb = getScentence().executeUpdate("UPDATE customer SET status = " + status + " WHERE email = '" + email + "';");
                             if (numb == 0) {
                                 getScentence().executeQuery("COMMIT;");
@@ -127,7 +144,7 @@ public class CustomerManagement extends Management{
 
         String adress = adressFormatter(city, postCode, streetAdress);
         String name = nameFormatter(firstname, lastname);
-        if(addCustomer(name, email, phone, adress, 1)) return true;
+        if(addCustomer(name, email, phone, adress, CustStatus.ACTIVE.getValue())) return true;
         else return false;
 
     }
@@ -135,7 +152,7 @@ public class CustomerManagement extends Management{
         if(setUp()){
             int res = 0;
             try{
-                res = getScentence().executeUpdate("UPDATE customer SET status = 0 WHERE email = '" + email + "';");
+                res = getScentence().executeUpdate("UPDATE customer SET status = "+CustStatus.INACTIVE.getValue()+" WHERE email = '" + email + "';");
             }
             catch (Exception e){
                 System.err.println("Issue with deleting customer");
@@ -211,8 +228,7 @@ public class CustomerManagement extends Management{
         }
         return rowChanged > 0;
     }
-    public boolean updateCustomerAdress(String email, String streetAdress, String postCode, String city) {
-        String newData = adressFormatter(city, postCode, streetAdress);
+    public boolean updateCustomerAdress(String email, String newData) {
         int rowChanged = 0;
         if (setUp()) {
             try {
@@ -233,7 +249,7 @@ public class CustomerManagement extends Management{
         }
         return rowChanged > 0;
     }
-    public boolean updateCustomerEmail(String email, int newData) {
+    public boolean updateCustomerStatus(String email, int newData) {
         int rowChanged = 0;
         if (setUp()) {
             try {
