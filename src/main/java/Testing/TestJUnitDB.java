@@ -206,10 +206,10 @@ public class TestJUnitDB{
     //int custID, String dateFrom, String dateTo, int weeksBetween, ArrayList<Object[][]> recipesWithDay, String note
     public void testCreateSubs(){
         ArrayList<Object[][]> obj = new ArrayList<Object[][]>();
-        obj.add(new Object[][]{{"Catfish", "Potatodog"},{2, 3},{2}});
-        obj.add(new Object[][]{{"Catfish"},{3},{5}});
+        obj.add(new Object[][]{{"Catfish", "Potatodog"},{2, 3},{1}});
+        obj.add(new Object[][]{{"Catfish"},{3},{3}});
         Subscriptions upt = new Subscriptions();
-        upt.createSubscription(7, "2016-03-17", "2016-04-08", 1, obj, "Uten banan");
+        upt.createSubscription(6, "2016-03-20", "2016-05-08", 2, obj, "Bare cat ikke fish");
 
     }
     @Test
