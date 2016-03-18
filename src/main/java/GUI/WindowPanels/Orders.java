@@ -20,15 +20,23 @@ public class Orders {
     static OrderManagement orderManagement = new OrderManagement();
     static DefaultTableModel orderModel;
 
-    public Orders(final JPanel mainPanel, JTable ordersTable, final JTextField searchOrders, JButton addOrderButton) {
+    public Orders(final JPanel mainPanel, JTable ordersTable, final JTextField searchOrders, JButton addOrderButton, JButton editOrderButton, JButton deleteOrderButton) {
 
         String[] headers = {"Id", "Name", "Phone", "Address", "Date", "Status"};
 
-        orderModel = new DefaultTableModel();
+        orderModel = new DefaultTableModel() {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                //all cells false
+                return false;
+            }
+        };
+
         orderModel.setColumnIdentifiers(headers);
 
         ordersTable.setModel(orderModel);
         ordersTable.setAutoCreateRowSorter(true);
+        ordersTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         addOrderButton.addActionListener(new ActionListener() {
             @Override

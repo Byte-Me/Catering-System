@@ -33,6 +33,7 @@ public class AddOrder extends JFrame {
     private JButton rightButton;
     private JButton cancelButton;
     private JButton addOrderButton;
+    private JTextArea commentTextArea;
 
     public AddOrder(Container parent) {
         setContentPane(mainPanel);
@@ -53,7 +54,14 @@ public class AddOrder extends JFrame {
         /* Create Order Table */
         String[] headers = {"Portions", "Recipe"};
 
-        final DefaultTableModel addOrderModel = new DefaultTableModel();
+        final DefaultTableModel addOrderModel = new DefaultTableModel() {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                //all cells false
+                return false;
+            }
+        };
+
         addOrderModel.setColumnIdentifiers(headers);
 
         orderRecepies.setModel(addOrderModel);
@@ -130,6 +138,7 @@ public class AddOrder extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 Object[] selectedCustomer = customers.get(customerDropdown.getSelectedIndex());
                 String selectedDate = dateField.getText();
+                String comment = commentTextArea.getText();
 
                 ArrayList<Object[]> selectedRecipes = new ArrayList<Object[]>();
                 for (int i = 0; i < addOrderModel.getRowCount(); i++) {
@@ -138,7 +147,7 @@ public class AddOrder extends JFrame {
 
                 OrderManagement orderManagement = new OrderManagement();
 
-                boolean isAdded = orderManagement.createOrder((String)selectedCustomer[1], selectedDate, selectedRecipes, "");
+                boolean isAdded = orderManagement.createOrder((String)selectedCustomer[1], selectedDate, selectedRecipes, comment);
                 if(!isAdded) {
                     System.err.println("Kunne ikke legge til order");
                 }
