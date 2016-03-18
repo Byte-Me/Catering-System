@@ -137,6 +137,7 @@ public class AddOrder extends JFrame {
                 }
 
                 OrderManagement orderManagement = new OrderManagement();
+
                 boolean isAdded = orderManagement.createOrder((String)selectedCustomer[1], selectedDate, selectedRecipes, "");
                 if(!isAdded) {
                     System.err.println("Kunne ikke legge til order");
