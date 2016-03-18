@@ -1,5 +1,7 @@
 package Encryption;
 
+import Database.CustomerManagement.*;
+
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import java.security.NoSuchAlgorithmException;
@@ -18,7 +20,6 @@ public class Encryption {
         byte[] salt = stringToByte(saltString);
 
         byte[] hashPass = stringToByte(hashString);
-
 
 
         byte[] hash = null;
