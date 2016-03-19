@@ -1,5 +1,7 @@
 package GUI.WindowPanels;
 
+import com.google.common.io.Files;
+import com.google.common.base.Charsets;
 import com.teamdev.jxbrowser.chromium.*;
 import com.teamdev.jxbrowser.chromium.swing.BrowserView;
 
@@ -7,11 +9,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 
 import static Delivery.CreateDeliveryRoute.UseReadyOrders;
 import static Delivery.CreateDeliveryRoute.UseReadyOrdersLatLng;
+import static GUI.WindowPanels._Map.getMapHTML;
 
 /**
  * Created by olekristianaune on 13.03.2016.
@@ -27,7 +32,12 @@ public class Driver {
 
         updateDrivingRoute();
 
-        createMap(mapPanel, generateDrivingRouteButton);
+        try {
+            createMap(mapPanel, generateDrivingRouteButton);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
 
     }
 
@@ -47,7 +57,7 @@ public class Driver {
         }
     }
 
-    public void createMap(JPanel mapPanel, JButton generateDrivingRouteButton) {
+    public void createMap(JPanel mapPanel, JButton generateDrivingRouteButton) throws IOException {
 
         // Reduce logging -- doesn't work?
         LoggerProvider.getChromiumProcessLogger().setLevel(Level.OFF);
@@ -63,7 +73,7 @@ public class Driver {
         mapPanel.add(browserView, BorderLayout.CENTER);
 
         // Load website
-        browser.loadURL("file:///Users/olekristianaune/Documents/Mine%20Filer/Java/IntelliJ/Catering-System/src/main/java/GUI/map.html"); // FIXME: find relative path to file
+        browser.loadHTML(getMapHTML());
 
         // Generate driving route
         generateDrivingRouteButton.addActionListener(new ActionListener() {
