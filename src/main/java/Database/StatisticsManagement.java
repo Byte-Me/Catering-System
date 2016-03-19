@@ -17,7 +17,7 @@ public class StatisticsManagement extends Management{
     Inntekter per tid
     Antall ordre per tid
 
-     */
+     */ //TODO: slett når klassen er blitt testet.
     public ArrayList<String> getOrders(String firstDate, String lastDate){
         ResultSet res;
         ArrayList<String> out = new ArrayList<String>();
@@ -31,6 +31,28 @@ public class StatisticsManagement extends Management{
                 }
             } catch (Exception e) {
                 System.err.println("Issue with getting orders");
+                return null;
+            } finally {
+                DbUtils.closeQuietly(getScentence());
+                DbUtils.closeQuietly(getConnection());
+            }
+        }
+        return out;
+    }
+//TODO: Ikke testet 19.03.2016
+    public ArrayList<String> getDates(String firstDate, String lastDate, String name){
+        ResultSet res;
+        ArrayList<String> out = new ArrayList<String>();
+        if(setUp()) {
+            try {
+                res = getScentence().executeQuery("SELECT `"+name+"`.date from `"+name+"` where `date` >= DATE '" + firstDate +
+                        "' AND `date` <= DATE '" + lastDate + "' order by date;");
+
+                while (res.next()) {
+                    out.add(res.getString("date"));
+                }
+            } catch (Exception e) {
+                System.err.println("Issue with getting customers");
                 return null;
             } finally {
                 DbUtils.closeQuietly(getScentence());

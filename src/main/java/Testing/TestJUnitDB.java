@@ -209,7 +209,8 @@ public class TestJUnitDB{
         obj.add(new Object[][]{{"Catfish", "Potatodog"},{2, 3},{1}});
         obj.add(new Object[][]{{"Catfish"},{3},{3}});
         Subscriptions upt = new Subscriptions();
-        upt.createSubscription(6, "2016-03-20", "2016-05-08", 2, obj, "Bare cat ikke fish");
+        boolean bool = upt.createSubscription(6, "2016-03-20", "2016-05-08", 2, obj, "Bare cat ikke fish");
+        assertTrue(bool);
 
     }
     @Test

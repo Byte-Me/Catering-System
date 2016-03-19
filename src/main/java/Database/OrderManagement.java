@@ -68,9 +68,10 @@ public class OrderManagement extends Management {
 
             //Henter info fra ordre der ordren ikke er merket som inaktiv.
             try {
+
                 ResultSet res = getScentence().executeQuery("SELECT `order`.order_id, customer.name ,customer.phone, customer.adress, `order`.date, `order`.status " +
-                        "FROM `order`, customer WHERE `order`.customer_id = customer.customer_id AND order.status >= "+OrdStatus.ACTIVE.getValue()+
-                        "ORDER BY `date` DESC, status DESC;");
+                        "FROM `order`, customer WHERE `order`.customer_id = customer.customer_id AND `order`.status >= "+OrdStatus.ACTIVE.getValue()+
+                        " ORDER BY `date` DESC, status DESC;");
                 while (res.next()){
                     out.add(createList(res));
 

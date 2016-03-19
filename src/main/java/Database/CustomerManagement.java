@@ -228,8 +228,7 @@ public class CustomerManagement extends Management{
         }
         return rowChanged > 0;
     }
-    public boolean updateCustomerAdress(String email, String streetAdress, String postCode, String city) {
-        String newData = adressFormatter(city, postCode, streetAdress);
+    public boolean updateCustomerAdress(String email, String newData) {
         int rowChanged = 0;
         if (setUp()) {
             try {

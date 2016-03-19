@@ -4,6 +4,7 @@ import Database.StatisticsManagement;
 import Statistics.graph.ChartCreator;
 
 import javax.swing.*;
+import java.text.ParseException;
 import java.util.*;
 
 /**
@@ -20,78 +21,45 @@ public class OrderStatistics extends Statistics{
 
 
 
-    public Object[] createStatsFromOrders(String startDate, String endDate) {
+    public Object[] createStatsFromOrders(String startDateS, String endDateS) {
         StatisticsManagement stat = new StatisticsManagement();
-        ArrayList<String> orders = stat.getOrders(startDate, endDate);
+        ArrayList<String> orders = stat.getDates(startDateS, endDateS, "order");
         ArrayList<Double> yValues = new ArrayList<Double>();
         ArrayList<String> xValues = new ArrayList<String>();
         String curDate = "";
+        Date startDate = null;
+        Date endDate = null;
         try {
-            curDate = orders.get(0);
-        } catch (Exception e) {
-            System.err.println("No orders found.");
+            startDate = getFormatter().parse(startDateS);
+            startDate = getFormatter().parse(endDateS);
+
+        } catch (ParseException e) {
+            System.err.println("Issue with parsing date.");
             return null;
         }
+
         JPanel chart = null;
         int count = 1;
-        try {
+
+        try { //TODO: Ikke testet 19-03-2016.
             int timeDiff = checkDaysBetween(startDate, endDate);
 
-            if (timeDiff > 160) {
-                for (int i = 1; i < orders.size(); i++) {
-                    if (isSameMonth(curDate, orders.get(i))) {
-                        count++;
-                        if(i == orders.size()-1){
-                            yValues.add(Double.valueOf(count));
-                            xValues.add(getMonthName(orders.get(i)));
-                        }
-                    } else {
-                        yValues.add(Double.valueOf(count));
-                        xValues.add(getMonthName(orders.get(i - 1)));
-                        curDate = orders.get(i);
-                        count = 1;
-                    }
-                }
+            if (timeDiff > MONTHLIMIT) {
+                ArrayList[] values = valuesMonth(orders);
 
-                chart = ChartCreator.createLineChart("Orders", "Months", "Orders per month", xValues, yValues, "orders");
+                chart = ChartCreator.createLineChart("Orders", "Months", "Orders per month", (ArrayList<String>)values[0],
+                        (ArrayList<Double>)values[1], "orders");
             }
-            else if(timeDiff > 30){
-                for (int i = 1; i < orders.size(); i++) {
-                    if (isSameWeek(curDate, orders.get(i))) {
-                        count++;
-                        if(i == orders.size()-1){
-                            yValues.add(Double.valueOf(count));
-                            xValues.add(getWeekName(orders.get(i)));
-                        }
-                    } else {
-                        yValues.add(Double.valueOf(count));
-                        xValues.add(getWeekName(orders.get(i - 1)));
-                        curDate = orders.get(i);
-                        count = 1;
-                    }
-                }
-                chart = ChartCreator.createLineChart("Orders", "Weeks", "Orders per week", xValues, yValues, "orders");
+            else if(timeDiff > WEEKLIMIT){
+                ArrayList[] values = valuesWeek(orders);
+                chart = ChartCreator.createLineChart("Orders", "Weeks", "Orders per week", (ArrayList<String>)values[0],
+                        (ArrayList<Double>)values[1], "orders");
 
             }
-
-
             else {
-                for (int i = 1; i < orders.size(); i++) {
-                    if (orders.get(i).equals(curDate)) {
-                        count++;
-                        if(i == orders.size()-1){
-                            yValues.add(Double.valueOf(count));
-                            xValues.add(orders.get(i));
-                        }
-                    }
-                    else{
-                        yValues.add(Double.valueOf(count));
-                        xValues.add(orders.get(i - 1));
-                        curDate = orders.get(i);
-                        count = 1;
-                    }
-                }
-                chart = ChartCreator.createLineChart("Orders", "Days", "Orders per day", xValues, yValues, "orders");
+                ArrayList[] values = valuesDay(orders);
+                chart = ChartCreator.createLineChart("Orders", "Days", "Orders per day", (ArrayList<String>)values[0],
+                        (ArrayList<Double>)values[1], "orders");
 
             }
         }

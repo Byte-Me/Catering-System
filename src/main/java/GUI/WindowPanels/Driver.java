@@ -64,7 +64,7 @@ public class Driver {
         mapPanel.add(browserView, BorderLayout.CENTER);
 
         // Load website
-        browser.loadURL("file:///Users/olekristianaune/Documents/Mine%20Filer/Java/IntelliJ/Catering-System/src/main/java/GUI/map.html"); // FIXME: find relative path to file
+        browser.loadURL("C:\\Users\\Evdal\\IdeaProjects\\Catering-System6\\src\\main\\java\\GUI\\map.html"); // FIXME: find relative path to file
 
         // Generate driving route
         generateDrivingRouteButton.addActionListener(new ActionListener() {
