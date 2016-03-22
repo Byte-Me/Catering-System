@@ -3,6 +3,7 @@ package Database;
 import org.apache.commons.dbutils.DbUtils;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
@@ -55,6 +56,27 @@ public class StatisticsManagement extends Management{
                 System.err.println("Issue with getting customers");
                 return null;
             } finally {
+                DbUtils.closeQuietly(getScentence());
+                DbUtils.closeQuietly(getConnection());
+            }
+        }
+        return out;
+    }
+
+    public ArrayList<String[]> getSubDates(){
+        ArrayList<String[]> out = new ArrayList<String[]>();
+        if(setUp()){
+            try{
+                ResultSet res = getScentence().executeQuery("SELECT date_from, date_to FROM subscription;");
+                while(res.next()){
+                    out.add(new String[]{res.getString("date_from"), res.getString("date_to")});
+                }
+            }
+            catch (SQLException e){
+                System.err.println("Issue with getting subscription dates.");
+                return null;
+            }
+            finally {
                 DbUtils.closeQuietly(getScentence());
                 DbUtils.closeQuietly(getConnection());
             }

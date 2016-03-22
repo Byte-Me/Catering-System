@@ -90,7 +90,11 @@ public abstract class Statistics {
         return new ArrayList[]{xValues,yValues};
 
     }
-
+    protected Date nextDate(Date date, int time){ //Calendar int, month, year, week, day.
+        cal.setTime(date);
+        cal.add(time, 1);
+        return cal.getTime();
+    }
 
 
     protected boolean isSameDay(String date1, String date2){
@@ -110,8 +114,13 @@ public abstract class Statistics {
         if(day1 == day2) return true;
         else return false;
     }
-    protected String getMonthName(String date)throws Exception{
-        Date tmp = formatter.parse(date);
+    protected String getMonthName(String date){
+        Date tmp = null;
+        try {
+            tmp = formatter.parse(date);
+        } catch (ParseException e) {
+            System.err.println("Issue with parsing dates.");
+        }
         cal.setTime(tmp);
         return cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault());
 
@@ -148,9 +157,15 @@ public abstract class Statistics {
         if(week1 == week2) return true;
         else return false;
     }
-    protected boolean isSameMonth(String date1, String date2)throws Exception{
-        Date start = formatter.parse(date1);
-        Date end = formatter.parse(date2);
+    protected boolean isSameMonth(String date1, String date2){
+        Date start = null;
+        Date end = null;
+        try {
+            start = formatter.parse(date1);
+            end = formatter.parse(date2);
+        } catch (ParseException e) {
+            System.err.println("Issue with parsing dates.");
+        }
         cal.setTime(start);
         int month1 = cal.get(Calendar.MONTH);
         cal.setTime(end);

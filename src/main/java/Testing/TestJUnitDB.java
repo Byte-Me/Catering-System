@@ -7,6 +7,7 @@ import Subscription.Subscriptions;
 import org.junit.*;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import static org.junit.Assert.*;
 
@@ -53,8 +54,8 @@ public class TestJUnitDB{
     @Test
     public void checkActiveSubscriptions(){
         Subscriptions upt = new Subscriptions();
-        assertTrue(upt.checkSubscriptionActive("2016-03-10", "2016-04-01"));
-        assertFalse(upt.checkSubscriptionActive("2016-03-10", "2016-03-15"));
+        assertTrue(upt.checkSubscriptionActive("2016-03-10", "2016-04-01", new Date()));
+        assertFalse(upt.checkSubscriptionActive("2016-03-10", "2016-03-15", new Date()));
 
     }
     @Test

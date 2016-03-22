@@ -24,17 +24,16 @@ public class Subscriptions {
         ArrayList<Object[]> subs = subMan.getSubscriptions();
         ArrayList<Object[]> activeSubs = new ArrayList<Object[]>();
         for (Object[] sub : subs) {
-            if (checkSubscriptionActive((String) sub[2], (String) sub[3])) { //2 = dayfrom, 3 = dayto
+            if (checkSubscriptionActive((String) sub[2], (String) sub[3], new Date())) { //2 = dayfrom, 3 = dayto
                 activeSubs.add(sub);
             }
         }
         return activeSubs;
     }
 
-    public boolean checkSubscriptionActive(String dateFrom, String dateTo) {
+    public boolean checkSubscriptionActive(String dateFrom, String dateTo, Date today) {
         Date from = null;
         Date to = null;
-        Date today = new Date();
         try {
             from = formatter.parse(dateFrom);
             to = formatter.parse(dateTo);
