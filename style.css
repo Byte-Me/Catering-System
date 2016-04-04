@@ -1,3 +1,18 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background: #ccc;
+}
+
+.main-content {
+    background: white;
+    width: 700px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
 h1 {
-    color: red;
+    text-align: center;
 }
