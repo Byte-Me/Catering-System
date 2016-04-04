@@ -13,7 +13,7 @@ public class HelpWindow extends JFrame{
     private JPanel mainPanel;
     Browser browser;
 
-    public HelpWindow() {
+    public HelpWindow(Container parent) {
         setContentPane(mainPanel);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
@@ -27,7 +27,7 @@ public class HelpWindow extends JFrame{
 
         pack();
         setSize(700, 500);
-        setLocationRelativeTo(null);
+        setLocationRelativeTo(parent);
         setVisible(true);
     }
 }

@@ -468,14 +468,34 @@
             <preferred-size width="-1" height="20"/>
           </grid>
         </constraints>
-        <properties/>
+        <properties>
+          <enabled value="false"/>
+        </properties>
         <border type="none"/>
         <children>
+          <component id="1f729" class="javax.swing.JButton" binding="fileButton" default-binding="true">
+            <constraints/>
+            <properties>
+              <text value="File"/>
+            </properties>
+          </component>
+          <component id="63ba3" class="javax.swing.JButton" binding="settingsButton" default-binding="true">
+            <constraints/>
+            <properties>
+              <text value="Settings"/>
+            </properties>
+          </component>
+          <hspacer id="3def4">
+            <constraints/>
+          </hspacer>
           <component id="c6292" class="javax.swing.JButton" binding="helpButton" default-binding="true">
             <constraints/>
             <properties>
               <horizontalAlignment value="0"/>
+              <horizontalTextPosition value="11"/>
               <text value="Help"/>
+              <verticalAlignment value="0"/>
+              <verticalTextPosition value="0"/>
             </properties>
           </component>
         </children>

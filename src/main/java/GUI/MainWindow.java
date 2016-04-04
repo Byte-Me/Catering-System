@@ -45,6 +45,8 @@ public class MainWindow extends JFrame {
     private JButton editOrderButton;
     private JButton deleteOrderButton;
     private JButton helpButton;
+    private JButton fileButton;
+    private JButton settingsButton;
 
 
     public MainWindow(UserManagement.UserType userType) {
@@ -95,7 +97,7 @@ public class MainWindow extends JFrame {
         helpButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                new HelpWindow();
+                new HelpWindow(mainPanel.getParent());
             }
         });
 
