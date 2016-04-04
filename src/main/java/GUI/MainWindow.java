@@ -5,6 +5,7 @@ import Database.UserManagement;
 import GUI.WindowPanels.*;
 
 import javax.swing.*;
+import java.awt.*;
 
 /**
  * Created by olekristianaune on 07.03.2016.
@@ -46,6 +47,9 @@ public class MainWindow extends JFrame {
     public MainWindow(UserManagement.UserType userType) {
         setContentPane(mainPanel); // Set the main content panel
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Exit application when window is closed.
+
+        Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/Images/icon32.png"));
+        setIconImage(icon);
 
         // Setup the different panels - keep referance for possible future need.
         // Will get disposed and garbage collected when MainWindow gets closed (When application is closed)

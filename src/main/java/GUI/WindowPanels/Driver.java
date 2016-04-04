@@ -106,14 +106,18 @@ public class Driver {
             @Override
             public void actionPerformed(ActionEvent e) {
                 updateDrivingRoute();
-                browser.executeJavaScript(getDrivingRoute());
+
+                JSValue loaded = browser.executeJavaScriptAndReturnValue(getDrivingRoute());
 
                 // FIXME: The following executes before the new map is generated.
-                double mapLat = browser.executeJavaScriptAndReturnValue("map.getCenter().lat();").getNumberValue();
-                double mapLng = browser.executeJavaScriptAndReturnValue("map.getCenter().lng();").getNumberValue();
-                int mapZoom = (int) browser.executeJavaScriptAndReturnValue("map.getZoom();").getNumberValue();
+                if(!loaded.isUndefined()) {
+                    System.out.println("Map loaded?");
+                    double mapLat = browser.executeJavaScriptAndReturnValue("map.getCenter().lat();").getNumberValue();
+                    double mapLng = browser.executeJavaScriptAndReturnValue("map.getCenter().lng();").getNumberValue();
+                    int mapZoom = (int) browser.executeJavaScriptAndReturnValue("map.getZoom();").getNumberValue();
 
-                mapCenter = new Number[]{mapLat, mapLng, mapZoom};
+                    mapCenter = new Number[]{mapLat, mapLng, mapZoom};
+                }
 
             }
         });
@@ -142,6 +146,7 @@ public class Driver {
                     "directionsService.route(request, function(result, status) {" +
                     "if (status == google.maps.DirectionsStatus.OK) {" +
                     "directionsDisplay.setDirections(result);" +
+                    "alert('directions created');" +
                     "}" +
                     "});";
 
