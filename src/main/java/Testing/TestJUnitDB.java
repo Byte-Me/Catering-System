@@ -178,9 +178,9 @@ public class TestJUnitDB{
         ArrayList<Object[]> obj = food.getRecipes();
         assertTrue(!obj.isEmpty());
     }
-    @Test
+    @Ignore
     public void getIngredientsFromRecipes(){
-        ArrayList<Object[]> obj = food.getIngredientsFromRecipe(110);
+        ArrayList<Object[]> obj = food.getRecipeIngredients();
         assertTrue(!obj.isEmpty());
     }
     @Test
