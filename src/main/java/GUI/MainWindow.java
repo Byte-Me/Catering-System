@@ -6,6 +6,8 @@ import GUI.WindowPanels.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * Created by olekristianaune on 07.03.2016.
@@ -42,6 +44,7 @@ public class MainWindow extends JFrame {
     private JButton addIngredientButton;
     private JButton editOrderButton;
     private JButton deleteOrderButton;
+    private JButton helpButton;
 
 
     public MainWindow(UserManagement.UserType userType) {
@@ -88,6 +91,13 @@ public class MainWindow extends JFrame {
             default:
                 System.err.println("GUI for UserType " + userType + " not defined.");
         }
+
+        helpButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new HelpWindow();
+            }
+        });
 
         pack(); // Pack the window
         setSize(1000, 600); // Set window to desired size
