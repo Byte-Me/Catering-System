@@ -4,6 +4,9 @@ package GUI.WindowPanels;
  * Created by olekristianaune on 19.03.2016.
  */
 public class _Map {
+
+    private static String startAddress; // FIXME: This will need to be geocoded and then inputted as map center
+
     private static String mapHTML = "" +
             "<!DOCTYPE html>\n"+
             "<html>\n"+
@@ -45,5 +48,5 @@ public class _Map {
             "</body>\n"+
             "</html>";
 
-    public static String getMapHTML() { return mapHTML; }
+    public static String getMapHTML() { return mapHTML; } // FIXME: Add startAddress input in method
 }
