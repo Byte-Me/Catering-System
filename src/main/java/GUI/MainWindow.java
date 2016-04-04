@@ -39,6 +39,8 @@ public class MainWindow extends JFrame {
     private JButton deleteUsersButton;
     private JButton generateDrivingRouteButton;
     private JButton addIngredientButton;
+    private JButton editOrderButton;
+    private JButton deleteOrderButton;
 
 
     public MainWindow(UserManagement.UserType userType) {
@@ -50,7 +52,7 @@ public class MainWindow extends JFrame {
         Statistics statisticsPanel = new Statistics(fromDate, toDate, getStatisticsButton);
         Users usersPanel = new Users(mainPanel, addUserButton, userTable, searchUsers, deleteUsersButton);
         Customers customersPanel = new Customers(mainPanel, addCustomerButton, customerTable, searchCustomers, deleteCustomersButton);
-        Orders ordersPanel = new Orders(mainPanel, ordersTable, searchOrders, addOrderButton);
+        Orders ordersPanel = new Orders(mainPanel, ordersTable, searchOrders, addOrderButton, editOrderButton, deleteOrderButton);
         Driver driverPanel = new Driver(drivingList, mapPanel, generateDrivingRouteButton);
         Chef chefPanel = new Chef(mainPanel, prepareTable, ingredientTable, generateShoppingListButton, recipesButton, addIngredientButton);
 

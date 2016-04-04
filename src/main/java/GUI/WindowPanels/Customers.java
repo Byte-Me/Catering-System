@@ -41,7 +41,7 @@ public class Customers {
         // What happens when a cell in the table is changed?
         Action action = new AbstractAction() {
             public void actionPerformed(ActionEvent e) {
-                int usernameColumn = 4;
+                int emailColumn = 1;
                 TableCellListener tcl = (TableCellListener)e.getSource();
 
                 int option = showOptionDialog(null,
@@ -54,28 +54,25 @@ public class Customers {
                         "No");
 
                 // If yes, ubdate database
-
-                /*
                 if (option == 0) {
                     switch (tcl.getColumn()) {
                         case 0:
-                            customerManagement.updateCustomerInfoName((String)userModel.getValueAt(tcl.getRow(), usernameColumn), (String)tcl.getNewValue());
+                            customerManagement.updateCustomerName((String)customerModel.getValueAt(tcl.getRow(), emailColumn), (String)tcl.getNewValue());
                             break;
                         case 1:
-                            customerManagement.updateCustomerInfoEmail((String)userModel.getValueAt(tcl.getRow(), usernameColumn), (String)tcl.getNewValue());
+                            customerManagement.updateCustomerEmail((String)customerModel.getValueAt(tcl.getRow(), emailColumn), (String)tcl.getNewValue());
                             break;
                         case 2:
-                            customerManagement.updateCustomerInfoPhone((String)userModel.getValueAt(tcl.getRow(), usernameColumn), (String)tcl.getNewValue());
+                            customerManagement.updateCustomerPhone((String)customerModel.getValueAt(tcl.getRow(), emailColumn), (String)tcl.getNewValue());
                             break;
                         case 3:
-                            customerManagement.updateCustomerInfoAddress((String)userModel.getValueAt(tcl.getRow(), usernameColumn), (String)tcl.getNewValue());
+                            customerManagement.updateCustomerAdress((String)customerModel.getValueAt(tcl.getRow(), emailColumn), (String)tcl.getNewValue());
                             break;
                         default:
                             System.err.println(customerTable.getColumnName(tcl.getColumn()) + " does not yet have an implemetation.");
                     }
 
                 }
-                */
 
                 // Update user table from database
                 updateCustomer();
