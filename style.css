@@ -2,11 +2,6 @@
     box-sizing: border-box;
 }
 
-html, body {
-    margin: 0;
-    padding: 0;
-}
-
 body {
     background: #ccc;
     font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
@@ -22,4 +17,6 @@ body {
 
 h1 {
     text-align: center;
+    font-size: 2em;
+    margin-bottom: 20px;
 }
