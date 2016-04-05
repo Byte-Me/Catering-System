@@ -5,6 +5,8 @@ import Database.UserManagement;
 import GUI.WindowPanels.*;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -97,6 +99,10 @@ public class MainWindow extends JFrame {
                 System.err.println("GUI for UserType " + userType + " not defined.");
                 dispose();
         }
+
+        tabbedPane1.addChangeListener(e -> {
+            tabbedPane1.getSelectedIndex();
+        });
 
         helpButton.addActionListener(e -> new HelpWindow(mainPanel.getParent()));
 
