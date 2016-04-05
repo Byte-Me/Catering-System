@@ -67,10 +67,10 @@ public class MainWindow extends JFrame {
         Driver driverPanel = new Driver(drivingList, mapPanel, generateDrivingRouteButton);
         Chef chefPanel = new Chef(mainPanel, prepareTable, ingredientTable, generateShoppingListButton, recipesButton, addIngredientButton);
 
-        // Remove panes the user does not have access to;
+        // Remove panes the user does not have access to
         switch (userType) {
             case ADMIN:
-                // Admin have access to everything
+                // Admin have access to everything, therefore remove nothing.
                 break;
             case SALE:
                 // Sale
@@ -93,7 +93,9 @@ public class MainWindow extends JFrame {
                 tabbedPane1.remove(sale);
                 break;
             default:
+                // For some reason we did not get a valid userType - print error message and close window.
                 System.err.println("GUI for UserType " + userType + " not defined.");
+                dispose();
         }
 
         helpButton.addActionListener(new ActionListener() {
