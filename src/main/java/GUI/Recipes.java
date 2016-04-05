@@ -41,23 +41,13 @@ public class Recipes extends JFrame {
 
         updateRecipes();
 
-        addRecipeButton.addActionListener(new ActionListener() { // Button action listener
-            public void actionPerformed(ActionEvent e) {
-                new AddRecipe(mainPane.getParent());
-            }
-        });
+        addRecipeButton.addActionListener(e -> new AddRecipe(mainPane.getParent()));
 
-        editRecipeButton.addActionListener(new ActionListener() { // Button action listener
-            public void actionPerformed(ActionEvent e) {
-                new EditRecipe(mainPane.getParent());
-            }
-        });
+        editRecipeButton.addActionListener(e -> new EditRecipe(mainPane.getParent()));
 
-        cancelButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                setVisible(false);
-                dispose();
-            }
+        cancelButton.addActionListener(e -> {
+            setVisible(false);
+            dispose();
         });
 
         setVisible(true);

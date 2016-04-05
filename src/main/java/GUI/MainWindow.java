@@ -51,7 +51,7 @@ public class MainWindow extends JFrame {
 
     public MainWindow(UserManagement.UserType userType) {
         setContentPane(mainPanel); // Set the main content panel
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Exit application when window is closed.
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE); // Exit application when window is closed.
 
         Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/Images/icon32.png"));
         setIconImage(icon);
@@ -98,12 +98,7 @@ public class MainWindow extends JFrame {
                 dispose();
         }
 
-        helpButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                new HelpWindow(mainPanel.getParent());
-            }
-        });
+        helpButton.addActionListener(e -> new HelpWindow(mainPanel.getParent()));
 
         pack(); // Pack the window
         setSize(1000, 600); // Set window to desired size
