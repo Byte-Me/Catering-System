@@ -9,11 +9,9 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import static javax.swing.JOptionPane.*;
 
@@ -40,7 +38,7 @@ public class Users {
         userTable.setAutoCreateRowSorter(true); // Auto sort table by row
 
         // Create dropdown for UserType
-        JComboBox<String> userTypeDropDown = new JComboBox<String>();
+        JComboBox<String> userTypeDropDown = new JComboBox<>();
         userTypeDropDown.addItem("Admin");
         userTypeDropDown.addItem("Sale");
         userTypeDropDown.addItem("Driver");
@@ -50,11 +48,7 @@ public class Users {
         TableColumn userTypeColumn = userTable.getColumnModel().getColumn(userTypeColumnNr);
         userTypeColumn.setCellEditor(new DefaultCellEditor(userTypeDropDown));
 
-        addUserButton.addActionListener(new ActionListener() { // Button action listener
-            public void actionPerformed(ActionEvent e) {
-                new AddUser(mainPanel.getParent());
-            }
-        });
+        addUserButton.addActionListener(e -> new AddUser(mainPanel.getParent()));
 
         // What happens when a cell in the table is changed?
         Action action = new AbstractAction() {

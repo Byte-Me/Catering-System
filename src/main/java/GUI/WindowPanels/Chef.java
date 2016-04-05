@@ -2,14 +2,11 @@ package GUI.WindowPanels;
 
 import Database.FoodManagement;
 import GUI.AddIngredient;
-import GUI.AddRecipe;
 import GUI.GenerateShoppingList;
 import GUI.Recipes;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 /**
@@ -24,23 +21,11 @@ public class Chef {
 
     public Chef(final JPanel mainPanel, JTable prepareTable, JTable ingredientTable, JButton generateShoppingListButton, JButton recipesButton, JButton addIngredientButton) {
 
-        recipesButton.addActionListener(new ActionListener() { // Button action listener
-            public void actionPerformed(ActionEvent e) {
-                new Recipes(mainPanel.getParent());
-            }
-        });
+        recipesButton.addActionListener(e -> new Recipes(mainPanel.getParent()));
 
-        addIngredientButton.addActionListener(new ActionListener() { // Button action listener
-            public void actionPerformed(ActionEvent e) {
-                new AddIngredient(mainPanel.getParent());
-            }
-        });
+        addIngredientButton.addActionListener(e -> new AddIngredient(mainPanel.getParent()));
 
-        generateShoppingListButton.addActionListener(new ActionListener() { // Button action listener
-            public void actionPerformed(ActionEvent e) {
-                new GenerateShoppingList(mainPanel.getParent());
-            }
-        });
+        generateShoppingListButton.addActionListener(e -> new GenerateShoppingList(mainPanel.getParent()));
 
         String[] prepareHeader = {"Quantity", "Recipe", "Notes", "Ready for delivery"}; // Header titles
         String[] ingredientHeader = {"Ingredient", "Quantity", "Unit"}; // Header titles

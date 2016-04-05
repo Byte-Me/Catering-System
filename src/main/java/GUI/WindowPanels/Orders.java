@@ -38,12 +38,7 @@ public class Orders {
         ordersTable.setAutoCreateRowSorter(true);
         ordersTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-        addOrderButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                new AddOrder(mainPanel.getParent());
-            }
-        });
+        addOrderButton.addActionListener(e -> new AddOrder(mainPanel.getParent()));
 
         searchOrders.getDocument().addDocumentListener(new DocumentListener() {
             @Override
