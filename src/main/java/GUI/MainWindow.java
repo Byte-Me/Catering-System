@@ -56,6 +56,8 @@ public class MainWindow extends JFrame {
         Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/Images/icon32.png"));
         setIconImage(icon);
 
+        tabbedPane1.setIconAt(0, new ImageIcon(icon)); // Dummy Icon for tab
+
         // Setup the different panels - keep referance for possible future need.
         // Will get disposed and garbage collected when MainWindow gets closed (When application is closed)
         Statistics statisticsPanel = new Statistics(fromDate, toDate, getStatisticsButton);
