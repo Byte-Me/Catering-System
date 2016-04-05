@@ -3,10 +3,15 @@ package Database;
 import Database.Management;
 import org.apache.commons.dbutils.DbUtils;
 
-
+import java.io.InputStream;
+import java.io.Reader;
+import java.math.BigDecimal;
+import java.net.URL;
 import java.sql.*;
 import java.util.ArrayList;
-
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Map;
 
 /**
  * Created by Evdal on 07.03.2016.
@@ -63,8 +68,9 @@ public class OrderManagement extends Management {
 
             //Henter info fra ordre der ordren ikke er merket som inaktiv.
             try {
+
                 ResultSet res = getScentence().executeQuery("SELECT `order`.order_id, customer.name ,customer.phone, customer.adress, `order`.date, `order`.status " +
-                        "FROM `order`, customer WHERE `order`.customer_id = customer.customer_id AND order.status >= "+OrdStatus.ACTIVE.getValue()+
+                        "FROM `order`, customer WHERE `order`.customer_id = customer.customer_id AND `order`.status >= "+OrdStatus.ACTIVE.getValue()+
                         " ORDER BY `date` DESC, status DESC;");
                 while (res.next()){
                     out.add(createList(res));
