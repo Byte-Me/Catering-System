@@ -4,6 +4,7 @@ import Database.LoginManagement;
 import Database.UserManagement;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
@@ -19,6 +20,7 @@ public class Login extends JFrame{
     private JButton loginButton;
     private JButton cancelButton;
     private JPanel mainPanel;
+    private JLabel logoLabel;
 
     private LoginManagement dbconnect;
 
@@ -27,8 +29,9 @@ public class Login extends JFrame{
         setContentPane(mainPanel);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         mainPanel.getRootPane().setDefaultButton(loginButton);
-        pack();
-        setLocationRelativeTo(null);
+
+        Image logo = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/Images/icon-login.png"));
+        logoLabel.setIcon(new ImageIcon(logo));
 
         loginButton.addActionListener(new ActionListener() {
 
@@ -37,10 +40,8 @@ public class Login extends JFrame{
                 String inputUsr = usernameTextField.getText();
                 String inputPass = new String(passwordPasswordField.getPassword());
 
-                int userType = -1;
-
                 dbconnect = new LoginManagement();
-                userType = dbconnect.login(inputUsr, inputPass);
+                int userType = dbconnect.login(inputUsr, inputPass);
 
 
                 if ( userType >= 0) {
@@ -67,6 +68,9 @@ public class Login extends JFrame{
                 dispose();
             }
         });
+
+        pack();
+        setLocationRelativeTo(null);
 
         setVisible(true);
     }

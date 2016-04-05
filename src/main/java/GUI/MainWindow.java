@@ -5,6 +5,9 @@ import Database.UserManagement;
 import GUI.WindowPanels.*;
 
 import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * Created by olekristianaune on 07.03.2016.
@@ -41,11 +44,19 @@ public class MainWindow extends JFrame {
     private JButton addIngredientButton;
     private JButton editOrderButton;
     private JButton deleteOrderButton;
+    private JButton helpButton;
+    private JButton fileButton;
+    private JButton settingsButton;
 
 
     public MainWindow(UserManagement.UserType userType) {
         setContentPane(mainPanel); // Set the main content panel
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Exit application when window is closed.
+
+        Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/Images/icon32.png"));
+        setIconImage(icon);
+
+        tabbedPane1.setIconAt(0, new ImageIcon(icon)); // Dummy Icon for tab
 
         // Setup the different panels - keep referance for possible future need.
         // Will get disposed and garbage collected when MainWindow gets closed (When application is closed)
@@ -86,6 +97,13 @@ public class MainWindow extends JFrame {
                 System.err.println("GUI for UserType " + userType + " not defined.");
                 dispose();
         }
+
+        helpButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new HelpWindow(mainPanel.getParent());
+            }
+        });
 
         pack(); // Pack the window
         setSize(1000, 600); // Set window to desired size

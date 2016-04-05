@@ -1,6 +1,7 @@
 import GUI.*;
 import Delivery.*;
 
+import javax.swing.*;
 import java.util.ArrayList;
 
 /**
@@ -8,37 +9,17 @@ import java.util.ArrayList;
  */
 public class Program {
     public static void main(String[] args) throws Exception {
-        Login loginForm = new Login();
+        try {
+            // Load system Look and Feel
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            if (!System.getProperty("os.name").equals("Mac OS X")) { // Check if OS is Mac OS X
+                UIManager.setLookAndFeel("com.seaglasslookandfeel.SeaGlassLookAndFeel"); // Better look for windows (works on linux?)
+            }
 
-        /*
-        ArrayList<String> test = new ArrayList<String>();
-
-
-        test.add("Paris, France");
-        test.add("Madrid, Spain");
-        test.add("London, England");
-        test.add("Stockholm, Sweden");
-        test.add("Copenhagen, Denmark");
-        test.add("Berlin, Germany");
-        test.add("Warsaw, Poland");
-        test.add("Amsterdam, Netherlands");
-        test.add("Rome, Italy");
-        test.add("Lisbon, Portugal");
-
-
-
-        TravelingSalesman delivery = new TravelingSalesman("Oslo, Norway"); //Start and end point
-
-        ArrayList<double[]> positions = delivery.createPositionsArray(test);
-        ArrayList<double[]> route = new ArrayList<double[]>();
-
-        delivery.bruteForceFindBestRoute(route, positions);
-
-        ArrayList<String> result = delivery.positionsToAdresses(delivery.getBestRoute(), test);
-
-        for(String res : result){
-            System.out.println(res);
+        } catch (Exception e) { // Should not fail, will only fall back to system UI
+            e.printStackTrace();
         }
-        */
+
+        Login loginForm = new Login(); // Open login screen - FIXME: If not used, remove reference to object
     }
 }
