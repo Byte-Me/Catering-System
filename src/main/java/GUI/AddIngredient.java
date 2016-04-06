@@ -109,8 +109,8 @@ public class AddIngredient extends JFrame {
         });
 
         cancelButton.addActionListener(e -> {
-            setVisible(false);
-            dispose();
+            AddIngredient.this.setVisible(false);
+            AddIngredient.this.dispose();
         });
 
         setVisible(true);

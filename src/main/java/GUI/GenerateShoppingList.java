@@ -1,6 +1,7 @@
 package GUI;
 
 import Database.FoodManagement;
+import Food.CreateShoppingList;
 
 import javax.swing.*;
 import javax.swing.JPanel;
@@ -19,7 +20,8 @@ public class GenerateShoppingList extends JFrame {
     private JTable shoppingTable;
     private JButton okButton;
 
-    FoodManagement foodManagement;
+    private FoodManagement foodManagement;
+    private DefaultTableModel shoppingListModel = new DefaultTableModel();
 
     public GenerateShoppingList(Container parent) {
         setContentPane(mainPane);
@@ -30,12 +32,10 @@ public class GenerateShoppingList extends JFrame {
 
         String[] shoppingListHeader = {"Ingredient", "Quantity", "Unit", "Price"};
 
-        DefaultTableModel shoppingListModel = new DefaultTableModel();
-
         shoppingListModel.setColumnIdentifiers(shoppingListHeader);
 
         shoppingTable.setModel(shoppingListModel);
-        shoppingTable.setEnabled(false);
+        updateShoppingList();
 
         okButton.addActionListener(e -> {
             setVisible(false);
@@ -43,5 +43,21 @@ public class GenerateShoppingList extends JFrame {
         });
 
         setVisible(true);
+    }
+    private void updateShoppingList() {
+        ArrayList<Object[]> shoppingItems = CreateShoppingList.useOrdersToday();
+
+        for(Object[] shoppingItem : shoppingItems){
+            System.out.println(Arrays.toString(shoppingItem));
+        }
+        if(shoppingListModel.getRowCount() > 0) {
+            for (int i = shoppingListModel.getRowCount() -1; i < -1; i--) {
+                shoppingListModel.removeRow(i);
+            }
+        }
+
+        for (Object[] recipe : shoppingItems) {
+            shoppingListModel.addRow(recipe);
+        }
     }
 }

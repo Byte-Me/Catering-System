@@ -156,8 +156,9 @@ public class FoodManagement extends Management{
         if(setUp()){
             ResultSet res;
             try{
-                res = getScentence().executeQuery("SELECT grocery.price, recipe_grocery.amount, grocery.name, grocery.unit FROM grocery, recipe_grocery, `order` WHERE `order`.date = " +
-                        "CURRENT_DATE AND recipe_grocery.recipe_id = `order`.recipe_id AND grocery.grocery_id = recipe_grocery.grocery_id;");
+                res = getScentence().executeQuery("SELECT grocery.price, recipe_grocery.amount, grocery.name, grocery.unit FROM grocery, recipe_grocery, order_recipe, `order` WHERE `order`.date =\n" +
+                        "CURRENT_DATE AND order_recipe.order_id = `order`.order_id AND order_recipe.recipe_id = recipe_grocery.recipe_id AND\n" +
+                        "recipe_grocery.grocery_id = recipe_grocery.grocery_id AND recipe_grocery.grocery_id = grocery.grocery_id;");
                 while(res.next()){
                     Object[] obj = new Object[4];
                     obj[0] = res.getString("name");

@@ -41,17 +41,20 @@ public class UpdateHandler {
                 updateCustomer();
                 break;
             case 3:
-                updateOrders();
+                // Some function
                 break;
             case 4:
-                updateDrivingRoute();
+                updateOrders();
                 break;
             case 5:
+                updateDrivingRoute();
+                break;
+            case 6:
                 // Some function
                 break;
             default:
                 // Something wrong??
-                System.err.println("Unknown tab selected whith index " + currTab);
+                System.err.println("Unknown tab selected which index " + currTab);
         }
     }
 

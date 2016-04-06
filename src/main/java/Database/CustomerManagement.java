@@ -17,8 +17,9 @@ public class CustomerManagement extends Management{
     }
 
     public static enum CustStatus{
-        INACTIVE(0),
-        ACTIVE(1);
+        INACTIVE(-1),
+        PERSON(0),
+        COMPANY(1);
 
         private int value;
 
@@ -36,7 +37,7 @@ public class CustomerManagement extends Management{
             ArrayList<Object[]> out = new ArrayList<Object[]>();
             ResultSet res = null;
             try{
-                res = getScentence().executeQuery("SELECT * FROM customer WHERE status = "+CustStatus.ACTIVE.getValue()+";"); //Status 1 for aktiv og 0 for inaktiv
+                res = getScentence().executeQuery("SELECT * FROM customer WHERE status >= 0;"); //Status 1 for aktiv og 0 for inaktiv
                 while(res.next()) {
                     Object[] obj = new Object[4];
                     obj[0] = res.getString("name");
@@ -67,7 +68,7 @@ public class CustomerManagement extends Management{
             try {
                 res = getScentence().executeQuery("SELECT * FROM customer WHERE name LIKE '%" + searchTerm + "%' OR email LIKE '%" +
                         searchTerm + "%' OR phone LIKE '%" + searchTerm +
-                        "%' OR adress LIKE '%" + searchTerm + "%' AND status = "+CustStatus.ACTIVE.getValue()+" ORDER BY name;");
+                        "%' OR adress LIKE '%" + searchTerm + "%' AND status >= 0 ORDER BY name;");
 
                 while (res.next()){
                     Object[] obj = new Object[4];
@@ -101,7 +102,7 @@ public class CustomerManagement extends Management{
                     res = getScentence().executeQuery("SELECT status FROM customer WHERE email = '" + email + "';");
 
                     if(res.next()) {
-                        if (res.getInt("status") == CustStatus.ACTIVE.getValue()) {
+                        if (res.getInt("status") < 0) {
                             numb = getScentence().executeUpdate("UPDATE customer SET status = " + status + " WHERE email = '" + email + "';");
                             if (numb == 0) {
                                 getScentence().executeQuery("COMMIT;");
@@ -111,7 +112,7 @@ public class CustomerManagement extends Management{
                                 getScentence().executeQuery("COMMIT;");
                                 return false;
                             }
-                        }
+                        }//TODO: DETTE MÅ DU FINNE UT AV 06.04.2016
                     }
                 }else {
                     numb = getScentence().executeUpdate("INSERT INTO customer VALUES(DEFAULT, '" + name + "', '" + email + "', '" + phone +
@@ -134,7 +135,7 @@ public class CustomerManagement extends Management{
     }
     public boolean addCustomerCompany(String name, String email, String phone, String streetAdress, String postCode, String city){
         String adress = adressFormatter(city, postCode, streetAdress);
-        if(addCustomer(name, email, phone, adress, 2)) return true;
+        if(addCustomer(name, email, phone, adress, CustStatus.COMPANY.getValue())) return true;
         else return false;
 
 
@@ -144,7 +145,7 @@ public class CustomerManagement extends Management{
 
         String adress = adressFormatter(city, postCode, streetAdress);
         String name = nameFormatter(firstname, lastname);
-        if(addCustomer(name, email, phone, adress, CustStatus.ACTIVE.getValue())) return true;
+        if(addCustomer(name, email, phone, adress, CustStatus.PERSON.getValue())) return true;
         else return false;
 
     }
