@@ -57,66 +57,60 @@ public class AddIngredient extends JFrame {
 
         updateIngredients();
 
-        addButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                try {
-                    String nameText = ingName.getText();
-                    int quantityText = Integer.parseInt(quantity.getText());
-                    String unitText = unit.getText();
-                    int priceText = Integer.parseInt(price.getText());
+        addButton.addActionListener(e -> {
+            try {
+                String nameText = ingName.getText();
+                int quantityText = Integer.parseInt(quantity.getText());
+                String unitText = unit.getText();
+                int priceText = Integer.parseInt(price.getText());
 
-                    Object[] ingInfo = new Object[4];
-                    ingInfo[0] = nameText;
-                    ingInfo[1] = quantityText;
-                    ingInfo[2] = unitText;
-                    ingInfo[3] = priceText;
+                Object[] ingInfo = new Object[4];
+                ingInfo[0] = nameText;
+                ingInfo[1] = quantityText;
+                ingInfo[2] = unitText;
+                ingInfo[3] = priceText;
 
-                    if(nameText != null && unitText != null && quantityText >= 0 && priceText >= 0 && !existsInTable(toAddTable, nameText)) {
-                        toAddModel.addRow(ingInfo);
-                        ingName.setText(null);
-                        quantity.setText(null);
-                        unit.setText(null);
-                        price.setText(null);
-                    } else {
-                        wrongInputNumber(quantity);
-                        wrongInputNumber(price);
-                        JOptionPane.showMessageDialog(null, "Error!\n1. All fields must be filled. \n2. Units and price must be positive numbers.\n3. Two ingredients with the same name can\n not be added.\n(Edit the quantity instead!)");
-                    }
-                } catch(Exception e1) {}
-            }
-        });
-
-        addIngredientsButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                boolean ok = false;
-                // ArrayList<Object[]> ingToBeAdded = new ArrayList<Object[]>();
-                for(int i = 0; i < toAddTable.getRowCount(); i++) {
-                    Object[] obj = new Object[4];
-                    obj[0] = toAddTable.getValueAt(i, 0);
-                    obj[1] = toAddTable.getValueAt(i, 1);
-                    obj[2] = toAddTable.getValueAt(i, 2);
-                    obj[3] = toAddTable.getValueAt(i, 3);
-
-                    if(toAddTable.getRowCount() > 0 && foodManagement.addIngredient((String)obj[0], (Integer)obj[1], (String)obj[2], (Integer)obj[3])) {
-                        JOptionPane.showMessageDialog(null, "Ingredients added to database.");
-                        ok = true;
-                    }
-                }
-                if (!ok) {
-                    JOptionPane.showMessageDialog(null, "Error!\n1. All fields must be filled. \n2. Units and price must be positive numbers.\n3. Two ingredients with the same name can\n not be added.\n(Edit the quantity instead!)");
+                if(nameText != null && unitText != null && quantityText > 0 && priceText > 0 && !existsInTable(toAddTable, nameText)) {
+                    toAddModel.addRow(ingInfo);
+                    ingName.setText(null);
+                    quantity.setText(null);
+                    unit.setText(null);
+                    price.setText(null);
                 } else {
-                    updateIngredients();
-                    setVisible(false);
-                    dispose();
+                    wrongInputNumber(quantity);
+                    wrongInputNumber(price);
+                    JOptionPane.showMessageDialog(null, "Error!\n1. All fields must be filled. \n2. Units and price must be positive numbers.\n3. Two ingredients with the same name can\n not be added.\n(Edit the quantity instead!)");
                 }
-            }
+            } catch(Exception e1) {}
         });
 
-        cancelButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+        addIngredientsButton.addActionListener(e -> {
+            boolean ok = false;
+            // ArrayList<Object[]> ingToBeAdded = new ArrayList<Object[]>();
+            for(int i = 0; i < toAddTable.getRowCount(); i++) {
+                Object[] obj = new Object[4];
+                obj[0] = toAddTable.getValueAt(i, 0);
+                obj[1] = toAddTable.getValueAt(i, 1);
+                obj[2] = toAddTable.getValueAt(i, 2);
+                obj[3] = toAddTable.getValueAt(i, 3);
+
+                if(toAddTable.getRowCount() > 0 && foodManagement.addIngredient((String)obj[0], (Integer)obj[1], (String)obj[2], (Integer)obj[3])) {
+                    JOptionPane.showMessageDialog(null, "Success!");
+                    ok = true;
+                }
+            }
+            if (!ok) {
+                JOptionPane.showMessageDialog(null, "Error!\n1. All fields must be filled. \n2. Units and price must be positive numbers.\n3. Two ingredients with the same name can\n not be added.\n(Edit the quantity instead!)");
+            } else {
+                updateIngredients();
                 setVisible(false);
                 dispose();
             }
+        });
+
+        cancelButton.addActionListener(e -> {
+            AddIngredient.this.setVisible(false);
+            AddIngredient.this.dispose();
         });
 
         setVisible(true);

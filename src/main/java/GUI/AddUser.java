@@ -15,7 +15,7 @@ public class AddUser extends JFrame {
     private JTextField firstName;
     private JTextField lastName;
     private JTextField email;
-    private JComboBox userType;
+    private JComboBox<String> userType;
     private JTextField userName;
     private JTextField password;
     private JPanel mainPane;
@@ -38,34 +38,30 @@ public class AddUser extends JFrame {
         userType.addItem("Driver");
         userType.addItem("Chef");
 
-        addUserButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                String fName = firstName.getText();
-                String lName = lastName.getText();
-                String mail = email.getText();
-                String phoneNr = phone.getText();
-                int type = userType.getSelectedIndex();
-                String uName = userName.getText();
-                String pass = password.getText();
+        addUserButton.addActionListener(e -> {
+            String fName = firstName.getText();
+            String lName = lastName.getText();
+            String mail = email.getText();
+            String phoneNr = phone.getText();
+            int type1 = userType.getSelectedIndex();
+            String uName = userName.getText();
+            String pass = password.getText();
 
 
-                userManagement = new UserManagement();
-                // TODO - legg inn sjekk for om registrering var vellykket
-                userManagement.registerUser(fName, lName, uName, pass, mail, phoneNr, type); // Legg til bruker i database
+            userManagement = new UserManagement();
+            // TODO - legg inn sjekk for om registrering var vellykket
+            userManagement.registerUser(fName, lName, uName, pass, mail, phoneNr, type1); // Legg til bruker i database
 
-                Users.updateUsers();
+            Users.updateUsers();
 
-                setVisible(false);
-                dispose();
+            setVisible(false);
+            dispose();
 
-            }
         });
 
-        cancelButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                setVisible(false);
-                dispose();
-            }
+        cancelButton.addActionListener(e -> {
+            setVisible(false);
+            dispose();
         });
 
         setVisible(true);

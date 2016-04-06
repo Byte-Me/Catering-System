@@ -44,17 +44,15 @@ public class Statistics {
             });
 
         } catch(Exception e) {
-            System.err.println(e);
+            e.printStackTrace();
         }
 
 
-        getStatisticsButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                String fDate = fromDate.getText();
-                String tDate = toDate.getText();
+        getStatisticsButton.addActionListener(e -> {
+            String fDate = fromDate.getText();
+            String tDate = toDate.getText();
 
-                System.out.println("From: " + fDate + " To: " + tDate);
-            }
+            System.out.println("From: " + fDate + " To: " + tDate);
         });
 
 

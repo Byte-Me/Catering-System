@@ -3,11 +3,17 @@ package GUI;
 import Database.FoodManagement;
 import Database.UserManagement;
 import GUI.WindowPanels.*;
+import Updates.UpdateHandler;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import static Updates.UpdateHandler.startAutoUpdate;
+import static Updates.UpdateHandler.updateTab;
 
 /**
  * Created by olekristianaune on 07.03.2016.
@@ -47,16 +53,17 @@ public class MainWindow extends JFrame {
     private JButton helpButton;
     private JButton fileButton;
     private JButton settingsButton;
+    private JButton editUserButton;
+    private JButton editCustomerButton;
+    private JButton editIngredientButton;
 
 
     public MainWindow(UserManagement.UserType userType) {
         setContentPane(mainPanel); // Set the main content panel
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Exit application when window is closed.
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE); // Exit application when window is closed.
 
         Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/Images/icon32.png"));
         setIconImage(icon);
-
-        tabbedPane1.setIconAt(0, new ImageIcon(icon)); // Dummy Icon for tab
 
         // Setup the different panels - keep referance for possible future need.
         // Will get disposed and garbage collected when MainWindow gets closed (When application is closed)
@@ -98,12 +105,11 @@ public class MainWindow extends JFrame {
                 dispose();
         }
 
-        helpButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                new HelpWindow(mainPanel.getParent());
-            }
-        });
+        updateTab(tabbedPane1.getSelectedIndex()); // TODO: Check if this is needed, initiate fist tab
+        startAutoUpdate(tabbedPane1.getSelectedIndex()); // Start autoUpdate of tabs - TODO: Check interval on timer
+        tabbedPane1.addChangeListener(e -> updateTab(tabbedPane1.getSelectedIndex()));
+
+        helpButton.addActionListener(e -> new HelpWindow(mainPanel.getParent()));
 
         pack(); // Pack the window
         setSize(1000, 600); // Set window to desired size

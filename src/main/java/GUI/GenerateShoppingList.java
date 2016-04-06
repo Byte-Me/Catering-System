@@ -20,9 +20,8 @@ public class GenerateShoppingList extends JFrame {
     private JTable shoppingTable;
     private JButton okButton;
 
-    private static DefaultTableModel shoppingListModel;
-
     private FoodManagement foodManagement;
+    private DefaultTableModel shoppingListModel = new DefaultTableModel();
 
     public GenerateShoppingList(Container parent) {
         setContentPane(mainPane);
@@ -33,18 +32,14 @@ public class GenerateShoppingList extends JFrame {
 
         String[] shoppingListHeader = {"Ingredient", "Quantity", "Unit", "Price"};
 
-        shoppingListModel = new DefaultTableModel();
-
         shoppingListModel.setColumnIdentifiers(shoppingListHeader);
 
         shoppingTable.setModel(shoppingListModel);
         updateShoppingList();
 
-        okButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                setVisible(false);
-                dispose();
-            }
+        okButton.addActionListener(e -> {
+            setVisible(false);
+            dispose();
         });
 
         setVisible(true);

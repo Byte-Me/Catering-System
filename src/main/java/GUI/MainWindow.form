@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="GUI.MainWindow">
   <grid id="27dc6" binding="mainPanel" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
-    <margin top="0" left="0" bottom="0" right="0"/>
+    <margin top="5" left="5" bottom="5" right="5"/>
     <constraints>
       <xy x="20" y="20" width="920" height="400"/>
     </constraints>
@@ -96,7 +96,7 @@
             <properties/>
             <border type="none"/>
             <children>
-              <grid id="501ea" layout-manager="GridLayoutManager" row-count="1" column-count="5" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+              <grid id="501ea" layout-manager="GridLayoutManager" row-count="1" column-count="6" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="0" left="0" bottom="0" right="0"/>
                 <constraints>
                   <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
@@ -104,14 +104,6 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <component id="6d4a9" class="javax.swing.JButton" binding="addUserButton">
-                    <constraints>
-                      <grid row="0" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                    <properties>
-                      <text value="New User"/>
-                    </properties>
-                  </component>
                   <hspacer id="db318">
                     <constraints>
                       <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
@@ -125,14 +117,6 @@
                     </constraints>
                     <properties/>
                   </component>
-                  <component id="bcd92" class="javax.swing.JButton" binding="deleteUsersButton" default-binding="true">
-                    <constraints>
-                      <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                    <properties>
-                      <text value="Delete Users"/>
-                    </properties>
-                  </component>
                   <component id="f36dc" class="javax.swing.JLabel">
                     <constraints>
                       <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
@@ -140,6 +124,30 @@
                     <properties>
                       <labelFor value="60bbd"/>
                       <text value="Search Users: "/>
+                    </properties>
+                  </component>
+                  <component id="bcd92" class="javax.swing.JButton" binding="deleteUsersButton" default-binding="true">
+                    <constraints>
+                      <grid row="0" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Delete Users"/>
+                    </properties>
+                  </component>
+                  <component id="6d4a9" class="javax.swing.JButton" binding="addUserButton">
+                    <constraints>
+                      <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="New User"/>
+                    </properties>
+                  </component>
+                  <component id="3348d" class="javax.swing.JButton" binding="editUserButton" default-binding="true">
+                    <constraints>
+                      <grid row="0" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Edit User"/>
                     </properties>
                   </component>
                 </children>
@@ -167,7 +175,7 @@
             <properties/>
             <border type="none"/>
             <children>
-              <grid id="58b99" layout-manager="GridLayoutManager" row-count="1" column-count="5" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+              <grid id="58b99" layout-manager="GridLayoutManager" row-count="1" column-count="6" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="0" left="0" bottom="0" right="0"/>
                 <constraints>
                   <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
@@ -175,14 +183,6 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <component id="d9868" class="javax.swing.JButton" binding="addCustomerButton">
-                    <constraints>
-                      <grid row="0" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                    <properties>
-                      <text value="New Customer"/>
-                    </properties>
-                  </component>
                   <hspacer id="4184">
                     <constraints>
                       <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="1" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
@@ -198,7 +198,7 @@
                   </component>
                   <component id="8e2d" class="javax.swing.JButton" binding="deleteCustomersButton" default-binding="true">
                     <constraints>
-                      <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                      <grid row="0" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
                       <text value="Delete Customers"/>
@@ -211,6 +211,22 @@
                     <properties>
                       <labelFor value="3fc02"/>
                       <text value="Search Customers: "/>
+                    </properties>
+                  </component>
+                  <component id="d9868" class="javax.swing.JButton" binding="addCustomerButton">
+                    <constraints>
+                      <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="New Customer"/>
+                    </properties>
+                  </component>
+                  <component id="e98af" class="javax.swing.JButton" binding="editCustomerButton" default-binding="true">
+                    <constraints>
+                      <grid row="0" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Edit Customer"/>
                     </properties>
                   </component>
                 </children>
@@ -229,6 +245,15 @@
                 </children>
               </scrollpane>
             </children>
+          </grid>
+          <grid id="f30da" layout-manager="GridLayoutManager" row-count="1" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+            <margin top="0" left="0" bottom="0" right="0"/>
+            <constraints>
+              <tabbedpane title="Subscriptions"/>
+            </constraints>
+            <properties/>
+            <border type="none"/>
+            <children/>
           </grid>
           <grid id="78fb2" layout-manager="GridLayoutManager" row-count="2" column-count="1" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="0" left="0" bottom="0" right="0"/>
@@ -259,14 +284,6 @@
                     </constraints>
                     <properties/>
                   </component>
-                  <component id="d4392" class="javax.swing.JButton" binding="addOrderButton" default-binding="true">
-                    <constraints>
-                      <grid row="0" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                    <properties>
-                      <text value="Add Order"/>
-                    </properties>
-                  </component>
                   <component id="f32c2" class="javax.swing.JLabel">
                     <constraints>
                       <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
@@ -276,20 +293,28 @@
                       <text value="Search Order: "/>
                     </properties>
                   </component>
+                  <component id="36e31" class="javax.swing.JButton" binding="deleteOrderButton" default-binding="true">
+                    <constraints>
+                      <grid row="0" column="5" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="Delete Order"/>
+                    </properties>
+                  </component>
+                  <component id="d4392" class="javax.swing.JButton" binding="addOrderButton" default-binding="true">
+                    <constraints>
+                      <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                    </constraints>
+                    <properties>
+                      <text value="New Order"/>
+                    </properties>
+                  </component>
                   <component id="a3dea" class="javax.swing.JButton" binding="editOrderButton" default-binding="true">
                     <constraints>
                       <grid row="0" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                     </constraints>
                     <properties>
-                      <text value="Edit Order"/>
-                    </properties>
-                  </component>
-                  <component id="36e31" class="javax.swing.JButton" binding="deleteOrderButton" default-binding="true">
-                    <constraints>
-                      <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
-                    </constraints>
-                    <properties>
-                      <text value="Delete Order"/>
+                      <text value="Show/Edit Order"/>
                     </properties>
                   </component>
                 </children>
@@ -324,7 +349,9 @@
             <children>
               <scrollpane id="a70d2">
                 <constraints>
-                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                  <grid row="1" column="0" row-span="1" col-span="1" vsize-policy="7" hsize-policy="7" anchor="0" fill="3" indent="0" use-parent-layout="false">
+                    <preferred-size width="500" height="-1"/>
+                  </grid>
                 </constraints>
                 <properties/>
                 <border type="none"/>
@@ -372,7 +399,7 @@
               </grid>
             </children>
           </grid>
-          <grid id="e4e1f" binding="chef" layout-manager="GridLayoutManager" row-count="2" column-count="4" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
+          <grid id="e4e1f" binding="chef" layout-manager="GridLayoutManager" row-count="2" column-count="5" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
             <margin top="0" left="0" bottom="0" right="0"/>
             <constraints>
               <tabbedpane title="Chef"/>
@@ -383,7 +410,7 @@
               <grid id="64ecb" layout-manager="GridLayoutManager" row-count="1" column-count="2" same-size-horizontally="false" same-size-vertically="false" hgap="-1" vgap="-1">
                 <margin top="0" left="0" bottom="0" right="0"/>
                 <constraints>
-                  <grid row="1" column="0" row-span="1" col-span="4" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
+                  <grid row="1" column="0" row-span="1" col-span="5" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties/>
                 <border type="none"/>
@@ -431,7 +458,7 @@
               </grid>
               <component id="18504" class="javax.swing.JButton" binding="generateShoppingListButton" default-binding="true">
                 <constraints>
-                  <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                  <grid row="0" column="4" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
                   <text value="Generate Shopping List"/>
@@ -455,7 +482,15 @@
                   <grid row="0" column="2" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
                 </constraints>
                 <properties>
-                  <text value="Add Ingredient"/>
+                  <text value="New Ingredient"/>
+                </properties>
+              </component>
+              <component id="6c0f9" class="javax.swing.JButton" binding="editIngredientButton" default-binding="true">
+                <constraints>
+                  <grid row="0" column="3" row-span="1" col-span="1" vsize-policy="0" hsize-policy="3" anchor="0" fill="1" indent="0" use-parent-layout="false"/>
+                </constraints>
+                <properties>
+                  <text value="Edit Ingredient"/>
                 </properties>
               </component>
             </children>

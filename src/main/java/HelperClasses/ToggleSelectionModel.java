@@ -1,7 +1,6 @@
 package HelperClasses;
 
 import javax.swing.*;
-import javax.swing.event.ListSelectionListener;
 
 /**
  * Created by olekristianaune on 01.04.2016.
@@ -22,7 +21,7 @@ public class ToggleSelectionModel extends DefaultListSelectionModel {
 
     @Override
     public void setValueIsAdjusting(boolean isAdjusting) {
-        if (isAdjusting == false) {
+        if (!isAdjusting) {
             gestureStarted = false;
         }
     }

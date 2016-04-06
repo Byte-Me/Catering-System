@@ -41,65 +41,56 @@ public class AddCustomer extends JFrame{
         setLocationRelativeTo(parent);
 
         // Close on cancel
-        final ActionListener closeWindow = new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                setVisible(false);
-                dispose();
-            }
+        final ActionListener closeWindow = e -> {
+            setVisible(false);
+            dispose();
         };
 
         cancelButton.addActionListener(closeWindow);
         cCancelButton.addActionListener(closeWindow);
 
         // Add Private Customer
-        addCustomerButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String fName = firstName.getText();
-                String lName = lastName.getText();
-                String mail = email.getText();
-                String phoneNr = phone.getText();
-                String adr = address.getText();
-                String pc = postalCode.getText();
-                String pcCity = city.getText();
+        addCustomerButton.addActionListener(e -> {
+            String fName = firstName.getText();
+            String lName = lastName.getText();
+            String mail = email.getText();
+            String phoneNr = phone.getText();
+            String adr = address.getText();
+            String pc = postalCode.getText();
+            String pcCity = city.getText();
 
-                boolean addedCustomer = customerManagement.addCustomerPerson(fName, lName, mail, phoneNr, adr, pc, pcCity);
+            boolean addedCustomer = customerManagement.addCustomerPerson(fName, lName, mail, phoneNr, adr, pc, pcCity);
 
-                if (addedCustomer) {
-                    // Update customer list
-                    Customers.updateCustomer();
+            if (addedCustomer) {
+                // Update customer list
+                Customers.updateCustomer();
 
-                    // Close window
-                    setVisible(false);
-                    dispose();
-                } else {
-                    showMessageDialog(null, "Could not create user, please try again.");
-                }
+                // Close window
+                setVisible(false);
+                dispose();
+            } else {
+                showMessageDialog(null, "Could not create user, please try again.");
             }
         });
 
         // Add Corporate Customer
-        cAddCustomerButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String name = cName.getText();
-                String adr = cAddress.getText();
-                String pc = cPostalCode.getText();
-                String pcCity = cCity.getText();
+        cAddCustomerButton.addActionListener(e -> {
+            String name1 = cName.getText();
+            String adr = cAddress.getText();
+            String pc = cPostalCode.getText();
+            String pcCity = cCity.getText();
 
-                boolean addedCustomer = customerManagement.addCustomerCompany(name, "", "", adr, pc, pcCity);
+            boolean addedCustomer = customerManagement.addCustomerCompany(name1, "", "", adr, pc, pcCity);
 
-                if (addedCustomer) {
-                    // Update customer list
-                    Customers.updateCustomer();
+            if (addedCustomer) {
+                // Update customer list
+                Customers.updateCustomer();
 
-                    // Close window
-                    setVisible(false);
-                    dispose();
-                } else {
-                    showMessageDialog(null, "Could not create user, please try again.");
-                }
+                // Close window
+                setVisible(false);
+                dispose();
+            } else {
+                showMessageDialog(null, "Could not create user, please try again.");
             }
         });
 
