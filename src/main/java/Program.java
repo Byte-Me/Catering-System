@@ -12,10 +12,10 @@ public class Program {
         try {
             // Set system to Mac to get mac look and feel. Does this create issues?
 
-            System.setProperty("os.name", "Mac OS X");
-            System.setProperty("os.version", "10.11.3");
+            //System.setProperty("os.name", "Mac OS X");
+            //System.setProperty("os.version", "10.11.3");
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); // Does this load Mac look and feel on Windows?
-            //UIManager.setLookAndFeel("com.seaglasslookandfeel.SeaGlassLookAndFeel");
+            UIManager.setLookAndFeel("com.seaglasslookandfeel.SeaGlassLookAndFeel");
 
         } catch (Exception e) {
             e.printStackTrace();

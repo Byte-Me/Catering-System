@@ -47,6 +47,9 @@ public class MainWindow extends JFrame {
     private JButton helpButton;
     private JButton fileButton;
     private JButton settingsButton;
+    private JButton editUserButton;
+    private JButton editCustomerButton;
+    private JButton editIngredientButton;
 
 
     public MainWindow(UserManagement.UserType userType) {

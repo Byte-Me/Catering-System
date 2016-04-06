@@ -42,7 +42,7 @@ public class Chef {
             }
         });
 
-        String[] prepareHeader = {"Quantity", "Recipe", "Notes", "Ready for delivery"}; // Header titles
+        String[] prepareHeader = {"Quantity", "Recipe", "Time", "Notes", "Ready for delivery"}; // Header titles
         String[] ingredientHeader = {"Ingredient", "Quantity", "Unit"}; // Header titles
 
         prepareModel = new DefaultTableModel() {

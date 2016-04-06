@@ -52,7 +52,7 @@ public class AddOrder extends JFrame {
         });
 
         /* Create Order Table */
-        String[] headers = {"Portions", "Recipe"};
+        String[] headers = {"Recipe", "Portions"};
 
         final DefaultTableModel addOrderModel = new DefaultTableModel() {
             @Override

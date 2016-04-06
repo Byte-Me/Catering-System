@@ -22,7 +22,7 @@ public class Orders {
 
     public Orders(final JPanel mainPanel, JTable ordersTable, final JTextField searchOrders, JButton addOrderButton, JButton editOrderButton, JButton deleteOrderButton) {
 
-        String[] headers = {"Id", "Name", "Phone", "Address", "Date", "Status"};
+        String[] headers = {"ID", "Name", "Phone", "Address", "Date", "Status"};
 
         orderModel = new DefaultTableModel() {
             @Override
