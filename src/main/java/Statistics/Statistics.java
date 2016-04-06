@@ -13,7 +13,7 @@ public abstract class Statistics {
     private SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
     private Calendar cal = new GregorianCalendar();
     protected static int MONTHLIMIT = 200;
-    protected static int WEEKLIMIT = 60;
+    protected static int WEEKLIMIT = 20;
 
     protected int checkDaysBetween(Date to, Date from){
         long diff = from.getTime() - to.getTime();

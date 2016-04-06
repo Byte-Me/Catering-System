@@ -71,7 +71,7 @@ public class AddIngredient extends JFrame {
                     ingInfo[2] = unitText;
                     ingInfo[3] = priceText;
 
-                    if(nameText != null && unitText != null && quantityText > 0 && priceText > 0 && !existsInTable(toAddTable, nameText)) {
+                    if(nameText != null && unitText != null && quantityText >= 0 && priceText >= 0 && !existsInTable(toAddTable, nameText)) {
                         toAddModel.addRow(ingInfo);
                         ingName.setText(null);
                         quantity.setText(null);
@@ -98,7 +98,7 @@ public class AddIngredient extends JFrame {
                     obj[3] = toAddTable.getValueAt(i, 3);
 
                     if(toAddTable.getRowCount() > 0 && foodManagement.addIngredient((String)obj[0], (Integer)obj[1], (String)obj[2], (Integer)obj[3])) {
-                        JOptionPane.showMessageDialog(null, "Success!");
+                        JOptionPane.showMessageDialog(null, "Ingredients added to database.");
                         ok = true;
                     }
                 }
