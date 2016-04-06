@@ -4,15 +4,14 @@ Databaseprosjekt - mer info om funskjonalitet kommer.
 
 Loginscreen is finished.
 
-*   Check if default buttons are nescessery.
-*   Every window needs to be handled, cant go back to parent window without closing child.
+- [ ] Check if default buttons are nescessery.
+- [ ] Every window needs to be handled, cant go back to parent window without closing child.
 
-Statistics:
-
-*   Dropdown calendar for dates.
-*   Orders as main graph, fills upper half.
-*   Dynamic orders are fixed.
-*   Statistics as numbers in left lower corner:
+## Statistics:
+- [ ] Dropdown calendar for dates.
+- [ ] Orders as main graph, fills upper half.
+- [ ] Dynamic orders are fixed.
+- [ ] Statistics as numbers in left lower corner:
     1.  Amount of orders.
     2.  Amount of cancelled orders.
     2.  Amount of new subscriptions.
@@ -21,67 +20,58 @@ Statistics:
     5.  Income
     6.  Outcome
     7.  Net-profit.
-*   Statistics in right corner:
+- [ ] Statistics in right corner:
     1.  Amount of orders grouped by day of week.
 
-Users:
+## Users:
+- [ ] Remove editing in cell, add edit button which opens a window similar to add user. This window also upens on double click.
+- [ ] Check out a different search-method.
+- [ ] Ability to delete several users by marking them with ctrl.
+- [ ] Clicking the edit button while having several users marked will open a message box saying this wont work.
+- [ ] Right click user to choose wether to edit, delete or add new user(LOW PRIORITY).
 
-*   Remove editing in cell, add edit button which opens a window similar to add user. This window also upens on double click.
-*   Check out a different search-method.
-*   Ability to delete several users by marking them with ctrl.
-*   Clicking the edit button while having several users marked will open a message box saying this wont work.
-*   Right click user to choose wether to edit, delete or add new user(LOW PRIORITY).
+## Customers:
+- [ ] Remove editing in cell, add edit button which opens a window similar to add user. This window also upens on double click.
+- [ ] Find users set to inactive. Let admin restore data through file dropdown.
+- [ ] Check out a different search-method.
+- [ ] Add single select to Customers.
+- [ ] Right click user to choose wether to edit, delete or add new user(LOW PRIORITY).
 
-Customers:
+## Orders:
+- [ ] Change status integer to enum.
+- [ ] Remove default button in add order.
+- [ ] Double click will do the same as left arrow in edit order.
+- [ ] Double click will make it able to edit portions in edit order.
+- [ ] Double click in order list will open edit/show window.
+- [ ] Add clock table to orders after date table.
+- [ ] Change length of tables corresponding to tekst length.
+- [ ] Check out a different search-method.
+- [ ] Search recipes in edit order.
+- [ ] Increase comment size and decrease recipelist size in edit order.
 
-*   Remove editing in cell, add edit button which opens a window similar to add user. This window also upens on double click.
-*   Find users set to inactive. Let admin restore data through file dropdown.
-*   Check out a different search-method.
-*   Add single select to Customers.
-*   Right click user to choose wether to edit, delete or add new user(LOW PRIORITY).
+## Driver:
+- [ ] Make google window-size dynamic. (CANT FIND SOLUTION)
+- [x] Change list from jList to jTable. (FIXED)
+- [ ] Add tables to JTable: order_id, Name, phone, address. (GUI: FIXED, BACKEND: TODO)
 
-Orders:
-
-*   Change status integer to enum.
-*   Remove default button in add order.
-*   Double click will do the same as left arrow in edit order.
-*   Double click will make it able to edit portions in edit order.
-*   Double click in order list will open edit/show window.
-*   Add clock table to orders after date table.
-*   Change length of tables corresponding to tekst length.
-*   Check out a different search-method.
-*   Search recipes in edit order.
-*   Increase comment size and decrease recipelist size in edit order.
-
-Driver:
-
-*   Make google window-size dynamic. (CANT FIND SOLUTION)
-*   Change list from jList to jTable. (FIXED)
-*   Add tables to JTable: order_id, Name, phone, address. (GUI: FIXED, BACKEND: TODO)
-
-Chef:
-
-*   Create button where chef can set recipe as in progress. Then update button to ready for delivery.
+## Chef:
+- [ ] Create button where chef can set recipe as in progress. Then update button to ready for delivery.
     Recipe will be removed is ready for delivery is pressed. A message box with ok as default will be out failsafe.
-*   Time recipe needs to be done should be showed in To Prepare.
-*   Add both current day and tomorrow in two different lists in to prepare.
-*   Add price to upper JLabel in add ingredients.
-*   Make everything in chef uneditable through cells.
-*   Change edit recipes to edit/show. Doubleclick will go straight to edit.
-*   Add edit button with double click functions for ingredients.
-*   Make ingredients smaller and to prepare larger.
-*   Fix shoppinglist! //evda
-*   Add possibility to store info about shopping, usage and so on (LOW PRIORITY).
+- [ ] Time recipe needs to be done should be showed in To Prepare.
+- [ ] Add both current day and tomorrow in two different lists in to prepare.
+- [ ] Add price to upper JLabel in add ingredients.
+- [ ] Make everything in chef uneditable through cells.
+- [ ] Change edit recipes to edit/show. Doubleclick will go straight to edit.
+- [ ] Add edit button with double click functions for ingredients.
+- [ ] Make ingredients smaller and to prepare larger.
+- [ ] Fix shoppinglist! //evda
+- [ ] Add possibility to store info about shopping, usage and so on (LOW PRIORITY).
 
-Subscriptions:
+## Subscriptions:
+- [ ] Fix subscriptions equal to customers and orders.
 
-*   Fix subscriptions equal to customers and orders.
-
-
-DatabaseManagement:
-
-*   Create delete user method.
-
-*   Database:
+## DatabaseManagement:
+- [ ] Create delete user method.
+- [ ] Database:
     1.  Add recipe price.
     2.  Add order time.
