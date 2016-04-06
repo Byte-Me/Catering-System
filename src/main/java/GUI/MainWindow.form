@@ -356,7 +356,7 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <component id="94e31" class="javax.swing.JList" binding="drivingList">
+                  <component id="6011a" class="javax.swing.JTable" binding="driverTable">
                     <constraints/>
                     <properties/>
                   </component>

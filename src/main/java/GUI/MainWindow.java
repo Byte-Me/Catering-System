@@ -33,7 +33,6 @@ public class MainWindow extends JFrame {
     private JButton getStatisticsButton;
     private JButton addCustomerButton;
     private JTable customerTable;
-    private JList drivingList;
     private JPanel mapPanel;
     private JTable prepareTable;
     private JTable ingredientTable;
@@ -56,6 +55,7 @@ public class MainWindow extends JFrame {
     private JButton editUserButton;
     private JButton editCustomerButton;
     private JButton editIngredientButton;
+    private JTable driverTable;
 
 
     public MainWindow(UserManagement.UserType userType) {
@@ -71,7 +71,7 @@ public class MainWindow extends JFrame {
         Users usersPanel = new Users(mainPanel, addUserButton, userTable, searchUsers, deleteUsersButton);
         Customers customersPanel = new Customers(mainPanel, addCustomerButton, customerTable, searchCustomers, deleteCustomersButton);
         Orders ordersPanel = new Orders(mainPanel, ordersTable, searchOrders, addOrderButton, editOrderButton, deleteOrderButton);
-        Driver driverPanel = new Driver(drivingList, mapPanel, generateDrivingRouteButton);
+        Driver driverPanel = new Driver(driverTable, mapPanel, generateDrivingRouteButton);
         Chef chefPanel = new Chef(mainPanel, prepareTable, ingredientTable, generateShoppingListButton, recipesButton, addIngredientButton);
 
         // Remove panes the user does not have access to
