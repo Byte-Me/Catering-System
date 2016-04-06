@@ -22,12 +22,15 @@ public class Users {
 
     static UserManagement userManagement = new UserManagement();
     static DefaultTableModel userModel;
+    private static JTable localUserTable;
 
     // Create Users Pane
     public Users(final JPanel mainPanel, JButton addUserButton, final JTable userTable, final JTextField searchUsers, JButton deleteUsersButton) {
 
         final int usernameColumnNr = 4;
         final int userTypeColumnNr = 5;
+
+        localUserTable = userTable;
 
         String[] header = {"First Name", "Last Name", "Email", "Phone", "Username", "User Type"}; // Header titles
 
@@ -141,20 +144,14 @@ public class Users {
         // Get users from database
         ArrayList<Object[]> users = userManagement.userInfo();
 
-        // Empties entries of Users table
-        if (userModel.getRowCount() > 0) {
-            for (int i = userModel.getRowCount() - 1; i > -1; i--) {
-                userModel.removeRow(i);
-            }
-        }
-
-        // Add users from arraylist to table
-        for (Object[] user : users) {
-            userModel.addRow(user);
-        }
+        updateUsers(users);
     }
 
     public static void updateUsers(ArrayList<Object[]> users) {
+
+        if (localUserTable.isEditing()) {
+            localUserTable.getCellEditor().stopCellEditing();
+        }
 
         // Empties entries of Users table
         if (userModel.getRowCount() > 0) {

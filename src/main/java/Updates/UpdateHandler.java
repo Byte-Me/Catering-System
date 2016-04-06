@@ -55,10 +55,11 @@ public class UpdateHandler {
         }
     }
 
+    // FIXME: AutoUpdate can cause problems if trying to edit a cell when update happens - either no updates directly in table or handle selected cell before autoUpdating
     public static void startAutoUpdate(int tabIndex) {
         if(!autoUpdateStarted) {
             currTab = tabIndex;
-            timer = new Timer(30000, e -> {
+            timer = new Timer(300000, e -> {
                 System.out.println("AutoUpdated tab " + currTab);
                 updateTab();
                 restartTimer();

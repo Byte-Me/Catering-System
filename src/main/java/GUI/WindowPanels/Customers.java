@@ -21,6 +21,7 @@ public class Customers {
 
     static CustomerManagement customerManagement = new CustomerManagement();
     static DefaultTableModel customerModel;
+    private static JTable localCustomerTable;
 
     public Customers(final JPanel mainPanel, JButton addCustomerButton, final JTable customerTable, final JTextField searchCustomers, JButton deleteCustomerButton) {
 
@@ -29,6 +30,8 @@ public class Customers {
                 new AddCustomer(mainPanel.getParent());
             }
         });
+
+        localCustomerTable = customerTable;
 
         String[] header = {"Name", "Email", "Phone", "Address"}; // Header titles
 
@@ -114,20 +117,15 @@ public class Customers {
         // Get users from database
         ArrayList<Object[]> customers = customerManagement.getCustomers();
 
-        // Empties entries of Users table
-        if (customerModel.getRowCount() > 0) {
-            for (int i = customerModel.getRowCount() - 1; i > -1; i--) {
-                customerModel.removeRow(i);
-            }
-        }
+        updateCustomer(customers);
 
-        // Add users from arraylist to table
-        for (Object[] customer : customers) {
-            customerModel.addRow(customer);
-        }
     }
 
     public static void updateCustomer(ArrayList<Object[]> customers) {
+
+        if (localCustomerTable.isEditing()) {
+            localCustomerTable.getCellEditor().stopCellEditing();
+        }
 
         // Empties entries of Users table
         if (customerModel.getRowCount() > 0) {

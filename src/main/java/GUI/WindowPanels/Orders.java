@@ -73,17 +73,8 @@ public class Orders {
         // Get users from database
         ArrayList<Object[]> users = orderManagement.getOrders();
 
-        // Empties entries of Users table
-        if (orderModel.getRowCount() > 0) {
-            for (int i = orderModel.getRowCount() - 1; i > -1; i--) {
-                orderModel.removeRow(i);
-            }
-        }
+        updateOrders(users);
 
-        // Add users from arraylist to table
-        for (Object[] user : users) {
-            orderModel.addRow(user);
-        }
     }
 
     public static void updateOrders(ArrayList<Object[]> users) {
