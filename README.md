@@ -9,7 +9,7 @@ Loginscreen is finished.
 
 Statistics:
 
-- [x] *   Dropdown calendar for dates.
+    - [x]   Dropdown calendar for dates.
 *   Orders as main graph, fills upper half.
 *   Dynamic orders are fixed.
 *   Statistics as numbers in left lower corner:
