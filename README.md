@@ -2,12 +2,14 @@
 
 Databaseprosjekt - mer info om funskjonalitet kommer.
 
-Loginscreen is finished.
+## TODO:
+__Loginscreen is finished.__
 
+### General:
 - [ ] Check if default buttons are nescessery.
 - [ ] Every window needs to be handled, cant go back to parent window without closing child.
 
-## Statistics:
+### Statistics:
 - [ ] Dropdown calendar for dates.
 - [ ] Orders as main graph, fills upper half.
 - [ ] Dynamic orders are fixed.
@@ -23,21 +25,21 @@ Loginscreen is finished.
 - [ ] Statistics in right corner:
     1.  Amount of orders grouped by day of week.
 
-## Users:
+### Users:
 - [ ] Remove editing in cell, add edit button which opens a window similar to add user. This window also upens on double click.
 - [ ] Check out a different search-method.
 - [ ] Ability to delete several users by marking them with ctrl.
 - [ ] Clicking the edit button while having several users marked will open a message box saying this wont work.
 - [ ] Right click user to choose wether to edit, delete or add new user(LOW PRIORITY).
 
-## Customers:
+### Customers:
 - [ ] Remove editing in cell, add edit button which opens a window similar to add user. This window also upens on double click.
 - [ ] Find users set to inactive. Let admin restore data through file dropdown.
 - [ ] Check out a different search-method.
 - [ ] Add single select to Customers.
 - [ ] Right click user to choose wether to edit, delete or add new user(LOW PRIORITY).
 
-## Orders:
+### Orders:
 - [ ] Change status integer to enum.
 - [ ] Remove default button in add order.
 - [ ] Double click will do the same as left arrow in edit order.
@@ -49,12 +51,12 @@ Loginscreen is finished.
 - [ ] Search recipes in edit order.
 - [ ] Increase comment size and decrease recipelist size in edit order.
 
-## Driver:
+### Driver:
 - [ ] Make google window-size dynamic. (CANT FIND SOLUTION)
 - [x] Change list from jList to jTable. (FIXED)
 - [ ] Add tables to JTable: order_id, Name, phone, address. (GUI: FIXED, BACKEND: TODO)
 
-## Chef:
+### Chef:
 - [ ] Create button where chef can set recipe as in progress. Then update button to ready for delivery.
     Recipe will be removed is ready for delivery is pressed. A message box with ok as default will be out failsafe.
 - [ ] Time recipe needs to be done should be showed in To Prepare.
@@ -67,10 +69,10 @@ Loginscreen is finished.
 - [ ] Fix shoppinglist! //evda
 - [ ] Add possibility to store info about shopping, usage and so on (LOW PRIORITY).
 
-## Subscriptions:
+### Subscriptions:
 - [ ] Fix subscriptions equal to customers and orders.
 
-## DatabaseManagement:
+### DatabaseManagement:
 - [ ] Create delete user method.
 - [ ] Database:
     1.  Add recipe price.
