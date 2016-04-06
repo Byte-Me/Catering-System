@@ -124,7 +124,7 @@ public class OrderManagement extends Management {
         return out;
 
     }
-    public boolean createOrder(String customerMail, String date, ArrayList<Object[]> recipes, String note){
+    public boolean createOrder(String customerMail, String date, ArrayList<Object[]> recipes, String note, String time){
         int id = -1;
         try {
             if(setUp()) {
@@ -137,7 +137,7 @@ public class OrderManagement extends Management {
                 //Deretter kalles create order for subscription med de nye verdiene.
             }
 
-            if(!createOrderSub(id, date, recipes, note, -1)) return false; //-1 er verdien som blir satt dersom det ikke finnes en
+            if(!createOrderSub(id, date, recipes, note, time, -1)) return false; //-1 er verdien som blir satt dersom det ikke finnes en
                                                                             //subscription.
         } catch (Exception e) {
             System.err.println("Issue with registering order.");
@@ -148,18 +148,18 @@ public class OrderManagement extends Management {
         }
         return true;
     }
-    public boolean createOrderSub(int id, String date, ArrayList<Object[]> recipes, String note, int subId){ // recipes[0] = name, recipes[1] = portions.
+    public boolean createOrderSub(int id, String date, ArrayList<Object[]> recipes, String note, String time, int subId){ // recipes[0] = name, recipes[1] = portions.
         if(setUp()){
             try{
                 ResultSet res;
                 ArrayList<Integer> recipeIDs = new ArrayList<Integer>();
                 getScentence().executeQuery("START TRANSACTION;");
                 int rowChanged = getScentence().executeUpdate("INSERT INTO `order` VALUES(DEFAULT, "+OrdStatus.ACTIVE.getValue()
-                        +", '" + date + "', " + id + ", '"+ note + "', "+ subId + ");"); //Legger inn orderen med status aktiv.
+                        +", '" + date + "', " + id + ", '"+ note + "', '"+ time + "', "+ subId + ");"); //Legger inn orderen med status aktiv.
 
                 int orderID = 0;
                 if(rowChanged > 0) {
-                    res = getScentence().executeQuery("SELECT LAST_INSERT_ID() as id;"); // Henter den autoinkrementerte verdien.
+                    res = getScentence().executeQuery("SELECT LAST_INSERT_ID<zasx() as id;"); // Henter den autoinkrementerte verdien.
                     if(res.next()) {
                         orderID = res.getInt("id");
                     }

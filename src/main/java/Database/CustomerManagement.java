@@ -98,23 +98,23 @@ public class CustomerManagement extends Management{
             try{
                 getScentence().executeQuery("START TRANSACTION;");
                 res = getScentence().executeQuery("SELECT name FROM customer WHERE email = '" + email + "';");
-                if(res.next()) {
+                if(res.next()) {//finds if customer already in database
                     res = getScentence().executeQuery("SELECT status FROM customer WHERE email = '" + email + "';");
 
                     if(res.next()) {
+                        //find status of customer, if status = -1, make customer active, else return false.
+                        //Customer already exists.
                         if (res.getInt("status") < 0) {
                             numb = getScentence().executeUpdate("UPDATE customer SET status = " + status + " WHERE email = '" + email + "';");
-                            if (numb == 0) {
-                                getScentence().executeQuery("COMMIT;");
-                                return false;
-                            }
-                            else {
-                                getScentence().executeQuery("COMMIT;");
-                                return false;
-                            }
-                        }//TODO: DETTE MÅ DU FINNE UT AV 06.04.2016
+                            getScentence().executeQuery("COMMIT;");
+                            return true;
+                        }
+                        else{
+                            getScentence().executeQuery("COMMIT;");
+                            return false;
+                        }
                     }
-                }else {
+                }else { //If not in database, create customer.
                     numb = getScentence().executeUpdate("INSERT INTO customer VALUES(DEFAULT, '" + name + "', '" + email + "', '" + phone +
                             "', '" + adress + "', DEFAULT);");
                 }
@@ -123,6 +123,7 @@ public class CustomerManagement extends Management{
             }
             catch (Exception e){
                 System.err.println("Issue with adding customer.");
+                return false;
             }
             finally{
                 DbUtils.closeQuietly(getScentence());
@@ -149,23 +150,7 @@ public class CustomerManagement extends Management{
         else return false;
 
     }
-    public boolean deleteCustomer(String email){
-        if(setUp()){
-            int res = 0;
-            try{
-                res = getScentence().executeUpdate("UPDATE customer SET status = "+CustStatus.INACTIVE.getValue()+" WHERE email = '" + email + "';");
-            }
-            catch (Exception e){
-                System.err.println("Issue with deleting customer");
-            }
-            finally {
-                DbUtils.closeQuietly(getScentence());
-                DbUtils.closeQuietly(getConnection());
-            }
-            if(res > 0) return true;
-        }
-        return false;
-    }
+
     public boolean updateCustomerName(String email, String newData) {
         int rowChanged = 0;
         if (setUp()) {
@@ -181,8 +166,6 @@ public class CustomerManagement extends Management{
             } finally {
                 DbUtils.closeQuietly(getScentence());
                 DbUtils.closeQuietly(getConnection());
-
-
             }
         }
         return rowChanged > 0;
@@ -270,6 +253,9 @@ public class CustomerManagement extends Management{
             }
         }
         return rowChanged > 0;
+    }
+    public boolean deleteCustomer(String email){
+        return updateCustomerStatus(email, CustStatus.INACTIVE.getValue());
     }
 
 
