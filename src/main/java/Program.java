@@ -10,22 +10,16 @@ import java.util.ArrayList;
 public class Program {
     public static void main(String[] args) throws Exception {
         try {
-            // Set system to Mac to get mac look and feel. Does this create issues?
+            // Load system Look and Feel
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            if (!System.getProperty("os.name").equals("Mac OS X")) { // Check if OS is Mac OS X
+                UIManager.setLookAndFeel("com.seaglasslookandfeel.SeaGlassLookAndFeel"); // Better look for windows (works on linux?)
+            }
 
-            //System.setProperty("os.name", "Mac OS X");
-            //System.setProperty("os.version", "10.11.3");
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName()); // Does this load Mac look and feel on Windows?
-            UIManager.setLookAndFeel("com.seaglasslookandfeel.SeaGlassLookAndFeel");
-
-        } catch (Exception e) {
+        } catch (Exception e) { // Should not fail, will only fall back to system UI
             e.printStackTrace();
         }
 
-        /*
-        System.out.println(System.getProperty("os.name"));
-        System.out.println(System.getProperty("os.version"));
-        */
-
-        Login loginForm = new Login(); // Open login screen
+        Login loginForm = new Login(); // Open login screen - FIXME: If not used, remove reference to object
     }
 }

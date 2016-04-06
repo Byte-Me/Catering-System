@@ -56,46 +56,33 @@ public class EditRecipe extends JFrame {
 
         updateIngredients();
 
-        moveLeft.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                copyPasteData(inStorageTable.getSelectedRow(), true);
+        moveLeft.addActionListener(e -> copyPasteData(inStorageTable.getSelectedRow(), true));
 
+        moveRight.addActionListener(e -> copyPasteData(inRecipeTable.getSelectedRow(), false));
+
+        addRecipeButton.addActionListener(e -> {
+            foodManagement = new FoodManagement();
+            String recipeName = JOptionPane.showInputDialog(null, "Name of recipe: ");
+            ArrayList<Object[]> ingInfo = new ArrayList<>();
+            for(int i = 0; i < inRecipeTable.getRowCount(); i++) {
+                Object[] obj = new Object[2];
+                obj[0] = inRecipeTable.getValueAt(i, nameColumnNr);
+                obj[1] = inRecipeTable.getValueAt(i, quantityColumnNr);
+                ingInfo.add(obj);
             }
-        });
-
-        moveRight.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                copyPasteData(inRecipeTable.getSelectedRow(), false);
-            }
-        });
-
-        addRecipeButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                foodManagement = new FoodManagement();
-                String recipeName = JOptionPane.showInputDialog(null, "Name of recipe: ");
-                ArrayList<Object[]> ingInfo = new ArrayList<Object[]>();
-                for(int i = 0; i < inRecipeTable.getRowCount(); i++) {
-                    Object[] obj = new Object[2];
-                    obj[0] = inRecipeTable.getValueAt(i, nameColumnNr);
-                    obj[1] = inRecipeTable.getValueAt(i, quantityColumnNr);
-                    ingInfo.add(obj);
-                }
-                if(foodManagement.addRecipe(recipeName, ingInfo) && recipeName != null) {
-                    JOptionPane.showMessageDialog(null, "Success!");
-                    setVisible(false);
-                    dispose();
-                } else {
-                    JOptionPane.showMessageDialog(null, "Error. Try again!");
-                }
-
-            }
-        });
-
-        cancelButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
+            if(foodManagement.addRecipe(recipeName, ingInfo) && recipeName != null) {
+                JOptionPane.showMessageDialog(null, "Success!");
                 setVisible(false);
                 dispose();
+            } else {
+                JOptionPane.showMessageDialog(null, "Error. Try again!");
             }
+
+        });
+
+        cancelButton.addActionListener(e -> {
+            setVisible(false);
+            dispose();
         });
 
         setVisible(true);
@@ -117,7 +104,9 @@ public class EditRecipe extends JFrame {
             } else {
                 inRecipeModel.removeRow(index);
             }
-        } catch (Exception e){}
+        } catch (HeadlessException | NumberFormatException e) {
+            e.printStackTrace();
+        }
     }
 
     private static void updateIngredients() {

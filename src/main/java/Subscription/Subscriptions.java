@@ -24,17 +24,16 @@ public class Subscriptions {
         ArrayList<Object[]> subs = subMan.getSubscriptions();
         ArrayList<Object[]> activeSubs = new ArrayList<Object[]>();
         for (Object[] sub : subs) {
-            if (checkSubscriptionActive((String) sub[2], (String) sub[3])) { //2 = dayfrom, 3 = dayto
+            if (checkSubscriptionActive((String) sub[2], (String) sub[3], new Date())) { //2 = dayfrom, 3 = dayto
                 activeSubs.add(sub);
             }
         }
         return activeSubs;
     }
 
-    public boolean checkSubscriptionActive(String dateFrom, String dateTo) {
+    public boolean checkSubscriptionActive(String dateFrom, String dateTo, Date today) {
         Date from = null;
         Date to = null;
-        Date today = new Date();
         try {
             from = formatter.parse(dateFrom);
             to = formatter.parse(dateTo);
@@ -75,11 +74,12 @@ public class Subscriptions {
     public boolean createSubscription(int custID, String dateFrom, String dateTo, int weeksBetween, ArrayList<Object[][]> recipesWithDay, String note) {
 
         int subID = subMan.createSubscription(custID, dateFrom, dateTo, weeksBetween);
-        if (subID < 0) {
+        if (!(subID > 0)) {
             return false;
         }
         String prevDate = dateFrom;
-        while (!prevDate.equals(dateTo)) {
+        boolean flag = true;
+        while (flag) {
             for (Object[][] obj : recipesWithDay) {
                 ArrayList<Object[]> recipes = new ArrayList<Object[]>();
                 for (int i = 0; i < obj[0].length; i++) {
@@ -89,14 +89,18 @@ public class Subscriptions {
                     recipes.add(tmp);
 
                 }
+
+
                 prevDate = findNextDate((Integer) obj[2][0], prevDate, dateTo, weeksBetween);
-                System.out.println(prevDate);
-                if (prevDate.equals("")) return true;
+                if (prevDate.equals("")){
+
+                    return true;
+                }
 
                 if (!order.createOrderSub(custID, prevDate, recipes, note, subID)) return false;
             }
         }
-        return true;
+        return false;
     }
 
     private String findNextDate(int day, String prevDateS, String dateTo, int frequency) {
@@ -118,13 +122,20 @@ public class Subscriptions {
 
         boolean stillNotEndOfWeek = true;
         while (frequency >= count) {
-            if(formatter.format(cal.getTime()).equals(dateTo)) return "";
+            System.out.println(formatter.format(cal.getTime()));
+            if(formatter.format(cal.getTime()).equals(dateTo)) {
+                //System.out.println(dateTo);
+                return "";
+            }
             cal.add(Calendar.DAY_OF_YEAR, 1);
             if (cal.getFirstDayOfWeek() == cal.get(Calendar.DAY_OF_WEEK)) stillNotEndOfWeek = false;
-
+            System.out.println("Current day: " + cal.get(Calendar.DAY_OF_WEEK) + " Goal day: " + day);
             if (cal.get(Calendar.DAY_OF_WEEK) == day) { //TODO: DAY MÅ VÆRE PÅ SAMME FORM SOM CALENDAR!!!!
                 if (count == frequency - 1 || stillNotEndOfWeek) {
                     return formatter.format(cal.getTime());
+                }
+                else{
+                    count++;
                 }
             }
         }

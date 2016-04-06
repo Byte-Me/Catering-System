@@ -25,10 +25,10 @@ import static javax.swing.JOptionPane.showInputDialog;
 public class AddOrder extends JFrame {
 
     private JPanel mainPanel;
-    private JComboBox customerDropdown;
+    private JComboBox<Object> customerDropdown;
     private JFormattedTextField dateField;
     private JTable orderRecepies;
-    private JList recipesList;
+    private JList<String> recipesList;
     private JButton leftButton;
     private JButton rightButton;
     private JButton cancelButton;
@@ -43,12 +43,9 @@ public class AddOrder extends JFrame {
         setLocationRelativeTo(parent);
 
         /* Cancel button */
-        cancelButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                setVisible(false);
-                dispose();
-            }
+        cancelButton.addActionListener(e -> {
+            setVisible(false);
+            dispose();
         });
 
         /* Create Order Table */
@@ -92,11 +89,11 @@ public class AddOrder extends JFrame {
                 }
             });
         } catch (Exception e) {
-            System.err.println(e);
+            e.printStackTrace();
         }
 
         /* Create Recipe List */
-        final DefaultListModel<String> recipeModel = new DefaultListModel<String>();
+        final DefaultListModel<String> recipeModel = new DefaultListModel<>();
         recipesList.setModel(recipeModel);
         recipesList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
@@ -108,54 +105,43 @@ public class AddOrder extends JFrame {
         }
 
         /* Left and Right buttons for adding and removing recipes from orders */
-        leftButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String selectedRecipe = (String)recipesList.getSelectedValue();
-                int portions = Integer.parseInt(showInputDialog("How many portions of " + selectedRecipe + " do you want to add?")); // FIXME: Add failsafe for parsing integer
-                if (existsInTable(orderRecepies, selectedRecipe) == -1) {
-                    addOrderModel.addRow(new Object[]{portions, selectedRecipe});
-                } else {
-                    int row = existsInTable(orderRecepies, selectedRecipe);
-                    int currentPortions = (Integer)addOrderModel.getValueAt(row, 0);
-                    if (currentPortions + portions >= 1) {
-                        addOrderModel.setValueAt(currentPortions + portions, row, 0);
-                    }
+        leftButton.addActionListener(e -> {
+            String selectedRecipe = recipesList.getSelectedValue();
+            int portions = Integer.parseInt(showInputDialog("How many portions of " + selectedRecipe + " do you want to add?")); // FIXME: Add failsafe for parsing integer
+            if (existsInTable(orderRecepies, selectedRecipe) == -1) {
+                addOrderModel.addRow(new Object[]{portions, selectedRecipe});
+            } else {
+                int row = existsInTable(orderRecepies, selectedRecipe);
+                int currentPortions = (Integer)addOrderModel.getValueAt(row, 0);
+                if (currentPortions + portions >= 1) {
+                    addOrderModel.setValueAt(currentPortions + portions, row, 0);
                 }
             }
         });
 
 
-        rightButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                addOrderModel.removeRow(orderRecepies.getSelectedRow());
+        rightButton.addActionListener(e -> addOrderModel.removeRow(orderRecepies.getSelectedRow()));
+
+        addOrderButton.addActionListener(e -> {
+            Object[] selectedCustomer = customers.get(customerDropdown.getSelectedIndex());
+            String selectedDate = dateField.getText();
+            String comment = commentTextArea.getText();
+
+            ArrayList<Object[]> selectedRecipes = new ArrayList<>();
+            for (int i = 0; i < addOrderModel.getRowCount(); i++) {
+                selectedRecipes.add(new Object[]{addOrderModel.getValueAt(i, 1), addOrderModel.getValueAt(i, 0)});
             }
-        });
 
-        addOrderButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Object[] selectedCustomer = customers.get(customerDropdown.getSelectedIndex());
-                String selectedDate = dateField.getText();
-                String comment = commentTextArea.getText();
+            OrderManagement orderManagement = new OrderManagement();
 
-                ArrayList<Object[]> selectedRecipes = new ArrayList<Object[]>();
-                for (int i = 0; i < addOrderModel.getRowCount(); i++) {
-                    selectedRecipes.add(new Object[]{(String)addOrderModel.getValueAt(i, 1), (Integer)addOrderModel.getValueAt(i, 0)});
-                }
-
-                OrderManagement orderManagement = new OrderManagement();
-
-                boolean isAdded = orderManagement.createOrder((String)selectedCustomer[1], selectedDate, selectedRecipes, comment);
-                if(!isAdded) {
-                    System.err.println("Kunne ikke legge til order");
-                }
-
-                updateOrders();
-                setVisible(false);
-                dispose();
+            boolean isAdded = orderManagement.createOrder((String)selectedCustomer[1], selectedDate, selectedRecipes, comment);
+            if(!isAdded) {
+                System.err.println("Kunne ikke legge til order");
             }
+
+            updateOrders();
+            setVisible(false);
+            dispose();
         });
 
         setVisible(true);
@@ -163,7 +149,7 @@ public class AddOrder extends JFrame {
 
     private int existsInTable(JTable table, String entry) {
         for (int i = 0; i < table.getRowCount(); i++) {
-            if (((String)table.getValueAt(i, 1)).equals(entry)) {
+            if (table.getValueAt(i, 1).equals(entry)) {
                 return i;
             }
         }

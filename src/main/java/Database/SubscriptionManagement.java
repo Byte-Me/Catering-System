@@ -150,6 +150,23 @@ public class SubscriptionManagement extends Management{
         }
         return true;
     }
-
+    public boolean changeRecipes(int subID, int prevRecipeID, int newRecipeID){
+        int rowChanged = 0;
+        if(setUp()){
+            try{
+                rowChanged = getScentence().executeUpdate("UPDATE order_recipe SET recipe_id  = " + newRecipeID+
+                        " WHERE order_id IN(SELECT " + "order_id FROM `order` WHERE sub_id = "+subID+") AND " +
+                        "order_recipe.recipe_id = "+prevRecipeID+";");
+            }catch(Exception e){
+                System.err.println("Issue with changing recipes.");
+                return false;
+            }
+            finally {
+                DbUtils.closeQuietly(getScentence());
+                DbUtils.closeQuietly(getConnection());
+            }
+        }
+        return rowChanged > 0;
+    }
 
 }
