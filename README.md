@@ -4,14 +4,15 @@ Databaseprosjekt - mer info om funskjonalitet kommer.
 
 Loginscreen is finished.
 
-*   Check if default buttons are nescessery.
+*   Check if default buttons are necessary.
 *   Every window needs to be handled, cant go back to parent window without closing child.
+*   Change SQL statements to preperared statements.
 
 Statistics:
-
-    - [x]   Dropdown calendar for dates.
+                    //Utsetter mye så andre kan gjøre det, se på metodene mine, mange er nesten like -evda
+*   Dropdown calendar for dates.
 *   Orders as main graph, fills upper half.
-*   Dynamic orders are fixed.
+*   Dynamic orders are fixed. // ferdig
 *   Statistics as numbers in left lower corner:
     1.  Amount of orders.
     2.  Amount of cancelled orders.
@@ -70,7 +71,8 @@ Chef:
 *   Change edit recipes to edit/show. Doubleclick will go straight to edit.
 *   Add edit button with double click functions for ingredients.
 *   Make ingredients smaller and to prepare larger.
-*   Fix shoppinglist! //evda
+*   Fix shoppinglist! //backend er fikset og listen vises, mangler pynting og knapper for å lagre shoppinglist til lager.
+*   Add ability to change quantity in shoppinglist.
 *   Add possibility to store info about shopping, usage and so on (LOW PRIORITY).
 
 Subscriptions:
@@ -80,8 +82,8 @@ Subscriptions:
 
 DatabaseManagement:
 
-*   Create delete user method.
+*   Create delete user method. //Utsetter så andre kan gjøre det -evda
 
 *   Database:
-    1.  Add recipe price.
-    2.  Add order time.
+    1.  Add recipe price. //ferdig
+    2.  Add order time. //ferdig

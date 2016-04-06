@@ -122,7 +122,7 @@ public class TestJUnitDB{
         ing.add(new Object[]{"Potet", 1});
         ing.add(new Object[]{"Fisk", 2});
 
-        assertTrue(food.addRecipe("Oppskriftarererer", ing));
+        assertTrue(food.addRecipe("Oppskriftarererer", ing, 100));
     }
 
     @Test
@@ -180,8 +180,8 @@ public class TestJUnitDB{
     }
     @Ignore
     public void getIngredientsFromRecipes(){
-        ArrayList<Object[]> obj = food.getRecipeIngredients();
-        assertTrue(!obj.isEmpty());
+       // ArrayList<Object[]> obj = food.getRecipeIngredients();
+      //  assertTrue(!obj.isEmpty());
     }
     @Test
     public void ingredientToStorage(){
@@ -201,7 +201,7 @@ public class TestJUnitDB{
         ArrayList<Object[]> obj = new ArrayList<Object[]>();
         obj.add(new Object[]{"Catfish", 5});
         obj.add(new Object[]{"Potatodog", 2});
-        assertTrue(orde.createOrder("Test@Test", "2016-03-21", obj, "Uten makrell"));
+        assertTrue(orde.createOrder("Test@Test", "2016-03-21", obj, "Uten makrell", "20:00:00"));
     }
     @Test
     //int custID, String dateFrom, String dateTo, int weeksBetween, ArrayList<Object[][]> recipesWithDay, String note
@@ -210,7 +210,7 @@ public class TestJUnitDB{
         obj.add(new Object[][]{{"Catfish", "Potatodog"},{2, 3},{1}});
         obj.add(new Object[][]{{"Catfish"},{3},{3}});
         Subscriptions upt = new Subscriptions();
-        boolean bool = upt.createSubscription(6, "2016-03-20", "2016-05-08", 2, obj, "Bare cat ikke fish");
+        boolean bool = upt.createSubscription(6, "2016-03-20", "2016-05-08", 2, obj, "Bare cat ikke fish", "20:00:00");
         assertTrue(bool);
 
     }

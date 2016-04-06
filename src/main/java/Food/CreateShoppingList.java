@@ -6,17 +6,22 @@ package Food;
 
 import Database.*;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
 public class CreateShoppingList {
+    static NumberFormat formatter = new DecimalFormat("#0");
     public static ArrayList<Object[]> useOrdersToday(){
 
         FoodManagement food = new FoodManagement();
-        ArrayList<Object[]> ingredientsNeeded = food.getRecipeIngredients(); // 0 is name, 1 is amount, 2 is unit and 3 is price.
-        ingredientsNeeded = shortenArrayList(ingredientsNeeded);
-        ArrayList<String> names = new ArrayList<>();
+        ArrayList<Object[]> ingredientsNeeded = food.getIngredientsForShoppinglist(); // 0 is name, 1 is amount, 2 is unit and 3 is price.
+
+        ingredientsNeeded = shortenArrayList(ingredientsNeeded); //Samler ingredienser med samme navn og summerer quantity
+
+        ArrayList<String> names = new ArrayList<>(); //henter ingredienser vha navnene til ingredienser som trengs
 
         names.addAll(ingredientsNeeded.stream().map(ing -> (String) ing[0]).collect(Collectors.toList()));
         ArrayList<Object[]> inStorage = food.getIngredientsInStorage(names); //0 is name, 1 is quantity in storage.
@@ -25,9 +30,8 @@ public class CreateShoppingList {
 
         for(int i = 0; i<ingredientsNeeded.size();i++){
                 if (ingredientsNeeded.get(i)[0].equals(inStorage.get(i)[0])) { //if name == name
-                    System.out.println(ingredientsNeeded.get(i)[1]);
 
-                    if ((Integer) ingredientsNeeded.get(i)[1] > (Integer) inStorage.get(i)[1]) {
+                    if ((Integer) ingredientsNeeded.get(i)[1] > (Integer) inStorage.get(i)[1]) {//hvis det ikke er nok på storage
                         Object[] obj = new Object[4];
                         obj[0] = ingredientsNeeded.get(i)[0]; //name of ingredient
                         int neededQuant = (Integer) ingredientsNeeded.get(i)[1] - (Integer) inStorage.get(i)[1];
@@ -39,12 +43,10 @@ public class CreateShoppingList {
                     }
                 }
         }
-        for(Object[] shoppingItem : out){
-            System.out.println(Arrays.toString(shoppingItem));
-        }
+
         return out;
     }
-    private static ArrayList<Object[]> shortenArrayList(ArrayList<Object[]> in){
+    private static ArrayList<Object[]> shortenArrayList(ArrayList<Object[]> in){//samler navn og summerer quantity
         ArrayList<Object[]> out = new ArrayList<>();
         for(int i=0; i<in.size();i++){
             boolean flag = true;
@@ -69,6 +71,13 @@ public class CreateShoppingList {
         }
 
         return out;
+    }
+    public static String findTotalPrice(ArrayList<Object[]> shoppingList){
+        int sum = 0;
+        for(Object[] list : shoppingList){
+            sum += (Integer)list[3];
+        }
+        return formatter.format(sum);
     }
 
 }

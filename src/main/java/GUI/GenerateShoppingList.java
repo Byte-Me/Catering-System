@@ -20,6 +20,8 @@ public class GenerateShoppingList extends JFrame {
     private JTable shoppingTable;
     private JButton okButton;
 
+    //TODO: må pyntes og gjøres bedre.
+
     private static DefaultTableModel shoppingListModel;
 
     private FoodManagement foodManagement;
@@ -52,9 +54,6 @@ public class GenerateShoppingList extends JFrame {
     private void updateShoppingList() {
         ArrayList<Object[]> shoppingItems = CreateShoppingList.useOrdersToday();
 
-        for(Object[] shoppingItem : shoppingItems){
-            System.out.println(Arrays.toString(shoppingItem));
-        }
         if(shoppingListModel.getRowCount() > 0) {
             for (int i = shoppingListModel.getRowCount() -1; i < -1; i--) {
                 shoppingListModel.removeRow(i);
@@ -64,5 +63,7 @@ public class GenerateShoppingList extends JFrame {
         for (Object[] recipe : shoppingItems) {
             shoppingListModel.addRow(recipe);
         }
+        String sum = CreateShoppingList.findTotalPrice(shoppingItems);
+        shoppingListModel.addRow(new Object[]{"", "", "Total", sum});
     }
 }

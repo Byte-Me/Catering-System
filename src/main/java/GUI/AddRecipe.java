@@ -79,7 +79,7 @@ public class AddRecipe extends JFrame {
                     obj[1] = inRecipeTable.getValueAt(i, quantityColumnNr);
                     ingInfo.add(obj);
                 }
-                if(foodManagement.addRecipe(recipeName, ingInfo) && recipeName != null) {
+                if(foodManagement.addRecipe(recipeName, ingInfo, 100) && recipeName != null) {
                     JOptionPane.showMessageDialog(null, "Success!");
                     setVisible(false);
                     dispose();

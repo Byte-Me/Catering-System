@@ -71,7 +71,8 @@ public class Subscriptions {
     note = information about each order, special needs etc.
      */
 
-    public boolean createSubscription(int custID, String dateFrom, String dateTo, int weeksBetween, ArrayList<Object[][]> recipesWithDay, String note) {
+    public boolean createSubscription(int custID, String dateFrom, String dateTo, int weeksBetween, ArrayList<Object[][]> recipesWithDay,
+                                      String note, String time) {
 
         int subID = subMan.createSubscription(custID, dateFrom, dateTo, weeksBetween);
         if (!(subID > 0)) {
@@ -97,7 +98,7 @@ public class Subscriptions {
                     return true;
                 }
 
-                if (!order.createOrderSub(custID, prevDate, recipes, note, subID)) return false;
+                if (!order.createOrderSub(custID, prevDate, recipes, note, time, subID)) return false;
             }
         }
         return false;
