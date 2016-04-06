@@ -5,6 +5,7 @@ import com.teamdev.jxbrowser.chromium.*;
 import com.teamdev.jxbrowser.chromium.swing.BrowserView;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,25 +14,28 @@ import java.util.logging.Level;
 import static Delivery.CreateDeliveryRoute.UseReadyOrders;
 import static Delivery.CreateDeliveryRoute.UseReadyOrdersLatLng;
 import static Delivery.DeliveryRoute.geoCoder;
-import static GUI.WindowPanels._Map.getMapHTML;
 
 /**
  * Created by olekristianaune on 13.03.2016.
  */
 public class Driver {
     private static final String cateringAdress = "Trondheim, Norway";
-    static DefaultListModel<String> driverModel;
+    static DefaultTableModel driverModel;
 
     Browser browser;
     private static Number[] mapCenter;
 
-    public Driver(final JList<String> drivingList, JPanel mapPanel, JButton generateDrivingRouteButton) {
+    public Driver(final JTable driverTable, JPanel mapPanel, JButton generateDrivingRouteButton) {
 
-        driverModel = new DefaultListModel<>(); // Model of the list
-        drivingList.setModel(driverModel); // Add model to jList
-        drivingList.setSelectionModel(new ToggleSelectionModel()); // Makes the list toggleable - used for zooming in and out on map
+        String[] header = {"ID", "Name", "Phone", "Address"}; // Header titles
 
-        drivingList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION); // Only one row can be selected at a time - makes sure map code works
+        driverModel = new DefaultTableModel(); // Model of the table
+        driverModel.setColumnIdentifiers(header);
+
+        driverTable.setModel(driverModel); // Add model to jTable
+        driverTable.setSelectionModel(new ToggleSelectionModel()); // Makes the list toggleable - used for zooming in and out on map
+
+        driverTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION); // Only one row can be selected at a time - makes sure map code works
 
         try {
             createMap(mapPanel, generateDrivingRouteButton);
@@ -40,13 +44,16 @@ public class Driver {
         }
 
         // Zoom map in to selected address on map - TODO: Make it possible to deselect and then zoom out to full map.
-        drivingList.addListSelectionListener(e -> {
+        driverTable.getSelectionModel().addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting()) { // Ensures value changed only fires once on change completed
-                if (drivingList.isSelectionEmpty()) {
+                if (driverTable.getSelectionModel().isSelectionEmpty()) {
+                    // FIXME
+                    /*
                     browser.executeJavaScript("map.panTo(new google.maps.LatLng(" + mapCenter[0] + "," + mapCenter[1] + "));" +
                             "map.setZoom(" + mapCenter[2] + ");");
+                    */
                 } else {
-                    double[] geoLocation = geoCoder(drivingList.getSelectedValue(), 0); // Get the value (ie. address) of the selected row and geocode it
+                    double[] geoLocation = geoCoder((String) driverTable.getValueAt(driverTable.getSelectedRow(), 3), 0); // Get the value (ie. address) of the selected row and geocode it
 
                     browser.executeJavaScript("map.panTo(new google.maps.LatLng(" + geoLocation[0] + "," + geoLocation[1] + "));" +
                             "map.setZoom(14);");
@@ -60,19 +67,22 @@ public class Driver {
     public static void updateDrivingRoute() {
         ArrayList<String> orders = UseReadyOrders(cateringAdress);
 
-        // Empties entries of Driver List
-        if (driverModel.size() > 0) {
-            for (int i = driverModel.size() - 1; i > -1; i--) {
-                driverModel.remove(i);
+        // Empties entries of Users table
+        if (driverModel.getRowCount() > 0) {
+            for (int i = driverModel.getRowCount() - 1; i > -1; i--) {
+                driverModel.removeRow(i);
             }
         }
 
-        // Add elements to Driver List
-        if (orders != null) {
-            for (String order : orders) {
-                driverModel.addElement(order);
-            }
+        // Add users from arraylist to table
+        for (String order : orders) {
+            driverModel.addRow(new Object[] {"", "", "", order}); // FIXME: Change this when new backend method available
         }
+        /*
+        for (Object[] order : orders) {
+            driverModel.addRow(order);
+        }
+        */
     }
 
     public void createMap(JPanel mapPanel, JButton generateDrivingRouteButton) throws IOException {
@@ -91,7 +101,7 @@ public class Driver {
         mapPanel.add(browserView, BorderLayout.CENTER);
 
         // Load website
-        browser.loadHTML(getMapHTML());
+        browser.loadURL(getClass().getResource("/Map/map.html").toExternalForm());
 
         // Generate driving route
         generateDrivingRouteButton.addActionListener(e -> {
