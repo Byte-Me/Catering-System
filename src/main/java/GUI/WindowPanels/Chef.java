@@ -7,6 +7,8 @@ import GUI.Recipes;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 /**
@@ -42,7 +44,7 @@ public class Chef {
         prepareTable.setModel(prepareModel); // Add model to table
         ingredientTable.setModel(ingredientModel); // Add model to table
 
-        updateIngredients();
+        updateIngredients(); // FIXME: Remove this and make the tab autoUpdateable
 
     }
 

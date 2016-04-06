@@ -3,6 +3,7 @@ package GUI;
 import Database.FoodManagement;
 import Database.UserManagement;
 import GUI.WindowPanels.*;
+import Updates.UpdateHandler;
 
 import javax.swing.*;
 import javax.swing.event.ChangeEvent;
@@ -10,6 +11,9 @@ import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
+import static Updates.UpdateHandler.startAutoUpdate;
+import static Updates.UpdateHandler.updateTab;
 
 /**
  * Created by olekristianaune on 07.03.2016.
@@ -100,9 +104,9 @@ public class MainWindow extends JFrame {
                 dispose();
         }
 
-        tabbedPane1.addChangeListener(e -> {
-            tabbedPane1.getSelectedIndex();
-        });
+        updateTab(tabbedPane1.getSelectedIndex()); // TODO: Check if this is needed, initiate fist tab
+        startAutoUpdate(tabbedPane1.getSelectedIndex()); // Start autoUpdate of tabs - TODO: Check interval on timer
+        tabbedPane1.addChangeListener(e -> updateTab(tabbedPane1.getSelectedIndex()));
 
         helpButton.addActionListener(e -> new HelpWindow(mainPanel.getParent()));
 

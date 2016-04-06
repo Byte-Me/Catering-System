@@ -106,8 +106,6 @@ public class Customers {
             }
         });
 
-        updateCustomer();
-
     }
 
     // Update Users function

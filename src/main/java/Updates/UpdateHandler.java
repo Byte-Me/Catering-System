@@ -2,6 +2,11 @@ package Updates;
 
 import javax.swing.*;
 
+import static GUI.WindowPanels.Customers.updateCustomer;
+import static GUI.WindowPanels.Driver.updateDrivingRoute;
+import static GUI.WindowPanels.Orders.updateOrders;
+import static GUI.WindowPanels.Users.updateUsers;
+
 /**
  * Created by olekristianaune on 05.04.2016.
  */
@@ -27,35 +32,34 @@ public class UpdateHandler {
     private static void updateTab() {
         switch (currTab) {
             case 0:
-                // Some function
+                // Statistics - NO AUTO REFRESH HERE!
                 break;
             case 1:
-                // Some function
+                updateUsers();
                 break;
             case 2:
-                // Some function
+                updateCustomer();
                 break;
             case 3:
-                // Some function
+                updateOrders();
                 break;
             case 4:
-                // Some function
+                updateDrivingRoute();
                 break;
             case 5:
                 // Some function
                 break;
-            case 6:
-                // Some function
-                break;
             default:
                 // Something wrong??
+                System.err.println("Unknown tab selected whith index " + currTab);
         }
     }
 
     public static void startAutoUpdate(int tabIndex) {
         if(!autoUpdateStarted) {
             currTab = tabIndex;
-            timer = new Timer(60, e -> {
+            timer = new Timer(30000, e -> {
+                System.out.println("AutoUpdated tab " + currTab);
                 updateTab();
                 restartTimer();
             });

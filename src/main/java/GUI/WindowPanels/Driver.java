@@ -33,9 +33,6 @@ public class Driver {
 
         drivingList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION); // Only one row can be selected at a time - makes sure map code works
 
-        // TODO: Change from JList to JTable, show order details instead of addresses (meybe remove addresses from the table completely?)
-        updateDrivingRoute(); // Calls function to create the list of addresses in the JList
-
         try {
             createMap(mapPanel, generateDrivingRouteButton);
         } catch (Exception e) {

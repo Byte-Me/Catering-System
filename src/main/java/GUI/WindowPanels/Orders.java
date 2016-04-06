@@ -65,8 +65,6 @@ public class Orders {
             }
         });
 
-        updateOrders();
-
     }
 
     // Update Users function

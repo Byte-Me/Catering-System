@@ -133,8 +133,6 @@ public class Users {
             }
         });
 
-        updateUsers();
-
     }
 
     // Update Users function
