@@ -55,9 +55,9 @@ Orders:
 
 Driver:
 
-*   Make google window-size dynamic.
-*   Change list from jList to jTable.
-*   Add tables to JTable: order_id, Name, phone, adress.
+*   Make google window-size dynamic. (CANT FIND SOLUTION)
+*   Change list from jList to jTable. (FIXED)
+*   Add tables to JTable: order_id, Name, phone, address. (GUI: FIXED, BACKEND: TODO)
 
 Chef:
 

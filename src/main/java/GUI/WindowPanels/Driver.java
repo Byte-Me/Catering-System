@@ -14,7 +14,6 @@ import java.util.logging.Level;
 import static Delivery.CreateDeliveryRoute.UseReadyOrders;
 import static Delivery.CreateDeliveryRoute.UseReadyOrdersLatLng;
 import static Delivery.DeliveryRoute.geoCoder;
-import static GUI.WindowPanels._Map.getMapHTML;
 
 /**
  * Created by olekristianaune on 13.03.2016.
@@ -102,7 +101,7 @@ public class Driver {
         mapPanel.add(browserView, BorderLayout.CENTER);
 
         // Load website
-        browser.loadHTML(getMapHTML());
+        browser.loadURL(getClass().getResource("/Map/map.html").toExternalForm());
 
         // Generate driving route
         generateDrivingRouteButton.addActionListener(e -> {
