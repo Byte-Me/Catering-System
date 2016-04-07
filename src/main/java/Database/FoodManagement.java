@@ -4,6 +4,7 @@ import org.apache.commons.dbutils.DbUtils;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 
 /**
@@ -30,7 +31,8 @@ public class FoodManagement extends Management{
                 }
             }
             /*
-            2 = delivered
+            3 = delivered
+            2 = in the making
             1 = ready for delivery
             0 = active
             -1 = inactive
@@ -95,7 +97,7 @@ public class FoodManagement extends Management{
         else return null;
     }
 
-    public boolean addRecipe(String name, ArrayList<Object[]> ingInfo){
+    public boolean addRecipe(String name, ArrayList<Object[]> ingInfo, int price){
         int numb;
         if(setUp()){
             try{
@@ -106,8 +108,10 @@ public class FoodManagement extends Management{
 
                 getScentence().executeUpdate("START TRANSACTION;");
                 ArrayList<Integer> IDs = getGroceryID(names);
-                numb = getScentence().executeUpdate("INSERT INTO recipe VALUES(DEFAULT, '" + name + "');");
-                if(numb == 0)return false;
+                PreparedStatement prep = getConnection().prepareStatement("INSERT INTO recipe VALUES(DEFAULT, ?,?);");
+                prep.setString(1, name);
+                prep.setInt(2, price);
+                if(prep.executeUpdate() == 0)return false;
                 String recipeID = getRecipeID(name);
 
 
@@ -151,13 +155,13 @@ public class FoodManagement extends Management{
         return res > 0;
     }
 
-    public ArrayList<Object[]> getRecipeIngredients(){
+    public ArrayList<Object[]> getRecipeIngredients(String recipeName){
         ArrayList<Object[]> out = new ArrayList<Object[]>();
         if(setUp()){
             ResultSet res;
             try{
-                res = getScentence().executeQuery("SELECT grocery.price, recipe_grocery.amount, grocery.name, grocery.unit FROM grocery, recipe_grocery, order_recipe, `order` WHERE `order`.date =\n" +
-                        "CURRENT_DATE AND order_recipe.order_id = `order`.order_id AND order_recipe.recipe_id = recipe_grocery.recipe_id AND\n" +
+                res = getScentence().executeQuery("SELECT grocery.price, recipe_grocery.amount, grocery.name, grocery.unit FROM grocery, recipe_grocery, order_recipe, `order` WHERE `order`.date = " +
+                        "CURRENT_DATE + 1 AND order_recipe.order_id = `order`.order_id AND order_recipe.recipe_id = recipe_grocery.recipe_id AND " +
                         "recipe_grocery.grocery_id = recipe_grocery.grocery_id AND recipe_grocery.grocery_id = grocery.grocery_id;");
                 while(res.next()){
                     Object[] obj = new Object[4];
@@ -243,7 +247,8 @@ public class FoodManagement extends Management{
                 ResultSet res = getScentence().executeQuery("SELECT quantity FROM grocery WHERE name = '" + name + "';");
                 if(res.next()) {
                     int newQuant = res.getInt("quantity") - subtractedValue;
-                    numb = getScentence().executeUpdate("UPDATE grocery SET quantity = '" + newQuant + "' WHERE name = '" + name + "';");
+                    numb = getScentence().executeUpdate("UPDATE grocery SET quantity = '" + newQuant +
+                            "' WHERE name = '" + name + "';");
 
 
                 }
@@ -293,22 +298,50 @@ public class FoodManagement extends Management{
         return out;
     }
 
-    public ArrayList<Object[]> getIngredientsForOrder(int order_id, String recipeName){
+    public ArrayList<Object[]> getIngredientsForShoppinglist(){
+        ArrayList<Object[]> out = new ArrayList<Object[]>();
+        ArrayList<Object[]> IDs = getRecipeIDs();
+       // ArrayList<Object[]>
+        if(setUp()) {
+            try {
+
+                for (Object[] id : IDs) {
+                    ArrayList<Object[]> tmp = new ArrayList<>();
+                    ResultSet res = getScentence().executeQuery("SELECT grocery.name, grocery.unit, recipe_grocery.amount, grocery.price " +
+                            "FROM grocery, recipe_grocery WHERE recipe_grocery.recipe_id = " + id[0] + " AND recipe_grocery.grocery_id = grocery.grocery_id;");
+                    while (res.next()) {
+                        Object[] obj = new Object[4];
+                        obj[0] = res.getString("name");
+                        obj[1] = res.getInt("amount") * (Integer)id[1];
+                        obj[2] = res.getString("unit");
+                        obj[3] = res.getInt("price");
+                        tmp.add(obj);
+                    }
+                    out.addAll(tmp);
+                }
+                }catch(Exception e){
+                    System.err.println("Issue with getting ingredients from order_id.");
+                }finally{
+                    DbUtils.closeQuietly(getScentence());
+                    DbUtils.closeQuietly(getConnection());
+
+                }
+
+        }
+        return out;
+    }
+    public ArrayList<Object[]> getRecipeIDs(){
         ArrayList<Object[]> out = new ArrayList<Object[]>();
         if(setUp()) {
             try {
-                //System.out.println("SELECT grocery.name, grocery.unit, recipe_grocery.amount, order_recipe.portions " +
-                  //      "FROM grocery, order_recipe, recipe_grocery WHERE order_recipe.order_id = " + order_id + " AND order_recipe.recipe_id = " +
-                    //    "recipe_grocery.recipe_id AND recipe_grocery.grocery_id = grocery.grocery_id AND recipe.name = '" + recipeName + "';");
-                ResultSet res = getScentence().executeQuery("SELECT grocery.name, grocery.unit, recipe_grocery.amount, order_recipe.portions " +
-                        "FROM grocery, order_recipe, recipe_grocery WHERE order_recipe.order_id = " + order_id + " AND order_recipe.recipe_id = " +
-                        "recipe_grocery.recipe_id AND recipe_grocery.grocery_id = grocery.grocery_id AND recipe.name = '" + recipeName + "';");
+                ResultSet res = getScentence().executeQuery("SELECT order_recipe.recipe_id, order_recipe.portions " +
+                        "FROM order_recipe, `order` WHERE order_recipe.order_id = `order`.order_id AND `order`." +
+                        "`date` = CURRENT_DATE +1;");
 
                 while (res.next()) {
-                    Object[] obj = new Object[3];
-                    obj[0] = res.getString("name");
-                    obj[1] = res.getInt("portions") * res.getInt("amount");
-                    obj[2] = res.getString("unit");
+                    Object[] obj = new Object[2];
+                    obj[0] = res.getInt("recipe_id");
+                    obj[1] = res.getInt("portions");
                     out.add(obj);
                 }
             } catch (Exception e) {
@@ -321,7 +354,6 @@ public class FoodManagement extends Management{
         }
         return out;
     }
-
     public boolean updateQuantity(String recipeName, String newData) throws Exception {
         int rowChanged = 0;
         if (super.setUp()) {

@@ -2,6 +2,7 @@
 
 Databaseprosjekt - mer info om funskjonalitet kommer.
 
+<<<<<<< HEAD
 ## TODO:
 __Loginscreen is finished.__
 
@@ -10,6 +11,7 @@ __Loginscreen is finished.__
 - [ ] Every window needs to be handled, cant go back to parent window without closing child.
 
 ### Statistics:
+    //Utsetter mye så andre kan gjøre det, se på metodene mine, mange er nesten like -evda
 - [ ] Dropdown calendar for dates.
 - [ ] Orders as main graph, fills upper half.
 - [ ] Dynamic orders are fixed.
@@ -66,14 +68,15 @@ __Loginscreen is finished.__
 - [ ] Change edit recipes to edit/show. Doubleclick will go straight to edit.
 - [ ] Add edit button with double click functions for ingredients.
 - [ ] Make ingredients smaller and to prepare larger.
-- [ ] Fix shoppinglist! //evda
+- [ ] Fix shoppinglist! //backend er fikset og listen vises, mangler pynting og knapper for å lagre shoppinglist til lager.
 - [ ] Add possibility to store info about shopping, usage and so on (LOW PRIORITY).
 
 ### Subscriptions:
 - [ ] Fix subscriptions equal to customers and orders.
 
 ### DatabaseManagement:
-- [ ] Create delete user method.
-- [ ] Database:
+- [ ] Create delete user method. //Utsetter så andre kan gjøre det -evda
+- [x] Database:
     1.  Add recipe price.
     2.  Add order time.
+
