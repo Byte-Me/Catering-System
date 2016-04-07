@@ -1,5 +1,8 @@
 package GUI.WindowPanels;
 
+import Statistics.*;
+import org.jfree.chart.JFreeChart;
+
 import javax.swing.*;
 import javax.swing.text.MaskFormatter;
 import java.awt.event.ActionEvent;
@@ -14,7 +17,12 @@ import java.util.Date;
  */
 public class Statistics {
 
-    public Statistics(final JFormattedTextField fromDate, final JFormattedTextField toDate, JButton getStatisticsButton) {
+    private JPanel orderStatisticsPanel;
+    OrderStatistics os = new OrderStatistics();
+
+    public Statistics(final JFormattedTextField fromDate, final JFormattedTextField toDate, JButton getStatisticsButton, JPanel orderStatisticsPanel) {
+
+        this.orderStatisticsPanel = orderStatisticsPanel;
 
         try {
             final MaskFormatter maskFormatter1 = new MaskFormatter("####-##-##"); // Defining format pattern
@@ -53,6 +61,9 @@ public class Statistics {
             String tDate = toDate.getText();
 
             System.out.println("From: " + fDate + " To: " + tDate);
+            Object[] orderStats = os.createStatsFromOrders(fDate, tDate);
+            System.out.println(orderStats[0].getClass());
+            orderStatisticsPanel.add((JPanel)orderStats[0]);
         });
 
 
