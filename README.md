@@ -13,7 +13,6 @@ __Loginscreen is finished.__
 ### Statistics:
 - [ ] Dropdown calendar for dates.
 - [ ] Orders as main graph, fills upper half. (BACKEND DONE)
-- [ ] Dynamic orders are fixed.
 - [ ] Statistics as numbers in left lower corner:
     1.  Amount of orders.
     2.  Amount of cancelled orders.
@@ -23,7 +22,7 @@ __Loginscreen is finished.__
     5.  Income
     6.  Outcome
     7.  Net-profit.
-- [ ] Statistics in right corner:
+- [x] Statistics in right corner: 
     1.  Amount of orders grouped by day of week.
 
 ### Users:

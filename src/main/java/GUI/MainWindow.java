@@ -56,6 +56,7 @@ public class MainWindow extends JFrame {
     private JButton editCustomerButton;
     private JButton editIngredientButton;
     private JTable driverTable;
+    private JPanel barChartPanel;
 
 
     public MainWindow(UserManagement.UserType userType) {
@@ -67,7 +68,7 @@ public class MainWindow extends JFrame {
 
         // Setup the different panels - keep referance for possible future need.
         // Will get disposed and garbage collected when MainWindow gets closed (When application is closed)
-        Statistics statisticsPanel = new Statistics(fromDate, toDate, getStatisticsButton);
+        Statistics statisticsPanel = new Statistics(fromDate, toDate, getStatisticsButton, barChartPanel);
         Users usersPanel = new Users(mainPanel, addUserButton, userTable, searchUsers, deleteUsersButton);
         Customers customersPanel = new Customers(mainPanel, addCustomerButton, customerTable, searchCustomers, deleteCustomersButton);
         Orders ordersPanel = new Orders(mainPanel, ordersTable, searchOrders, addOrderButton, editOrderButton, deleteOrderButton);

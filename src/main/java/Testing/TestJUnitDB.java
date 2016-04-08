@@ -172,8 +172,10 @@ public class TestJUnitDB{
     @Test
     public void testOrderStatistics(){
         OrderStatistics order = new OrderStatistics();
-        System.out.println(Arrays.toString(order.createStatsFromOrders("2008-11-20", "2016-11-20")));
-        assertNotNull(order.createStatsFromOrders("2016-01-20", "2016-11-20"));
+        System.out.println(Arrays.toString(order.createLineChartFromOrder("2008-11-20", "2016-11-20")));
+        assertNotNull(order.createLineChartFromOrder("2016-01-20", "2016-11-20"));
+        assertNotNull(order.createBarChartFromOrder("2016-01-20", "2016-11-20"));
+
     }
     @Test
     public void testHansMetode(){

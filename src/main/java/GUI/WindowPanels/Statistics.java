@@ -1,7 +1,9 @@
 package GUI.WindowPanels;
-
+import Statistics.OrderStatistics;
+import org.jfree.chart.ChartPanel;
 import javax.swing.*;
 import javax.swing.text.MaskFormatter;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DateFormat;
@@ -13,8 +15,9 @@ import java.util.Date;
  * Created by olekristianaune on 13.03.2016.
  */
 public class Statistics {
+    private OrderStatistics orderStats= new OrderStatistics();
 
-    public Statistics(final JFormattedTextField fromDate, final JFormattedTextField toDate, JButton getStatisticsButton) {
+    public Statistics(final JFormattedTextField fromDate, final JFormattedTextField toDate, JButton getStatisticsButton, JPanel barChartPanel) {
 
         try {
             final MaskFormatter maskFormatter1 = new MaskFormatter("####-##-##"); // Defining format pattern
@@ -51,8 +54,13 @@ public class Statistics {
         getStatisticsButton.addActionListener(e -> {
             String fDate = fromDate.getText();
             String tDate = toDate.getText();
+            barChartPanel.setLayout(new BorderLayout());
+            JPanel barChart = orderStats.createBarChartFromOrder(fDate, tDate);
 
-            System.out.println("From: " + fDate + " To: " + tDate);
+            barChartPanel.add(barChart, BorderLayout.EAST);
+            barChartPanel.revalidate();
+            barChartPanel.repaint(); //FIXME: Ole må fikse dette, skjønner ikke...
+
         });
 
 
