@@ -62,6 +62,9 @@ public class AddRecipe extends JFrame {
         addRecipeButton.addActionListener(e -> {
             foodManagement = new FoodManagement();
             String recipeName = JOptionPane.showInputDialog(null, "Name of recipe: ");
+            String priceIn = JOptionPane.showInputDialog(null, "Salesprice for "+recipeName+": ");
+            int recipePrice = Integer.parseInt(priceIn);
+
             ArrayList<Object[]> ingInfo = new ArrayList<>();
             for(int i = 0; i < inRecipeTable.getRowCount(); i++) {
                 Object[] obj = new Object[2];
@@ -69,7 +72,7 @@ public class AddRecipe extends JFrame {
                 obj[1] = inRecipeTable.getValueAt(i, quantityColumnNr);
                 ingInfo.add(obj);
             }
-            if(foodManagement.addRecipe(recipeName, ingInfo) && recipeName != null) {
+            if(foodManagement.addRecipe(recipeName, ingInfo, recipePrice) && recipeName != null && recipePrice > 0) {
                 JOptionPane.showMessageDialog(null, "Success!");
                 setVisible(false);
                 dispose();

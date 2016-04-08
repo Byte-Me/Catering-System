@@ -159,7 +159,7 @@ public class OrderManagement extends Management {
 
                 int orderID = 0;
                 if(rowChanged > 0) {
-                    res = getScentence().executeQuery("SELECT LAST_INSERT_ID<zasx() as id;"); // Henter den autoinkrementerte verdien.
+                    res = getScentence().executeQuery("SELECT LAST_INSERT_ID() as id;"); // Henter den autoinkrementerte verdien.
                     if(res.next()) {
                         orderID = res.getInt("id");
                     }
@@ -181,7 +181,7 @@ public class OrderManagement extends Management {
                         return false;
                     }
                 }
-
+                System.out.println("Hei");
 
                 for (int i = 0; i < recipeIDs.size(); i++) {
                     rowChanged = getScentence().executeUpdate("INSERT INTO order_recipe VALUES(" + orderID + ", " + recipeIDs.get(i) +

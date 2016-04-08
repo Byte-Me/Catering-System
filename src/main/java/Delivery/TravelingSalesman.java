@@ -201,11 +201,11 @@ public class TravelingSalesman {
         positions.remove(0);
         positions.remove(positions.size() - 1);
         positions.trimToSize();
-        out.add(startPoint);
+    //    out.add(startPoint);
         for (double[] pos : positions) {
-            out.add(fix.get((int) pos[2]));
+            out.add(fix.get((int) pos[2])); //TODO: STARTPOINT, IS IT NEEDED?
         }
-        out.add(startPoint);
+ //       out.add(startPoint);
         return out;
 
     }

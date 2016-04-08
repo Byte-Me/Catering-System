@@ -8,10 +8,11 @@ __Loginscreen is finished.__
 ### General:
 - [ ] Check if default buttons are nescessery.
 - [ ] Every window needs to be handled, cant go back to parent window without closing child.
+- [ ] Sorting by id's needs fixing, 90 is apparently higher than 100
 
 ### Statistics:
 - [ ] Dropdown calendar for dates.
-- [ ] Orders as main graph, fills upper half.
+- [ ] Orders as main graph, fills upper half. (BACKEND DONE)
 - [ ] Dynamic orders are fixed.
 - [ ] Statistics as numbers in left lower corner:
     1.  Amount of orders.
@@ -50,11 +51,12 @@ __Loginscreen is finished.__
 - [ ] Check out a different search-method.
 - [ ] Search recipes in edit order.
 - [ ] Increase comment size and decrease recipelist size in edit order.
+- [ ] Recipes and portions must switch places in addOrder.
 
 ### Driver:
 - [ ] Make google window-size dynamic. (CANT FIND SOLUTION)
 - [x] Change list from jList to jTable. (FIXED)
-- [ ] Add tables to JTable: order_id, Name, phone, address. (GUI: FIXED, BACKEND: TODO)
+- [x] Add tables to JTable: order_id, Name, phone, address.
 
 ### Chef:
 - [ ] Create button where chef can set recipe as in progress. Then update button to ready for delivery.
@@ -66,7 +68,7 @@ __Loginscreen is finished.__
 - [ ] Change edit recipes to edit/show. Doubleclick will go straight to edit.
 - [ ] Add edit button with double click functions for ingredients.
 - [ ] Make ingredients smaller and to prepare larger.
-- [ ] Fix shoppinglist! //evda
+- [ ] Fix shoppinglist! (BACKEND WORKS, FRONTEND NEEDS FIXING)
 - [ ] Add possibility to store info about shopping, usage and so on (LOW PRIORITY).
 
 ### Subscriptions:
@@ -74,6 +76,6 @@ __Loginscreen is finished.__
 
 ### DatabaseManagement:
 - [ ] Create delete user method.
-- [ ] Database:
+- [x] Database:
     1.  Add recipe price.
     2.  Add order time.

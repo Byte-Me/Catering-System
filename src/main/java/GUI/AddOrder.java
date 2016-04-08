@@ -34,6 +34,11 @@ public class AddOrder extends JFrame {
     private JButton cancelButton;
     private JButton addOrderButton;
     private JTextArea commentTextArea;
+    private JFormattedTextField timeField;
+
+    private final String defaultTimeValue = "12:00";
+    private final String seconds = ":00";
+
 
     public AddOrder(Container parent) {
         setContentPane(mainPanel);
@@ -72,7 +77,8 @@ public class AddOrder extends JFrame {
 
         try {
             /* FormattedTextField for date, default value set to tomorrow */
-            final MaskFormatter maskFormatter = new MaskFormatter("####-##-##"); // Defining format pattern
+            final MaskFormatter dateMaskFormatter = new MaskFormatter("####-##-##"); // Defining format pattern
+            final MaskFormatter timeMaskFormatter = new MaskFormatter("##:##"); // Defining format pattern
 
             DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd"); // Setup date format
 
@@ -80,12 +86,19 @@ public class AddOrder extends JFrame {
             cal.add(Calendar.DATE, 1);
             Date tomorrowDate = new Date(cal.getTimeInMillis());
 
-            maskFormatter.setPlaceholder(dateFormat.format(tomorrowDate)); // Placeholder
+            dateMaskFormatter.setPlaceholder(dateFormat.format(tomorrowDate)); // Placeholder
+            timeMaskFormatter.setPlaceholder(defaultTimeValue); // Placeholder
 
             dateField.setFormatterFactory(new JFormattedTextField.AbstractFormatterFactory() { // Add format to field
                 @Override
                 public JFormattedTextField.AbstractFormatter getFormatter(JFormattedTextField tf) {
-                    return maskFormatter;
+                    return dateMaskFormatter;
+                }
+            });
+            timeField.setFormatterFactory(new JFormattedTextField.AbstractFormatterFactory() { // Add format to field
+                @Override
+                public JFormattedTextField.AbstractFormatter getFormatter(JFormattedTextField tf) {
+                    return timeMaskFormatter;
                 }
             });
         } catch (Exception e) {
@@ -107,7 +120,7 @@ public class AddOrder extends JFrame {
         /* Left and Right buttons for adding and removing recipes from orders */
         leftButton.addActionListener(e -> {
             String selectedRecipe = recipesList.getSelectedValue();
-            int portions = Integer.parseInt(showInputDialog("How many portions of " + selectedRecipe + " do you want to add?")); // FIXME: Add failsafe for parsing integer
+            int portions = Integer.parseInt(showInputDialog("How many portions of " + selectedRecipe.toLowerCase() + " do you want to add?")); // FIXME: Add failsafe for parsing integer
             if (existsInTable(orderRecepies, selectedRecipe) == -1) {
                 addOrderModel.addRow(new Object[]{portions, selectedRecipe});
             } else {
@@ -117,7 +130,7 @@ public class AddOrder extends JFrame {
                     addOrderModel.setValueAt(currentPortions + portions, row, 0);
                 }
             }
-        });
+        });     //TODO: portions og recipes må bytte plass, ole eller håkon må fikse...
 
 
         rightButton.addActionListener(e -> addOrderModel.removeRow(orderRecepies.getSelectedRow()));
@@ -125,6 +138,7 @@ public class AddOrder extends JFrame {
         addOrderButton.addActionListener(e -> {
             Object[] selectedCustomer = customers.get(customerDropdown.getSelectedIndex());
             String selectedDate = dateField.getText();
+            String selectedTime = timeField.getText();
             String comment = commentTextArea.getText();
 
             ArrayList<Object[]> selectedRecipes = new ArrayList<>();
@@ -133,8 +147,7 @@ public class AddOrder extends JFrame {
             }
 
             OrderManagement orderManagement = new OrderManagement();
-
-            boolean isAdded = orderManagement.createOrder((String)selectedCustomer[1], selectedDate, selectedRecipes, comment);
+            boolean isAdded = orderManagement.createOrder((String)selectedCustomer[1], selectedDate, selectedRecipes, comment, selectedTime+seconds);
             if(!isAdded) {
                 System.err.println("Kunne ikke legge til order");
             }

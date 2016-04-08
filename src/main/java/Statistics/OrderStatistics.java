@@ -21,7 +21,7 @@ public class OrderStatistics extends Statistics{
 
 
 
-    public Object[] createStatsFromOrders(String startDateS, String endDateS) {
+    public Object[] createStatsFromOrders(String startDateS, String endDateS) { //[0] = JFreeChart, [1] = SumOrders
         StatisticsManagement stat = new StatisticsManagement();
         ArrayList<String> orders = stat.getDates(startDateS, endDateS, "order");
         ArrayList<Double> yValues = new ArrayList<Double>();
@@ -31,7 +31,7 @@ public class OrderStatistics extends Statistics{
         Date endDate = null;
         try {
             startDate = getFormatter().parse(startDateS);
-            startDate = getFormatter().parse(endDateS);
+            endDate = getFormatter().parse(endDateS);
 
         } catch (ParseException e) {
             System.err.println("Issue with parsing date.");
@@ -45,6 +45,7 @@ public class OrderStatistics extends Statistics{
             int timeDiff = checkDaysBetween(startDate, endDate);
 
             if (timeDiff > MONTHLIMIT) {
+                System.out.println("Hei");
                 ArrayList[] values = valuesMonth(orders);
 
                 chart = ChartCreator.createLineChart("Orders", "Months", "Orders per month", (ArrayList<String>)values[0],

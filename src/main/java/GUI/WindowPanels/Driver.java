@@ -65,7 +65,7 @@ public class Driver {
     }
 
     public static void updateDrivingRoute() {
-        ArrayList<String> orders = UseReadyOrders(cateringAdress);
+        ArrayList<Object[]> orders = UseReadyOrders(cateringAdress);
 
         // Empties entries of Users table
         if (driverModel.getRowCount() > 0) {
@@ -75,8 +75,8 @@ public class Driver {
         }
 
         // Add users from arraylist to table
-        for (String order : orders) {
-            driverModel.addRow(new Object[] {"", "", "", order}); // FIXME: Change this when new backend method available
+        for (Object[] order : orders) {
+            driverModel.addRow(order); // FIXME: Change this when new backend method available
         }
         /*
         for (Object[] order : orders) {

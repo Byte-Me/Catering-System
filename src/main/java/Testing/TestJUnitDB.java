@@ -7,6 +7,7 @@ import Subscription.Subscriptions;
 import org.junit.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 
 import static org.junit.Assert.*;
@@ -171,7 +172,8 @@ public class TestJUnitDB{
     @Test
     public void testOrderStatistics(){
         OrderStatistics order = new OrderStatistics();
-        assertNotNull(order.createStatsFromOrders("2008-11-20", "2016-11-20"));
+        System.out.println(Arrays.toString(order.createStatsFromOrders("2008-11-20", "2016-11-20")));
+        assertNotNull(order.createStatsFromOrders("2016-01-20", "2016-11-20"));
     }
     @Test
     public void testHansMetode(){
@@ -204,7 +206,16 @@ public class TestJUnitDB{
         assertTrue(orde.createOrder("Test@Test", "2016-03-21", obj, "Uten makrell", "20:00:00"));
     }
     @Test
+    public void getDeliveryInfo(){
+        ArrayList<String> adresses = new ArrayList<>();
+        adresses.add("Rønningsbakken 12, 7045 Trondheim, Norway");
+        adresses.add("Erling Skakkes Gate 40, 7045 Trondheim, Norway");
+        assertNotNull(deli.getDeliveryInfo(adresses));
+
+    }
+    @Test
     //int custID, String dateFrom, String dateTo, int weeksBetween, ArrayList<Object[][]> recipesWithDay, String note
+
     public void testCreateSubs(){
         ArrayList<Object[][]> obj = new ArrayList<Object[][]>();
         obj.add(new Object[][]{{"Catfish", "Potatodog"},{2, 3},{1}});
