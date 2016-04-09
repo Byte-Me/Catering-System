@@ -11,6 +11,7 @@ import java.awt.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -26,7 +27,7 @@ public class EditOrder extends JFrame {
     private JPanel mainPanel;
     private JComboBox<Object> customerDropdown;
     private JFormattedTextField dateField;
-    private JTable orderRecepies;
+    private JTable recipeTable;
     private JList<String> recipesList;
     private JButton leftButton;
     private JButton rightButton;
@@ -34,6 +35,7 @@ public class EditOrder extends JFrame {
     private JButton addOrderButton;
     private JTextArea commentTextArea;
     private JFormattedTextField timeField;
+    private JComboBox statusDropdown;
 
     private final String defaultTimeValue = "12:00";
     private final String seconds = ":00";
@@ -41,11 +43,12 @@ public class EditOrder extends JFrame {
     private FoodManagement foodManagement = new FoodManagement();
     private CustomerManagement customerManagement = new CustomerManagement();
     private ArrayList<Object[]> customers;
+    private OrderManagement orderManagement = new OrderManagement();
 
 
 
 
-    public EditOrder(Container parent) {
+    public EditOrder(Container parent, int orderId) {
         setContentPane(mainPanel);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         mainPanel.getRootPane().setDefaultButton(cancelButton);
@@ -73,24 +76,22 @@ public class EditOrder extends JFrame {
 
         addOrderModel.setColumnIdentifiers(headers);
 
-        orderRecepies.setModel(addOrderModel);
+        recipeTable.setModel(addOrderModel);
 
         /* Create Customer Dropdown */
         updateDropdown();
+
+        // Create Status Dropdown
+        for(OrderManagement.OrderType status : OrderManagement.OrderType.values()){
+            statusDropdown.addItem(status);
+        }
 
         try {
             /* FormattedTextField for date, default value set to tomorrow */
             final MaskFormatter dateMaskFormatter = new MaskFormatter("####-##-##"); // Defining format pattern
             final MaskFormatter timeMaskFormatter = new MaskFormatter("##:##"); // Defining format pattern
 
-            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd"); // Setup date format
 
-            Calendar cal = Calendar.getInstance();
-            cal.add(Calendar.DATE, 1);
-            Date tomorrowDate = new Date(cal.getTimeInMillis());
-
-            dateMaskFormatter.setPlaceholder(dateFormat.format(tomorrowDate)); // Placeholder
-            timeMaskFormatter.setPlaceholder(defaultTimeValue); // Placeholder
 
             dateField.setFormatterFactory(new JFormattedTextField.AbstractFormatterFactory() { // Add format to field
                 @Override
@@ -119,20 +120,38 @@ public class EditOrder extends JFrame {
             recipeModel.addElement((String)recipe[1]);
         }
 
+
+        //Getting info about selected order.
+        Object[] orderInfo = orderManagement.getOrderInfoFromId(orderId);
+        ArrayList<Object[]> orderRecipes = orderManagement.getRecipesFromOrder(orderId);
+
+        //Adding info to textboxes.
+        String customerName = (String)orderInfo[0];
+        customerDropdown.setSelectedItem(customerName);
+        dateField.setText((String)orderInfo[1]);
+        timeField.setText((String)orderInfo[2]);
+        commentTextArea.setText((String)orderInfo[3]);
+        statusDropdown.setSelectedItem(orderInfo[4]);
+
+        //Adding recipes to list
+        for(Object[] recipe : orderRecipes) {
+            addOrderModel.addRow(recipe);
+        }
+
         customerDropdown.addActionListener(e -> { //if value in dropdown is changed
             if (customerDropdown.getSelectedIndex() == customerDropdown.getItemCount()-1) { //if selected value is last index
                 new AddCustomer(mainPanel.getParent()); //call addCustomer method.
-                updateDropdown(); //FIXME: Denne oppdaterer for fort? ny kunde vises ikke før den oppdateres senere...
+                updateDropdown(); //TODO: Denne oppdaterer for fort? ny kunde vises ikke før den oppdateres senere...
             }
         });
         /* Left and Right buttons for adding and removing recipes from orders */
         leftButton.addActionListener(e -> {
             String selectedRecipe = recipesList.getSelectedValue();
             int portions = Integer.parseInt(showInputDialog("How many portions of " + selectedRecipe.toLowerCase() + " do you want to add?")); // FIXME: Add failsafe for parsing integer
-            if (existsInTable(orderRecepies, selectedRecipe) == -1) {
+            if (existsInTable(recipeTable, selectedRecipe) == -1) {
                 addOrderModel.addRow(new Object[]{selectedRecipe,portions});
             } else {
-                int row = existsInTable(orderRecepies, selectedRecipe);
+                int row = existsInTable(recipeTable, selectedRecipe);
                 int currentPortions = (Integer)addOrderModel.getValueAt(row, 0);
                 if (currentPortions + portions >= 1) {
                     addOrderModel.setValueAt(currentPortions + portions, row, 0);
@@ -141,7 +160,7 @@ public class EditOrder extends JFrame {
         });
 
 
-        rightButton.addActionListener(e -> addOrderModel.removeRow(orderRecepies.getSelectedRow()));
+        rightButton.addActionListener(e -> addOrderModel.removeRow(recipeTable.getSelectedRow()));
 
         addOrderButton.addActionListener(e -> {
             Object[] selectedCustomer = customers.get(customerDropdown.getSelectedIndex());

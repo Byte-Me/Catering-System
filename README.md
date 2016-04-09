@@ -34,7 +34,7 @@ __Loginscreen is finished.__
 - [ ] Right click user to choose wether to edit, delete or add new user(LOW PRIORITY).
 
 ### Customers:
-- [x] Remove editing in cell, add edit button which opens a window similar to add user. This window also upens on double click.
+- [x] Remove editing in cell, add edit button which opens a window similar to add user. This window also opens on double click.
 - [ ] Find users set to inactive. Let admin restore data through file dropdown.
 - [ ] Check out a different search-method.
 - [x] Add single select to Customers.
@@ -45,13 +45,14 @@ __Loginscreen is finished.__
 - [x] Remove default button in add order.
 - [ ] Double click will do the same as left arrow in edit order.
 - [ ] Double click will make it able to edit portions in edit order.
-- [ ] Double click in order list will open edit/show window.
+- [x] Double click in order list will open edit/show window.
 - [x] Add clock table to orders after date table.
-- [ ] Change length of tables corresponding to tekst length.
+- [ ] Change length of tables corresponding to text length.
 - [ ] Check out a different search-method.
 - [ ] Search recipes in edit order.
 - [ ] Increase comment size and decrease recipelist size in edit order.
 - [x] Recipes and portions must switch places in addOrder.
+- [ ] Change edit order calls from createOrder to updateOrder(WHEN BACKEND IS DONE).
 
 ### Driver:
 - [ ] Make google window-size dynamic. (CANT FIND SOLUTION)
@@ -77,6 +78,7 @@ __Loginscreen is finished.__
 
 ### DatabaseManagement:
 - [ ] Create delete user method.
+- [ ] Create methods for updating order values
 - [x] Database:
     1.  Add recipe price.
     2.  Add order time.

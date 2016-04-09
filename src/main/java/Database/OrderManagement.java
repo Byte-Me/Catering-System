@@ -239,5 +239,64 @@ public class OrderManagement extends Management {
         else return false;
         return true;
     }
+    /*.getOrderInfoFromId(orderId);
+        ArrayList<Object[]> orderRecipes = orderManagement.getRecipesFromOrder(orderId);
+        */
+    public Object[] getOrderInfoFromId(int orderId){
+        Object[] out = new Object[5];
+        if(setUp()) {
+            try {
+
+                PreparedStatement prep = getConnection().prepareStatement("SELECT `order`.status, `order`.date, " +
+                        "customer.name, `order`.note, `order`.time FROM `order`, customer WHERE `order`.order_id = ?" +
+                        " AND `order`.customer_id = customer.customer_id;");
+                prep.setInt(1, orderId);
+                ResultSet res = prep.executeQuery();
+                if (res.next()){
+                    out[0] = res.getString("name");
+                    out[1] = res.getString("date");
+                    out[2] = res.getString("time");
+                    out[3] = res.getString("note");
+                    out[4] = OrderType.valueOf(res.getInt("status"));
+                }
+
+            } catch (Exception e) {
+                System.err.println("Issue with finding order.");
+            } finally {
+                DbUtils.closeQuietly(getScentence());
+                DbUtils.closeQuietly(getConnection());
+            }
+
+        }
+        return out;
+    }
+    public ArrayList<Object[]> getRecipesFromOrder(int orderId){
+        ArrayList<Object[]> out = new ArrayList<>();
+        if(setUp()) {
+            try {
+
+                PreparedStatement prep = getConnection().prepareStatement("SELECT recipe.name, order_recipe.portions " +
+                        "FROM recipe, order_recipe WHERE order_recipe.order_id = ?" +
+                        " AND order_recipe.recipe_id = recipe.recipe_id;");
+                prep.setInt(1, orderId);
+                ResultSet res = prep.executeQuery();
+                while (res.next()){
+                    Object[] obj = new Object[2];
+                    obj[0] = res.getString("name");
+                    obj[1] = res.getString("portions");
+                    out.add(obj);
+
+                }
+
+            } catch (Exception e) {
+                System.err.println("Issue with finding order.");
+            } finally {
+                DbUtils.closeQuietly(getScentence());
+                DbUtils.closeQuietly(getConnection());
+            }
+
+        }
+        return out;
+    }
 }
 
