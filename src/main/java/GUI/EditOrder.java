@@ -8,6 +8,8 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.MaskFormatter;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -40,10 +42,13 @@ public class EditOrder extends JFrame {
     private final String defaultTimeValue = "12:00";
     private final String seconds = ":00";
     private final String newCustomer = "+ New customer";
+    private final int recipeColumnNr = 0;
+    private final int quantityColumnNr = 1;
     private FoodManagement foodManagement = new FoodManagement();
     private CustomerManagement customerManagement = new CustomerManagement();
     private ArrayList<Object[]> customers;
     private OrderManagement orderManagement = new OrderManagement();
+
 
 
 
@@ -133,11 +138,11 @@ public class EditOrder extends JFrame {
         commentTextArea.setText((String)orderInfo[3]);
         statusDropdown.setSelectedItem(orderInfo[4]);
 
-        //Adding recipes to list
+        //Adding recipes to table
         for(Object[] recipe : orderRecipes) {
             addOrderModel.addRow(recipe);
         }
-
+        //Adds a customer if new customer is selected
         customerDropdown.addActionListener(e -> { //if value in dropdown is changed
             if (customerDropdown.getSelectedIndex() == customerDropdown.getItemCount()-1) { //if selected value is last index
                 new AddCustomer(mainPanel.getParent()); //call addCustomer method.
@@ -155,6 +160,41 @@ public class EditOrder extends JFrame {
                 int currentPortions = (Integer)addOrderModel.getValueAt(row, 0);
                 if (currentPortions + portions >= 1) {
                     addOrderModel.setValueAt(currentPortions + portions, row, 0);
+                }
+            }
+        });
+        recipesList.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if(e.getClickCount() == 2){
+                    String selectedRecipe = recipesList.getSelectedValue();
+                    int portions = Integer.parseInt(showInputDialog("How many portions of " + selectedRecipe.toLowerCase() + " do you want to add?")); // FIXME: Add failsafe for parsing integer
+                    if (existsInTable(recipeTable, selectedRecipe) == -1) {
+                        addOrderModel.addRow(new Object[]{selectedRecipe,portions});
+                    } else {
+                        int row = existsInTable(recipeTable, selectedRecipe);
+                        int currentPortions = (Integer)addOrderModel.getValueAt(row, 0);
+                        if (currentPortions + portions >= 1) {
+                            addOrderModel.setValueAt(currentPortions + portions, row, 0);
+                        }
+                    }
+                }
+            }
+        });
+
+        recipeTable.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    String recipe = (String) recipeTable.getValueAt(recipeTable.getSelectedRow(), recipeColumnNr);
+                    String in = showInputDialog("How many portions of " + recipe.toLowerCase() + " do you want?");
+                    if(!in.equals("")) {
+                        int portions = Integer.parseInt(in); // FIXME: Add failsafe for parsing integer
+                        addOrderModel.setValueAt(portions, recipeTable.getSelectedRow(), quantityColumnNr);
+                    }
+                    else{
+                        showMessageDialog(null, "You need to input a number.");
+                    }
                 }
             }
         });
@@ -176,7 +216,7 @@ public class EditOrder extends JFrame {
             OrderManagement orderManagement = new OrderManagement();
             boolean isAdded = orderManagement.createOrder((String)selectedCustomer[1], selectedDate, selectedRecipes, comment, selectedTime+seconds);
             if(!isAdded) {
-                showMessageDialog(null, "Kunne ikke legge til order.");
+                showMessageDialog(null, "Issue with editing order.");
             }
 
             updateOrders();

@@ -30,7 +30,7 @@ __Loginscreen is finished.__
 - [ ] Check out a different search-method.
 - [x] Ability to delete several users by marking them with ctrl. (LAGET ANNEN LØSNING)
 - [x] Clicking the edit button while having several users marked will open a message box saying this wont work. (VANSKELIG, LØSTE MED SINGLE SELECTION)
-- [ ] Fix IndexOutOfBounds når en column er merket, så unmerket, deretter edit user blir trykket.
+- [x] Fix IndexOutOfBounds når en column er merket, så unmerket, deretter edit user blir trykket.
 - [ ] Right click user to choose wether to edit, delete or add new user(LOW PRIORITY).
 
 ### Customers:
@@ -43,8 +43,8 @@ __Loginscreen is finished.__
 ### Orders:
 - [x] Change status integer to enum.
 - [x] Remove default button in add order.
-- [ ] Double click will do the same as left arrow in edit order.
-- [ ] Double click will make it able to edit portions in edit order.
+- [x] Double click will do the same as left arrow in edit order.
+- [x] Double click will make it able to edit portions in edit order.
 - [x] Double click in order list will open edit/show window.
 - [x] Add clock table to orders after date table.
 - [ ] Change length of tables corresponding to text length.

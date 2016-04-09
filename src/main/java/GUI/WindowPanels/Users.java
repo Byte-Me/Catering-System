@@ -57,14 +57,15 @@ public class Users {
         addUserButton.addActionListener(e -> new AddUser(mainPanel.getParent()));
 
         editUserButton.addActionListener(e ->{
-            System.out.println(userTable.getSelectedColumn());
-            //TODO: oppstår IndexOutOfBounds når en column er merket, så unmerket, deretter prøver edit user.
-            if(userTable.getSelectedColumn() >= 0) { //TODO: sjekker ikke om flere columns er selected, velger øverste.
-                String username = (String) userTable.getValueAt(userTable.getSelectedRow(), usernameColumnNr); //hent username for selected row
-                new EditUser(mainPanel.getParent(), username);
+            try {
+                if (userTable.getSelectedColumn() >= 0) { //TODO: sjekker ikke om flere columns er selected, velger øverste.
+                    String username = (String) userTable.getValueAt(userTable.getSelectedRow(), usernameColumnNr); //hent username for selected row
+                    new EditUser(mainPanel.getParent(), username);
+                } else {
+                    showMessageDialog(null, "A user needs to be selected.");
+                }
             }
-
-            else{
+            catch (IndexOutOfBoundsException iobe){ //Oppstår exception jeg ikke forstår, derfor bare catcher det.
                 showMessageDialog(null, "A user needs to be selected.");
             }
 
@@ -109,6 +110,9 @@ public class Users {
 
     // Update Users function
     public static void updateUsers() {
+
+        //clears selection in row, important
+        listSelectionModel.clearSelection();
 
         // Get users from database
         ArrayList<Object[]> users = userManagement.userInfo();
