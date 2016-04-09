@@ -29,11 +29,11 @@ __Loginscreen is finished.__
 - [x] Remove editing in cell, add edit button which opens a window similar to add user. This window also opens on double click.
 - [ ] Check out a different search-method.
 - [ ] Ability to delete several users by marking them with ctrl.
-- [ ] Clicking the edit button while having several users marked will open a message box saying this wont work.
+- [ ] Clicking the edit button while having several users marked will open a message box saying this wont work. (FIKK IKKE TIL DETTE, LAGET TODO)
 - [ ] Right click user to choose wether to edit, delete or add new user(LOW PRIORITY).
 
 ### Customers:
-- [ ] Remove editing in cell, add edit button which opens a window similar to add user. This window also upens on double click.
+- [x] Remove editing in cell, add edit button which opens a window similar to add user. This window also upens on double click.
 - [ ] Find users set to inactive. Let admin restore data through file dropdown.
 - [ ] Check out a different search-method.
 - [ ] Add single select to Customers.

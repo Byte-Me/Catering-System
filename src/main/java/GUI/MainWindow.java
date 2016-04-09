@@ -70,7 +70,7 @@ public class MainWindow extends JFrame {
         // Will get disposed and garbage collected when MainWindow gets closed (When application is closed)
         Statistics statisticsPanel = new Statistics(fromDate, toDate, getStatisticsButton, barChartPanel);
         Users usersPanel = new Users(mainPanel, addUserButton, userTable, searchUsers, deleteUsersButton, editUserButton);
-        Customers customersPanel = new Customers(mainPanel, addCustomerButton, customerTable, searchCustomers, deleteCustomersButton);
+        Customers customersPanel = new Customers(mainPanel, addCustomerButton, customerTable, searchCustomers, deleteCustomersButton, editCustomerButton);
         Orders ordersPanel = new Orders(mainPanel, ordersTable, searchOrders, addOrderButton, editOrderButton, deleteOrderButton);
         Driver driverPanel = new Driver(driverTable, mapPanel, generateDrivingRouteButton);
         Chef chefPanel = new Chef(mainPanel, prepareTable, ingredientTable, generateShoppingListButton, recipesButton, addIngredientButton);
