@@ -87,7 +87,7 @@ public class UserManagement extends Management {
                     obj[3] = res.getString("phone");
                     obj[4] = res.getString("username");
                     // Convert access level from int to string
-                    obj[5] = UserType.valueOf((Integer.parseInt(res.getString("access_level"))));
+                    obj[5] = UserType.valueOf(res.getInt("access_level"));
                     out.add(obj);
                 }
             } catch (SQLException e) {
@@ -313,7 +313,7 @@ public class UserManagement extends Management {
                     obj[3] = res.getString("phone");
                     obj[4] = res.getString("username");
                     // Convert access level from int to string
-                    obj[5] = UserType.valueOf((Integer.parseInt(res.getString("access_level"))));
+                    obj[5] = UserType.valueOf(res.getInt("access_level"));
                     out.add(obj);
                 }
             } catch (Exception e) {

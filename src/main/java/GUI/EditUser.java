@@ -39,14 +39,13 @@ public class EditUser extends JFrame{
         userType.addItem("Driver");
         userType.addItem("Chef");
 
-        Object[] userInfo = userManagement.getSingleUserInfo(username);
+        Object[] userInfo = userManagement.getSingleUserInfo(username); //Henter info om spesifikk bruker
 
         firstName.setText((String)userInfo[0]);
         lastName.setText((String)userInfo[1]);
         email.setText((String)userInfo[2]);
         phone.setText((String)userInfo[3]);
         userName.setText((String)userInfo[4]);
-        System.out.println(Arrays.toString(userInfo));
         userType.setSelectedIndex((Integer)userInfo[5]);
 
 
@@ -66,12 +65,14 @@ public class EditUser extends JFrame{
             userManagement.updateUserInfoLName(username, lName) &&
             userManagement.updateUserInfoEmail(username, mail) &&
             userManagement.updateUserInfoPhone(username, phoneNr) &&
-            userManagement.updateUserInfoUsername(username, uName) &&
-            userManagement.updateUserInfoAccessLevel(username, type1)){
-                JOptionPane.showMessageDialog(null, "Bruker oppdatert.");
+            userManagement.updateUserInfoAccessLevel(username, type1) &&
+                userManagement.updateUserInfoUsername(username, uName) )
+                        {
+
+                JOptionPane.showMessageDialog(null, "User updated.");
             }
             else{
-                JOptionPane.showMessageDialog(null, "Problem med oppdatering av bruker.");
+                JOptionPane.showMessageDialog(null, "Issue with updating user.");
             }
 
             Users.updateUsers();

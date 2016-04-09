@@ -41,6 +41,29 @@ public class OrderManagement extends Management {
             return value;
         }
     }
+    public enum OrderType {
+        INACTIVE, ACTIVE, PROCESSING, READY, DELIVERED;
+
+        public int getValue() {
+            return super.ordinal();
+        }
+
+        public static OrderType valueOf(int userTypeNr) {
+            for (OrderType type : OrderType.values()) {
+                if (type.ordinal() == userTypeNr) {
+                    return type;
+                }
+            }
+            return null;
+        }
+
+        @Override
+        public String toString() {
+            String constName = super.toString();
+            return constName.substring(0,1) + constName.substring(1).toLowerCase();
+        }
+
+    }
     public boolean updateStatus(int orderID, int newStatus){
         int numb = 0;
         if(newStatus <= OrdStatus.INACTIVE.getValue() || newStatus >= OrdStatus.DELIVERED.getValue()) {
@@ -94,7 +117,7 @@ public class OrderManagement extends Management {
         obj[2] = res.getString("phone");
         obj[3] = res.getString("adress");
         obj[4] = res.getString("date");
-        obj[5] = res.getInt("status");
+        obj[5] = OrderType.valueOf(res.getInt("status"));
         return obj;
     }
     public ArrayList<Object[]> orderSearch(String searchTerm){
@@ -151,6 +174,8 @@ public class OrderManagement extends Management {
     public boolean createOrderSub(int id, String date, ArrayList<Object[]> recipes, String note, String time, int subId){ // recipes[0] = name, recipes[1] = portions.
         if(setUp()){
             try{
+                System.out.println("INSERT INTO `order` VALUES(DEFAULT, "+OrdStatus.ACTIVE.getValue()
+                        +", '" + date + "', " + id + ", '"+ note + "', '"+ time + "', "+ subId + ");");
                 ResultSet res;
                 ArrayList<Integer> recipeIDs = new ArrayList<Integer>();
                 getScentence().executeQuery("START TRANSACTION;");

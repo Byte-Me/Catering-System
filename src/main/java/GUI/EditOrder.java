@@ -8,8 +8,6 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.MaskFormatter;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -21,9 +19,9 @@ import static javax.swing.JOptionPane.showInputDialog;
 import static javax.swing.JOptionPane.showMessageDialog;
 
 /**
- * Created by olekristianaune on 16.03.2016.
+ * Created by Evdal on 09.04.2016.
  */
-public class AddOrder extends JFrame{
+public class EditOrder extends JFrame {
 
     private JPanel mainPanel;
     private JComboBox<Object> customerDropdown;
@@ -47,11 +45,14 @@ public class AddOrder extends JFrame{
 
 
 
-    public AddOrder(Container parent) {
+    public EditOrder(Container parent) {
         setContentPane(mainPanel);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        mainPanel.getRootPane().setDefaultButton(cancelButton);
         pack();
         setLocationRelativeTo(parent);
+
+
 
         /* Cancel button */
         cancelButton.addActionListener(e -> {
@@ -185,3 +186,4 @@ public class AddOrder extends JFrame{
 
     }
 }
+

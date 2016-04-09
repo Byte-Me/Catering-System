@@ -70,6 +70,7 @@ public class Customers {
 
         customerTable.setModel(customerModel); // Add model to table
         customerTable.setAutoCreateRowSorter(true);
+        customerTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         // What happens when a cell in the table is changed?
  /*       Action action = new AbstractAction() {

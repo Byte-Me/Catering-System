@@ -50,11 +50,9 @@ public class Users {
 
         userTable.setModel(userModel); // Add model to table
         userTable.setAutoCreateRowSorter(true); // Auto sort table by row
+        userTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-
-        // Add dropdown to table
-        TableColumn userTypeColumn = userTable.getColumnModel().getColumn(userTypeColumnNr);//trengs denne?
-
+        listSelectionModel = new DefaultListSelectionModel();
 
         addUserButton.addActionListener(e -> new AddUser(mainPanel.getParent()));
 
@@ -65,6 +63,7 @@ public class Users {
                 String username = (String) userTable.getValueAt(userTable.getSelectedRow(), usernameColumnNr); //hent username for selected row
                 new EditUser(mainPanel.getParent(), username);
             }
+
             else{
                 showMessageDialog(null, "A user needs to be selected.");
             }

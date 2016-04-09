@@ -28,20 +28,21 @@ __Loginscreen is finished.__
 ### Users:
 - [x] Remove editing in cell, add edit button which opens a window similar to add user. This window also opens on double click.
 - [ ] Check out a different search-method.
-- [ ] Ability to delete several users by marking them with ctrl.
-- [ ] Clicking the edit button while having several users marked will open a message box saying this wont work. (FIKK IKKE TIL DETTE, LAGET TODO)
+- [x] Ability to delete several users by marking them with ctrl. (LAGET ANNEN LØSNING)
+- [x] Clicking the edit button while having several users marked will open a message box saying this wont work. (VANSKELIG, LØSTE MED SINGLE SELECTION)
+- [ ] Fix IndexOutOfBounds når en column er merket, så unmerket, deretter edit user blir trykket.
 - [ ] Right click user to choose wether to edit, delete or add new user(LOW PRIORITY).
 
 ### Customers:
 - [x] Remove editing in cell, add edit button which opens a window similar to add user. This window also upens on double click.
 - [ ] Find users set to inactive. Let admin restore data through file dropdown.
 - [ ] Check out a different search-method.
-- [ ] Add single select to Customers.
-- [ ] Right click user to choose wether to edit, delete or add new user(LOW PRIORITY).
+- [x] Add single select to Customers.
+- [ ] Right click user to choose wether to edit, delete or add new customer(LOW PRIORITY).
 
 ### Orders:
-- [ ] Change status integer to enum.
-- [ ] Remove default button in add order.
+- [x] Change status integer to enum.
+- [x] Remove default button in add order.
 - [ ] Double click will do the same as left arrow in edit order.
 - [ ] Double click will make it able to edit portions in edit order.
 - [ ] Double click in order list will open edit/show window.
@@ -50,7 +51,7 @@ __Loginscreen is finished.__
 - [ ] Check out a different search-method.
 - [ ] Search recipes in edit order.
 - [ ] Increase comment size and decrease recipelist size in edit order.
-- [ ] Recipes and portions must switch places in addOrder.
+- [x] Recipes and portions must switch places in addOrder.
 
 ### Driver:
 - [ ] Make google window-size dynamic. (CANT FIND SOLUTION)
@@ -60,7 +61,7 @@ __Loginscreen is finished.__
 
 ### Chef:
 - [ ] Create button where chef can set recipe as in progress. Then update button to ready for delivery.
-    Recipe will be removed is ready for delivery is pressed. A message box with ok as default will be out failsafe.
+    Recipe will be removed when ready for delivery is pressed. A message box with ok as default will be our failsafe.
 - [ ] Time recipe needs to be done should be showed in To Prepare.
 - [ ] Add both current day and tomorrow in two different lists in to prepare.
 - [ ] Add price to upper JLabel in add ingredients.
