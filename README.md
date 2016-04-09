@@ -6,7 +6,7 @@ Databaseprosjekt - mer info om funskjonalitet kommer.
 __Loginscreen is finished.__
 
 ### General:
-- [ ] Check if default buttons are nescessery.
+- [ ] Check if default buttons are necessary.
 - [ ] Every window needs to be handled, cant go back to parent window without closing child.
 - [ ] Sorting by id's needs fixing, 90 is apparently higher than 100
 
@@ -19,14 +19,14 @@ __Loginscreen is finished.__
     2.  Amount of new subscriptions.
     3.  Amount of cancelled subscriptions.
     4.  Amount of currently active subscriptions
-    5.  Income
-    6.  Outcome
-    7.  Net-profit.
+    5.  Income(SAME AS OUTCOME)
+    6.  Outcome (DB AND METHODS MADE, TODO: INCORPORATE IN CODE AND GUI)
+    7.  Net-profit.(SAME AS OUTCOME)
 - [x] Statistics in right corner: 
     1.  Amount of orders grouped by day of week.
 
 ### Users:
-- [ ] Remove editing in cell, add edit button which opens a window similar to add user. This window also upens on double click.
+- [x] Remove editing in cell, add edit button which opens a window similar to add user. This window also opens on double click.
 - [ ] Check out a different search-method.
 - [ ] Ability to delete several users by marking them with ctrl.
 - [ ] Clicking the edit button while having several users marked will open a message box saying this wont work.
@@ -45,7 +45,7 @@ __Loginscreen is finished.__
 - [ ] Double click will do the same as left arrow in edit order.
 - [ ] Double click will make it able to edit portions in edit order.
 - [ ] Double click in order list will open edit/show window.
-- [ ] Add clock table to orders after date table.
+- [x] Add clock table to orders after date table.
 - [ ] Change length of tables corresponding to tekst length.
 - [ ] Check out a different search-method.
 - [ ] Search recipes in edit order.
@@ -56,6 +56,7 @@ __Loginscreen is finished.__
 - [ ] Make google window-size dynamic. (CANT FIND SOLUTION)
 - [x] Change list from jList to jTable. (FIXED)
 - [x] Add tables to JTable: order_id, Name, phone, address.
+- [ ] Fix error "UIDefaults.getUI() failed".
 
 ### Chef:
 - [ ] Create button where chef can set recipe as in progress. Then update button to ready for delivery.

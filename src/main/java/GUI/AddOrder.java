@@ -18,11 +18,12 @@ import java.util.Date;
 
 import static GUI.WindowPanels.Orders.updateOrders;
 import static javax.swing.JOptionPane.showInputDialog;
+import static javax.swing.JOptionPane.showMessageDialog;
 
 /**
  * Created by olekristianaune on 16.03.2016.
  */
-public class AddOrder extends JFrame {
+public class AddOrder extends JFrame{
 
     private JPanel mainPanel;
     private JComboBox<Object> customerDropdown;
@@ -38,6 +39,12 @@ public class AddOrder extends JFrame {
 
     private final String defaultTimeValue = "12:00";
     private final String seconds = ":00";
+    private final String newCustomer = "+ New customer";
+    private FoodManagement foodManagement = new FoodManagement();
+    private CustomerManagement customerManagement = new CustomerManagement();
+    private ArrayList<Object[]> customers;
+
+
 
 
     public AddOrder(Container parent) {
@@ -69,11 +76,7 @@ public class AddOrder extends JFrame {
         orderRecepies.setModel(addOrderModel);
 
         /* Create Customer Dropdown */
-        CustomerManagement customerManagement = new CustomerManagement();
-        final ArrayList<Object[]> customers = customerManagement.getCustomers();
-        for (Object[] customer : customers) {
-            customerDropdown.addItem(customer[0]);
-        }
+        updateDropdown();
 
         try {
             /* FormattedTextField for date, default value set to tomorrow */
@@ -110,13 +113,18 @@ public class AddOrder extends JFrame {
         recipesList.setModel(recipeModel);
         recipesList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-        FoodManagement foodManagement = new FoodManagement();
         final ArrayList<Object[]> recipes = foodManagement.getRecipes();
 
         for (Object[] recipe : recipes) {
             recipeModel.addElement((String)recipe[1]);
         }
 
+        customerDropdown.addActionListener(e -> { //if value in dropdown is changed
+            if (customerDropdown.getSelectedIndex() == customerDropdown.getItemCount()-1) { //if selected value is last index
+                new AddCustomer(mainPanel.getParent()); //call addCustomer method.
+                updateDropdown(); //FIXME: Denne oppdaterer for fort? ny kunde vises ikke før den oppdateres senere...
+            }
+        });
         /* Left and Right buttons for adding and removing recipes from orders */
         leftButton.addActionListener(e -> {
             String selectedRecipe = recipesList.getSelectedValue();
@@ -149,7 +157,7 @@ public class AddOrder extends JFrame {
             OrderManagement orderManagement = new OrderManagement();
             boolean isAdded = orderManagement.createOrder((String)selectedCustomer[1], selectedDate, selectedRecipes, comment, selectedTime+seconds);
             if(!isAdded) {
-                System.err.println("Kunne ikke legge til order");
+                showMessageDialog(null, "Kunne ikke legge til order.");
             }
 
             updateOrders();
@@ -167,5 +175,14 @@ public class AddOrder extends JFrame {
             }
         }
         return -1;
+    }
+    private void updateDropdown(){
+        customerDropdown.removeAllItems();
+        customers = customerManagement.getCustomers();
+        for (Object[] customer : customers) {
+            customerDropdown.addItem(customer[0]);
+        }
+        customerDropdown.addItem(newCustomer);
+
     }
 }

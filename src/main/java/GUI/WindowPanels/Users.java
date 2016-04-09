@@ -2,6 +2,7 @@ package GUI.WindowPanels;
 
 import Database.UserManagement;
 import GUI.AddUser;
+import GUI.EditUser;
 import HelperClasses.TableCellListener;
 
 import javax.swing.*;
@@ -11,6 +12,8 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 import static javax.swing.JOptionPane.*;
@@ -23,9 +26,10 @@ public class Users {
     static UserManagement userManagement = new UserManagement();
     static DefaultTableModel userModel;
     private static JTable localUserTable;
+    static DefaultListSelectionModel listSelectionModel;
 
     // Create Users Pane
-    public Users(final JPanel mainPanel, JButton addUserButton, final JTable userTable, final JTextField searchUsers, JButton deleteUsersButton) {
+    public Users(final JPanel mainPanel, JButton addUserButton, final JTable userTable, final JTextField searchUsers, JButton deleteUsersButton, JButton editUserButton) {
 
         final int usernameColumnNr = 4;
         final int userTypeColumnNr = 5;
@@ -34,81 +38,47 @@ public class Users {
 
         String[] header = {"First Name", "Last Name", "Email", "Phone", "Username", "User Type"}; // Header titles
 
-        userModel = new DefaultTableModel(); // Model of the table
+        //gjør celler un-editable.
+        userModel = new DefaultTableModel(){
+            @Override
+            public boolean isCellEditable(int row, int column){
+                return false;
+            }
+        }; // Model of the table
+
         userModel.setColumnIdentifiers(header); // Add header to columns
 
         userTable.setModel(userModel); // Add model to table
         userTable.setAutoCreateRowSorter(true); // Auto sort table by row
 
-        // Create dropdown for UserType
-        JComboBox<String> userTypeDropDown = new JComboBox<>();
-        userTypeDropDown.addItem("Admin");
-        userTypeDropDown.addItem("Sale");
-        userTypeDropDown.addItem("Driver");
-        userTypeDropDown.addItem("Chef");
 
         // Add dropdown to table
-        TableColumn userTypeColumn = userTable.getColumnModel().getColumn(userTypeColumnNr);
-        userTypeColumn.setCellEditor(new DefaultCellEditor(userTypeDropDown));
+        TableColumn userTypeColumn = userTable.getColumnModel().getColumn(userTypeColumnNr);//trengs denne?
+
 
         addUserButton.addActionListener(e -> new AddUser(mainPanel.getParent()));
 
-        // What happens when a cell in the table is changed?
-        Action action = new AbstractAction() {
-            public void actionPerformed(ActionEvent e) {
-                TableCellListener tcl = (TableCellListener) e.getSource();
-
-                int option;
-                if ((tcl.getOldValue()).equals(tcl.getNewValue())) {
-                    option = 1;
-                } else if (tcl.getColumn() == userTypeColumnNr) { // Special case for userTypeColumn to handle dropdown
-                    option = 0;
-                } else {
-                    option = showOptionDialog(null,
-                            "Change " + userModel.getColumnName(tcl.getColumn()) + " from '" + tcl.getOldValue() + "' to '" + tcl.getNewValue() + "'?",
-                            "Edit " + userModel.getColumnName(tcl.getColumn()),
-                            YES_NO_OPTION,
-                            INFORMATION_MESSAGE,
-                            null,
-                            new Object[]{"Yes", "No"},
-                            "No");
-                }
-
-
-                // If yes, ubdate database
-                if (option == 0) {
-                    switch (tcl.getColumn()) {
-                        case 0:
-                            userManagement.updateUserInfoFName((String)userModel.getValueAt(tcl.getRow(), usernameColumnNr), (String)tcl.getNewValue());
-                            break;
-                        case 1:
-                            userManagement.updateUserInfoLName((String)userModel.getValueAt(tcl.getRow(), usernameColumnNr), (String)tcl.getNewValue());
-                            break;
-                        case 2:
-                            userManagement.updateUserInfoEmail((String)userModel.getValueAt(tcl.getRow(), usernameColumnNr), (String)tcl.getNewValue());
-                            break;
-                        case 3:
-                            userManagement.updateUserInfoPhone((String)userModel.getValueAt(tcl.getRow(), usernameColumnNr), (String)tcl.getNewValue());
-                            break;
-                        case 4:
-                            userManagement.updateUserInfoUsername((String)userModel.getValueAt(tcl.getRow(), usernameColumnNr), (String)tcl.getNewValue());
-                            break;
-                        case 5:
-                            // Handle the dropdown differently
-                            userManagement.updateUserInfoAccessLevel((String)userModel.getValueAt(tcl.getRow(), usernameColumnNr), UserManagement.UserType.valueOf(((String)tcl.getNewValue()).toUpperCase()).getValue());
-                            break;
-                        default:
-                            System.err.println(userTable.getColumnName(tcl.getColumn()) + " does not yet have an implemetation.");
-                    }
-
-                }
-
-                // Update user table from database
-                updateUsers();
+        editUserButton.addActionListener(e ->{
+            System.out.println(userTable.getSelectedColumn());
+            //TODO: oppstår IndexOutOfBounds når en column er merket, så unmerket, deretter prøver edit user.
+            if(userTable.getSelectedColumn() >= 0) { //TODO: sjekker ikke om flere columns er selected, velger øverste.
+                String username = (String) userTable.getValueAt(userTable.getSelectedRow(), usernameColumnNr); //hent username for selected row
+                new EditUser(mainPanel.getParent(), username);
             }
-        };
-        TableCellListener tcl = new TableCellListener(userTable, action);
+            else{
+                showMessageDialog(null, "A user needs to be selected.");
+            }
 
+        });
+        userTable.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if(e.getClickCount() == 2) {
+                    String username = (String) userModel.getValueAt(userTable.getSelectedRow(), usernameColumnNr);
+                    new EditUser(mainPanel.getParent(), username);
+                }
+            }
+        });
 
         // Serach field input changed?
         searchUsers.getDocument().addDocumentListener(new DocumentListener() {
@@ -148,10 +118,6 @@ public class Users {
     }
 
     public static void updateUsers(ArrayList<Object[]> users) {
-
-        if (localUserTable.isEditing()) {
-            localUserTable.getCellEditor().stopCellEditing();
-        }
 
         // Empties entries of Users table
         if (userModel.getRowCount() > 0) {
