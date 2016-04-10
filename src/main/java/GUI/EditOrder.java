@@ -8,6 +8,8 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.MaskFormatter;
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.text.DateFormat;
@@ -166,6 +168,31 @@ public class EditOrder extends JFrame {
                 }
             }
         });
+
+        //Deletes recipes from recipeTable when recipe is selected and delete-key pressed.
+        recipeTable.addKeyListener(new KeyListener() {
+
+            @Override
+            public void keyTyped(KeyEvent e) {
+
+            }
+
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if(e.getKeyCode() == KeyEvent.VK_DELETE){
+                    int[] selected = recipeTable.getSelectedRows();
+                    for(int i =0; i<selected.length;i++){ //kanskje legge inn failsafe
+                        addOrderModel.removeRow(selected[i]);
+                    }
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+
+            }
+        });
+        //does same as left-button when doubleclick is heard.
         recipesList.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -184,7 +211,7 @@ public class EditOrder extends JFrame {
                 }
             }
         });
-
+        //updates portions when double-click is heard.
         recipeTable.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -205,6 +232,7 @@ public class EditOrder extends JFrame {
 
         rightButton.addActionListener(e -> addOrderModel.removeRow(recipeTable.getSelectedRow()));
 
+        //adds
         addOrderButton.addActionListener(e -> {
             Object[] selectedCustomer = customers.get(customerDropdown.getSelectedIndex());
             String selectedDate = dateField.getText();

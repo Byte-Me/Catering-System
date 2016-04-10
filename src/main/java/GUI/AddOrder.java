@@ -8,10 +8,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.MaskFormatter;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -181,6 +178,22 @@ public class AddOrder extends JFrame{
                 }
             }
         });
+        orderRecepies.addKeyListener(new KeyListener() {
+            @Override
+            public void keyTyped(KeyEvent e) {}
+            @Override
+            public void keyPressed(KeyEvent e) {
+                if(e.getKeyCode() == KeyEvent.VK_DELETE){
+                    int[] selected = orderRecepies.getSelectedRows();
+                    for(int i =0; i<selected.length;i++){
+                        addOrderModel.removeRow(selected[i]);
+                    }
+                }
+            }
+            @Override
+            public void keyReleased(KeyEvent e) {}
+        });
+
 
 
         rightButton.addActionListener(e -> addOrderModel.removeRow(orderRecepies.getSelectedRow()));
