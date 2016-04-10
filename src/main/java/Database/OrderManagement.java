@@ -174,10 +174,8 @@ public class OrderManagement extends Management {
     public boolean createOrderSub(int id, String date, ArrayList<Object[]> recipes, String note, String time, int subId){ // recipes[0] = name, recipes[1] = portions.
         if(setUp()){
             try{
-                System.out.println("INSERT INTO `order` VALUES(DEFAULT, "+OrdStatus.ACTIVE.getValue()
-                        +", '" + date + "', " + id + ", '"+ note + "', '"+ time + "', "+ subId + ");");
                 ResultSet res;
-                ArrayList<Integer> recipeIDs = new ArrayList<Integer>();
+                ArrayList<Integer> recipeIDs = new ArrayList<>();
                 getScentence().executeQuery("START TRANSACTION;");
                 int rowChanged = getScentence().executeUpdate("INSERT INTO `order` VALUES(DEFAULT, "+OrdStatus.ACTIVE.getValue()
                         +", '" + date + "', " + id + ", '"+ note + "', '"+ time + "', "+ subId + ");"); //Legger inn orderen med status aktiv.
@@ -194,9 +192,10 @@ public class OrderManagement extends Management {
                     return false;
 
                 }
-                for(Object[] name : recipes) {
+                for(Object[] name : recipes) { //[0] = quantity, [1] = name
 
-                    res = getScentence().executeQuery("SELECT recipe_id FROM recipe WHERE name = '" + name[0] + "';");
+
+                    res = getScentence().executeQuery("SELECT recipe_id FROM recipe WHERE name = '" + name[1] + "';");
 
                     if (res.next()) {
                         recipeIDs.add(res.getInt("recipe_id")); //Henter oppskrifts IDer for å koble oppskrifter med ordre.
@@ -209,7 +208,7 @@ public class OrderManagement extends Management {
 
                 for (int i = 0; i < recipeIDs.size(); i++) {
                     rowChanged = getScentence().executeUpdate("INSERT INTO order_recipe VALUES(" + orderID + ", " + recipeIDs.get(i) +
-                            ", '" + recipes.get(i)[1] + "');");
+                            ", '" + recipes.get(i)[0] + "');");
                     if (!(rowChanged > 0)) {
                         getScentence().executeQuery("ROLLBACK;");
                         return false;

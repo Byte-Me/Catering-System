@@ -10,6 +10,8 @@ import javax.swing.text.MaskFormatter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -40,6 +42,9 @@ public class AddOrder extends JFrame{
     private final String defaultTimeValue = "12:00";
     private final String seconds = ":00";
     private final String newCustomer = "+ New customer";
+    private final int recipeColumnNr = 0;
+    private final int quantityColumnNr = 1;
+
     private FoodManagement foodManagement = new FoodManagement();
     private CustomerManagement customerManagement = new CustomerManagement();
     private ArrayList<Object[]> customers;
@@ -123,6 +128,7 @@ public class AddOrder extends JFrame{
                 new AddCustomer(mainPanel.getParent()); //call addCustomer method.
                 updateDropdown(); //FIXME: Denne oppdaterer for fort? ny kunde vises ikke før den oppdateres senere...
             }
+
         });
         /* Left and Right buttons for adding and removing recipes from orders */
         leftButton.addActionListener(e -> {
@@ -135,6 +141,40 @@ public class AddOrder extends JFrame{
                 int currentPortions = (Integer)addOrderModel.getValueAt(row, 0);
                 if (currentPortions + portions >= 1) {
                     addOrderModel.setValueAt(currentPortions + portions, row, 0);
+                }
+            }
+        });
+        recipesList.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if(e.getClickCount() == 2){
+                    String selectedRecipe = recipesList.getSelectedValue();
+                    int portions = Integer.parseInt(showInputDialog("How many portions of " + selectedRecipe.toLowerCase() + " do you want to add?")); // FIXME: Add failsafe for parsing integer
+                    if (existsInTable(orderRecepies, selectedRecipe) == -1) {
+                        addOrderModel.addRow(new Object[]{selectedRecipe,portions});
+                    } else {
+                        int row = existsInTable(orderRecepies, selectedRecipe);
+                        int currentPortions = (Integer)addOrderModel.getValueAt(row, 0);
+                        if (currentPortions + portions >= 1) {
+                            addOrderModel.setValueAt(currentPortions + portions, row, 0);
+                        }
+                    }
+                }
+            }
+        });
+        orderRecepies.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    String recipe = (String) orderRecepies.getValueAt(orderRecepies.getSelectedRow(), recipeColumnNr);
+                    String in = showInputDialog("How many portions of " + recipe.toLowerCase() + " do you want?");
+                    if(!in.equals("")) {
+                        int portions = Integer.parseInt(in); // FIXME: Add failsafe for parsing integer
+                        addOrderModel.setValueAt(portions, orderRecepies.getSelectedRow(), quantityColumnNr);
+                    }
+                    else{
+                        showMessageDialog(null, "You need to input a number.");
+                    }
                 }
             }
         });

@@ -28,8 +28,9 @@ __Loginscreen is finished.__
 ### Users:
 - [x] Remove editing in cell, add edit button which opens a window similar to add user. This window also opens on double click.
 - [ ] Check out a different search-method.
-- [x] Ability to delete several users by marking them with ctrl. (LAGET ANNEN LØSNING)
-- [x] Clicking the edit button while having several users marked will open a message box saying this wont work. (VANSKELIG, LØSTE MED SINGLE SELECTION)
+- [x] Ability to delete several users by marking them with ctrl.
+- [ ] Ability to delete user with delete key.
+- [x] Clicking the edit button while having several users marked will open a message box saying this wont work.
 - [x] Fix IndexOutOfBounds når en column er merket, så unmerket, deretter edit user blir trykket.
 - [ ] Right click user to choose wether to edit, delete or add new user(LOW PRIORITY).
 

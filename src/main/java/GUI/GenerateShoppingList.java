@@ -19,6 +19,9 @@ public class GenerateShoppingList extends JFrame {
     private JPanel mainPane;
     private JTable shoppingTable;
     private JButton okButton;
+    private JRadioButton addToStorageRButton;
+    private JLabel priceLabel;
+    private JLabel totalPriceLabel;
 
     private FoodManagement foodManagement;
     private DefaultTableModel shoppingListModel = new DefaultTableModel();

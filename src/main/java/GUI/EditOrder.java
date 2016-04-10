@@ -142,12 +142,15 @@ public class EditOrder extends JFrame {
         for(Object[] recipe : orderRecipes) {
             addOrderModel.addRow(recipe);
         }
+
         //Adds a customer if new customer is selected
         customerDropdown.addActionListener(e -> { //if value in dropdown is changed
             if (customerDropdown.getSelectedIndex() == customerDropdown.getItemCount()-1) { //if selected value is last index
                 new AddCustomer(mainPanel.getParent()); //call addCustomer method.
                 updateDropdown(); //TODO: Denne oppdaterer for fort? ny kunde vises ikke før den oppdateres senere...
+
             }
+
         });
         /* Left and Right buttons for adding and removing recipes from orders */
         leftButton.addActionListener(e -> {

@@ -50,7 +50,7 @@ public class Users {
 
         userTable.setModel(userModel); // Add model to table
         userTable.setAutoCreateRowSorter(true); // Auto sort table by row
-        userTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+       // userTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         listSelectionModel = new DefaultListSelectionModel();
 
@@ -58,11 +58,14 @@ public class Users {
 
         editUserButton.addActionListener(e ->{
             try {
-                if (userTable.getSelectedColumn() >= 0) { //TODO: sjekker ikke om flere columns er selected, velger øverste.
+                if (userTable.getSelectedRows().length == 1 ) { //TODO: sjekker ikke om flere columns er selected, velger øverste.
                     String username = (String) userTable.getValueAt(userTable.getSelectedRow(), usernameColumnNr); //hent username for selected row
                     new EditUser(mainPanel.getParent(), username);
-                } else {
+                } else if(userTable.getSelectedRows().length < 1){
                     showMessageDialog(null, "A user needs to be selected.");
+                }
+                else{
+                    showMessageDialog(null, "Only one user can be selected.");
                 }
             }
             catch (IndexOutOfBoundsException iobe){ //Oppstår exception jeg ikke forstår, derfor bare catcher det.
@@ -76,6 +79,25 @@ public class Users {
                 if(e.getClickCount() == 2) {
                     String username = (String) userModel.getValueAt(userTable.getSelectedRow(), usernameColumnNr);
                     new EditUser(mainPanel.getParent(), username);
+                }
+            }
+        });
+
+        deleteUsersButton.addActionListener(e ->{
+            if(userTable.getSelectedRows().length < 1){
+                showMessageDialog(null, "A user needs to be selected.");
+            }
+            else{
+                int[] users = userTable.getSelectedRows();
+                for(int i = 0; i<users.length;i++){
+                    String username = (String)userModel.getValueAt(users[i], 4);
+                    String message = "Are you sure you want to delete user: "+username+"?"; //username
+                    int answer = showOptionDialog(null, message, "Delete User",YES_NO_OPTION,QUESTION_MESSAGE,null, new Object[]{"Yes", "No"}, "No");
+                    if(answer == YES_OPTION){
+                        //userManagement.deleteUser(username); //TODO: lag backend.
+                        //userModel.removeRow(i);
+                        System.out.println("Deleteing user : "+username);
+                    }
                 }
             }
         });
@@ -134,4 +156,5 @@ public class Users {
             userModel.addRow(user);
         }
     }
+
 }
