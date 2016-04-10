@@ -47,8 +47,8 @@ public abstract class Statistics {
         return new ArrayList[]{xValues, yValues};
     }
     protected ArrayList[] valuesWeek(ArrayList<String> values){
-        ArrayList<String> xValues = new ArrayList<String>();
-        ArrayList<Double> yValues = new ArrayList<Double>();
+        ArrayList<String> xValues = new ArrayList<>();
+        ArrayList<Double> yValues = new ArrayList<>();
         String curDate = values.get(0);
         int count = 1;
         for (int i = 1; i < values.size(); i++) {
@@ -88,6 +88,11 @@ public abstract class Statistics {
             }
         }
         return new ArrayList[]{xValues,yValues};
+
+    }
+    protected int getDayofWeek(Date date){ //return ints from 1-7, sunday is 1.
+        cal.setTime(date);
+        return cal.get(cal.DAY_OF_WEEK);
 
     }
     protected Date nextDate(Date date, int time){ //Calendar int, month, year, week, day.

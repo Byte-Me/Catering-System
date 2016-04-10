@@ -22,13 +22,14 @@ public class AddUser extends JFrame {
     private JButton cancelButton;
     private JButton addUserButton;
     private JTextField phone;
+    private JRadioButton changePasswordRadioButton;
 
     UserManagement userManagement;
 
     public AddUser(Container parent) {
         setContentPane(mainPane);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        mainPane.getRootPane().setDefaultButton(addUserButton);
+      //  mainPane.getRootPane().setDefaultButton(addUserButton);
         pack();
         setLocationRelativeTo(parent);
 

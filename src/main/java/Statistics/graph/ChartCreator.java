@@ -42,7 +42,7 @@ public class ChartCreator extends JFrame {
     */
 
     public static ChartPanel createLineChart(String title, String xTitle,
-                                             String yTitle, ArrayList<String> xValues, ArrayList<Double> yValues, String dataInfo ) {
+                                             String yTitle, ArrayList<String> xValues, ArrayList<Object> yValues, String dataInfo ) {
 
         if(xValues.size() != yValues.size()) {
             return null;
@@ -66,16 +66,40 @@ public class ChartCreator extends JFrame {
             returns NULL if not equal size.
          */
 
-    private static DefaultCategoryDataset createDataset(ArrayList<String> xValues,
-                                                        ArrayList<Double> yValues, String dataInfo) {
+    private static DefaultCategoryDataset createDataset(ArrayList<String> xValues, //kan bare sende inn double eller int
+                                                        ArrayList<Object> yValues, String dataInfo) {
 
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-
-        for(int i = 0; i<xValues.size();i++){
-            dataset.addValue(yValues.get(i), dataInfo, xValues.get(i));
+        if(yValues.get(0) instanceof Integer) {
+            for (int i = 0; i < xValues.size(); i++) {
+                dataset.addValue((Integer)yValues.get(i), dataInfo, xValues.get(i));
+            }
+        }
+        else if(yValues.get(0) instanceof Double){
+            for (int i = 0; i < xValues.size(); i++) {
+                dataset.addValue((Double)yValues.get(i), dataInfo, xValues.get(i));
+            }
         }
 
         return dataset;
+    }
+    public static ChartPanel createBarChart(String title, String xTitle,
+                                             String yTitle, ArrayList<String> xValues, ArrayList<Object> yValues, String dataInfo ) {
+
+        if(xValues.size() != yValues.size()) {
+            return null;
+        }
+        JFreeChart barChart = ChartFactory.createBarChart(title, xTitle, yTitle,
+                createDataset(xValues, yValues, dataInfo), PlotOrientation.VERTICAL, true, true, false);
+
+        ChartPanel chartPanel = new ChartPanel(barChart);
+
+
+        chartPanel.setPreferredSize( new java.awt.Dimension( 560 , 367 ) );
+        // preffered size is set, might want variables for dimensions.
+
+        return chartPanel;
+
     }
 
 }

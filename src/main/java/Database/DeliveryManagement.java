@@ -20,8 +20,40 @@ public class DeliveryManagement extends Management{
     1 = active
     2 = in the making
     3 = ready for delivery
-    4 = delivered
+    4 = delivered       order_id, Name, phone, address
      */
+
+    public ArrayList<Object[]> getDeliveryInfo(ArrayList<String> adresses){
+        if(setUp()) {
+            ArrayList<Object[]> out = new ArrayList<Object[]>();
+            try {
+                for(String adress : adresses) {
+                    ResultSet res = getScentence().executeQuery("SELECT `order`.order_id, customer.name, customer.phone, customer.adress FROM `order`, customer WHERE " +
+                            "`order`.status = 3 AND `order`.customer_id = customer.customer_id AND customer.adress = '"+adress+"';");
+                    if (res.next()) {
+                        Object[] obj = new Object[4];
+                        obj[0] = res.getString("order_id");
+                        obj[1] = res.getString("name");
+                        obj[2] = res.getString("phone");
+                        obj[3] = res.getString("adress");
+                        out.add(obj);
+                    }
+                }
+
+            } catch (Exception e) {
+                System.err.println("Issue with getting customer information.");
+                e.printStackTrace();
+                return null;
+            } finally {
+                DbUtils.closeQuietly(getScentence());
+                DbUtils.closeQuietly(getConnection());
+
+            }
+            return out;
+        }
+        else return null;
+    }
+
 
     public ArrayList<Object[]> getDeliveryReady(){
         ResultSet res = null;

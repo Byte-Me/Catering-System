@@ -41,6 +41,29 @@ public class OrderManagement extends Management {
             return value;
         }
     }
+    public enum OrderType {
+        INACTIVE, ACTIVE, PROCESSING, READY, DELIVERED;
+
+        public int getValue() {
+            return super.ordinal();
+        }
+
+        public static OrderType valueOf(int userTypeNr) {
+            for (OrderType type : OrderType.values()) {
+                if (type.ordinal() == userTypeNr) {
+                    return type;
+                }
+            }
+            return null;
+        }
+
+        @Override
+        public String toString() {
+            String constName = super.toString();
+            return constName.substring(0,1) + constName.substring(1).toLowerCase();
+        }
+
+    }
     public boolean updateStatus(int orderID, int newStatus){
         int numb = 0;
         if(newStatus <= OrdStatus.INACTIVE.getValue() || newStatus >= OrdStatus.DELIVERED.getValue()) {
@@ -94,7 +117,7 @@ public class OrderManagement extends Management {
         obj[2] = res.getString("phone");
         obj[3] = res.getString("adress");
         obj[4] = res.getString("date");
-        obj[5] = res.getInt("status");
+        obj[5] = OrderType.valueOf(res.getInt("status"));
         return obj;
     }
     public ArrayList<Object[]> orderSearch(String searchTerm){
@@ -152,14 +175,14 @@ public class OrderManagement extends Management {
         if(setUp()){
             try{
                 ResultSet res;
-                ArrayList<Integer> recipeIDs = new ArrayList<Integer>();
+                ArrayList<Integer> recipeIDs = new ArrayList<>();
                 getScentence().executeQuery("START TRANSACTION;");
                 int rowChanged = getScentence().executeUpdate("INSERT INTO `order` VALUES(DEFAULT, "+OrdStatus.ACTIVE.getValue()
                         +", '" + date + "', " + id + ", '"+ note + "', '"+ time + "', "+ subId + ");"); //Legger inn orderen med status aktiv.
 
                 int orderID = 0;
                 if(rowChanged > 0) {
-                    res = getScentence().executeQuery("SELECT LAST_INSERT_ID<zasx() as id;"); // Henter den autoinkrementerte verdien.
+                    res = getScentence().executeQuery("SELECT LAST_INSERT_ID() as id;"); // Henter den autoinkrementerte verdien.
                     if(res.next()) {
                         orderID = res.getInt("id");
                     }
@@ -169,9 +192,10 @@ public class OrderManagement extends Management {
                     return false;
 
                 }
-                for(Object[] name : recipes) {
+                for(Object[] name : recipes) { //[0] = quantity, [1] = name
 
-                    res = getScentence().executeQuery("SELECT recipe_id FROM recipe WHERE name = '" + name[0] + "';");
+
+                    res = getScentence().executeQuery("SELECT recipe_id FROM recipe WHERE name = '" + name[1] + "';");
 
                     if (res.next()) {
                         recipeIDs.add(res.getInt("recipe_id")); //Henter oppskrifts IDer for å koble oppskrifter med ordre.
@@ -182,10 +206,9 @@ public class OrderManagement extends Management {
                     }
                 }
 
-
                 for (int i = 0; i < recipeIDs.size(); i++) {
                     rowChanged = getScentence().executeUpdate("INSERT INTO order_recipe VALUES(" + orderID + ", " + recipeIDs.get(i) +
-                            ", '" + recipes.get(i)[1] + "');");
+                            ", '" + recipes.get(i)[0] + "');");
                     if (!(rowChanged > 0)) {
                         getScentence().executeQuery("ROLLBACK;");
                         return false;
@@ -214,6 +237,65 @@ public class OrderManagement extends Management {
         }
         else return false;
         return true;
+    }
+    /*.getOrderInfoFromId(orderId);
+        ArrayList<Object[]> orderRecipes = orderManagement.getRecipesFromOrder(orderId);
+        */
+    public Object[] getOrderInfoFromId(int orderId){
+        Object[] out = new Object[5];
+        if(setUp()) {
+            try {
+
+                PreparedStatement prep = getConnection().prepareStatement("SELECT `order`.status, `order`.date, " +
+                        "customer.name, `order`.note, `order`.time FROM `order`, customer WHERE `order`.order_id = ?" +
+                        " AND `order`.customer_id = customer.customer_id;");
+                prep.setInt(1, orderId);
+                ResultSet res = prep.executeQuery();
+                if (res.next()){
+                    out[0] = res.getString("name");
+                    out[1] = res.getString("date");
+                    out[2] = res.getString("time");
+                    out[3] = res.getString("note");
+                    out[4] = OrderType.valueOf(res.getInt("status"));
+                }
+
+            } catch (Exception e) {
+                System.err.println("Issue with finding order.");
+            } finally {
+                DbUtils.closeQuietly(getScentence());
+                DbUtils.closeQuietly(getConnection());
+            }
+
+        }
+        return out;
+    }
+    public ArrayList<Object[]> getRecipesFromOrder(int orderId){
+        ArrayList<Object[]> out = new ArrayList<>();
+        if(setUp()) {
+            try {
+
+                PreparedStatement prep = getConnection().prepareStatement("SELECT recipe.name, order_recipe.portions " +
+                        "FROM recipe, order_recipe WHERE order_recipe.order_id = ?" +
+                        " AND order_recipe.recipe_id = recipe.recipe_id;");
+                prep.setInt(1, orderId);
+                ResultSet res = prep.executeQuery();
+                while (res.next()){
+                    Object[] obj = new Object[2];
+                    obj[0] = res.getString("name");
+                    obj[1] = res.getString("portions");
+                    out.add(obj);
+
+                }
+
+            } catch (Exception e) {
+                System.err.println("Issue with finding order.");
+            } finally {
+                DbUtils.closeQuietly(getScentence());
+                DbUtils.closeQuietly(getConnection());
+            }
+
+        }
+        return out;
     }
 }
 

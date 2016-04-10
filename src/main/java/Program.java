@@ -20,6 +20,6 @@ public class Program {
             e.printStackTrace();
         }
 
-        Login loginForm = new Login(); // Open login screen - FIXME: If not used, remove reference to object
+        new Login();
     }
 }

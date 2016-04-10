@@ -81,11 +81,10 @@ public class AddCustomer extends JFrame{
             String pcCity = cCity.getText();
 
             boolean addedCustomer = customerManagement.addCustomerCompany(name1, "", "", adr, pc, pcCity);
-
+            //TODO: company må fikses. Alle nye customers blir company, finn evt. feil.
             if (addedCustomer) {
                 // Update customer list
                 Customers.updateCustomer();
-
                 // Close window
                 setVisible(false);
                 dispose();

@@ -2,6 +2,8 @@ package GUI.WindowPanels;
 
 import Database.OrderManagement;
 import GUI.AddOrder;
+import GUI.EditCustomer;
+import GUI.EditOrder;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -10,7 +12,11 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+
+import static javax.swing.JOptionPane.showMessageDialog;
 
 /**
  * Created by olekristianaune on 13.03.2016.
@@ -19,6 +25,7 @@ public class Orders {
 
     static OrderManagement orderManagement = new OrderManagement();
     static DefaultTableModel orderModel;
+    private final int orderColumnNr = 0;
 
     public Orders(final JPanel mainPanel, JTable ordersTable, final JTextField searchOrders, JButton addOrderButton, JButton editOrderButton, JButton deleteOrderButton) {
 
@@ -40,6 +47,25 @@ public class Orders {
 
         addOrderButton.addActionListener(e -> new AddOrder(mainPanel.getParent()));
 
+        editOrderButton.addActionListener(e -> {
+            if(ordersTable.getSelectedColumn() >= 0) { //TODO: sjekker ikke om flere columns er selected, velger øverste.
+                int id = (Integer)ordersTable.getValueAt(ordersTable.getSelectedRow(), orderColumnNr); //hent username for selected row
+                new EditOrder(mainPanel.getParent(), id);
+            }
+            else{
+                showMessageDialog(null, "An order needs to be selected.");
+            }
+        });
+
+        ordersTable.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if(e.getClickCount() == 2) {
+                    int id = (Integer) ordersTable.getValueAt(ordersTable.getSelectedRow(), orderColumnNr);
+                    new EditOrder(mainPanel.getParent(), id);
+                }
+            }
+        });
         searchOrders.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
@@ -80,11 +106,7 @@ public class Orders {
     public static void updateOrders(ArrayList<Object[]> users) {
 
         // Empties entries of Users table
-        if (orderModel.getRowCount() > 0) {
-            for (int i = orderModel.getRowCount() - 1; i > -1; i--) {
-                orderModel.removeRow(i);
-            }
-        }
+        orderModel.setRowCount(0);
 
         // Add users from arraylist to table
         for (Object[] user : users) {

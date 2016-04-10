@@ -35,17 +35,17 @@ public class SubscriptionStatistics extends Statistics{
         if(dayBetween > MONTHLIMIT) {
             ArrayList[] values = valuesMonth(subscription);
             chart = ChartCreator.createLineChart("Subscriptions", "Months", "Amount", (ArrayList<String>) values[0],
-                    (ArrayList<Double>) values[1], "subscriptions");
+                    (ArrayList<Object>) values[1], "subscriptions");
         }
         else if(dayBetween > WEEKLIMIT){
             ArrayList[] values = valuesWeek(subscription);
             chart = ChartCreator.createLineChart("Subscriptions", "Weeks", "Amount", (ArrayList<String>)values[0],
-                    (ArrayList<Double>)values[1], "subscriptions");
+                    (ArrayList<Object>)values[1], "subscriptions");
         }
         else{
             ArrayList[] values = valuesDay(subscription);
             chart = ChartCreator.createLineChart("Subscriptions", "Days", "Amount", (ArrayList<String>)values[0],
-                    (ArrayList<Double>)values[1], "subscriptions");
+                    (ArrayList<Object>)values[1], "subscriptions");
         }
         return chart;
     }
@@ -55,7 +55,7 @@ public class SubscriptionStatistics extends Statistics{
         Date to = null;
         JPanel chart = null;
         ArrayList<String> xValues = new ArrayList<String>();
-        ArrayList<Double> yValues = new ArrayList<Double>();
+        ArrayList<Object> yValues = new ArrayList<>();
 
 
         try {

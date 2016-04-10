@@ -18,20 +18,23 @@ public class StatisticsManagement extends Management{
     Inntekter per tid
     Antall ordre per tid
 
-     */ //TODO: slett når klassen er blitt testet.
-    public ArrayList<String> getOrders(String firstDate, String lastDate){
+*/
+    public ArrayList<double[]> getFinanceInfo(String firstDate, String lastDate){
         ResultSet res;
-        ArrayList<String> out = new ArrayList<String>();
+        ArrayList<double[]> out = new ArrayList<>();
         if(setUp()) {
             try {
-                res = getScentence().executeQuery("SELECT `order`.date from `order` where `date` >= DATE '" + firstDate +
+                res = getScentence().executeQuery("SELECT income, outcome from `finance` where `date` >= DATE '" + firstDate +
                         "' AND `date` <= DATE '" + lastDate + "' order by date;");
 
                 while (res.next()) {
-                    out.add(res.getString("date"));
+                    double[] dou = new double[2];
+                    dou[0] = res.getDouble("income");
+                    dou[1] = res.getDouble("outcome");
+                    out.add(dou);
                 }
             } catch (Exception e) {
-                System.err.println("Issue with getting orders");
+                System.err.println("Issue with getting finance from db");
                 return null;
             } finally {
                 DbUtils.closeQuietly(getScentence());
@@ -40,7 +43,6 @@ public class StatisticsManagement extends Management{
         }
         return out;
     }
-//TODO: Ikke testet 19.03.2016
     public ArrayList<String> getDates(String firstDate, String lastDate, String name){
         ResultSet res;
         ArrayList<String> out = new ArrayList<String>();
@@ -53,7 +55,7 @@ public class StatisticsManagement extends Management{
                     out.add(res.getString("date"));
                 }
             } catch (Exception e) {
-                System.err.println("Issue with getting customers");
+                System.err.println("Issue with getting dates");
                 return null;
             } finally {
                 DbUtils.closeQuietly(getScentence());
