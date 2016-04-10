@@ -6,7 +6,9 @@ import Statistics.*;
 import Subscription.Subscriptions;
 import org.junit.*;
 
+import javax.swing.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 
 import static org.junit.Assert.*;
@@ -171,6 +173,8 @@ public class TestJUnitDB{
     @Test
     public void testOrderStatistics(){
         OrderStatistics order = new OrderStatistics();
+        Object[] o = order.createStatsFromOrders("2008-11-20", "2016-11-20");
+        System.out.println(((JPanel)o[0]).toString());
         assertNotNull(order.createStatsFromOrders("2008-11-20", "2016-11-20"));
     }
     @Test

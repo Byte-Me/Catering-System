@@ -52,9 +52,7 @@ public class Chef {
         FoodManagement foodManagement = new FoodManagement();
         ArrayList<Object[]> ingredients = foodManagement.getIngredients();
 
-        for(int i = 0; i < ingredientModel.getRowCount(); i++) {
-            ingredientModel.removeRow(i);
-        }
+        ingredientModel.setRowCount(0);
 
         for (Object[] ingredient : ingredients) {
             ingredientModel.addRow(ingredient);

@@ -138,6 +138,8 @@ public class Users {
 
     }
 
+    // TODO: Make generic update function (also make generic table model with right click menu)
+
     // Update Users function
     public static void updateUsers() {
 
@@ -154,11 +156,7 @@ public class Users {
         }
 
         // Empties entries of Users table
-        if (userModel.getRowCount() > 0) {
-            for (int i = userModel.getRowCount() - 1; i > -1; i--) {
-                userModel.removeRow(i);
-            }
-        }
+        userModel.setRowCount(0);
 
         // Add users from arraylist to table
         for (Object[] user : users) {

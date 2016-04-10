@@ -68,11 +68,7 @@ public class Driver {
         ArrayList<String> orders = UseReadyOrders(cateringAdress);
 
         // Empties entries of Users table
-        if (driverModel.getRowCount() > 0) {
-            for (int i = driverModel.getRowCount() - 1; i > -1; i--) {
-                driverModel.removeRow(i);
-            }
-        }
+        driverModel.setRowCount(0);
 
         // Add users from arraylist to table
         for (String order : orders) {

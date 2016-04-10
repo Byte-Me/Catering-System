@@ -1,10 +1,12 @@
 package GUI.WindowPanels;
 
 import Statistics.*;
+import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 
 import javax.swing.*;
 import javax.swing.text.MaskFormatter;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DateFormat;
@@ -19,10 +21,14 @@ public class Statistics {
 
     private JPanel orderStatisticsPanel;
     OrderStatistics os = new OrderStatistics();
+    JFormattedTextField fromDate;
+    JFormattedTextField toDate;
 
     public Statistics(final JFormattedTextField fromDate, final JFormattedTextField toDate, JButton getStatisticsButton, JPanel orderStatisticsPanel) {
 
         this.orderStatisticsPanel = orderStatisticsPanel;
+        this.fromDate = fromDate;
+        this.toDate = toDate;
 
         try {
             final MaskFormatter maskFormatter1 = new MaskFormatter("####-##-##"); // Defining format pattern
@@ -57,16 +63,26 @@ public class Statistics {
 
 
         getStatisticsButton.addActionListener(e -> {
-            String fDate = fromDate.getText();
-            String tDate = toDate.getText();
-
-            System.out.println("From: " + fDate + " To: " + tDate);
-            Object[] orderStats = os.createStatsFromOrders(fDate, tDate);
-            System.out.println(orderStats[0].getClass());
-            orderStatisticsPanel.add((JPanel)orderStats[0]);
+            getStatistics();
         });
 
+        getStatistics();
 
+
+    }
+
+    public void getStatistics() {
+        String fDate = fromDate.getText();
+        String tDate = toDate.getText();
+
+        orderStatisticsPanel.setLayout(new BorderLayout());
+
+        Object[] orderStats = os.createStatsFromOrders(fDate, tDate);
+
+        ChartPanel p = (ChartPanel)orderStats[0];
+        if (p != null) {
+            orderStatisticsPanel.add(p, BorderLayout.CENTER);
+        }
     }
 
 }

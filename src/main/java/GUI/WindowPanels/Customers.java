@@ -128,11 +128,7 @@ public class Customers {
         }
 
         // Empties entries of Users table
-        if (customerModel.getRowCount() > 0) {
-            for (int i = customerModel.getRowCount() - 1; i > -1; i--) {
-                customerModel.removeRow(i);
-            }
-        }
+        customerModel.setRowCount(0);
 
         // Add users from arraylist to table
         for (Object[] customer : customers) {

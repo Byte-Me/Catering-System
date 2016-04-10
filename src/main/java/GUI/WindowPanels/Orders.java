@@ -80,11 +80,7 @@ public class Orders {
     public static void updateOrders(ArrayList<Object[]> users) {
 
         // Empties entries of Users table
-        if (orderModel.getRowCount() > 0) {
-            for (int i = orderModel.getRowCount() - 1; i > -1; i--) {
-                orderModel.removeRow(i);
-            }
-        }
+        orderModel.setRowCount(0);
 
         // Add users from arraylist to table
         for (Object[] user : users) {

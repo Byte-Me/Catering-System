@@ -31,7 +31,7 @@ public class OrderStatistics extends Statistics{
         Date endDate = null;
         try {
             startDate = getFormatter().parse(startDateS);
-            startDate = getFormatter().parse(endDateS);
+            endDate = getFormatter().parse(endDateS);
 
         } catch (ParseException e) {
             System.err.println("Issue with parsing date.");
