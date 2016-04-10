@@ -57,6 +57,8 @@ public class MainWindow extends JFrame {
     private JButton editIngredientButton;
     private JTable driverTable;
     private JPanel orderStatisticsPanel;
+    private JPanel barChartPanel;
+    private JPanel statsPanel;
 
 
     public MainWindow(UserManagement.UserType userType) {
@@ -68,9 +70,9 @@ public class MainWindow extends JFrame {
 
         // Setup the different panels - keep referance for possible future need.
         // Will get disposed and garbage collected when MainWindow gets closed (When application is closed)
-        Statistics statisticsPanel = new Statistics(fromDate, toDate, getStatisticsButton, orderStatisticsPanel);
-        Users usersPanel = new Users(mainPanel, addUserButton, userTable, searchUsers, deleteUsersButton);
-        Customers customersPanel = new Customers(mainPanel, addCustomerButton, customerTable, searchCustomers, deleteCustomersButton);
+        Statistics statisticsPanel = new Statistics(fromDate, toDate, getStatisticsButton, orderStatisticsPanel, statsPanel, barChartPanel);
+        Users usersPanel = new Users(mainPanel, addUserButton, userTable, searchUsers, deleteUsersButton, editUserButton);
+        Customers customersPanel = new Customers(mainPanel, addCustomerButton, customerTable, searchCustomers, deleteCustomersButton, editCustomerButton);
         Orders ordersPanel = new Orders(mainPanel, ordersTable, searchOrders, addOrderButton, editOrderButton, deleteOrderButton);
         Driver driverPanel = new Driver(driverTable, mapPanel, generateDrivingRouteButton);
         Chef chefPanel = new Chef(mainPanel, prepareTable, ingredientTable, generateShoppingListButton, recipesButton, addIngredientButton);

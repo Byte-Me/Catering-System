@@ -87,7 +87,7 @@ public class UserManagement extends Management {
                     obj[3] = res.getString("phone");
                     obj[4] = res.getString("username");
                     // Convert access level from int to string
-                    obj[5] = UserType.valueOf((Integer.parseInt(res.getString("access_level"))));
+                    obj[5] = UserType.valueOf(res.getInt("access_level"));
                     out.add(obj);
                 }
             } catch (SQLException e) {
@@ -98,6 +98,34 @@ public class UserManagement extends Management {
         } else return null;
 
     }
+    public Object[] getSingleUserInfo(String username){
+        Object[] out = new Object[6];
+        if(setUp()){
+            try {
+
+                ResultSet res = getScentence().executeQuery("SELECT first_name, last_name, email, phone, username, access_level" +
+                        " FROM user WHERE username = '"+username+"';");
+                if(res.next()){
+                    out[0] = res.getString("first_name");
+                    out[1] = res.getString("last_name");
+                    out[2] = res.getString("email");
+                    out[3] = res.getString("phone");
+                    out[4] = res.getString("username");
+                    out[5] = res.getInt("access_level");
+                }
+            }
+            catch (SQLException e){
+                System.err.println("Issue with getting user info.");
+                return null;
+            }
+            finally {
+                DbUtils.closeQuietly(getScentence());
+                DbUtils.closeQuietly(getConnection());
+            }
+        }
+        return out;
+    }
+
 
     public boolean updateUserInfoFName(String username, String newData) {
         int rowChanged = 0;
@@ -123,6 +151,33 @@ public class UserManagement extends Management {
         if(rowChanged > 0) return true;
         return false;
     }
+
+    public boolean updateUserPass(String username, String newData) {
+        int rowChanged = 0;
+        if (setUp()) {
+            try {
+                Encryption enc = new Encryption();
+                String[] saltHash = enc.passEncoding(newData);
+                PreparedStatement prep = getConnection().prepareStatement("UPDATE user SET salt = ?, hash = ? WHERE username = ?;");
+                prep.setString(1, saltHash[0]);
+                prep.setString(2, saltHash[1]);
+                prep.setString(3, username);
+                rowChanged = prep.executeUpdate();
+            } catch (SQLException e) {
+                System.err.println("Issue with executing database update.");
+                return false;
+
+            } finally {
+                DbUtils.closeQuietly(getScentence());
+                DbUtils.closeQuietly(getConnection());
+
+
+            }
+        }
+        if(rowChanged > 0) return true;
+        return false;
+    }
+
 
     public boolean updateUserInfoLName(String username, String newData) {
         int rowChanged = 0;
@@ -258,7 +313,7 @@ public class UserManagement extends Management {
                     obj[3] = res.getString("phone");
                     obj[4] = res.getString("username");
                     // Convert access level from int to string
-                    obj[5] = UserType.valueOf((Integer.parseInt(res.getString("access_level"))));
+                    obj[5] = UserType.valueOf(res.getInt("access_level"));
                     out.add(obj);
                 }
             } catch (Exception e) {

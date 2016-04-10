@@ -31,17 +31,17 @@ public class CustomerStatistics extends Statistics{
         if(dayBetween > MONTHLIMIT){
             ArrayList[] values = valuesMonth(customers);
             chart = ChartCreator.createLineChart("Customers", "Months", "Amount", (ArrayList<String>)values[0],
-                    (ArrayList<Double>)values[1], "customers");
+                    (ArrayList<Object>)values[1], "customers");
         }
         else if(dayBetween > WEEKLIMIT){
             ArrayList[] values = valuesWeek(customers);
             chart = ChartCreator.createLineChart("Customers", "Weeks", "Amount", (ArrayList<String>)values[0],
-                    (ArrayList<Double>)values[1], "customers");
+                    (ArrayList<Object>)values[1], "customers");
         }
         else{
             ArrayList[] values = valuesDay(customers);
             chart = ChartCreator.createLineChart("Customers", "Days", "Amount", (ArrayList<String>)values[0],
-                    (ArrayList<Double>)values[1], "customers");
+                    (ArrayList<Object>)values[1], "customers");
         }
         return chart;
 

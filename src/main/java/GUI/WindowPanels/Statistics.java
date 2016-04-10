@@ -1,9 +1,17 @@
 package GUI.WindowPanels;
 
+import java.awt.*;
+
+<<<<<<< HEAD
+
 import Statistics.*;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 
+=======
+import Statistics.OrderStatistics;
+import org.jfree.chart.ChartPanel;
+>>>>>>> EvensArbeid2
 import javax.swing.*;
 import javax.swing.text.MaskFormatter;
 import java.awt.*;
@@ -18,13 +26,15 @@ import java.util.Date;
  * Created by olekristianaune on 13.03.2016.
  */
 public class Statistics {
+    private OrderStatistics orderStats= new OrderStatistics();
 
+<<<<<<< HEAD
     private JPanel orderStatisticsPanel;
     OrderStatistics os = new OrderStatistics();
     JFormattedTextField fromDate;
     JFormattedTextField toDate;
 
-    public Statistics(final JFormattedTextField fromDate, final JFormattedTextField toDate, JButton getStatisticsButton, JPanel orderStatisticsPanel) {
+    public Statistics(final JFormattedTextField fromDate, final JFormattedTextField toDate, JButton getStatisticsButton, JPanel orderStatisticsPanel, JPanel statsPanel,  JPanel barChartPanel) {
 
         this.orderStatisticsPanel = orderStatisticsPanel;
         this.fromDate = fromDate;
@@ -63,7 +73,15 @@ public class Statistics {
 
 
         getStatisticsButton.addActionListener(e -> {
-            getStatistics();
+            String fDate = fromDate.getText();
+            String tDate = toDate.getText();
+            barChartPanel.setLayout(new BorderLayout());
+            JPanel barChart = orderStats.createBarChartFromOrder(fDate, tDate);
+
+            barChartPanel.add(barChart, BorderLayout.EAST);
+            barChartPanel.revalidate();
+            barChartPanel.repaint(); //FIXME: Ole må fikse dette, skjønner ikke...
+
         });
 
         getStatistics();
@@ -77,7 +95,7 @@ public class Statistics {
 
         orderStatisticsPanel.setLayout(new BorderLayout());
 
-        Object[] orderStats = os.createStatsFromOrders(fDate, tDate);
+        Object[] orderStats = os.createLineChartFromOrder(fDate, tDate);
 
         ChartPanel p = (ChartPanel)orderStats[0];
         if (p != null) {

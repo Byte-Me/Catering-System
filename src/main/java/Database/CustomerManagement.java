@@ -150,6 +150,11 @@ public class CustomerManagement extends Management{
         else return false;
 
     }
+    public boolean updateCustomerName(String email, String fName, String lName) {
+        String newData = nameFormatter(fName,lName);
+        if(updateCustomerName(email, newData)) return true;
+        return false;
+    }
 
     public boolean updateCustomerName(String email, String newData) {
         int rowChanged = 0;
@@ -212,8 +217,34 @@ public class CustomerManagement extends Management{
         }
         return rowChanged > 0;
     }
-    public boolean updateCustomerAdress(String email, String newData) {
+    public Object[] getSingleCustomerInfo(String email){
+        Object[] out =  new Object[5];
+        if (setUp()) {
+            try {
+                ResultSet res = getScentence().executeQuery("SELECT name, email, phone, adress, status FROM customer WHERE email = '"
+                        +email+"';");
+                if(res.next()){
+                    out[0] = res.getString("name");
+                    out[1] = res.getString("email");
+                    out[2] = res.getString("phone");
+                    out[3] = res.getString("adress");
+                    out[4] = res.getInt("status");
+                }
+            } catch (SQLException e) {
+                System.err.println("Issue with getting customer info.");
+                return null;
+
+            } finally {
+                DbUtils.closeQuietly(getScentence());
+                DbUtils.closeQuietly(getConnection());
+
+            }
+        }
+        return out;
+    }
+    public boolean updateCustomerAdress(String email, String street, String postCode, String city) {
         int rowChanged = 0;
+        String newData = adressFormatter(city, postCode,street);
         if (setUp()) {
             try {
                 PreparedStatement prep = getConnection().prepareStatement("UPDATE customer SET adress = ? WHERE email = ?;");

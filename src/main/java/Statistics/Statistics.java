@@ -90,6 +90,11 @@ public abstract class Statistics {
         return new ArrayList[]{xValues,yValues};
 
     }
+    protected int getDayofWeek(Date date){ //return ints from 1-7, sunday is 1.
+        cal.setTime(date);
+        return cal.get(cal.DAY_OF_WEEK);
+
+    }
     protected Date nextDate(Date date, int time){ //Calendar int, month, year, week, day.
         cal.setTime(date);
         cal.add(time, 1);
