@@ -2,21 +2,10 @@ package GUI.WindowPanels;
 
 import java.awt.*;
 
-<<<<<<< HEAD
-
-import Statistics.*;
-import org.jfree.chart.ChartPanel;
-import org.jfree.chart.JFreeChart;
-
-=======
 import Statistics.OrderStatistics;
 import org.jfree.chart.ChartPanel;
->>>>>>> EvensArbeid2
 import javax.swing.*;
 import javax.swing.text.MaskFormatter;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -26,10 +15,8 @@ import java.util.Date;
  * Created by olekristianaune on 13.03.2016.
  */
 public class Statistics {
-    private OrderStatistics orderStats= new OrderStatistics();
-
-<<<<<<< HEAD
     private JPanel orderStatisticsPanel;
+    private JPanel barChartPanel;
     OrderStatistics os = new OrderStatistics();
     JFormattedTextField fromDate;
     JFormattedTextField toDate;
@@ -37,6 +24,7 @@ public class Statistics {
     public Statistics(final JFormattedTextField fromDate, final JFormattedTextField toDate, JButton getStatisticsButton, JPanel orderStatisticsPanel, JPanel statsPanel,  JPanel barChartPanel) {
 
         this.orderStatisticsPanel = orderStatisticsPanel;
+        this.barChartPanel = barChartPanel;
         this.fromDate = fromDate;
         this.toDate = toDate;
 
@@ -73,15 +61,7 @@ public class Statistics {
 
 
         getStatisticsButton.addActionListener(e -> {
-            String fDate = fromDate.getText();
-            String tDate = toDate.getText();
-            barChartPanel.setLayout(new BorderLayout());
-            JPanel barChart = orderStats.createBarChartFromOrder(fDate, tDate);
-
-            barChartPanel.add(barChart, BorderLayout.EAST);
-            barChartPanel.revalidate();
-            barChartPanel.repaint(); //FIXME: Ole må fikse dette, skjønner ikke...
-
+            getStatistics();
         });
 
         getStatistics();
@@ -89,17 +69,28 @@ public class Statistics {
 
     }
 
+    // TODO: This should be rewritten to only update components and not deleting and readding
     public void getStatistics() {
         String fDate = fromDate.getText();
         String tDate = toDate.getText();
 
         orderStatisticsPanel.setLayout(new BorderLayout());
+        barChartPanel.setLayout(new BorderLayout());
 
         Object[] orderStats = os.createLineChartFromOrder(fDate, tDate);
 
-        ChartPanel p = (ChartPanel)orderStats[0];
-        if (p != null) {
-            orderStatisticsPanel.add(p, BorderLayout.CENTER);
+        ChartPanel lineChart = (ChartPanel)orderStats[0];
+        if (lineChart != null) {
+            orderStatisticsPanel.removeAll();
+            orderStatisticsPanel.add(lineChart, BorderLayout.CENTER);
+            orderStatisticsPanel.getRootPane().revalidate();
+        }
+
+        JPanel barChart = os.createBarChartFromOrder(fDate, tDate);
+        if (barChart != null) {
+            barChartPanel.removeAll();
+            barChartPanel.add(barChart, BorderLayout.CENTER);
+            barChartPanel.getRootPane().revalidate();
         }
     }
 

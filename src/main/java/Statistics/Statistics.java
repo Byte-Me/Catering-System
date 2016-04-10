@@ -47,8 +47,8 @@ public abstract class Statistics {
         return new ArrayList[]{xValues, yValues};
     }
     protected ArrayList[] valuesWeek(ArrayList<String> values){
-        ArrayList<String> xValues = new ArrayList<String>();
-        ArrayList<Double> yValues = new ArrayList<Double>();
+        ArrayList<String> xValues = new ArrayList<>();
+        ArrayList<Double> yValues = new ArrayList<>();
         String curDate = values.get(0);
         int count = 1;
         for (int i = 1; i < values.size(); i++) {
