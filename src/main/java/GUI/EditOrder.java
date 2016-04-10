@@ -38,6 +38,7 @@ public class EditOrder extends JFrame {
     private JTextArea commentTextArea;
     private JFormattedTextField timeField;
     private JComboBox statusDropdown;
+    private static JComboBox<Object> custDropHelp;
 
     private final String defaultTimeValue = "12:00";
     private final String seconds = ":00";
@@ -147,8 +148,7 @@ public class EditOrder extends JFrame {
         customerDropdown.addActionListener(e -> { //if value in dropdown is changed
             if (customerDropdown.getSelectedIndex() == customerDropdown.getItemCount()-1) { //if selected value is last index
                 new AddCustomer(mainPanel.getParent()); //call addCustomer method.
-                updateDropdown(); //TODO: Denne oppdaterer for fort? ny kunde vises ikke før den oppdateres senere...
-
+                updateDropdown(); //TODO: Move updateDropdown to addCustomer, static methods needs to be fixed first.
             }
 
         });
@@ -238,7 +238,7 @@ public class EditOrder extends JFrame {
         }
         return -1;
     }
-    private void updateDropdown(){
+    public void updateDropdown(){
         customerDropdown.removeAllItems();
         customers = customerManagement.getCustomers();
         for (Object[] customer : customers) {
@@ -247,5 +247,6 @@ public class EditOrder extends JFrame {
         customerDropdown.addItem(newCustomer);
 
     }
+
 }
 

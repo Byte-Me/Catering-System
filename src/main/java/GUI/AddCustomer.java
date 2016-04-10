@@ -85,7 +85,7 @@ public class AddCustomer extends JFrame{
             if (addedCustomer) {
                 // Update customer list
                 Customers.updateCustomer();
-
+                EditOrder.updateDropdown();
                 // Close window
                 setVisible(false);
                 dispose();

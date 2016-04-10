@@ -125,8 +125,11 @@ public class AddOrder extends JFrame{
 
         customerDropdown.addActionListener(e -> { //if value in dropdown is changed
             if (customerDropdown.getSelectedIndex() == customerDropdown.getItemCount()-1) { //if selected value is last index
+                System.out.println("Før");
                 new AddCustomer(mainPanel.getParent()); //call addCustomer method.
+                System.out.println("Etter");
                 updateDropdown(); //FIXME: Denne oppdaterer for fort? ny kunde vises ikke før den oppdateres senere...
+
             }
 
         });
