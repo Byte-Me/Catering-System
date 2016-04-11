@@ -56,7 +56,6 @@ public class EditOrder extends JDialog {
     public EditOrder(int orderId) {
         setContentPane(mainPanel);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        mainPanel.getRootPane().setDefaultButton(cancelButton);
         pack();
         setLocationRelativeTo(getParent());
         setModal(true);

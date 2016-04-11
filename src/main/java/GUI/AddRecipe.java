@@ -33,7 +33,6 @@ public class AddRecipe extends JDialog {
     public AddRecipe() {
         setContentPane(mainPane);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        mainPane.getRootPane().setDefaultButton(addRecipeButton);
         pack();
         setLocationRelativeTo(getParent());
         setModal(true);

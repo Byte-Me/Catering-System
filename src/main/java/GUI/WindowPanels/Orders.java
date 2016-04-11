@@ -8,6 +8,7 @@ import GUI.EditOrder;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -37,6 +38,18 @@ public class Orders {
                 //all cells false
                 return false;
             }
+
+            @Override
+            public Class getColumnClass(int column) {
+                switch (column) {
+                    case 0:
+                        return Integer.class;
+                    case 2:
+                        return Integer.class;
+                    default:
+                        return String.class;
+                }
+            }
         };
 
         orderModel.setColumnIdentifiers(headers);
@@ -44,6 +57,11 @@ public class Orders {
         ordersTable.setModel(orderModel);
         ordersTable.setAutoCreateRowSorter(true);
         ordersTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        DefaultTableCellRenderer intRenderer = new DefaultTableCellRenderer();
+        intRenderer.setHorizontalAlignment(SwingConstants.LEFT);
+        ordersTable.getColumnModel().getColumn(0).setCellRenderer(intRenderer);
+        ordersTable.getColumnModel().getColumn(2).setCellRenderer(intRenderer);
 
         addOrderButton.addActionListener(e -> new AddOrder());
 

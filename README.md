@@ -6,9 +6,9 @@ Databaseprosjekt - mer info om funskjonalitet kommer.
 __Loginscreen is finished.__
 
 ### General:
-- [ ] Check if default buttons are necessary.
+- [x] Check if default buttons are necessary.
 - [x] Every window needs to be handled, cant go back to parent window without closing child.
-- [ ] Sorting by id's needs fixing, 90 is apparently higher than 100
+- [x] Sorting by id's needs fixing, 90 is apparently higher than 100 (FIXED ON ORDERS)
 
 ### Statistics:
     Utsetter mye så andre kan gjøre det, se på metodene mine, mange er nesten like -evda
