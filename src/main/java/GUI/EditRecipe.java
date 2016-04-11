@@ -31,12 +31,12 @@ public class EditRecipe extends JDialog {
 
     FoodManagement foodManagement;
 
-    public EditRecipe(Container parent) {
+    public EditRecipe() {
         setContentPane(mainPane);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         mainPane.getRootPane().setDefaultButton(addRecipeButton);
         pack();
-        setLocationRelativeTo(parent);
+        setLocationRelativeTo(getParent());
         setModal(true);
 
         final int nameColumnNr = 0;

@@ -34,12 +34,12 @@ public class AddIngredient extends JDialog {
 
     FoodManagement foodManagement;
 
-    public AddIngredient(Container parent) {
+    public AddIngredient() {
         setContentPane(mainPane);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         mainPane.getRootPane().setDefaultButton(addButton);
         pack();
-        setLocationRelativeTo(parent);
+        setLocationRelativeTo(getParent());
         setModal(true);
 
         foodManagement = new FoodManagement();

@@ -25,12 +25,12 @@ public class GenerateShoppingList extends JDialog {
 
     private DefaultTableModel shoppingListModel = new DefaultTableModel();
 
-    public GenerateShoppingList(Container parent) {
+    public GenerateShoppingList() {
         setContentPane(mainPane);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         mainPane.getRootPane().setDefaultButton(okButton);
         pack();
-        setLocationRelativeTo(parent);
+        setLocationRelativeTo(getParent());
         setModal(true);
 
         String[] shoppingListHeader = {"Ingredient", "Quantity", "Unit", "Price"};

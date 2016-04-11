@@ -49,11 +49,11 @@ public class AddOrder extends JDialog{
 
 
 
-    public AddOrder(Container parent) {
+    public AddOrder() {
         setContentPane(mainPanel);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         pack();
-        setLocationRelativeTo(parent);
+        setLocationRelativeTo(getParent());
         setModal(true);
 
         /* Cancel button */
@@ -124,7 +124,7 @@ public class AddOrder extends JDialog{
         customerDropdown.addActionListener(e -> { //if value in dropdown is changed
             if (customerDropdown.getSelectedIndex() == customerDropdown.getItemCount()-1) { //if selected value is last index
                 System.out.println("Før");
-                new AddCustomer(mainPanel.getParent()); //call addCustomer method.
+                new AddCustomer(); //call addCustomer method.
                 System.out.println("Etter");
                 updateDropdown(); //FIXME: Denne oppdaterer for fort? ny kunde vises ikke før den oppdateres senere...
 

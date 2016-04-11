@@ -24,12 +24,12 @@ public class Recipes extends JDialog {
 
     FoodManagement foodManagement = new FoodManagement();
 
-    public Recipes(Container parent) {
+    public Recipes() {
         setContentPane(mainPane);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         mainPane.getRootPane().setDefaultButton(addRecipeButton);
         pack();
-        setLocationRelativeTo(parent);
+        setLocationRelativeTo(getParent());
         setModal(true);
 
         String[] recipeHeader = {"ID", "Name"};
@@ -42,9 +42,9 @@ public class Recipes extends JDialog {
 
         updateRecipes();
 
-        addRecipeButton.addActionListener(e -> new AddRecipe(mainPane.getParent()));
+        addRecipeButton.addActionListener(e -> new AddRecipe());
 
-        editRecipeButton.addActionListener(e -> new EditRecipe(mainPane.getParent()));
+        editRecipeButton.addActionListener(e -> new EditRecipe());
 
         cancelButton.addActionListener(e -> {
             setVisible(false);

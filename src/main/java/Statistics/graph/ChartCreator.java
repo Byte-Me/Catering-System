@@ -48,7 +48,7 @@ public class ChartCreator extends JFrame {
             return null;
         }
 
-        JFreeChart lineChart = ChartFactory.createLineChart3D(title, xTitle, yTitle,
+        JFreeChart lineChart = ChartFactory.createLineChart(title, xTitle, yTitle,
                 createDataset(xValues, yValues, dataInfo), PlotOrientation.VERTICAL, true, true, false);
 
         ChartPanel chartPanel = new ChartPanel( lineChart );

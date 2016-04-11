@@ -27,18 +27,18 @@ public class Customers {
     private int emailColumnNr = 1;
     private static JTable localCustomerTable;
 
-    public Customers(final JPanel mainPanel, JButton addCustomerButton, final JTable customerTable, final JTextField searchCustomers, JButton deleteCustomerButton, JButton editCustomerButton) {
+    public Customers(JButton addCustomerButton, final JTable customerTable, final JTextField searchCustomers, JButton deleteCustomerButton, JButton editCustomerButton) {
 
         addCustomerButton.addActionListener(new ActionListener() { // Button action listener
             public void actionPerformed(ActionEvent e) {
-                new AddCustomer(mainPanel.getParent());
+                new AddCustomer();
             }
         });
 
         editCustomerButton.addActionListener(e -> {
             if(customerTable.getSelectedColumn() >= 0) { //TODO: sjekker ikke om flere columns er selected, velger øverste.
                 String email = (String) customerTable.getValueAt(customerTable.getSelectedRow(), emailColumnNr); //hent username for selected row
-                new EditCustomer(mainPanel.getParent(), email);
+                new EditCustomer(email);
             }
             else{
                 showMessageDialog(null, "A customer needs to be selected.");
@@ -50,7 +50,7 @@ public class Customers {
             public void mouseClicked(MouseEvent e) {
                 if(e.getClickCount() == 2) {
                     String email = (String) customerTable.getValueAt(customerTable.getSelectedRow(), emailColumnNr);
-                    new EditCustomer(mainPanel.getParent(), email);
+                    new EditCustomer(email);
                 }
             }
         });

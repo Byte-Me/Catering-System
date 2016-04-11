@@ -53,12 +53,12 @@ public class EditOrder extends JDialog {
     private OrderManagement orderManagement = new OrderManagement();
 
 
-    public EditOrder(Container parent, int orderId) {
+    public EditOrder(int orderId) {
         setContentPane(mainPanel);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         mainPanel.getRootPane().setDefaultButton(cancelButton);
         pack();
-        setLocationRelativeTo(parent);
+        setLocationRelativeTo(getParent());
         setModal(true);
 
         /* Cancel button */
@@ -145,7 +145,7 @@ public class EditOrder extends JDialog {
         //Adds a customer if new customer is selected
         customerDropdown.addActionListener(e -> { //if value in dropdown is changed
             if (customerDropdown.getSelectedIndex() == customerDropdown.getItemCount()-1) { //if selected value is last index
-                new AddCustomer(mainPanel.getParent()); //call addCustomer method.
+                new AddCustomer(); //call addCustomer method.
                 updateDropdown(); //TODO: Move updateDropdown to addCustomer, static methods needs to be fixed first.
             }
 

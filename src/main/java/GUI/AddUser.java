@@ -26,12 +26,12 @@ public class AddUser extends JDialog {
 
     UserManagement userManagement;
 
-    public AddUser(Container parent) {
+    public AddUser() {
         setContentPane(mainPane);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
       //  mainPane.getRootPane().setDefaultButton(addUserButton);
         pack();
-        setLocationRelativeTo(parent);
+        setLocationRelativeTo(getParent());
         setModal(true);
 
         // Setting up the userType select box

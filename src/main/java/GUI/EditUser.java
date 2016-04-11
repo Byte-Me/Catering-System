@@ -26,12 +26,12 @@ public class EditUser extends JDialog{
     UserManagement userManagement = new UserManagement(); //TODO: Dette må testes, db var nede 09.04.2016
 
 
-    public EditUser(Container parent, String username) {
+    public EditUser(String username) {
         setContentPane(mainPane);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         //  mainPane.getRootPane().setDefaultButton(addUserButton); //TODO: ønsker vi denne?
         pack();
-        setLocationRelativeTo(parent);
+        setLocationRelativeTo(getParent());
         setModal(true);
 
         // Setting up the userType select box

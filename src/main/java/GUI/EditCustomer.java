@@ -33,12 +33,12 @@ public class EditCustomer extends JDialog{
 
     public CustomerManagement customerManagement = new CustomerManagement();
 
-        public EditCustomer(Container parent, String emailS) {
+        public EditCustomer(String emailS) {
 
             setContentPane(mainPanel);
             setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
             pack();
-            setLocationRelativeTo(parent);
+            setLocationRelativeTo(getParent());
             setModal(true);
 
             // Close on cancel

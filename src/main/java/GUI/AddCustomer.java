@@ -33,12 +33,12 @@ public class AddCustomer extends JDialog{
 
     public CustomerManagement customerManagement = new CustomerManagement();
 
-    public AddCustomer(Container parent) {
+    public AddCustomer() {
 
         setContentPane(mainPanel);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         pack();
-        setLocationRelativeTo(parent);
+        setLocationRelativeTo(getParent());
         setModal(true);
 
         // Close on cancel
