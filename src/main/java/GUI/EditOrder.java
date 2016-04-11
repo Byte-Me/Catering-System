@@ -26,7 +26,7 @@ import static javax.swing.JOptionPane.showMessageDialog;
 /**
  * Created by Evdal on 09.04.2016.
  */
-public class EditOrder extends JFrame {
+public class EditOrder extends JDialog {
 
     private JPanel mainPanel;
     private JComboBox<Object> customerDropdown;
@@ -53,17 +53,13 @@ public class EditOrder extends JFrame {
     private OrderManagement orderManagement = new OrderManagement();
 
 
-
-
-
     public EditOrder(Container parent, int orderId) {
         setContentPane(mainPanel);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         mainPanel.getRootPane().setDefaultButton(cancelButton);
         pack();
         setLocationRelativeTo(parent);
-
-
+        setModal(true);
 
         /* Cancel button */
         cancelButton.addActionListener(e -> {

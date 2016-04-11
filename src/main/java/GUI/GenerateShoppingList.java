@@ -15,7 +15,7 @@ import java.util.Arrays;
 /**
  * Created by asdfLaptop on 15.03.2016.
  */
-public class GenerateShoppingList extends JFrame {
+public class GenerateShoppingList extends JDialog {
     private JPanel mainPane;
     private JTable shoppingTable;
     private JButton okButton;
@@ -31,6 +31,7 @@ public class GenerateShoppingList extends JFrame {
         mainPane.getRootPane().setDefaultButton(okButton);
         pack();
         setLocationRelativeTo(parent);
+        setModal(true);
 
         String[] shoppingListHeader = {"Ingredient", "Quantity", "Unit", "Price"};
 

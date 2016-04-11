@@ -9,7 +9,7 @@ import java.awt.*;
 /**
  * Created by olekristianaune on 04.04.2016.
  */
-public class HelpWindow extends JFrame{
+public class HelpWindow extends JDialog{
     private JPanel mainPanel;
     Browser browser;
 
@@ -29,5 +29,6 @@ public class HelpWindow extends JFrame{
         setSize(700, 500);
         setLocationRelativeTo(parent);
         setVisible(true);
+        setModal(true);
     }
 }

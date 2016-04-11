@@ -11,7 +11,7 @@ import java.awt.event.ActionListener;
 /**
  * Created by olekristianaune on 09.03.2016.
  */
-public class AddUser extends JFrame {
+public class AddUser extends JDialog {
     private JTextField firstName;
     private JTextField lastName;
     private JTextField email;
@@ -32,6 +32,7 @@ public class AddUser extends JFrame {
       //  mainPane.getRootPane().setDefaultButton(addUserButton);
         pack();
         setLocationRelativeTo(parent);
+        setModal(true);
 
         // Setting up the userType select box
         userType.addItem("Admin");

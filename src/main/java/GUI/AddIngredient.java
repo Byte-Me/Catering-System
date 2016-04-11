@@ -15,7 +15,7 @@ import java.util.ArrayList;
 /**
  * Created by asdfLaptop on 15.03.2016.
  */
-public class AddIngredient extends JFrame {
+public class AddIngredient extends JDialog {
     private JPanel mainPane;
     private JButton cancelButton;
     private JButton addIngredientsButton;
@@ -40,6 +40,7 @@ public class AddIngredient extends JFrame {
         mainPane.getRootPane().setDefaultButton(addButton);
         pack();
         setLocationRelativeTo(parent);
+        setModal(true);
 
         foodManagement = new FoodManagement();
 
