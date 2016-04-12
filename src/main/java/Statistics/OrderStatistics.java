@@ -114,8 +114,8 @@ public class OrderStatistics extends Statistics{
         xValues.add("Thursday");
         xValues.add("Friday");
         xValues.add("Saturday");
-        ChartPanel chart = ChartCreator.createBarChart("Orders", "Days", "Orders per day", xValues,
-                yValues, "orders");
+        ChartPanel chart = ChartCreator.createBarChart("Orders by weekday", "Days", "Amount", xValues,
+                yValues, "");
 
         return chart;
 

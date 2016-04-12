@@ -10,7 +10,7 @@ import java.util.Arrays;
 /**
  * Created by Evdal on 09.04.2016.
  */
-public class EditUser extends JFrame{
+public class EditUser extends JDialog{
     private JTextField firstName;
     private JTextField lastName;
     private JTextField email;
@@ -26,12 +26,13 @@ public class EditUser extends JFrame{
     UserManagement userManagement = new UserManagement(); //TODO: Dette må testes, db var nede 09.04.2016
 
 
-    public EditUser(Container parent, String username) {
+    public EditUser(String username) {
         setContentPane(mainPane);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         //  mainPane.getRootPane().setDefaultButton(addUserButton); //TODO: ønsker vi denne?
         pack();
-        setLocationRelativeTo(parent);
+        setLocationRelativeTo(getParent());
+        setModal(true);
 
         // Setting up the userType select box
         userType.addItem("Admin");

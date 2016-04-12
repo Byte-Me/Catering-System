@@ -15,7 +15,7 @@ import static GUI.AddRecipe.existsInTable;
 /**
  * Created by asdfLaptop on 16.03.2016.
  */
-public class EditRecipe extends JFrame {
+public class EditRecipe extends JDialog {
     private JPanel mainPane;
     private JButton cancelButton;
     private JButton addRecipeButton;
@@ -31,12 +31,12 @@ public class EditRecipe extends JFrame {
 
     FoodManagement foodManagement;
 
-    public EditRecipe(Container parent) {
+    public EditRecipe() {
         setContentPane(mainPane);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        mainPane.getRootPane().setDefaultButton(addRecipeButton);
         pack();
-        setLocationRelativeTo(parent);
+        setLocationRelativeTo(getParent());
+        setModal(true);
 
         final int nameColumnNr = 0;
         final int quantityColumnNr = 1;

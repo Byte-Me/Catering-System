@@ -13,7 +13,7 @@ import static javax.swing.JOptionPane.showMessageDialog;
 /**
  * Created by olekristianaune on 11.03.2016.
  */
-public class AddCustomer extends JFrame{
+public class AddCustomer extends JDialog{
     private JPanel mainPanel;
     private JTextField firstName;
     private JTextField lastName;
@@ -33,12 +33,13 @@ public class AddCustomer extends JFrame{
 
     public CustomerManagement customerManagement = new CustomerManagement();
 
-    public AddCustomer(Container parent) {
+    public AddCustomer() {
 
         setContentPane(mainPanel);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         pack();
-        setLocationRelativeTo(parent);
+        setLocationRelativeTo(getParent());
+        setModal(true);
 
         // Close on cancel
         final ActionListener closeWindow = e -> {

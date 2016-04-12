@@ -71,11 +71,11 @@ public class MainWindow extends JFrame {
         // Setup the different panels - keep referance for possible future need.
         // Will get disposed and garbage collected when MainWindow gets closed (When application is closed)
         Statistics statisticsPanel = new Statistics(fromDate, toDate, getStatisticsButton, orderStatisticsPanel, statsPanel, barChartPanel);
-        Users usersPanel = new Users(mainPanel, addUserButton, userTable, searchUsers, deleteUsersButton, editUserButton);
-        Customers customersPanel = new Customers(mainPanel, addCustomerButton, customerTable, searchCustomers, deleteCustomersButton, editCustomerButton);
-        Orders ordersPanel = new Orders(mainPanel, ordersTable, searchOrders, addOrderButton, editOrderButton, deleteOrderButton);
+        Users usersPanel = new Users(addUserButton, userTable, searchUsers, deleteUsersButton, editUserButton);
+        Customers customersPanel = new Customers(addCustomerButton, customerTable, searchCustomers, deleteCustomersButton, editCustomerButton);
+        Orders ordersPanel = new Orders(ordersTable, searchOrders, addOrderButton, editOrderButton, deleteOrderButton);
         Driver driverPanel = new Driver(driverTable, mapPanel, generateDrivingRouteButton);
-        Chef chefPanel = new Chef(mainPanel, prepareTable, ingredientTable, generateShoppingListButton, recipesButton, addIngredientButton);
+        Chef chefPanel = new Chef(prepareTable, ingredientTable, generateShoppingListButton, recipesButton, addIngredientButton);
 
         // Remove panes the user does not have access to
         switch (userType) {
@@ -112,7 +112,7 @@ public class MainWindow extends JFrame {
         startAutoUpdate(tabbedPane1.getSelectedIndex()); // Start autoUpdate of tabs - TODO: Check interval on timer
         tabbedPane1.addChangeListener(e -> updateTab(tabbedPane1.getSelectedIndex()));
 
-        helpButton.addActionListener(e -> new HelpWindow(mainPanel.getParent()));
+        helpButton.addActionListener(e -> new HelpWindow());
 
         pack(); // Pack the window
         setSize(1000, 600); // Set window to desired size

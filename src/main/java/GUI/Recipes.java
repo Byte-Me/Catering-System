@@ -12,7 +12,7 @@ import java.util.ArrayList;
 /**
  * Created by asdfLaptop on 16.03.2016.
  */
-public class Recipes extends JFrame {
+public class Recipes extends JDialog {
     private JPanel mainPane;
     private JTable recipesTable;
     private JScrollPane recipes;
@@ -24,12 +24,12 @@ public class Recipes extends JFrame {
 
     FoodManagement foodManagement = new FoodManagement();
 
-    public Recipes(Container parent) {
+    public Recipes() {
         setContentPane(mainPane);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        mainPane.getRootPane().setDefaultButton(addRecipeButton);
         pack();
-        setLocationRelativeTo(parent);
+        setLocationRelativeTo(getParent());
+        setModal(true);
 
         String[] recipeHeader = {"ID", "Name"};
 
@@ -41,9 +41,9 @@ public class Recipes extends JFrame {
 
         updateRecipes();
 
-        addRecipeButton.addActionListener(e -> new AddRecipe(mainPane.getParent()));
+        addRecipeButton.addActionListener(e -> new AddRecipe());
 
-        editRecipeButton.addActionListener(e -> new EditRecipe(mainPane.getParent()));
+        editRecipeButton.addActionListener(e -> new EditRecipe());
 
         cancelButton.addActionListener(e -> {
             setVisible(false);

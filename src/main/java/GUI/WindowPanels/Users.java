@@ -3,15 +3,12 @@ package GUI.WindowPanels;
 import Database.UserManagement;
 import GUI.AddUser;
 import GUI.EditUser;
-import HelperClasses.TableCellListener;
+import HelperClasses.MainTableModel;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -29,7 +26,7 @@ public class Users {
     static DefaultListSelectionModel listSelectionModel;
 
     // Create Users Pane
-    public Users(final JPanel mainPanel, JButton addUserButton, final JTable userTable, final JTextField searchUsers, JButton deleteUsersButton, JButton editUserButton) {
+    public Users(JButton addUserButton, final JTable userTable, final JTextField searchUsers, JButton deleteUsersButton, JButton editUserButton) {
 
         final int usernameColumnNr = 4;
         final int userTypeColumnNr = 5;
@@ -39,12 +36,7 @@ public class Users {
         String[] header = {"First Name", "Last Name", "Email", "Phone", "Username", "User Type"}; // Header titles
 
         //gjør celler un-editable.
-        userModel = new DefaultTableModel(){
-            @Override
-            public boolean isCellEditable(int row, int column){
-                return false;
-            }
-        }; // Model of the table
+        userModel = new MainTableModel();
 
         userModel.setColumnIdentifiers(header); // Add header to columns
 
@@ -54,13 +46,13 @@ public class Users {
 
         listSelectionModel = new DefaultListSelectionModel();
 
-        addUserButton.addActionListener(e -> new AddUser(mainPanel.getParent()));
+        addUserButton.addActionListener(e -> new AddUser());
 
         editUserButton.addActionListener(e ->{
             try {
                 if (userTable.getSelectedRows().length == 1 ) { //TODO: sjekker ikke om flere columns er selected, velger øverste.
                     String username = (String) userTable.getValueAt(userTable.getSelectedRow(), usernameColumnNr); //hent username for selected row
-                    new EditUser(mainPanel.getParent(), username);
+                    new EditUser(username);
                 } else if(userTable.getSelectedRows().length < 1){
                     showMessageDialog(null, "A user needs to be selected.");
                 }
@@ -78,7 +70,7 @@ public class Users {
             public void mouseClicked(MouseEvent e) {
                 if(e.getClickCount() == 2) {
                     String username = (String) userModel.getValueAt(userTable.getSelectedRow(), usernameColumnNr);
-                    new EditUser(mainPanel.getParent(), username);
+                    new EditUser(username);
                 }
             }
         });

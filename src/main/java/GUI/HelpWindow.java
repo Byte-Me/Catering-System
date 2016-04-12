@@ -9,11 +9,11 @@ import java.awt.*;
 /**
  * Created by olekristianaune on 04.04.2016.
  */
-public class HelpWindow extends JFrame{
+public class HelpWindow extends JDialog{
     private JPanel mainPanel;
     Browser browser;
 
-    public HelpWindow(Container parent) {
+    public HelpWindow() {
         setContentPane(mainPanel);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
@@ -27,7 +27,8 @@ public class HelpWindow extends JFrame{
 
         pack();
         setSize(700, 500);
-        setLocationRelativeTo(parent);
+        setLocationRelativeTo(getParent());
         setVisible(true);
+        setModal(true);
     }
 }

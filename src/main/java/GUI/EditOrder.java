@@ -26,7 +26,7 @@ import static javax.swing.JOptionPane.showMessageDialog;
 /**
  * Created by Evdal on 09.04.2016.
  */
-public class EditOrder extends JFrame {
+public class EditOrder extends JDialog {
 
     private JPanel mainPanel;
     private JComboBox<Object> customerDropdown;
@@ -53,17 +53,12 @@ public class EditOrder extends JFrame {
     private OrderManagement orderManagement = new OrderManagement();
 
 
-
-
-
-    public EditOrder(Container parent, int orderId) {
+    public EditOrder(int orderId) {
         setContentPane(mainPanel);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        mainPanel.getRootPane().setDefaultButton(cancelButton);
         pack();
-        setLocationRelativeTo(parent);
-
-
+        setLocationRelativeTo(getParent());
+        setModal(true);
 
         /* Cancel button */
         cancelButton.addActionListener(e -> {
@@ -149,7 +144,7 @@ public class EditOrder extends JFrame {
         //Adds a customer if new customer is selected
         customerDropdown.addActionListener(e -> { //if value in dropdown is changed
             if (customerDropdown.getSelectedIndex() == customerDropdown.getItemCount()-1) { //if selected value is last index
-                new AddCustomer(mainPanel.getParent()); //call addCustomer method.
+                new AddCustomer(); //call addCustomer method.
                 updateDropdown(); //TODO: Move updateDropdown to addCustomer, static methods needs to be fixed first.
             }
 
@@ -196,17 +191,21 @@ public class EditOrder extends JFrame {
         recipesList.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if(e.getClickCount() == 2){
-                    String selectedRecipe = recipesList.getSelectedValue();
-                    int portions = Integer.parseInt(showInputDialog("How many portions of " + selectedRecipe.toLowerCase() + " do you want to add?")); // FIXME: Add failsafe for parsing integer
-                    if (existsInTable(recipeTable, selectedRecipe) == -1) {
-                        addOrderModel.addRow(new Object[]{selectedRecipe,portions});
-                    } else {
-                        int row = existsInTable(recipeTable, selectedRecipe);
-                        int currentPortions = (Integer)addOrderModel.getValueAt(row, 0);
-                        if (currentPortions + portions >= 1) {
-                            addOrderModel.setValueAt(currentPortions + portions, row, 0);
+                if(e.getClickCount() == 2) {
+                    try {
+                        String selectedRecipe = recipesList.getSelectedValue();
+                        int portions = Integer.parseInt(showInputDialog("How many portions of " + selectedRecipe.toLowerCase() + " do you want to add?")); // FIXME: Add failsafe for parsing integer
+                        if (existsInTable(recipeTable, selectedRecipe) == -1) {
+                            addOrderModel.addRow(new Object[]{selectedRecipe, portions});
+                        } else {
+                            int row = existsInTable(recipeTable, selectedRecipe);
+                            int currentPortions = (Integer) addOrderModel.getValueAt(row, 0);
+                            if (currentPortions + portions >= 1) {
+                                addOrderModel.setValueAt(currentPortions + portions, row, 0);
+                            }
                         }
+                    } catch (NumberFormatException ne) {
+                        //message box cancelled.
                     }
                 }
             }
@@ -218,12 +217,15 @@ public class EditOrder extends JFrame {
                 if (e.getClickCount() == 2) {
                     String recipe = (String) recipeTable.getValueAt(recipeTable.getSelectedRow(), recipeColumnNr);
                     String in = showInputDialog("How many portions of " + recipe.toLowerCase() + " do you want?");
-                    if(!in.equals("")) {
-                        int portions = Integer.parseInt(in); // FIXME: Add failsafe for parsing integer
-                        addOrderModel.setValueAt(portions, recipeTable.getSelectedRow(), quantityColumnNr);
-                    }
-                    else{
-                        showMessageDialog(null, "You need to input a number.");
+                    try {
+                        if (in != null || !in.equals("")) {
+                            int portions = Integer.parseInt(in); // FIXME: Add failsafe for parsing integer
+                            addOrderModel.setValueAt(portions, recipeTable.getSelectedRow(), quantityColumnNr);
+                        } else {
+                            showMessageDialog(null, "You need to input a number.");
+                        }
+                    }catch(NullPointerException ne){
+                        //messagebox cancelled.
                     }
                 }
             }

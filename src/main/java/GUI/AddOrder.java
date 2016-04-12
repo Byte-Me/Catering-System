@@ -5,6 +5,7 @@ import Database.FoodManagement;
 import Database.OrderManagement;
 
 import javax.swing.*;
+import javax.swing.plaf.basic.BasicArrowButton;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.MaskFormatter;
 import java.awt.*;
@@ -22,7 +23,7 @@ import static javax.swing.JOptionPane.showMessageDialog;
 /**
  * Created by olekristianaune on 16.03.2016.
  */
-public class AddOrder extends JFrame{
+public class AddOrder extends JDialog{
 
     private JPanel mainPanel;
     private JComboBox<Object> customerDropdown;
@@ -49,11 +50,12 @@ public class AddOrder extends JFrame{
 
 
 
-    public AddOrder(Container parent) {
+    public AddOrder() {
         setContentPane(mainPanel);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         pack();
-        setLocationRelativeTo(parent);
+        setLocationRelativeTo(getParent());
+        setModal(true);
 
         /* Cancel button */
         cancelButton.addActionListener(e -> {
@@ -63,6 +65,7 @@ public class AddOrder extends JFrame{
 
         /* Create Order Table */
         String[] headers = {"Recipe", "Portions"};
+
 
         final DefaultTableModel addOrderModel = new DefaultTableModel() {
             @Override
@@ -123,7 +126,7 @@ public class AddOrder extends JFrame{
         customerDropdown.addActionListener(e -> { //if value in dropdown is changed
             if (customerDropdown.getSelectedIndex() == customerDropdown.getItemCount()-1) { //if selected value is last index
                 System.out.println("Før");
-                new AddCustomer(mainPanel.getParent()); //call addCustomer method.
+                new AddCustomer(); //call addCustomer method.
                 System.out.println("Etter");
                 updateDropdown(); //FIXME: Denne oppdaterer for fort? ny kunde vises ikke før den oppdateres senere...
 

@@ -25,13 +25,13 @@ public class DeliveryManagement extends Management{
 
     public ArrayList<Object[]> getDeliveryInfo(ArrayList<String> adresses){
         if(setUp()) {
-            ArrayList<Object[]> out = new ArrayList<Object[]>();
+            ArrayList<Object[]> out = new ArrayList<>();
             try {
                 for(String adress : adresses) {
                     ResultSet res = getScentence().executeQuery("SELECT `order`.order_id, customer.name, customer.phone, customer.adress FROM `order`, customer WHERE " +
                             "`order`.status = 3 AND `order`.customer_id = customer.customer_id AND customer.adress = '"+adress+"';");
                     if (res.next()) {
-                        Object[] obj = new Object[4];
+                        Object[] obj = new Object[5];
                         obj[0] = res.getString("order_id");
                         obj[1] = res.getString("name");
                         obj[2] = res.getString("phone");
@@ -56,9 +56,9 @@ public class DeliveryManagement extends Management{
 
 
     public ArrayList<Object[]> getDeliveryReady(){
-        ResultSet res = null;
+        ResultSet res;
         if(setUp()) {
-            ArrayList<Object[]> out = new ArrayList<Object[]>();
+            ArrayList<Object[]> out = new ArrayList<>();
 
             try {
                 res = getScentence().executeQuery("SELECT customer.phone, customer.adress FROM `order`, customer WHERE " +
@@ -83,9 +83,9 @@ public class DeliveryManagement extends Management{
         else return null;
     }
     public ArrayList<String> getAdressReady(){
-        ResultSet res = null;
+        ResultSet res;
         if(setUp()) {
-            ArrayList<String> out = new ArrayList<String>();
+            ArrayList<String> out = new ArrayList<>();
 
             try {
                 res = getScentence().executeQuery("SELECT customer.adress FROM `order`, customer WHERE "+

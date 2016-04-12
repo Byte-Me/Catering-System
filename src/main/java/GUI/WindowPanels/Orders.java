@@ -4,10 +4,12 @@ import Database.OrderManagement;
 import GUI.AddOrder;
 import GUI.EditCustomer;
 import GUI.EditOrder;
+import HelperClasses.MainTableModel;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -27,17 +29,11 @@ public class Orders {
     static DefaultTableModel orderModel;
     private final int orderColumnNr = 0;
 
-    public Orders(final JPanel mainPanel, JTable ordersTable, final JTextField searchOrders, JButton addOrderButton, JButton editOrderButton, JButton deleteOrderButton) {
+    public Orders(JTable ordersTable, final JTextField searchOrders, JButton addOrderButton, JButton editOrderButton, JButton deleteOrderButton) {
 
         String[] headers = {"ID", "Name", "Phone", "Address", "Date", "Status"};
 
-        orderModel = new DefaultTableModel() {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                //all cells false
-                return false;
-            }
-        };
+        orderModel = new MainTableModel();
 
         orderModel.setColumnIdentifiers(headers);
 
@@ -45,12 +41,25 @@ public class Orders {
         ordersTable.setAutoCreateRowSorter(true);
         ordersTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-        addOrderButton.addActionListener(e -> new AddOrder(mainPanel.getParent()));
+
+        DefaultTableCellRenderer intRenderer = new DefaultTableCellRenderer();
+        intRenderer.setHorizontalAlignment(SwingConstants.LEFT);
+        ordersTable.getColumnModel().getColumn(0).setCellRenderer(intRenderer);
+        ordersTable.getColumnModel().getColumn(2).setCellRenderer(intRenderer);
+
+        addOrderButton.addActionListener(e -> new AddOrder());
+
+        //setting column widths -- FIXME: Find better way to to this
+        ordersTable.getColumnModel().getColumn(0).setMinWidth(90);
+        ordersTable.getColumnModel().getColumn(1).setMaxWidth(190);
+        ordersTable.getColumnModel().getColumn(2).setMinWidth(130);
+        ordersTable.getColumnModel().getColumn(4).setMinWidth(130);
+        ordersTable.getColumnModel().getColumn(5).setMinWidth(100);
 
         editOrderButton.addActionListener(e -> {
             if(ordersTable.getSelectedColumn() >= 0) { //TODO: sjekker ikke om flere columns er selected, velger øverste.
                 int id = (Integer)ordersTable.getValueAt(ordersTable.getSelectedRow(), orderColumnNr); //hent username for selected row
-                new EditOrder(mainPanel.getParent(), id);
+                new EditOrder(id);
             }
             else{
                 showMessageDialog(null, "An order needs to be selected.");
@@ -62,7 +71,7 @@ public class Orders {
             public void mouseClicked(MouseEvent e) {
                 if(e.getClickCount() == 2) {
                     int id = (Integer) ordersTable.getValueAt(ordersTable.getSelectedRow(), orderColumnNr);
-                    new EditOrder(mainPanel.getParent(), id);
+                    new EditOrder(id);
                 }
             }
         });

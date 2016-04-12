@@ -15,7 +15,7 @@ import java.util.Arrays;
 /**
  * Created by asdfLaptop on 15.03.2016.
  */
-public class GenerateShoppingList extends JFrame {
+public class GenerateShoppingList extends JDialog {
     private JPanel mainPane;
     private JTable shoppingTable;
     private JButton okButton;
@@ -25,12 +25,13 @@ public class GenerateShoppingList extends JFrame {
 
     private DefaultTableModel shoppingListModel = new DefaultTableModel();
 
-    public GenerateShoppingList(Container parent) {
+    public GenerateShoppingList() {
         setContentPane(mainPane);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         mainPane.getRootPane().setDefaultButton(okButton);
         pack();
-        setLocationRelativeTo(parent);
+        setLocationRelativeTo(getParent());
+        setModal(true);
 
         String[] shoppingListHeader = {"Ingredient", "Quantity", "Unit", "Price"};
 
