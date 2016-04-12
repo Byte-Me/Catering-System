@@ -45,6 +45,18 @@ public class Orders {
         ordersTable.setAutoCreateRowSorter(true);
         ordersTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
+        //setting column widths
+        ordersTable.getColumnModel().getColumn(0).setMinWidth(90);
+        ordersTable.getColumnModel().getColumn(1).setMaxWidth(190);
+        ordersTable.getColumnModel().getColumn(2).setMinWidth(130);
+        ordersTable.getColumnModel().getColumn(0).setMaxWidth(90);
+        ordersTable.getColumnModel().getColumn(1).setMinWidth(190);
+        ordersTable.getColumnModel().getColumn(2).setMaxWidth(130);
+        ordersTable.getColumnModel().getColumn(4).setMinWidth(130);
+        ordersTable.getColumnModel().getColumn(4).setMaxWidth(130);
+        ordersTable.getColumnModel().getColumn(5).setMinWidth(100);
+        ordersTable.getColumnModel().getColumn(5).setMaxWidth(100);
+
         addOrderButton.addActionListener(e -> new AddOrder(mainPanel.getParent()));
 
         editOrderButton.addActionListener(e -> {

@@ -9,6 +9,7 @@ import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -55,6 +56,7 @@ public class Customers {
             }
         });
 
+
         localCustomerTable = customerTable;
 
         String[] header = {"Name", "Email", "Phone", "Address"}; // Header titles
@@ -68,9 +70,19 @@ public class Customers {
         };
         customerModel.setColumnIdentifiers(header); // Add header to columns
 
+
         customerTable.setModel(customerModel); // Add model to table
         customerTable.setAutoCreateRowSorter(true);
         customerTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+
+        //setting column widths
+        customerTable.getColumnModel().getColumn(0).setMinWidth(210);
+        customerTable.getColumnModel().getColumn(1).setMaxWidth(210);
+        customerTable.getColumnModel().getColumn(2).setMinWidth(130);
+        customerTable.getColumnModel().getColumn(0).setMaxWidth(210);
+        customerTable.getColumnModel().getColumn(1).setMinWidth(210);
+        customerTable.getColumnModel().getColumn(2).setMaxWidth(130);
 
         // What happens when a cell in the table is changed?
  /*       Action action = new AbstractAction() {
