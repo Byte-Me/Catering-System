@@ -191,17 +191,21 @@ public class EditOrder extends JDialog {
         recipesList.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
-                if(e.getClickCount() == 2){
-                    String selectedRecipe = recipesList.getSelectedValue();
-                    int portions = Integer.parseInt(showInputDialog("How many portions of " + selectedRecipe.toLowerCase() + " do you want to add?")); // FIXME: Add failsafe for parsing integer
-                    if (existsInTable(recipeTable, selectedRecipe) == -1) {
-                        addOrderModel.addRow(new Object[]{selectedRecipe,portions});
-                    } else {
-                        int row = existsInTable(recipeTable, selectedRecipe);
-                        int currentPortions = (Integer)addOrderModel.getValueAt(row, 0);
-                        if (currentPortions + portions >= 1) {
-                            addOrderModel.setValueAt(currentPortions + portions, row, 0);
+                if(e.getClickCount() == 2) {
+                    try {
+                        String selectedRecipe = recipesList.getSelectedValue();
+                        int portions = Integer.parseInt(showInputDialog("How many portions of " + selectedRecipe.toLowerCase() + " do you want to add?")); // FIXME: Add failsafe for parsing integer
+                        if (existsInTable(recipeTable, selectedRecipe) == -1) {
+                            addOrderModel.addRow(new Object[]{selectedRecipe, portions});
+                        } else {
+                            int row = existsInTable(recipeTable, selectedRecipe);
+                            int currentPortions = (Integer) addOrderModel.getValueAt(row, 0);
+                            if (currentPortions + portions >= 1) {
+                                addOrderModel.setValueAt(currentPortions + portions, row, 0);
+                            }
                         }
+                    } catch (NumberFormatException ne) {
+                        //message box cancelled.
                     }
                 }
             }
@@ -213,12 +217,15 @@ public class EditOrder extends JDialog {
                 if (e.getClickCount() == 2) {
                     String recipe = (String) recipeTable.getValueAt(recipeTable.getSelectedRow(), recipeColumnNr);
                     String in = showInputDialog("How many portions of " + recipe.toLowerCase() + " do you want?");
-                    if(!in.equals("")) {
-                        int portions = Integer.parseInt(in); // FIXME: Add failsafe for parsing integer
-                        addOrderModel.setValueAt(portions, recipeTable.getSelectedRow(), quantityColumnNr);
-                    }
-                    else{
-                        showMessageDialog(null, "You need to input a number.");
+                    try {
+                        if (in != null || !in.equals("")) {
+                            int portions = Integer.parseInt(in); // FIXME: Add failsafe for parsing integer
+                            addOrderModel.setValueAt(portions, recipeTable.getSelectedRow(), quantityColumnNr);
+                        } else {
+                            showMessageDialog(null, "You need to input a number.");
+                        }
+                    }catch(NullPointerException ne){
+                        //messagebox cancelled.
                     }
                 }
             }

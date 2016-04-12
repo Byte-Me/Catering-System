@@ -66,7 +66,7 @@ public class OrderManagement extends Management {
     }
     public boolean updateStatus(int orderID, int newStatus){
         int numb = 0;
-        if(newStatus <= OrdStatus.INACTIVE.getValue() || newStatus >= OrdStatus.DELIVERED.getValue()) {
+        if(newStatus < OrderType.INACTIVE.getValue() || newStatus > OrderType.DELIVERED.getValue()) {
             return false;
         }
 

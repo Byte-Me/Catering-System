@@ -9,6 +9,7 @@ import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
@@ -59,9 +60,15 @@ public class Customers {
         customerModel = new MainTableModel();
         customerModel.setColumnIdentifiers(header); // Add header to columns
 
+
         customerTable.setModel(customerModel); // Add model to table
         customerTable.setAutoCreateRowSorter(true);
         customerTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        //setting column widths -- FIXME: Find better way to do this
+        customerTable.getColumnModel().getColumn(0).setMinWidth(210);
+        customerTable.getColumnModel().getColumn(1).setMaxWidth(210);
+        customerTable.getColumnModel().getColumn(2).setMinWidth(130);
 
         // Serach field input changed?
         searchCustomers.getDocument().addDocumentListener(new DocumentListener() {

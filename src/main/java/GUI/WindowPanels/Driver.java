@@ -1,5 +1,6 @@
 package GUI.WindowPanels;
 
+import Database.OrderManagement;
 import HelperClasses.ToggleSelectionModel;
 import com.teamdev.jxbrowser.chromium.*;
 import com.teamdev.jxbrowser.chromium.swing.BrowserView;
@@ -14,6 +15,9 @@ import java.util.logging.Level;
 import static Delivery.CreateDeliveryRoute.UseReadyOrders;
 import static Delivery.CreateDeliveryRoute.UseReadyOrdersLatLng;
 import static Delivery.DeliveryRoute.geoCoder;
+import static javax.swing.JOptionPane.YES_NO_OPTION;
+import static javax.swing.JOptionPane.YES_OPTION;
+import static javax.swing.JOptionPane.showConfirmDialog;
 
 /**
  * Created by olekristianaune on 13.03.2016.
@@ -21,15 +25,28 @@ import static Delivery.DeliveryRoute.geoCoder;
 public class Driver {
     private static final String cateringAdress = "Trondheim, Norway";
     static DefaultTableModel driverModel;
+    private OrderManagement orderManagement = new OrderManagement();
 
     Browser browser;
     private static Number[] mapCenter;
 
     public Driver(final JTable driverTable, JPanel mapPanel, JButton generateDrivingRouteButton) {
 
-        String[] header = {"ID", "Name", "Phone", "Address"}; // Header titles
+        String[] header = {"ID", "Name", "Phone", "Address","Delivered"}; // Header titles
 
-        driverModel = new DefaultTableModel(); // Model of the table
+        driverModel = new DefaultTableModel(){
+            @Override
+            public Class<?> getColumnClass(int columnIndex) {
+                if (columnIndex == 4)
+                    return Boolean.class;
+                return super.getColumnClass(columnIndex);
+            }
+            @Override
+            public boolean isCellEditable(int row, int col) {
+                return (col == 4);
+            }
+        }; // Model of the table
+
         driverModel.setColumnIdentifiers(header);
 
         driverTable.setModel(driverModel); // Add model to jTable
@@ -37,6 +54,31 @@ public class Driver {
 
         driverTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION); // Only one row can be selected at a time - makes sure map code works
 
+        //setting column widths
+        driverTable.getColumnModel().getColumn(0).setMinWidth(60);
+        driverTable.getColumnModel().getColumn(0).setMaxWidth(60);
+
+        //updating orderstatus
+        driverModel.addTableModelListener(e ->{
+            int count = 0;
+            boolean lookingForOrder = true;
+
+            while(count < driverTable.getRowCount() && lookingForOrder){
+                if((Boolean)driverTable.getValueAt(count, 4)){
+
+                    int input = showConfirmDialog(null,"Do you want update status for orderID " +driverTable.getValueAt(count, 0)+"?","",YES_NO_OPTION);
+                    if(input==YES_OPTION) {
+                        orderManagement.updateStatus(Integer.parseInt((String)driverTable.getValueAt(count, 0)), OrderManagement.OrderType.DELIVERED.getValue());
+                        updateDrivingRoute();
+                        lookingForOrder = false;
+                    }
+                    else{
+                        driverTable.setValueAt(false,count, 4);
+                    }
+                }
+                count++;
+            }
+        });
         try {
             createMap(mapPanel, generateDrivingRouteButton);
         } catch (Exception e) {
@@ -72,6 +114,7 @@ public class Driver {
 
         // Add users from arraylist to table
         for (Object[] order : orders) {
+            order[4] = false;
             driverModel.addRow(order); // FIXME: Change this when new backend method available
         }
         /*

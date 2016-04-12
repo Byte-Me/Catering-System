@@ -23,72 +23,71 @@ public abstract class Statistics {
         ArrayList<Double> yValues = new ArrayList<Double>();
         ArrayList<String> xValues = new ArrayList<String>();
         String curDate = values.get(0);
-        int count = 1;
-        for (int i = 1; i < values.size(); i++) {
+        int count;
 
-
-            try {
-                if (isSameMonth(curDate, values.get(i))) {
-                    count++;
-                    if(i == values.size()-1){
-                        yValues.add(Double.valueOf(count));
-                        xValues.add(getMonthName(values.get(i)));
+        try {
+            while(formatter.parse(curDate).before(formatter.parse(values.get(values.size()-1)))) {
+                count = 0;
+                for (int i = 0; i < values.size(); i++) {
+                    if (isSameMonth(values.get(i), curDate)) {
+                        count++;
                     }
-                } else {
-                    yValues.add(Double.valueOf(count));
-                    xValues.add(getMonthName(values.get(i - 1)));
-                    curDate = values.get(i);
-                    count = 1;
                 }
-            } catch (Exception e) {
-                System.err.println("Issue parsing dates.");
+                xValues.add(getMonthName(curDate));
+                yValues.add(Double.valueOf(count));
+                curDate = formatter.format(nextDate(formatter.parse(curDate), Calendar.MONTH));
+
             }
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
         return new ArrayList[]{xValues, yValues};
     }
     protected ArrayList[] valuesWeek(ArrayList<String> values){
-        ArrayList<String> xValues = new ArrayList<>();
-        ArrayList<Double> yValues = new ArrayList<>();
+        ArrayList<Double> yValues = new ArrayList<Double>();
+        ArrayList<String> xValues = new ArrayList<String>();
         String curDate = values.get(0);
-        int count = 1;
-        for (int i = 1; i < values.size(); i++) {
-            if (isSameWeek(curDate, values.get(i))) {
-                count++;
-                if(i == values.size()-1){
-                    yValues.add(Double.valueOf(count));
-                    xValues.add(getWeekName(values.get(i)));
+        int count;
+        try {
+            while(formatter.parse(curDate).before(formatter.parse(values.get(values.size()-1)))) {
+                count = 0;
+                for (int i = 0; i < values.size(); i++) {
+                    if (isSameWeek(values.get(i), curDate)) {
+                        count++;
+                    }
                 }
-            } else {
+                xValues.add(getWeekName(curDate));
                 yValues.add(Double.valueOf(count));
-                xValues.add(getWeekName(values.get(i - 1)));
-                curDate = values.get(i);
-                count = 1;
+                curDate = formatter.format(nextDate(formatter.parse(curDate), Calendar.WEEK_OF_YEAR ));
+
             }
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
-        return new ArrayList[]{xValues,yValues};
+        return new ArrayList[]{xValues, yValues};
     }
     protected ArrayList[] valuesDay(ArrayList<String> values){
-        ArrayList<String> xValues = new ArrayList<String>();
         ArrayList<Double> yValues = new ArrayList<Double>();
-        int count = 1;
+        ArrayList<String> xValues = new ArrayList<String>();
         String curDate = values.get(0);
-        for (int i = 1; i < values.size(); i++) {
-            if (values.get(i).equals(curDate)) {
-                count++;
-                if(i == values.size()-1){
-                    yValues.add(Double.valueOf(count));
-                    xValues.add(values.get(i));
+        int count;
+        try {
+            while(formatter.parse(curDate).before(formatter.parse(values.get(values.size()-1)))) {
+                count = 0;
+                for (int i = 0; i < values.size(); i++) {
+                    if (isSameDay(values.get(i), curDate)) {
+                        count++;
+                    }
                 }
-            }
-            else{
+                xValues.add((curDate));
                 yValues.add(Double.valueOf(count));
-                xValues.add(values.get(i - 1));
-                curDate = values.get(i);
-                count = 1;
-            }
-        }
-        return new ArrayList[]{xValues,yValues};
+                curDate = formatter.format(nextDate(formatter.parse(curDate), Calendar.DAY_OF_YEAR ));
 
+            }
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return new ArrayList[]{xValues, yValues};
     }
     protected int getDayofWeek(Date date){ //return ints from 1-7, sunday is 1.
         cal.setTime(date);
@@ -127,7 +126,7 @@ public abstract class Statistics {
             System.err.println("Issue with parsing dates.");
         }
         cal.setTime(tmp);
-        return cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault());
+        return cal.getDisplayName(Calendar.MONTH, Calendar.LONG, Locale.getDefault())+" "+cal.get(Calendar.YEAR);
 
     }
     protected String getWeekName(String date){

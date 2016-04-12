@@ -5,6 +5,7 @@ import Database.FoodManagement;
 import Database.OrderManagement;
 
 import javax.swing.*;
+import javax.swing.plaf.basic.BasicArrowButton;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.MaskFormatter;
 import java.awt.*;
@@ -64,6 +65,7 @@ public class AddOrder extends JDialog{
 
         /* Create Order Table */
         String[] headers = {"Recipe", "Portions"};
+
 
         final DefaultTableModel addOrderModel = new DefaultTableModel() {
             @Override

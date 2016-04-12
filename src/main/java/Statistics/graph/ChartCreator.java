@@ -3,10 +3,16 @@ package Statistics.graph;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.StandardChartTheme;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.renderer.category.BarRenderer;
+import org.jfree.chart.renderer.category.LineAndShapeRenderer;
+import org.jfree.chart.renderer.category.StandardBarPainter;
 import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.ui.RectangleInsets;
 
 import javax.swing.*;
+import java.awt.*;
 import java.util.*;
 
 /**
@@ -49,7 +55,29 @@ public class ChartCreator extends JFrame {
         }
 
         JFreeChart lineChart = ChartFactory.createLineChart(title, xTitle, yTitle,
-                createDataset(xValues, yValues, dataInfo), PlotOrientation.VERTICAL, true, true, false);
+                createDataset(xValues, yValues, dataInfo), PlotOrientation.VERTICAL, false, false, false);
+        StandardChartTheme theme = (StandardChartTheme)org.jfree.chart.StandardChartTheme.createJFreeTheme();
+        String fontName = "Lucida Sans";
+        theme.setExtraLargeFont( new Font(fontName,Font.PLAIN, 16) ); //title
+        theme.setLargeFont( new Font(fontName,Font.BOLD, 15)); //axis-title
+        theme.setRegularFont( new Font(fontName,Font.PLAIN, 11));
+        theme.setRangeGridlinePaint( Color.decode("#C0C0C0"));
+        theme.setPlotBackgroundPaint( Color.white );
+        theme.setChartBackgroundPaint( Color.white );
+        theme.setGridBandPaint( Color.red );
+        theme.setAxisOffset( new RectangleInsets(0,0,0,0) );
+        theme.setBarPainter(new StandardBarPainter());
+        theme.setAxisLabelPaint( Color.decode("#666666")  );
+        theme.apply( lineChart );
+        lineChart.getCategoryPlot().setOutlineVisible( false );
+        lineChart.getCategoryPlot().getRangeAxis().setAxisLineVisible( false );
+        lineChart.getCategoryPlot().getRangeAxis().setTickMarksVisible( false );
+        lineChart.getCategoryPlot().setRangeGridlineStroke( new BasicStroke() );
+        lineChart.getCategoryPlot().getRangeAxis().setTickLabelPaint( Color.decode("#666666") );
+        lineChart.getCategoryPlot().getDomainAxis().setTickLabelPaint( Color.decode("#666666") );
+        lineChart.setTextAntiAlias( true );
+        lineChart.setAntiAlias( true );
+        lineChart.getCategoryPlot().getRenderer().setSeriesPaint( 0, Color.decode( "#4572a7" ));
 
         ChartPanel chartPanel = new ChartPanel( lineChart );
 
@@ -90,8 +118,36 @@ public class ChartCreator extends JFrame {
             return null;
         }
         JFreeChart barChart = ChartFactory.createBarChart(title, xTitle, yTitle,
-                createDataset(xValues, yValues, dataInfo), PlotOrientation.VERTICAL, true, true, false);
+                createDataset(xValues, yValues, dataInfo), PlotOrientation.VERTICAL, false, false, false);
 
+        StandardChartTheme theme = (StandardChartTheme)org.jfree.chart.StandardChartTheme.createJFreeTheme();
+        String fontName = "Lucida Sans";
+        theme.setExtraLargeFont( new Font(fontName,Font.PLAIN, 16) ); //title
+        theme.setLargeFont( new Font(fontName,Font.BOLD, 15)); //axis-title
+        theme.setRegularFont( new Font(fontName,Font.PLAIN, 11));
+        theme.setRangeGridlinePaint( Color.decode("#C0C0C0"));
+        theme.setPlotBackgroundPaint( Color.white );
+        theme.setChartBackgroundPaint( Color.white );
+        theme.setGridBandPaint( Color.red );
+        theme.setAxisOffset( new RectangleInsets(0,0,0,0) );
+        theme.setBarPainter(new StandardBarPainter());
+        theme.setAxisLabelPaint( Color.decode("#666666")  );
+        theme.apply( barChart );
+        barChart.getCategoryPlot().setOutlineVisible( false );
+        barChart.getCategoryPlot().getRangeAxis().setAxisLineVisible( false );
+        barChart.getCategoryPlot().getRangeAxis().setTickMarksVisible( false );
+        barChart.getCategoryPlot().setRangeGridlineStroke( new BasicStroke() );
+        barChart.getCategoryPlot().getRangeAxis().setTickLabelPaint( Color.decode("#666666") );
+        barChart.getCategoryPlot().getDomainAxis().setTickLabelPaint( Color.decode("#666666") );
+        barChart.setTextAntiAlias( true );
+        barChart.setAntiAlias( true );
+        barChart.getCategoryPlot().getRenderer().setSeriesPaint( 0, Color.decode( "#4572a7" ));
+        BarRenderer rend = (BarRenderer) barChart.getCategoryPlot().getRenderer();
+        rend.setShadowVisible( true );
+        rend.setShadowXOffset( 2 );
+        rend.setShadowYOffset( 0 );
+        rend.setShadowPaint( Color.decode( "#C0C0C0"));
+        rend.setMaximumBarWidth( 0.1);
         ChartPanel chartPanel = new ChartPanel(barChart);
 
 
@@ -99,7 +155,6 @@ public class ChartCreator extends JFrame {
         // preffered size is set, might want variables for dimensions.
 
         return chartPanel;
-
     }
 
 }

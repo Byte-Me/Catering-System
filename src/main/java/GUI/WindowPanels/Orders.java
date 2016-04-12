@@ -41,12 +41,20 @@ public class Orders {
         ordersTable.setAutoCreateRowSorter(true);
         ordersTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
+
         DefaultTableCellRenderer intRenderer = new DefaultTableCellRenderer();
         intRenderer.setHorizontalAlignment(SwingConstants.LEFT);
         ordersTable.getColumnModel().getColumn(0).setCellRenderer(intRenderer);
         ordersTable.getColumnModel().getColumn(2).setCellRenderer(intRenderer);
 
         addOrderButton.addActionListener(e -> new AddOrder());
+
+        //setting column widths -- FIXME: Find better way to to this
+        ordersTable.getColumnModel().getColumn(0).setMinWidth(90);
+        ordersTable.getColumnModel().getColumn(1).setMaxWidth(190);
+        ordersTable.getColumnModel().getColumn(2).setMinWidth(130);
+        ordersTable.getColumnModel().getColumn(4).setMinWidth(130);
+        ordersTable.getColumnModel().getColumn(5).setMinWidth(100);
 
         editOrderButton.addActionListener(e -> {
             if(ordersTable.getSelectedColumn() >= 0) { //TODO: sjekker ikke om flere columns er selected, velger øverste.

@@ -276,16 +276,19 @@ public class FoodManagement extends Management{
         ArrayList<Object[]> out = new ArrayList<Object[]>();
         if(setUp()){
             try {
-                ResultSet res = getScentence().executeQuery("SELECT recipe.name, order_recipe.portions, `order`.date, `order`.order_id FROM recipe, `order`, order_recipe " +
-                        "WHERE `order`.order_id = order_recipe.order_id AND order_recipe.recipe_id = recipe.recipe_id ORDER BY `date` DESC, order_id;");
+                ResultSet res = getScentence().executeQuery("SELECT recipe.name, order_recipe.portions, `order`.time, " +
+                        "`order`.order_id, `order`.note, `order`.status FROM recipe, `order`, order_recipe WHERE " +
+                        "`order`.order_id = order_recipe.order_id AND order_recipe.recipe_id = recipe.recipe_id " +
+                        "AND status > 0 AND status < 3 AND `order`.date = CURRENT_DATE ORDER BY `time` DESC;");
                 while (res.next()){
-                    Object[] obj = new Object[4];
-                    obj[0] = res.getString("name");
-                    obj[1] = res.getInt("portions");
-                    obj[2] = res.getString("date");
-                    obj[3] = res.getInt("order_id");
+                    Object[] obj = new Object[7];
+                    obj[0] = res.getInt("order_id");
+                    obj[1] = res.getString("name");
+                    obj[2] = res.getString("portions");
+                    obj[3] = res.getString("time");
+                    obj[4] = res.getString("note");
+                    obj[5] = OrderManagement.OrderType.valueOf(res.getInt("status"));
                     out.add(obj);
-
                 }
             }catch (Exception e){
                 System.err.println("Issue with getting recipes.");
