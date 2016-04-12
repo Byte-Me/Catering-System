@@ -3,16 +3,12 @@ package GUI.WindowPanels;
 import Database.UserManagement;
 import GUI.AddUser;
 import GUI.EditUser;
-import HelperClasses.TableCellListener;
+import HelperClasses.MainTableModel;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableColumn;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -40,12 +36,7 @@ public class Users {
         String[] header = {"First Name", "Last Name", "Email", "Phone", "Username", "User Type"}; // Header titles
 
         //gjør celler un-editable.
-        userModel = new DefaultTableModel(){
-            @Override
-            public boolean isCellEditable(int row, int column){
-                return false;
-            }
-        }; // Model of the table
+        userModel = new MainTableModel();
 
         userModel.setColumnIdentifiers(header); // Add header to columns
 

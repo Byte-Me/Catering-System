@@ -4,6 +4,7 @@ import Database.OrderManagement;
 import GUI.AddOrder;
 import GUI.EditCustomer;
 import GUI.EditOrder;
+import HelperClasses.MainTableModel;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -32,25 +33,7 @@ public class Orders {
 
         String[] headers = {"ID", "Name", "Phone", "Address", "Date", "Status"};
 
-        orderModel = new DefaultTableModel() {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                //all cells false
-                return false;
-            }
-
-            @Override
-            public Class getColumnClass(int column) {
-                switch (column) {
-                    case 0:
-                        return Integer.class;
-                    case 2:
-                        return Integer.class;
-                    default:
-                        return String.class;
-                }
-            }
-        };
+        orderModel = new MainTableModel();
 
         orderModel.setColumnIdentifiers(headers);
 
