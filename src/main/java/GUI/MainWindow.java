@@ -59,6 +59,11 @@ public class MainWindow extends JFrame {
     private JPanel orderStatisticsPanel;
     private JPanel barChartPanel;
     private JPanel statsPanel;
+    private JTable subscriptionTable;
+    private JTextField searchSubscriptions;
+    private JButton deleteSubscriptionButton;
+    private JButton showEditSubscriptionButton;
+    private JButton newSubscriptionButton;
 
 
     public MainWindow(UserManagement.UserType userType) {

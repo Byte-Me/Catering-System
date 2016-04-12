@@ -78,6 +78,9 @@ __Loginscreen is finished.__
 
 ### Subscriptions:
 - [ ] Fix subscriptions equal to customers and orders.
+    1.  GUI (DONE)
+    2.  GUI calling methods / action listeners
+    3.  Backend
 
 ### DatabaseManagement:
 - [x] Create delete user method.(BRUK UPDATESTATUS)
