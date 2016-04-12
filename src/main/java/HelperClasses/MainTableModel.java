@@ -13,10 +13,13 @@ public class MainTableModel extends DefaultTableModel {
 
     @Override
     public Class getColumnClass(int column) {
-        switch (column) {
-            default:
-                return String.class; // All columns are by default Strings
+        for (int row = 0; row < getRowCount(); row++) {
+            Object o = getValueAt(row, column);
+            if (o != null) {
+                return o.getClass();
+            }
         }
+        return String.class;
     }
 
 
