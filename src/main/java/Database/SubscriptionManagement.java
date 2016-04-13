@@ -18,7 +18,7 @@ public class SubscriptionManagement extends Management{
     public SubscriptionManagement(){super();}
 
     public ArrayList<Object[]> getSubscriptions(){
-        ArrayList<Object[]> out = new ArrayList<Object[]>();
+        ArrayList<Object[]> out = new ArrayList<>();
         if(setUp()){
             try {
                 ResultSet res = getScentence().executeQuery("SELECT subscription.sub_id, customer.name, " +
@@ -49,6 +49,46 @@ public class SubscriptionManagement extends Management{
         obj[4] = res.getInt("sub_type"); // 0 = weekly, 1 = monthly.
         return obj;
     }
+
+    public ArrayList<Object[]> subscriptionSearch(String searchTerm){
+        ResultSet res;
+        ArrayList<Object[]> out = new ArrayList<>();
+        if(setUp()) {
+            try {
+                PreparedStatement prep = getConnection().prepareStatement("SELECT subscription.sub_id, customer.name, " +
+                                "subscription.date_from, subscription.date_to, subscription.sub_type" +
+                        " FROM subscription, customer WHERE subscription.sub_id LIKE ? OR customer.name LIKE ? OR subscription.date_from LIKE ? OR subscription.date_to LIKE ? OR subscription.sub_type LIKE ? ORDER BY customer.name;");
+                searchTerm = "%" + searchTerm + "%";
+                prep.setString(1, searchTerm);
+                prep.setString(2, searchTerm);
+                prep.setString(3, searchTerm);
+                prep.setString(4, searchTerm);
+                prep.setString(5, searchTerm);
+
+                res = prep.executeQuery();
+
+                while (res.next()) {
+                    Object[] obj = new Object[6];
+                    obj[0] = res.getInt("sub_id");
+                    obj[1] = res.getString("customer_name");
+                    obj[2] = res.getString("date_to");
+                    obj[3] = res.getString("date_from");
+                    obj[4] = res.getInt("sub_type");
+                    out.add(obj);
+                }
+            } catch (Exception e) {
+                System.err.println("Issue with search.");
+                return null;
+            } finally {
+                DbUtils.closeQuietly(getScentence());
+                DbUtils.closeQuietly(getConnection());
+            }
+
+            return out;
+        }
+        else return null;
+    }
+
     public int containsSubOrder(int subId){
         int orders = 0;
         if(setUp()){
