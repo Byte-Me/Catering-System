@@ -139,7 +139,7 @@
                     </constraints>
                     <properties>
                       <labelFor value="76db1"/>
-                      <text value="Address: "/>
+                      <text value="Street:"/>
                     </properties>
                   </component>
                   <component id="76db1" class="javax.swing.JTextField" binding="address">
@@ -286,7 +286,7 @@
                       </grid>
                     </constraints>
                     <properties>
-                      <text value="Address: "/>
+                      <text value="Street:"/>
                     </properties>
                   </component>
                   <component id="dabc4" class="javax.swing.JTextField" binding="cAddress">

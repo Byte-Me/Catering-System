@@ -1,6 +1,7 @@
 package Database;
 
 import org.apache.commons.dbutils.DbUtils;
+import org.omg.PortableInterceptor.INACTIVE;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,18 +13,62 @@ import static Database.OrderManagement.*;
  * Created by Evdal on 16.03.2016.
  */
 
-        //TODO: create enum with subscription_type, 1 = weekly, 2 = monthly;
 
 public class SubscriptionManagement extends Management{
     public SubscriptionManagement(){super();}
+
+    // Defines the User Types
+    public enum SubType {
+        INACTIVE, ACTIVE;
+
+        public int getValue() {
+            return super.ordinal();
+        }
+
+        public static SubType valueOf(int subTypeNr) {
+            for (SubType type : SubType.values()) {
+                if (type.ordinal() == subTypeNr) {
+                    return type;
+                }
+            }
+            return null;
+        }
+    }
 
     public ArrayList<Object[]> getSubscriptions(){
         ArrayList<Object[]> out = new ArrayList<Object[]>();
         if(setUp()){
             try {
+                System.out.println("Hei");
                 ResultSet res = getScentence().executeQuery("SELECT subscription.sub_id, customer.name, " +
                         "subscription.date_from, subscription.date_to, subscription.sub_type FROM subscription, " +
-                        "customer WHERE subscription.customer_ID = customer.customer_id");
+                        "customer WHERE subscription.customer_id = customer.customer_id AND subscription.status = "+SubType.ACTIVE.getValue()
+                +";");
+                System.out.println("Hei2");
+
+                while (res.next()){
+                    out.add(createObj(res));
+                }
+
+            }
+            catch (Exception e){
+                System.out.println("Issue with subscriptions.");
+            }
+            finally {
+                DbUtils.closeQuietly(getScentence());
+                DbUtils.closeQuietly(getConnection());
+            }
+        }
+        return out;
+    }
+    public ArrayList<Object[]> getDeletedSubscriptions(){
+        ArrayList<Object[]> out = new ArrayList<Object[]>();
+        if(setUp()){
+            try {
+                ResultSet res = getScentence().executeQuery("SELECT subscription.sub_id, customer.name, " +
+                        "subscription.date_from, subscription.date_to, subscription.sub_type FROM subscription, " +
+                        "customer WHERE subscription.customer_ID = customer.customer_id AND "+SubType.INACTIVE.getValue()
+                        +" = subscription.status;");
 
                 while (res.next()){
                     out.add(createObj(res));
@@ -42,11 +87,16 @@ public class SubscriptionManagement extends Management{
     }
     private Object[] createObj(ResultSet res)throws Exception{
         Object[] obj = new Object[5];
+
         obj[0] = res.getInt("sub_id");
-        obj[1] = res.getString("customer_name");
+
+
+        obj[1] = res.getString("name");
         obj[2] = res.getString("date_to");
+        System.out.println("Hei");
         obj[3] = res.getString("date_from");
-        obj[4] = res.getInt("sub_type"); // 0 = weekly, 1 = monthly.
+        obj[4] = res.getInt("sub_type"); // frequency.
+
         return obj;
     }
     public int containsSubOrder(int subId){
@@ -75,11 +125,12 @@ public class SubscriptionManagement extends Management{
         if(setUp()){
             try {
                 getScentence().executeQuery("START TRANSACTION");
-                PreparedStatement prep = getConnection().prepareStatement("INSERT INTO subscription VALUES (DEFAULT,?,?,?,?)");
+                PreparedStatement prep = getConnection().prepareStatement("INSERT INTO subscription VALUES (DEFAULT,?,?,?,?,?)");
                 prep.setInt(1, custID);
                 prep.setString(2, dateTo);
                 prep.setString(3, dateFrom);
-                prep.setInt(4, frequency);
+                prep.setInt(4, 1); //active
+                prep.setInt(5, frequency);
                 prep.executeUpdate();
                 ResultSet res = getScentence().executeQuery("SELECT LAST_INSERT_ID() as id;");
                 if(res.next()){
@@ -138,9 +189,14 @@ public class SubscriptionManagement extends Management{
             try {
                 int res = getScentence().executeUpdate("UPDATE `order` SET status = "+ OrdStatus.INACTIVE.getValue()+
                         " WHERE sub_id = "+subId+" AND `date` >= CURRENT_DATE;");
+                if(res > 0){
+                    getScentence().executeUpdate("UPDATE `order` SET status = "+ OrdStatus.INACTIVE.getValue()+
+                            " WHERE sub_id = "+subId+" AND `date` >= CURRENT_DATE;");
+                }
+                else return false;
             }
             catch (Exception e){
-                System.err.println("Issue with deleting subscription."); //TODO: Cancel subscription in sub table aswell.
+                System.err.println("Issue with deleting subscription.");
                 return false;
             }
             finally {
@@ -157,6 +213,7 @@ public class SubscriptionManagement extends Management{
                 rowChanged = getScentence().executeUpdate("UPDATE order_recipe SET recipe_id  = " + newRecipeID+
                         " WHERE order_id IN(SELECT " + "order_id FROM `order` WHERE sub_id = "+subID+") AND " +
                         "order_recipe.recipe_id = "+prevRecipeID+";");
+
             }catch(Exception e){
                 System.err.println("Issue with changing recipes.");
                 return false;

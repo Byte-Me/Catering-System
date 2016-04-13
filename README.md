@@ -38,7 +38,7 @@ __Loginscreen is finished.__
 
 ### Customers:
 - [x] Remove editing in cell, add edit button which opens a window similar to add user. This window also opens on double click.
-- [ ] Find users set to inactive. Let admin restore data through file dropdown.
+- [ ] Find customers set to inactive. Let admin restore data through file dropdown.
 - [ ] Check out a different search-method.
 - [x] Add single select to Customers.
 - [ ] Right click user to choose wether to edit, delete or add new customer(LOW PRIORITY).
@@ -84,7 +84,7 @@ __Loginscreen is finished.__
 
 ### DatabaseManagement:
 - [x] Create delete user method.(BRUK UPDATESTATUS)
-- [x] Create methods for updating order values
+- [ ] Create methods for updating order values
 - [x] Database:
     1.  Add recipe price.
     2.  Add order time.

@@ -56,7 +56,7 @@ public class EditCustomer extends JDialog{
             addCustTabs.setSelectedIndex(custStatus);
             //Fill in textfields
 
-            if (custStatus == 0) { //Person
+            if (custStatus == CustomerManagement.CustType.PERSON.getValue()) { //Person
                 String[] fAndLName = formatName((String) custInfo[0]);
                 String[] add = formatAdress((String) custInfo[3]);
                 firstName.setText(fAndLName[0]);

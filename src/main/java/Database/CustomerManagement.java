@@ -16,18 +16,27 @@ public class CustomerManagement extends Management{
         super();
     }
 
-    public static enum CustStatus{
-        INACTIVE(-1),
-        PERSON(0),
-        COMPANY(1);
+    // Defines the Customer Types
+    public enum CustType {
+        INACTIVE, PERSON, CORPORATION;
 
-        private int value;
-
-        private CustStatus(int value){
-            this.value = value;
+        public int getValue() {
+            return super.ordinal();
         }
-        public int getValue(){
-            return value;
+
+        public static CustType valueOf(int custTypeNr) {
+            for (CustType type : CustType.values()) {
+                if (type.ordinal() == custTypeNr) {
+                    return type;
+                }
+            }
+            return null;
+        }
+
+        @Override
+        public String toString() {
+            String constName = super.toString();
+            return constName.substring(0,1) + constName.substring(1).toLowerCase();
         }
 
     }
@@ -35,9 +44,38 @@ public class CustomerManagement extends Management{
     public ArrayList<Object[]> getCustomers(){
         if(setUp()){
             ArrayList<Object[]> out = new ArrayList<Object[]>();
+            ResultSet res;
+            try{
+                res = getScentence().executeQuery("SELECT * FROM customer WHERE status > "+CustType.INACTIVE.getValue()+";"); //Status 1 for aktiv og 0 for inaktiv
+                while(res.next()) {
+                    Object[] obj = new Object[4];
+                    obj[0] = res.getString("name");
+                    obj[1] = res.getString("email");
+                    obj[2] = res.getString("phone");
+                    obj[3] = res.getString("adress");
+                    out.add(obj);
+                }
+
+            }
+            catch (Exception e){
+                System.err.println("Issue with getting customers.");
+                return null;
+            }
+            finally{
+                DbUtils.closeQuietly(getScentence());
+                DbUtils.closeQuietly(getScentence());
+            }
+            return out;
+        }
+        else return null;
+    }
+
+    public ArrayList<Object[]> getDeletedCustomers(){
+        if(setUp()){
+            ArrayList<Object[]> out = new ArrayList<Object[]>();
             ResultSet res = null;
             try{
-                res = getScentence().executeQuery("SELECT * FROM customer WHERE status >= 0;"); //Status 1 for aktiv og 0 for inaktiv
+                res = getScentence().executeQuery("SELECT * FROM customer WHERE status = "+CustType.INACTIVE.getValue()+";"); //Status 1 for aktiv og 0 for inaktiv
                 while(res.next()) {
                     Object[] obj = new Object[4];
                     obj[0] = res.getString("name");
@@ -116,7 +154,7 @@ public class CustomerManagement extends Management{
                     }
                 }else { //If not in database, create customer.
                     numb = getScentence().executeUpdate("INSERT INTO customer VALUES(DEFAULT, '" + name + "', '" + email + "', '" + phone +
-                            "', '" + adress + "', DEFAULT);");
+                            "', '" + adress + "', "+status+");");
                 }
 
                 getScentence().executeQuery("COMMIT;");
@@ -136,7 +174,7 @@ public class CustomerManagement extends Management{
     }
     public boolean addCustomerCompany(String name, String email, String phone, String streetAdress, String postCode, String city){
         String adress = adressFormatter(city, postCode, streetAdress);
-        if(addCustomer(name, email, phone, adress, CustStatus.COMPANY.getValue())) return true;
+        if(addCustomer(name, email, phone, adress, CustType.CORPORATION.getValue())) return true;
         else return false;
 
 
@@ -146,7 +184,7 @@ public class CustomerManagement extends Management{
 
         String adress = adressFormatter(city, postCode, streetAdress);
         String name = nameFormatter(firstname, lastname);
-        if(addCustomer(name, email, phone, adress, CustStatus.PERSON.getValue())) return true;
+        if(addCustomer(name, email, phone, adress, CustType.PERSON.getValue())) return true;
         else return false;
 
     }
@@ -286,7 +324,7 @@ public class CustomerManagement extends Management{
         return rowChanged > 0;
     }
     public boolean deleteCustomer(String email){
-        return updateCustomerStatus(email, CustStatus.INACTIVE.getValue());
+        return updateCustomerStatus(email, CustType.INACTIVE.getValue());
     }
 
 

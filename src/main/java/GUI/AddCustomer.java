@@ -30,6 +30,7 @@ public class AddCustomer extends JDialog{
     private JTextField cCity;
     private JButton cCancelButton;
     private JButton cAddCustomerButton;
+    private JTextField cEmailField;
 
     public CustomerManagement customerManagement = new CustomerManagement();
 

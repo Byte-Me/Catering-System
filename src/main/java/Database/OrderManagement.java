@@ -85,6 +85,31 @@ public class OrderManagement extends Management {
         }
         return numb > 0;
     }
+    public ArrayList<Object[]> getDeletedOrders(){
+        ArrayList<Object[]> out = new ArrayList<Object[]>();
+        if(setUp()){
+
+            //Henter info fra ordre der ordren er merket som inaktiv.
+            try {
+
+                ResultSet res = getScentence().executeQuery("SELECT `order`.order_id, customer.name ,customer.phone, customer.adress, `order`.date, `order`.status " +
+                        "FROM `order`, customer WHERE `order`.customer_id = customer.customer_id AND `order`.status = "+OrdStatus.INACTIVE.getValue()+
+                        " ORDER BY `date` DESC, status DESC;");
+                while (res.next()){
+                    out.add(createList(res));
+
+                }
+            }
+            catch (Exception e){
+                System.err.println("Issue with fetching orders.");
+            }
+            finally {
+                DbUtils.closeQuietly(getScentence());
+                DbUtils.closeQuietly(getConnection());
+            }
+        }
+        return out;
+    }
     public ArrayList<Object[]> getOrders(){
         ArrayList<Object[]> out = new ArrayList<Object[]>();
         if(setUp()){
@@ -192,11 +217,9 @@ public class OrderManagement extends Management {
                     return false;
 
                 }
-                for(Object[] name : recipes) { //[0] = quantity, [1] = name
+                for(Object[] name : recipes) { //[1] = quantity, [0] = name
 
-
-                    res = getScentence().executeQuery("SELECT recipe_id FROM recipe WHERE name = '" + name[1] + "';");
-
+                    res = getScentence().executeQuery("SELECT recipe_id FROM recipe WHERE name = '" + name[0] + "';");
                     if (res.next()) {
                         recipeIDs.add(res.getInt("recipe_id")); //Henter oppskrifts IDer for å koble oppskrifter med ordre.
                     } else {
@@ -206,20 +229,20 @@ public class OrderManagement extends Management {
                     }
                 }
 
+
                 for (int i = 0; i < recipeIDs.size(); i++) {
                     rowChanged = getScentence().executeUpdate("INSERT INTO order_recipe VALUES(" + orderID + ", " + recipeIDs.get(i) +
-                            ", '" + recipes.get(i)[0] + "');");
+                            ", '" + recipes.get(i)[1] + "');");
                     if (!(rowChanged > 0)) {
                         getScentence().executeQuery("ROLLBACK;");
                         return false;
                     }
                 }
-
                 getScentence().executeQuery("COMMIT;");
             }
 
             catch (Exception e){
-                System.err.println("Issue with creating order.");
+                System.out.println("Issue with creating order.");
                 try {
                     getScentence().executeQuery("ROLLBACK");
                 }
