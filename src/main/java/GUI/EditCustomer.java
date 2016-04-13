@@ -54,20 +54,19 @@ public class EditCustomer extends JDialog{
 
             int custStatus = (Integer) custInfo[4];
             addCustTabs.setSelectedIndex(custStatus);
-
             //Fill in textfields
 
             if (custStatus == 0) { //Person
                 String[] fAndLName = formatName((String) custInfo[0]);
                 String[] add = formatAdress((String) custInfo[3]);
                 firstName.setText(fAndLName[0]);
-                ;
                 lastName.setText(fAndLName[1]);
                 email.setText((String) custInfo[1]);
                 phone.setText((String) custInfo[2]);
                 address.setText(add[0]);
                 postalCode.setText(add[1]);
                 city.setText(add[2]);
+                addCustTabs.remove(1);
 
             } else { //customer
                 String[] add = formatAdress((String) custInfo[3]);
@@ -75,6 +74,8 @@ public class EditCustomer extends JDialog{
                 cAddress.setText(add[0]);
                 cPostalCode.setText(add[1]);
                 cCity.setText(add[2]);
+                addCustTabs.remove(0);
+
             }
 
 

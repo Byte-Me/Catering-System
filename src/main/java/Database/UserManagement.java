@@ -10,7 +10,7 @@ public class UserManagement extends Management {
 
     // Defines the User Types
     public enum UserType {
-        ADMIN, SALE, DRIVER, CHEF;
+        ADMIN, SALE, DRIVER, CHEF,INACTIVE;
 
         public int getValue() {
             return super.ordinal();
@@ -77,8 +77,9 @@ public class UserManagement extends Management {
         if (setUp()) {
 
             try {
-                res = getScentence().executeQuery("select first_name, last_name, email, phone, username, access_level" +
-                        " from user order by last_name;");
+
+                res = getScentence().executeQuery("select first_name, last_name, email, phone, username, access_level from user" +
+                        " WHERE access_level < "+UserType.INACTIVE.getValue()+" order by last_name;");
                 while (res.next()) {
                     Object[] obj = new Object[6];
                     obj[0] = res.getString("first_name");
@@ -87,6 +88,7 @@ public class UserManagement extends Management {
                     obj[3] = res.getString("phone");
                     obj[4] = res.getString("username");
                     // Convert access level from int to string
+
                     obj[5] = UserType.valueOf(res.getInt("access_level"));
                     out.add(obj);
                 }
@@ -327,7 +329,12 @@ public class UserManagement extends Management {
             return out;
         }
         else return null;
-    }/*
+    }
+    public boolean deleteUser(String username){
+        return updateUserInfoAccessLevel(username, UserType.INACTIVE.getValue());
+    }
+    /*
+
     public boolean deleteUser(){
         ResultSet res = null;
         if(setUp()){

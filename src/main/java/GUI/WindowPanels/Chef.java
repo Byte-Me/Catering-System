@@ -14,6 +14,7 @@ import javax.swing.*;
 import javax.swing.event.TableModelListener;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -71,15 +72,15 @@ public class Chef {
             int count = 0;
             boolean lookingForOrder = true;
 
-            while(count < prepareTable.getRowCount() && lookingForOrder){
-                if((Boolean)prepareTable.getValueAt(count, 6)){
+            while(count < prepareTable.getRowCount() && lookingForOrder){ //blar gjennom radene
+                if((Boolean)prepareTable.getValueAt(count, 6)){ //er checkbox checket?
 
                     int input = showConfirmDialog(null,"Do you want update status for orderID " +prepareTable.getValueAt(count, 0)+"?","",YES_NO_OPTION);
                     if(input==YES_OPTION) {
-                        if (OrderType.ACTIVE == prepareTable.getValueAt(count, 5)) {
+                        if (OrderType.ACTIVE == prepareTable.getValueAt(count, 5)) { //er den aktiv, set til processsing
                             orderManagement.updateStatus((Integer) prepareTable.getValueAt(count, 0), OrderType.PROCESSING.getValue());
 
-                        } else {
+                        } else {//er den processing, set til ready
                             orderManagement.updateStatus((Integer) prepareTable.getValueAt(count, 0), OrderType.READY.getValue());
 
                         }
