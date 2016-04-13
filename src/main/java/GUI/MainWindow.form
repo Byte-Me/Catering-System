@@ -597,7 +597,7 @@
           </grid>
         </children>
       </tabbedpane>
-      <toolbar id="8476a">
+      <toolbar id="8476a" binding="menuBar">
         <constraints>
           <grid row="0" column="0" row-span="1" col-span="1" vsize-policy="0" hsize-policy="6" anchor="0" fill="1" indent="0" use-parent-layout="false">
             <preferred-size width="-1" height="20"/>
@@ -609,26 +609,16 @@
         </properties>
         <border type="none"/>
         <children>
-          <component id="1f729" class="javax.swing.JButton" binding="fileButton" default-binding="true">
-            <constraints/>
-            <properties>
-              <text value="File"/>
-            </properties>
-          </component>
-          <component id="63ba3" class="javax.swing.JButton" binding="settingsButton" default-binding="true">
+          <component id="685e3" class="javax.swing.JButton" binding="settingsButton" default-binding="true">
             <constraints/>
             <properties>
               <text value="Settings"/>
             </properties>
           </component>
-          <component id="c6292" class="javax.swing.JButton" binding="helpButton" default-binding="true">
+          <component id="43ab0" class="javax.swing.JButton" binding="helpButton" default-binding="true">
             <constraints/>
             <properties>
-              <horizontalAlignment value="0"/>
-              <horizontalTextPosition value="11"/>
               <text value="Help"/>
-              <verticalAlignment value="0"/>
-              <verticalTextPosition value="0"/>
             </properties>
           </component>
         </children>

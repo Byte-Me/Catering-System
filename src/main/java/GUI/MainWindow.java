@@ -11,9 +11,12 @@ import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import static Updates.UpdateHandler.startAutoUpdate;
 import static Updates.UpdateHandler.updateTab;
+import static javax.swing.JOptionPane.showMessageDialog;
 
 /**
  * Created by olekristianaune on 07.03.2016.
@@ -50,8 +53,6 @@ public class MainWindow extends JFrame {
     private JButton editOrderButton;
     private JButton deleteOrderButton;
     private JButton helpButton;
-    private JButton fileButton;
-    private JButton settingsButton;
     private JButton editUserButton;
     private JButton editCustomerButton;
     private JButton editIngredientButton;
@@ -64,6 +65,8 @@ public class MainWindow extends JFrame {
     private JButton deleteSubscriptionButton;
     private JButton showEditSubscriptionButton;
     private JButton newSubscriptionButton;
+    private JToolBar menuBar;
+    private JButton settingsButton;
 
 
     public MainWindow(UserManagement.UserType userType) {
@@ -118,7 +121,31 @@ public class MainWindow extends JFrame {
         startAutoUpdate(tabbedPane1.getSelectedIndex()); // Start autoUpdate of tabs - TODO: Check interval on timer
         tabbedPane1.addChangeListener(e -> updateTab(tabbedPane1.getSelectedIndex()));
 
+        JPopupMenu popupMenu = new JPopupMenu();
+        popupMenu.add(new AbstractAction("User Settings") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                showMessageDialog(getParent(), "User Settings"); // FIXME: Change with actual User Settings panel
+            }
+        });
+        if (userType == UserManagement.UserType.ADMIN) {
+            popupMenu.add(new AbstractAction("Program Settings") {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    showMessageDialog(getParent(), "Program Settings"); // FIXME: Change with actual Program Settings panel
+                }
+            });
+        }
+
+        settingsButton.addMouseListener(new MouseAdapter() {
+            public void mousePressed(MouseEvent e) {
+                popupMenu.show(settingsButton, 0, settingsButton.getHeight());
+            }
+        });
+
         helpButton.addActionListener(e -> new HelpWindow());
+
+        menuBar.setRollover(true);
 
         pack(); // Pack the window
         setSize(1000, 600); // Set window to desired size

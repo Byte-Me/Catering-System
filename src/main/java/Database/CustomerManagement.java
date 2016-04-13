@@ -16,16 +16,17 @@ public class CustomerManagement extends Management{
         super();
     }
 
-    public static enum CustStatus{
+    public enum CustStatus{
         INACTIVE(-1),
         PERSON(0),
         COMPANY(1);
 
         private int value;
 
-        private CustStatus(int value){
+        CustStatus(int value){
             this.value = value;
         }
+
         public int getValue(){
             return value;
         }
