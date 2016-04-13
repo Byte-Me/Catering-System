@@ -50,7 +50,6 @@ public class MainWindow extends JFrame {
     private JButton editOrderButton;
     private JButton deleteOrderButton;
     private JButton helpButton;
-    private JButton fileButton;
     private JButton settingsButton;
     private JButton editUserButton;
     private JButton editCustomerButton;

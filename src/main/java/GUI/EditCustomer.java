@@ -69,12 +69,16 @@ public class EditCustomer extends JDialog{
                 postalCode.setText(add[1]);
                 city.setText(add[2]);
 
+                addCustTabs.remove(1); //Remove corporation tab
+
             } else { //customer
                 String[] add = formatAdress((String) custInfo[3]);
                 cName.setText((String) custInfo[0]);
                 cAddress.setText(add[0]);
                 cPostalCode.setText(add[1]);
                 cCity.setText(add[2]);
+
+                addCustTabs.remove(0); // Remove private tab
             }
 
 

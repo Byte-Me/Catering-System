@@ -609,12 +609,6 @@
         </properties>
         <border type="none"/>
         <children>
-          <component id="1f729" class="javax.swing.JButton" binding="fileButton" default-binding="true">
-            <constraints/>
-            <properties>
-              <text value="File"/>
-            </properties>
-          </component>
           <component id="63ba3" class="javax.swing.JButton" binding="settingsButton" default-binding="true">
             <constraints/>
             <properties>
