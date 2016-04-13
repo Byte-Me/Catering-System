@@ -78,6 +78,7 @@ public class MainWindow extends JFrame {
         Statistics statisticsPanel = new Statistics(fromDate, toDate, getStatisticsButton, orderStatisticsPanel, statsPanel, barChartPanel);
         Users usersPanel = new Users(addUserButton, userTable, searchUsers, deleteUsersButton, editUserButton);
         Customers customersPanel = new Customers(addCustomerButton, customerTable, searchCustomers, deleteCustomersButton, editCustomerButton);
+        Subscriptions subscriptionsPanel = new Subscriptions(subscriptionTable, searchSubscriptions, newSubscriptionButton, showEditSubscriptionButton, deleteSubscriptionButton);
         Orders ordersPanel = new Orders(ordersTable, searchOrders, addOrderButton, editOrderButton, deleteOrderButton);
         Driver driverPanel = new Driver(driverTable, mapPanel, generateDrivingRouteButton);
         Chef chefPanel = new Chef(prepareTable, ingredientTable, generateShoppingListButton, recipesButton, addIngredientButton);

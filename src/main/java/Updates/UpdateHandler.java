@@ -5,6 +5,7 @@ import javax.swing.*;
 import static GUI.WindowPanels.Customers.updateCustomer;
 import static GUI.WindowPanels.Driver.updateDrivingRoute;
 import static GUI.WindowPanels.Orders.updateOrders;
+import static GUI.WindowPanels.Subscriptions.updateSubscriptions;
 import static GUI.WindowPanels.Users.updateUsers;
 
 /**
@@ -41,7 +42,7 @@ public class UpdateHandler {
                 updateCustomer();
                 break;
             case 3:
-                // Some function
+                updateSubscriptions();
                 break;
             case 4:
                 updateOrders();

@@ -26,7 +26,7 @@ import static javax.swing.JOptionPane.showMessageDialog;
 public class Orders {
 
     static OrderManagement orderManagement = new OrderManagement();
-    static DefaultTableModel orderModel;
+    static MainTableModel orderModel;
     private final int orderColumnNr = 0;
 
     public Orders(JTable ordersTable, final JTextField searchOrders, JButton addOrderButton, JButton editOrderButton, JButton deleteOrderButton) {
@@ -51,10 +51,15 @@ public class Orders {
 
         //setting column widths -- FIXME: Find better way to to this
         ordersTable.getColumnModel().getColumn(0).setMinWidth(90);
+        ordersTable.getColumnModel().getColumn(0).setMaxWidth(90);
+        ordersTable.getColumnModel().getColumn(1).setMinWidth(190);
         ordersTable.getColumnModel().getColumn(1).setMaxWidth(190);
         ordersTable.getColumnModel().getColumn(2).setMinWidth(130);
+        ordersTable.getColumnModel().getColumn(2).setMaxWidth(130);
         ordersTable.getColumnModel().getColumn(4).setMinWidth(130);
+        ordersTable.getColumnModel().getColumn(4).setMaxWidth(130);
         ordersTable.getColumnModel().getColumn(5).setMinWidth(100);
+        ordersTable.getColumnModel().getColumn(5).setMaxWidth(100);
 
         editOrderButton.addActionListener(e -> {
             if(ordersTable.getSelectedColumn() >= 0) { //TODO: sjekker ikke om flere columns er selected, velger øverste.

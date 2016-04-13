@@ -26,11 +26,11 @@ public class OrderStatistics extends Statistics{
 
     public Object[] createLineChartFromOrder(String startDateS, String endDateS) { //[0] = JFreeChart, [1] = SumOrders
         ArrayList<String> orders = stat.getDates(startDateS, endDateS, "order");
-        ArrayList<Double> yValues = new ArrayList<Double>();
-        ArrayList<String> xValues = new ArrayList<String>();
-        String curDate = "";
-        Date startDate = null;
-        Date endDate = null;
+        ArrayList<Double> yValues = new ArrayList<>();
+        ArrayList<String> xValues = new ArrayList<>(); // Brukes ikke?
+        String curDate = ""; // Brukes ikke?
+        Date startDate;
+        Date endDate;
         try {
             startDate = getFormatter().parse(startDateS);
             endDate = getFormatter().parse(endDateS);
@@ -41,7 +41,7 @@ public class OrderStatistics extends Statistics{
         }
 
         JPanel chart = null;
-        int count = 1;
+        int count = 1; // Brukes ikke?
 
         try {
             int timeDiff = checkDaysBetween(startDate, endDate);
@@ -49,18 +49,18 @@ public class OrderStatistics extends Statistics{
             if (timeDiff > MONTHLIMIT) {
                 ArrayList[] values = valuesMonth(orders);
 
-                chart = ChartCreator.createLineChart("Orders", "Months", "Orders per month", (ArrayList<String>)values[0],
+                chart = ChartCreator.createLineChart("Orders per month", "Months", "Orders", (ArrayList<String>)values[0],
                         (ArrayList<Object>)values[1], "orders");
             }
             else if(timeDiff > WEEKLIMIT){
                 ArrayList[] values = valuesWeek(orders);
-                chart = ChartCreator.createLineChart("Orders", "Weeks", "Orders per week", (ArrayList<String>)values[0],
+                chart = ChartCreator.createLineChart("Orders per week", "Weeks", "Orders", (ArrayList<String>)values[0],
                         (ArrayList<Object>)values[1], "orders");
 
             }
             else {
                 ArrayList[] values = valuesDay(orders);
-                chart = ChartCreator.createLineChart("Orders", "Days", "Orders per day", (ArrayList<String>)values[0],
+                chart = ChartCreator.createLineChart("Orders per day", "Days", "Orders", (ArrayList<String>)values[0],
                         (ArrayList<Object>)values[1], "orders");
 
             }
@@ -78,6 +78,7 @@ public class OrderStatistics extends Statistics{
         ArrayList<String> orders = stat.getDates(startDateS, endDateS, "order"); //henter ordre mellom startdate og enddate
 
         try {
+            // Brukes disse noe sted?
             Date startDate = getFormatter().parse(startDateS);
             Date endDate = getFormatter().parse(endDateS);
 

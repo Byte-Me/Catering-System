@@ -22,5 +22,4 @@ public class MainTableModel extends DefaultTableModel {
         return String.class;
     }
 
-
 }
