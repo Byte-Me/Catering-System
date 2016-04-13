@@ -3,6 +3,7 @@ package Subscription;
 import Database.OrderManagement;
 import Database.SubscriptionManagement;
 
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -73,13 +74,14 @@ public class Subscriptions {
 
     public boolean createSubscription(int custID, String dateFrom, String dateTo, int weeksBetween, ArrayList<Object[][]> recipesWithDay,
                                       String note, String time) {
-
         int subID = subMan.createSubscription(custID, dateFrom, dateTo, weeksBetween);
         if (!(subID > 0)) {
+            System.out.println("FAGGOTS");
             return false;
         }
         String prevDate = dateFrom;
         boolean flag = true;
+            // +++
         while (flag) {
             for (Object[][] obj : recipesWithDay) {
                 ArrayList<Object[]> recipes = new ArrayList<Object[]>();
@@ -94,15 +96,18 @@ public class Subscriptions {
 
                 prevDate = findNextDate((Integer) obj[2][0], prevDate, dateTo, weeksBetween);
                 if (prevDate.equals("")){
-
                     return true;
                 }
 
-                if (!order.createOrderSub(custID, prevDate, recipes, note, time, subID)) return false;
+                if (!order.createOrderSub(custID, prevDate, recipes, note, time, subID)){
+                    return false;
+                }
+
             }
         }
         return false;
     }
+
 
     private String findNextDate(int day, String prevDateS, String dateTo, int frequency) {
         Date prevDate = null;

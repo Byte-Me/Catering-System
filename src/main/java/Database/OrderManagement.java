@@ -16,7 +16,7 @@ import java.util.Map;
 /**
  * Created by Evdal on 07.03.2016.
  */
-public class OrderManagement extends Management {
+public class    OrderManagement extends Management {
     public OrderManagement(){
         super();
     }/*
@@ -151,7 +151,8 @@ public class OrderManagement extends Management {
         int id = -1;
         try {
             if(setUp()) {
-                getScentence().executeQuery("START TRANSACTION");
+                    // setAutoCommit(false) - Slik ingen endrer noe data når vi henter den
+                getConnection().setAutoCommit(false);
                 ResultSet res = getScentence().executeQuery("SELECT customer_id FROM customer WHERE email = '" + customerMail + "';");
                 if (res.next()) {
                     id = res.getInt("customer_id");
@@ -166,17 +167,24 @@ public class OrderManagement extends Management {
             System.err.println("Issue with registering order.");
             return false;
         } finally {
-            DbUtils.closeQuietly(getScentence());
-            DbUtils.closeQuietly(getConnection());
+            try {
+                getConnection().setAutoCommit(true);
+            }catch (SQLException sqle){
+                sqle.printStackTrace();
+            }finally {
+                DbUtils.closeQuietly(getScentence());
+                DbUtils.closeQuietly(getConnection());
+            }
         }
         return true;
     }
-    public boolean createOrderSub(int id, String date, ArrayList<Object[]> recipes, String note, String time, int subId){ // recipes[0] = name, recipes[1] = portions.
+    public boolean createOrderSub(int id, String date, ArrayList<Object[]> recipes,
+                                  String note, String time, int subId){ // recipes[0] = name, recipes[1] = portions.
         if(setUp()){
             try{
                 ResultSet res;
                 ArrayList<Integer> recipeIDs = new ArrayList<>();
-                getScentence().executeQuery("START TRANSACTION;");
+                getConnection().setAutoCommit(false);
                 int rowChanged = getScentence().executeUpdate("INSERT INTO `order` VALUES(DEFAULT, "+OrdStatus.ACTIVE.getValue()
                         +", '" + date + "', " + id + ", '"+ note + "', '"+ time + "', "+ subId + ");"); //Legger inn orderen med status aktiv.
 
@@ -188,52 +196,46 @@ public class OrderManagement extends Management {
                     }
                 }
                 else{
-                    getScentence().executeQuery("ROLLBACK;");
+                    getConnection().rollback();
                     return false;
-
                 }
                 for(Object[] name : recipes) { //[0] = quantity, [1] = name
-
-
-                    res = getScentence().executeQuery("SELECT recipe_id FROM recipe WHERE name = '" + name[1] + "';");
-
+                    res = getScentence().executeQuery("SELECT recipe_id FROM recipe WHERE name = '" + name[0] + "';");
                     if (res.next()) {
                         recipeIDs.add(res.getInt("recipe_id")); //Henter oppskrifts IDer for å koble oppskrifter med ordre.
                     } else {
-                        getScentence().executeQuery("ROLLBACK");
-
+                        getConnection().rollback();
                         return false;
                     }
                 }
 
                 for (int i = 0; i < recipeIDs.size(); i++) {
                     rowChanged = getScentence().executeUpdate("INSERT INTO order_recipe VALUES(" + orderID + ", " + recipeIDs.get(i) +
-                            ", '" + recipes.get(i)[0] + "');");
+                            ", '" + recipes.get(i)[1] + "');");
                     if (!(rowChanged > 0)) {
-                        getScentence().executeQuery("ROLLBACK;");
+                        getConnection().rollback();
                         return false;
                     }
                 }
-
-                getScentence().executeQuery("COMMIT;");
+                getConnection().commit();
+                getConnection().setAutoCommit(true);
             }
 
-            catch (Exception e){
-                System.err.println("Issue with creating order.");
+            catch (SQLException sqle){
+                System.out.println("Issue with creating order.");
+                sqle.printStackTrace();
                 try {
-                    getScentence().executeQuery("ROLLBACK");
+                    getConnection().rollback();
                 }
-                catch (Exception ee){
-                    System.err.println("Issue with rolling back transaction.");
+                catch (SQLException ee){
+                    System.out.println("Issue with rolling back transaction.");
                 }
                 return false;
-
             }
             finally {
                 DbUtils.closeQuietly(getScentence());
                 DbUtils.closeQuietly(getConnection());
             }
-
         }
         else return false;
         return true;
