@@ -25,9 +25,12 @@ public class Customers {
     static CustomerManagement customerManagement = new CustomerManagement();
     static MainTableModel customerModel;
     static  MainTableModel inactiveCustomerModel;
-    private int emailColumnNr = 1;
+    static JTable customerTable;
+    private static int emailColumnNr = 1;
 
     public Customers(JButton addCustomerButton, final JTable customerTable, final JTable inactiveCustomerTable, final JTextField searchCustomers, JButton deleteCustomerButton, JButton editCustomerButton, JButton reactivateCustomerButton) {
+
+        this.customerTable = customerTable;
 
         addCustomerButton.addActionListener(e -> new AddCustomer());
 
@@ -41,12 +44,7 @@ public class Customers {
             }
         });
 
-        deleteCustomerButton.addActionListener(e1 -> {
-            String customerEmail = (String) customerTable.getValueAt(customerTable.getSelectedRow(), emailColumnNr);
-            customerManagement.updateCustomerStatus(customerEmail, CustomerManagement.CustType.INACTIVE.getValue());
-            updateCustomer();
-            updateInactiveCustomer();
-        });
+        deleteCustomerButton.addActionListener(e1 -> deleteCustomer());
 
         reactivateCustomerButton.addActionListener(e -> {
             String customerEmail = (String) inactiveCustomerTable.getValueAt(inactiveCustomerTable.getSelectedRow(), emailColumnNr);
@@ -76,7 +74,7 @@ public class Customers {
         popupMenu.add(new AbstractAction("Delete Customer") {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                deleteCustomer();
             }
         });
 
@@ -201,6 +199,13 @@ public class Customers {
         for (Object[] customer : inactiveCustomers) {
             inactiveCustomerModel.addRow(customer);
         }
+    }
+
+    private static void deleteCustomer() {
+        String customerEmail = (String) customerTable.getValueAt(customerTable.getSelectedRow(), emailColumnNr);
+        customerManagement.updateCustomerStatus(customerEmail, CustomerManagement.CustType.INACTIVE.getValue());
+        updateCustomer();
+        updateInactiveCustomer();
     }
 
 

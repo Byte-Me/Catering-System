@@ -10,7 +10,6 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="licence (2)" level="project" />
     <orderEntry type="library" name="Maven: com.seaglasslookandfeel:seaglasslookandfeel:0.2.1" level="project" />
     <orderEntry type="library" name="Maven: com.google.code.geocoder-java:geocoder-java:0.16" level="project" />
     <orderEntry type="library" name="Maven: com.google.code.gson:gson:2.2.4" level="project" />
@@ -32,5 +31,6 @@
     <orderEntry type="library" name="Maven: com.teamdev.jxbrowser:jxbrowser-linux32:6.2" level="project" />
     <orderEntry type="library" name="Maven: com.teamdev.jxbrowser:jxbrowser-linux64:6.2" level="project" />
     <orderEntry type="library" name="Maven: com.teamdev.jxbrowser:jxbrowser-mac:6.2" level="project" />
+    <orderEntry type="library" name="licence" level="project" />
   </component>
 </module>

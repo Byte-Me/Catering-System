@@ -7,6 +7,7 @@ import Subscription.Subscriptions;
 import org.junit.*;
 
 import javax.swing.*;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -218,14 +219,13 @@ public class TestJUnitDB{
     @Test
     //int custID, String dateFrom, String dateTo, int weeksBetween, ArrayList<Object[][]> recipesWithDay, String note
 
-    public void testCreateSubs(){
+    public void testCreateSubs()throws SQLException{
         ArrayList<Object[][]> obj = new ArrayList<>();
         obj.add(new Object[][]{{"Catfish", "Potatodog"},{2, 3},{1}});
         obj.add(new Object[][]{{"Catfish"},{3},{3}});
         Subscriptions upt = new Subscriptions();
         boolean bool = upt.createSubscription(10, "2016-03-20", "2016-05-08", 2, obj, "Bare cat ikke fish", "20:00:00");
         assertTrue(bool);
-
     }
     @Test
     public void testDeliveryRoute(){

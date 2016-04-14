@@ -73,7 +73,6 @@
             <artifactId>jxbrowser-cross-platform</artifactId>
             <version>6.2</version>
         </dependency>
-
     </dependencies>
 
 </project>
