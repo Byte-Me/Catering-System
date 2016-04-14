@@ -16,6 +16,11 @@ public class UpdateHandler {
     private static int currTab;
     private static boolean autoUpdateStarted = false;
 
+    // Used for right click handler
+    public static int getCurrTab() {
+        return currTab;
+    }
+
     private static void startTimer() {
         timer.start();
     }
@@ -64,7 +69,7 @@ public class UpdateHandler {
         if(!autoUpdateStarted) {
             currTab = tabIndex;
             timer = new Timer(300000, e -> {
-                System.out.println("AutoUpdated tab " + currTab);
+                System.out.println("AutoUpdated tab " + currTab); // DEBUG
                 updateTab();
                 restartTimer();
             });

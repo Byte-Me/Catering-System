@@ -81,8 +81,7 @@ public class ChartCreator extends JFrame {
 
         ChartPanel chartPanel = new ChartPanel( lineChart );
 
-
-        chartPanel.setPreferredSize( new java.awt.Dimension( 560 , 367 ) );
+        chartPanel.setPreferredSize( new java.awt.Dimension( 1000 , 367 ) );
         // preffered size is set, might want variables for dimensions.
 
         return chartPanel;
