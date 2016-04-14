@@ -115,13 +115,8 @@ public class Driver {
         // Add users from arraylist to table
         for (Object[] order : orders) {
             order[4] = false;
-            driverModel.addRow(order); // FIXME: Change this when new backend method available
-        }
-        /*
-        for (Object[] order : orders) {
             driverModel.addRow(order);
         }
-        */
     }
 
     public void createMap(JPanel mapPanel, JButton generateDrivingRouteButton) throws IOException {
@@ -184,7 +179,6 @@ public class Driver {
                     "directionsService.route(request, function(result, status) {" +
                     "if (status == google.maps.DirectionsStatus.OK) {" +
                     "directionsDisplay.setDirections(result);" +
-                    "alert('directions created');" +
                     "}" +
                     "});";
         } catch (NullPointerException npe) {
