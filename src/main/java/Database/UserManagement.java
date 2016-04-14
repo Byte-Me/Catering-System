@@ -133,6 +133,7 @@ public class UserManagement extends Management {
         } else return null;
 
     }
+
     public Object[] getSingleUserInfo(String username){
         Object[] out = new Object[6];
         if(setUp()){
@@ -178,8 +179,6 @@ public class UserManagement extends Management {
             } finally {
                 DbUtils.closeQuietly(getScentence());
                 DbUtils.closeQuietly(getConnection());
-
-
             }
         }
 

@@ -1,10 +1,13 @@
 package GUI;
 
 import Database.FoodManagement;
+import HelperClasses.MainTableModel;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 import static GUI.AddRecipe.existsInTable;
@@ -29,8 +32,7 @@ public class EditRecipe extends JDialog {
 
     FoodManagement foodManagement;
 
-    public EditRecipe() {
-        setTitle("Edit Recipe");
+    public EditRecipe(int recipeId) {
         setContentPane(mainPane);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
@@ -42,8 +44,8 @@ public class EditRecipe extends JDialog {
 
         String[] ingredientHeader = {"Ingredient", "Quantity", "Unit"};
 
-        inStorageModel = new DefaultTableModel(); // Model of the table
-        inRecipeModel = new DefaultTableModel(); // Model of the table
+        inStorageModel = new MainTableModel(); // Model of the table. Make uneditable?
+        inRecipeModel = new MainTableModel(); // Model of the table. Make uneditable?
 
         inStorageModel.setColumnIdentifiers(ingredientHeader);
         inRecipeModel.setColumnIdentifiers(ingredientHeader);
@@ -54,6 +56,9 @@ public class EditRecipe extends JDialog {
         inStorageTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         updateIngredients();
+        updateIngredientsInRecipe(recipeId);
+
+
 
         moveLeft.addActionListener(e -> copyPasteData(inStorageTable.getSelectedRow(), true));
 
@@ -62,7 +67,7 @@ public class EditRecipe extends JDialog {
         addRecipeButton.addActionListener(e -> {
             foodManagement = new FoodManagement();
             String recipeName = JOptionPane.showInputDialog(null, "Name of recipe: ");
-            String priceIn = JOptionPane.showInputDialog(null, "Salesprice for "+recipeName+": ");
+            String priceIn = JOptionPane.showInputDialog(null, "Salesprice for " + recipeName + ": ");
             int recipePrice = Integer.parseInt(priceIn);
 
             ArrayList<Object[]> ingInfo = new ArrayList<>();
@@ -85,6 +90,24 @@ public class EditRecipe extends JDialog {
 
         });
 
+        inStorageTable.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if(e.getClickCount() == 2) {
+                    copyPasteData(inStorageTable.getSelectedRow(), true);
+                }
+            }
+        });
+
+        inRecipeTable.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if(e.getClickCount() == 2) {
+                    copyPasteData(inRecipeTable.getSelectedRow(), false);
+                }
+            }
+        });
+
         cancelButton.addActionListener(e -> {
             setVisible(false);
             dispose();
@@ -104,17 +127,19 @@ public class EditRecipe extends JDialog {
                 ingredient[0] = inStorageTable.getValueAt(index, 0);
                 ingredient[1] = unitsInRecipe;
                 ingredient[2] = inStorageTable.getValueAt(index, 2);
-                if (unitsInRecipe > 0 && !existsInTable(inRecipeTable, inStorageTable.getValueAt(index, 0).toString())) {
+                if (unitsInRecipe > 0 && existsInTable(inRecipeTable, inStorageTable.getValueAt(index, 0).toString()) == -1) {
                     inRecipeModel.addRow(ingredient);
+                } else if (existsInTable(inRecipeTable, inStorageTable.getValueAt(index, 0).toString()) >= 0) {
+                    int row = existsInTable(inRecipeTable, inStorageTable.getValueAt(index, 0).toString());
+                    int currentPortions = Integer.parseInt((String)inRecipeTable.getValueAt(row, 1));
+                    inRecipeModel.setValueAt((unitsInRecipe + currentPortions), row, 1);
                 } else {
                     JOptionPane.showMessageDialog(null, "1. Units must be positive numbers.\n2. Two ingredients with the same name can\n not be used in a recipe.\n(Edit the quantity instead!)");
                 }
             } else {
                 inRecipeModel.removeRow(index);
             }
-        } catch (HeadlessException | NumberFormatException e) {
-            e.printStackTrace();
-        }
+        } catch (Exception e){}
     }
 
     private static void updateIngredients() {
@@ -125,6 +150,17 @@ public class EditRecipe extends JDialog {
 
         for (Object[] ingredient : ingredients) {
             inStorageModel.addRow(ingredient);
+        }
+    }
+
+    private static void updateIngredientsInRecipe(int recipeId) {
+        FoodManagement foodManagement = new FoodManagement();
+        ArrayList<Object[]> ingredientsInRecipe = foodManagement.getRecipeIngredients(recipeId);
+
+        inRecipeModel.setRowCount(0);
+
+        for (Object[] ingredient : ingredientsInRecipe) {
+            inRecipeModel.addRow(ingredient);
         }
     }
 }

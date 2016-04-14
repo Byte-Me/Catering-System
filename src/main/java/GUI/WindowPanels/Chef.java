@@ -3,11 +3,15 @@ package GUI.WindowPanels;
 import Database.FoodManagement;
 import Database.OrderManagement;
 import GUI.AddIngredient;
+import GUI.EditIngredient;
 import GUI.GenerateShoppingList;
 import GUI.Recipes;
+import HelperClasses.MainTableModel;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 import static Database.OrderManagement.OrderType;
@@ -18,48 +22,59 @@ import static javax.swing.JOptionPane.*;
  */
 public class Chef {
 
-     DefaultTableModel prepareModel;
-    static DefaultTableModel ingredientModel = new DefaultTableModel();
+    static DefaultTableModel prepareModel;
+    static DefaultTableModel ingredientModel;
     private OrderManagement orderManagement = new OrderManagement();
     static FoodManagement foodManagement = new FoodManagement();
 
-    public Chef(JTable prepareTable, JTable ingredientTable, JButton generateShoppingListButton, JButton recipesButton, JButton addIngredientButton) {
+    public Chef(JTable prepareTable, JTable ingredientTable, JButton generateShoppingListButton, JButton recipesButton, JButton addIngredientButton, JButton editIngredientButton) {
 
         recipesButton.addActionListener(e -> new Recipes());
 
         addIngredientButton.addActionListener(e -> new AddIngredient());
+
+        editIngredientButton.addActionListener(e ->{
+            try {
+                if (ingredientTable.getSelectedRows().length == 1 ) {
+                    String ingredient = (String) ingredientTable.getValueAt(ingredientTable.getSelectedRow(), 0);
+                    new EditIngredient(ingredient);
+                } else if(ingredientTable.getSelectedRows().length < 1){
+                    showMessageDialog(null, "An ingredient needs to be selected.");
+                }
+                else{
+                    showMessageDialog(null, "Only one ingredient can be selected.");
+                }
+            }
+            catch (IndexOutOfBoundsException iobe){ //Oppstår exception jeg ikke forstår, derfor bare catcher det.
+                showMessageDialog(null, "An ingredient needs to be selected.");
+            }
+
+        });
 
         generateShoppingListButton.addActionListener(e -> new GenerateShoppingList());
 
         String[] prepareHeader = {"Order ID","Recipe", "Amount", "Time", "Notes", "Status", "Update"}; // Header titles
         String[] ingredientHeader = {"Ingredient", "Quantity", "Unit"}; // Header titles
 
-        prepareModel = new DefaultTableModel() {
-           /* public Class<?> getColumnClass(int columnIndex) {
-                return getValueAt(0, columnIndex).getClass();
-            }*/
-           @Override
-           public Class<?> getColumnClass(int columnIndex) {
-               if (columnIndex == 6)
-                   return Boolean.class;
-               return super.getColumnClass(columnIndex);
-           }
-            @Override
-            public boolean isCellEditable(int row, int col) {
-                return (col == 6);
-            }
-        }; // Model of the table
-
+        ingredientModel = new MainTableModel();
+        prepareModel = new MainTableModel();
 
         prepareModel.setColumnIdentifiers(prepareHeader); // Add header to columns
         ingredientModel.setColumnIdentifiers(ingredientHeader); // Add header to columns
 
         prepareTable.setModel(prepareModel); // Add model to table
         ingredientTable.setModel(ingredientModel); // Add model to table
+        ingredientTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
-        updateIngredients(); // FIXME: Remove this and make the tab autoUpdateable
-
-        updatePrepareTable();
+        ingredientTable.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if(e.getClickCount() == 2) {
+                    String ingredient = (String)ingredientModel.getValueAt(ingredientTable.getSelectedRow(), 0);
+                    new EditIngredient(ingredient);
+                }
+            }
+        });
 
         //update order process
         prepareModel.addTableModelListener(e ->{
@@ -92,7 +107,8 @@ public class Chef {
     }
 
 
-    public void updatePrepareTable() {
+    public static void updatePrepareTable() {
+        FoodManagement foodManagement = new FoodManagement();
         ArrayList<Object[]> recipes = foodManagement.getRecipesForChef();
         prepareModel.setRowCount(0);
         for (Object[] row : recipes) {

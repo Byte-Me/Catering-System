@@ -1,11 +1,16 @@
 package GUI;
 
 import Database.FoodManagement;
+import HelperClasses.MainTableModel;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+
+import static javax.swing.JOptionPane.showMessageDialog;
 
 /**
  * Created by asdfLaptop on 16.03.2016.
@@ -32,17 +37,44 @@ public class Recipes extends JDialog {
 
         String[] recipeHeader = {"ID", "Name"};
 
-        recipesModel = new DefaultTableModel(); // Model of the table
+        recipesModel = new MainTableModel();
 
         recipesModel.setColumnIdentifiers(recipeHeader);
 
         recipesTable.setModel(recipesModel); // Add model to table
+        recipesTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         updateRecipes();
 
+        recipesTable.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if(e.getClickCount() == 2) {
+                    int recipeId = (Integer)recipesModel.getValueAt(recipesTable.getSelectedRow(), 0);
+                    new EditRecipe(recipeId);
+                }
+            }
+        });
+
         addRecipeButton.addActionListener(e -> new AddRecipe());
 
-        editRecipeButton.addActionListener(e -> new EditRecipe());
+        editRecipeButton.addActionListener(e ->{
+            try {
+                if (recipesTable.getSelectedRows().length == 1 ) { //TODO: sjekker ikke om flere columns er selected, velger øverste.
+                    int recipeId = (Integer) recipesTable.getValueAt(recipesTable.getSelectedRow(), 1);
+                    new EditRecipe(recipeId);
+                } else if(recipesTable.getSelectedRows().length < 1){
+                    showMessageDialog(null, "A recipe needs to be selected.");
+                }
+                else{
+                    showMessageDialog(null, "Only one recipe can be selected.");
+                }
+            }
+            catch (IndexOutOfBoundsException iobe){
+                showMessageDialog(null, "A recipe needs to be selected.");
+            }
+
+        });
 
         cancelButton.addActionListener(e -> {
             setVisible(false);

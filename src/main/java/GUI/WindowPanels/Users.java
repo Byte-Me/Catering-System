@@ -192,5 +192,4 @@ public class Users {
             userModel.addRow(user);
         }
     }
-
 }
