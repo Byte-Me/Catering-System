@@ -10,6 +10,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Arrays;
+import HelperClasses.*;
 
 /**
  * Created by asdfLaptop on 11.03.2016.
@@ -42,8 +43,8 @@ public class AddRecipe extends JDialog {
 
         String[] ingredientHeader = {"Ingredient", "Quantity", "Unit"};
 
-        inStorageModel = new DefaultTableModel(); // Model of the table
-        inRecipeModel = new DefaultTableModel(); // Model of the table
+        inStorageModel = new MainTableModel(); // Model of the table
+        inRecipeModel = new MainTableModel(); // Model of the table
 
         inStorageModel.setColumnIdentifiers(ingredientHeader);
         inRecipeModel.setColumnIdentifiers(ingredientHeader);
@@ -99,8 +100,12 @@ public class AddRecipe extends JDialog {
                 ingredient[0] = inStorageTable.getValueAt(index, 0);
                 ingredient[1] = unitsInRecipe;
                 ingredient[2] = inStorageTable.getValueAt(index, 2);
-                if (unitsInRecipe > 0 && !existsInTable(inRecipeTable, inStorageTable.getValueAt(index, 0).toString())) {
+                if (unitsInRecipe > 0 && existsInTable(inRecipeTable, inStorageTable.getValueAt(index, 0).toString()) == -1) {
                     inRecipeModel.addRow(ingredient);
+                } else if (existsInTable(inRecipeTable, inStorageTable.getValueAt(index, 0).toString()) >= 0) {
+                    int row = existsInTable(inRecipeTable, inStorageTable.getValueAt(index, 0).toString());
+                    int currentPortions = (Integer)inRecipeTable.getValueAt(row, 1);
+                    inRecipeModel.setValueAt((unitsInRecipe + currentPortions), row, 1);
                 } else {
                     JOptionPane.showMessageDialog(null, "1. Units must be positive numbers.\n2. Two ingredients with the same name can\n not be used in a recipe.\n(Edit the quantity instead!)");
                 }
@@ -110,17 +115,16 @@ public class AddRecipe extends JDialog {
         } catch (Exception e){}
     }
 
-    public static boolean existsInTable(JTable table, String name) {
+    public static int existsInTable(JTable table, String name) {
         // Get row count
         int rowCount = table.getRowCount();
-
         // Check against all entries
         for (int i = 0; i < rowCount; i++) {
             if (table.getValueAt(i, 0).toString() == name) {
-                return true;
+                return i;
             }
         }
-        return false;
+        return -1;
     }
 
     public static void updateIngredients() {

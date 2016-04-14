@@ -2,6 +2,8 @@ package Updates;
 
 import javax.swing.*;
 
+import static GUI.WindowPanels.Chef.updateIngredients;
+import static GUI.WindowPanels.Chef.updatePrepareTable;
 import static GUI.WindowPanels.Customers.updateCustomer;
 import static GUI.WindowPanels.Driver.updateDrivingRoute;
 import static GUI.WindowPanels.Orders.updateOrders;
@@ -51,7 +53,8 @@ public class UpdateHandler {
                 updateDrivingRoute();
                 break;
             case 6:
-                // Some function
+                updatePrepareTable();
+                updateIngredients();
                 break;
             default:
                 // Something wrong??

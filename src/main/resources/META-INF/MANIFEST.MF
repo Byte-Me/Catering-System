@@ -1,9 +1,10 @@
 Manifest-Version: 1.0
-Class-Path: commons-logging-1.0.4.jar hamcrest-core-1.3.jar jfreechart
- -1.0.13.jar commons-codec-1.2.jar junit-4.12.jar jxbrowser-mac-6.2.ja
- r jcommon-1.0.16.jar commons-httpclient-3.1.jar license.jar commons-d
- butils-1.6.jar geocoder-java-0.16.jar gson-2.2.4.jar slf4j-api-1.7.7.
- jar mysql-connector-java-5.1.38.jar jxbrowser-linux32-6.2.jar jxbrows
- er-6.2.jar jxbrowser-win-6.2.jar jxbrowser-linux64-6.2.jar
+Class-Path: slf4j-api-1.7.7.jar junit-4.12.jar commons-logging-1.0.4.j
+ ar geocoder-java-0.16.jar jxbrowser-linux64-6.2.jar seaglasslookandfe
+ el-0.2.1.jar jxbrowser-6.2.jar jcommon-1.0.16.jar jfreechart-1.0.13.j
+ ar commons-httpclient-3.1.jar commons-codec-1.2.jar jxbrowser-linux32
+ -6.2.jar license.jar commons-dbutils-1.6.jar gson-2.2.4.jar hamcrest-
+ core-1.3.jar mysql-connector-java-5.1.38.jar jxbrowser-win-6.2.jar jx
+ browser-mac-6.2.jar
 Main-Class: Program
 

@@ -199,7 +199,7 @@ public class EditOrder extends JDialog {
                             addOrderModel.addRow(new Object[]{selectedRecipe, portions});
                         } else {
                             int row = existsInTable(recipeTable, selectedRecipe);
-                            int currentPortions = (Integer) addOrderModel.getValueAt(row, 0);
+                            int currentPortions = Integer.parseInt((String) addOrderModel.getValueAt(row, 0));
                             if (currentPortions + portions >= 1) {
                                 addOrderModel.setValueAt(currentPortions + portions, row, 0);
                             }

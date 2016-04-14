@@ -51,6 +51,124 @@ public class FoodManagement extends Management{
         return out;
     }
 
+    public Object[] getSingleIngredient(String ingredient){
+        Object[] out = new Object[4];
+        if(setUp()){
+            try {
+
+                ResultSet res = getScentence().executeQuery("SELECT name, quantity, unit, price FROM grocery WHERE name = '" + ingredient + "';");
+                if(res.next()){
+                    out[0] = res.getString("name");
+                    out[1] = res.getInt("price");
+                    out[2] = res.getInt("quantity");
+                    out[3] = res.getString("unit");
+                }
+            }
+            catch (SQLException e){
+                System.err.println("Issue with getting ingredient info.");
+                return null;
+            }
+            finally {
+                DbUtils.closeQuietly(getScentence());
+                DbUtils.closeQuietly(getConnection());
+            }
+        }
+        return out;
+    }
+
+    public boolean updateIngredientName(String name, String newData) {
+        int rowChanged = 0;
+        if (setUp()) {
+            try {
+                PreparedStatement prep = getConnection().prepareStatement("UPDATE grocery SET name = ? WHERE name = ?;");
+                prep.setString(1, newData);
+                prep.setString(2, name);
+
+                rowChanged = prep.executeUpdate();
+            } catch (SQLException e) {
+                System.err.println("Issue with executing database update.");
+                return false;
+
+            } finally {
+                DbUtils.closeQuietly(getScentence());
+                DbUtils.closeQuietly(getConnection());
+            }
+        }
+
+        if(rowChanged > 0) return true;
+        return false;
+    }
+
+    public boolean updateIngredientPrice(String name, int newData) {
+        int rowChanged = 0;
+        if (setUp()) {
+            try {
+                PreparedStatement prep = getConnection().prepareStatement("UPDATE grocery SET price = ? WHERE name = ?;");
+                prep.setInt(1, newData);
+                prep.setString(2, name);
+
+                rowChanged = prep.executeUpdate();
+            } catch (SQLException e) {
+                System.err.println("Issue with executing database update.");
+                return false;
+
+            } finally {
+                DbUtils.closeQuietly(getScentence());
+                DbUtils.closeQuietly(getConnection());
+            }
+        }
+
+        if(rowChanged > 0) return true;
+        return false;
+    }
+
+    public boolean updateIngredientQuantity(String name, int newData) {
+        int rowChanged = 0;
+        if (setUp()) {
+            try {
+                PreparedStatement prep = getConnection().prepareStatement("UPDATE grocery SET quantity = ? WHERE name = ?;");
+                prep.setInt(1, newData);
+                prep.setString(2, name);
+
+                rowChanged = prep.executeUpdate();
+            } catch (SQLException e) {
+                System.err.println("Issue with executing database update.");
+                return false;
+
+            } finally {
+                DbUtils.closeQuietly(getScentence());
+                DbUtils.closeQuietly(getConnection());
+            }
+        }
+
+        if(rowChanged > 0) return true;
+        return false;
+    }
+
+    public boolean updateIngredientUnit(String name, String newData) {
+        int rowChanged = 0;
+        if (setUp()) {
+            try {
+                PreparedStatement prep = getConnection().prepareStatement("UPDATE grocery SET unit = ? WHERE name = ?;");
+                prep.setString(1, newData);
+                prep.setString(2, name);
+
+                rowChanged = prep.executeUpdate();
+            } catch (SQLException e) {
+                System.err.println("Issue with executing database update.");
+                return false;
+
+            } finally {
+                DbUtils.closeQuietly(getScentence());
+                DbUtils.closeQuietly(getConnection());
+            }
+        }
+
+        if(rowChanged > 0) return true;
+        return false;
+    }
+
+
     public ArrayList<Object[]> getRecipes(){
         ResultSet res;
         ArrayList<Object[]> out = new ArrayList<Object[]>();
@@ -155,20 +273,17 @@ public class FoodManagement extends Management{
         return res > 0;
     }
 
-    public ArrayList<Object[]> getRecipeIngredients(String recipeName){
+    public ArrayList<Object[]> getRecipeIngredients(int id){
         ArrayList<Object[]> out = new ArrayList<Object[]>();
         if(setUp()){
             ResultSet res;
             try{
-                res = getScentence().executeQuery("SELECT grocery.price, recipe_grocery.amount, grocery.name, grocery.unit FROM grocery, recipe_grocery, order_recipe, `order` WHERE `order`.date = " +
-                        "CURRENT_DATE + 1 AND order_recipe.order_id = `order`.order_id AND order_recipe.recipe_id = recipe_grocery.recipe_id AND " +
-                        "recipe_grocery.grocery_id = recipe_grocery.grocery_id AND recipe_grocery.grocery_id = grocery.grocery_id;");
+                res = getScentence().executeQuery("SELECT recipe_grocery.amount, grocery.name, grocery.unit FROM grocery, recipe_grocery WHERE recipe_id = " + id + " AND recipe_grocery.grocery_id = grocery.grocery_id;");
                 while(res.next()){
-                    Object[] obj = new Object[4];
+                    Object[] obj = new Object[3];
                     obj[0] = res.getString("name");
                     obj[1] = res.getInt("amount");
                     obj[2] = res.getString("unit");
-                    obj[3] = res.getInt("price");
                     out.add(obj);
                 }
             }

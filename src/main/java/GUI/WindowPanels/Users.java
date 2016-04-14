@@ -65,6 +65,7 @@ public class Users {
             }
 
         });
+
         userTable.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -146,5 +147,4 @@ public class Users {
             userModel.addRow(user);
         }
     }
-
 }
