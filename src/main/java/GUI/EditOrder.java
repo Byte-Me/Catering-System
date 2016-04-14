@@ -247,8 +247,8 @@ public class EditOrder extends JDialog {
             }
 
             OrderManagement orderManagement = new OrderManagement();
-            boolean isAdded = orderManagement.createOrder((String)selectedCustomer[1], selectedDate, selectedRecipes, comment, selectedTime+seconds);
-            if(!isAdded) {
+            boolean isUpdated = orderManagement.createOrder((String)selectedCustomer[1], selectedDate, selectedRecipes, comment, selectedTime+seconds);
+            if(!isUpdated) {
                 showMessageDialog(null, "Issue with editing order.");
             }
 
