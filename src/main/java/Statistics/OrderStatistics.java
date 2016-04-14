@@ -27,7 +27,6 @@ public class OrderStatistics extends Statistics{
     public Object[] createLineChartFromOrder(String startDateS, String endDateS) { //[0] = JFreeChart, [1] = SumOrders
         ArrayList<String> orders = stat.getDates(startDateS, endDateS, "order");
         JPanel chart = null;
-        double sumOrders = 0;
         if (orders.isEmpty()) {
             chart = ChartCreator.createLineChart("No orders found", "", "", new ArrayList<String>(),
                     new ArrayList<>(), "orders");
@@ -66,12 +65,9 @@ public class OrderStatistics extends Statistics{
             } catch (Exception e) {
                 System.err.println("Issue with creating graph.");
             }
-            sumOrders = 0;
-            for (double value : yValues) {
-                sumOrders += value;
-            }
+
         }
-        return new Object[]{chart, Double.valueOf(sumOrders)};
+        return new Object[]{chart, orders.size()};
     }
     public JPanel createBarChartFromOrder(String startDateS, String endDateS){
         ArrayList<String> orders = stat.getDates(startDateS, endDateS, "order"); //henter ordre mellom startdate og enddate

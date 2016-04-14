@@ -31,7 +31,7 @@ public class SubscriptionStatistics extends Statistics{
         ArrayList<String[]> subscription = stats.getSubDates(); //kunne gjort i sql
         int count = 0;
         for(String[] sub : subscription){
-            if(subs.checkSubscriptionActive(sub[0],sub[2],new Date())){
+            if(subs.checkSubscriptionActive(sub[0],sub[1],new Date())){
                 count++;
             }
         }
@@ -68,6 +68,8 @@ public class SubscriptionStatistics extends Statistics{
         return chart;
     }
     */
+
+
     public JPanel subActiveLineGraph(String dateFrom, String dateTo){
         ArrayList<String[]> subscription = stats.getSubDates();
         Date from = null;

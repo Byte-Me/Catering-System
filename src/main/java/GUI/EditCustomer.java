@@ -54,7 +54,7 @@ public class EditCustomer extends JDialog{
             Object[] custInfo = customerManagement.getSingleCustomerInfo(emailS);
 
             int custStatus = (Integer) custInfo[4];
-            addCustTabs.setSelectedIndex(custStatus);
+            addCustTabs.setSelectedIndex(custStatus-1); //HACK
 
             if (custStatus == CustomerManagement.CustType.PERSON.getValue()) { //Person
 
@@ -67,7 +67,6 @@ public class EditCustomer extends JDialog{
                 address.setText(add[0]);
                 postalCode.setText(add[1]);
                 city.setText(add[2]);
-                addCustTabs.remove(1);
 
                 addCustTabs.remove(1); //Remove corporation tab
 
