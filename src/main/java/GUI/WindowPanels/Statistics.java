@@ -5,6 +5,7 @@ import java.awt.*;
 import Statistics.OrderStatistics;
 import org.jfree.chart.ChartPanel;
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import javax.swing.text.MaskFormatter;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -17,6 +18,7 @@ import java.util.Date;
 public class Statistics {
     private JPanel orderStatisticsPanel;
     private JPanel barChartPanel;
+    private JPanel statsPanel;
     OrderStatistics os = new OrderStatistics();
     JFormattedTextField fromDate;
     JFormattedTextField toDate;
@@ -25,6 +27,7 @@ public class Statistics {
 
         this.orderStatisticsPanel = orderStatisticsPanel;
         this.barChartPanel = barChartPanel;
+        this.statsPanel = statsPanel;
         this.fromDate = fromDate;
         this.toDate = toDate;
 
@@ -92,6 +95,12 @@ public class Statistics {
             barChartPanel.add(barChart, BorderLayout.CENTER);
             barChartPanel.getRootPane().revalidate();
         }
+
+        statsPanel.setBackground(Color.WHITE); // White background
+        statsPanel.setBorder(new EmptyBorder(10, 10, 10, 10)); // Padding
+        statsPanel.setLayout(new BorderLayout());
+        Double sumOrder = (Double)orderStats[1];
+        statsPanel.add(new JLabel("Sum Orders: " + sumOrder.toString()), BorderLayout.NORTH);
     }
 
 }

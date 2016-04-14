@@ -2,7 +2,9 @@ package GUI.WindowPanels;
 
 import Database.CustomerManagement;
 import GUI.AddCustomer;
+import GUI.AddUser;
 import GUI.EditCustomer;
+import GUI.EditUser;
 import HelperClasses.MainTableModel;
 
 import javax.swing.*;
@@ -45,12 +47,58 @@ public class Customers {
             }
         });
 
+
+        // Right Click Menu
+        JPopupMenu popupMenu = new JPopupMenu("Customers");
+        popupMenu.add(new AbstractAction("New Customer") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new AddCustomer();
+            }
+        });
+        popupMenu.add(new AbstractAction("Edit Customer") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (customerTable.getSelectedRow() != -1) {
+                    String email = (String) customerTable.getValueAt(customerTable.getSelectedRow(), emailColumnNr);
+                    new EditCustomer(email);
+                }
+            }
+        });
+        popupMenu.add(new AbstractAction("Delete Customer") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+
         customerTable.addMouseListener(new MouseAdapter() {
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                int r = customerTable.rowAtPoint(e.getPoint());
+                if (r >= 0 && r < customerTable.getRowCount()) {
+                    customerTable.setRowSelectionInterval(r, r);
+                } else {
+                    customerTable.clearSelection();
+                }
+
+                int rowindex = customerTable.getSelectedRow();
+                if (rowindex < 0)
+                    return;
+
+                if (e.isPopupTrigger() && e.getComponent() instanceof JTable) {
+                    popupMenu.show(e.getComponent(), e.getX(), e.getY());
+                }
+            }
+
             @Override
             public void mouseClicked(MouseEvent e) {
                 if(e.getClickCount() == 2) {
-                    String email = (String) customerTable.getValueAt(customerTable.getSelectedRow(), emailColumnNr);
-                    new EditCustomer(email);
+                    if (customerTable.getSelectedRow() != -1) {
+                        String email = (String) customerTable.getValueAt(customerTable.getSelectedRow(), emailColumnNr);
+                        new EditCustomer(email);
+                    }
                 }
             }
         });

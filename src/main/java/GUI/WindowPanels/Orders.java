@@ -71,15 +71,63 @@ public class Orders {
             }
         });
 
-        ordersTable.addMouseListener(new MouseAdapter() {
+        // Right Click Menu
+        JPopupMenu popupMenu = new JPopupMenu("Orders");
+        popupMenu.add(new AbstractAction("New Order") {
             @Override
-            public void mouseClicked(MouseEvent e) {
-                if(e.getClickCount() == 2) {
+            public void actionPerformed(ActionEvent e) {
+                new AddOrder();
+            }
+        });
+        popupMenu.add(new AbstractAction("Edit Order") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (ordersTable.getSelectedRow() != -1) {
                     int id = (Integer) ordersTable.getValueAt(ordersTable.getSelectedRow(), orderColumnNr);
                     new EditOrder(id);
                 }
             }
         });
+        popupMenu.add(new AbstractAction("Delete Order") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+
+        // Mouse Click Listener
+        ordersTable.addMouseListener(new MouseAdapter() {
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+                int r = ordersTable.rowAtPoint(e.getPoint());
+                if (r >= 0 && r < ordersTable.getRowCount()) {
+                    ordersTable.setRowSelectionInterval(r, r);
+                } else {
+                    ordersTable.clearSelection();
+                }
+
+                int rowindex = ordersTable.getSelectedRow();
+                if (rowindex < 0)
+                    return;
+
+                if (e.isPopupTrigger() && e.getComponent() instanceof JTable) {
+                    popupMenu.show(e.getComponent(), e.getX(), e.getY());
+                }
+            }
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if(e.getClickCount() == 2) {
+                    if (ordersTable.getSelectedRow() != -1) {
+                        int id = (Integer) ordersTable.getValueAt(ordersTable.getSelectedRow(), orderColumnNr);
+                        new EditOrder(id);
+                    }
+                }
+            }
+
+        });
+
         searchOrders.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {

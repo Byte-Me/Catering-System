@@ -1,7 +1,9 @@
 package GUI.WindowPanels;
 
 import Database.UserManagement;
+import GUI.AddOrder;
 import GUI.AddUser;
+import GUI.EditOrder;
 import GUI.EditUser;
 import HelperClasses.MainTableModel;
 
@@ -9,6 +11,7 @@ import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
+import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -65,12 +68,58 @@ public class Users {
             }
 
         });
+
+        // Right Click Menu
+        JPopupMenu popupMenu = new JPopupMenu("Users");
+        popupMenu.add(new AbstractAction("New User") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new AddUser();
+            }
+        });
+        popupMenu.add(new AbstractAction("Edit User") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if (userTable.getSelectedRow() != -1) {
+                    String username = (String) userModel.getValueAt(userTable.getSelectedRow(), usernameColumnNr);
+                    new EditUser(username);
+                }
+            }
+        });
+        popupMenu.add(new AbstractAction("Delete User") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+
+            }
+        });
+
+        // Mouse Click Listener
         userTable.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                int r = userTable.rowAtPoint(e.getPoint());
+                if (r >= 0 && r < userTable.getRowCount()) {
+                    userTable.setRowSelectionInterval(r, r);
+                } else {
+                    userTable.clearSelection();
+                }
+
+                int rowindex = userTable.getSelectedRow();
+                if (rowindex < 0)
+                    return;
+
+                if (e.isPopupTrigger() && e.getComponent() instanceof JTable) {
+                    popupMenu.show(e.getComponent(), e.getX(), e.getY());
+                }
+            }
+
             @Override
             public void mouseClicked(MouseEvent e) {
                 if(e.getClickCount() == 2) {
-                    String username = (String) userModel.getValueAt(userTable.getSelectedRow(), usernameColumnNr);
-                    new EditUser(username);
+                    if (userTable.getSelectedRow() != -1) {
+                        String username = (String) userModel.getValueAt(userTable.getSelectedRow(), usernameColumnNr);
+                        new EditUser(username);
+                    }
                 }
             }
         });
