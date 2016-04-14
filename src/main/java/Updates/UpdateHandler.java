@@ -5,6 +5,7 @@ import javax.swing.*;
 import static GUI.WindowPanels.Chef.updateIngredients;
 import static GUI.WindowPanels.Chef.updatePrepareTable;
 import static GUI.WindowPanels.Customers.updateCustomer;
+import static GUI.WindowPanels.Customers.updateInactiveCustomer;
 import static GUI.WindowPanels.Driver.updateDrivingRoute;
 import static GUI.WindowPanels.Orders.updateOrders;
 import static GUI.WindowPanels.Subscriptions.updateSubscriptions;
@@ -47,6 +48,7 @@ public class UpdateHandler {
                 break;
             case 2:
                 updateCustomer();
+                updateInactiveCustomer();
                 break;
             case 3:
                 updateSubscriptions();

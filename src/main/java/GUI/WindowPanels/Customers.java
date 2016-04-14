@@ -23,16 +23,13 @@ import static javax.swing.JOptionPane.showMessageDialog;
 public class Customers {
 
     static CustomerManagement customerManagement = new CustomerManagement();
-    static DefaultTableModel customerModel;
+    static MainTableModel customerModel;
+    static  MainTableModel inactiveCustomerModel;
     private int emailColumnNr = 1;
 
-    public Customers(JButton addCustomerButton, final JTable customerTable, final JTextField searchCustomers, JButton deleteCustomerButton, JButton editCustomerButton) {
+    public Customers(JButton addCustomerButton, final JTable customerTable, final JTable inactiveCustomerTable, final JTextField searchCustomers, JButton deleteCustomerButton, JButton editCustomerButton, JButton reactivateCustomerButton) {
 
-        addCustomerButton.addActionListener(new ActionListener() { // Button action listener
-            public void actionPerformed(ActionEvent e) {
-                new AddCustomer();
-            }
-        });
+        addCustomerButton.addActionListener(e -> new AddCustomer());
 
         editCustomerButton.addActionListener(e -> {
             if(customerTable.getSelectedColumn() >= 0) { //TODO: sjekker ikke om flere columns er selected, velger øverste.
@@ -42,6 +39,20 @@ public class Customers {
             else{
                 showMessageDialog(null, "A customer needs to be selected.");
             }
+        });
+
+        deleteCustomerButton.addActionListener(e1 -> {
+            String customerEmail = (String) customerTable.getValueAt(customerTable.getSelectedRow(), emailColumnNr);
+            customerManagement.updateCustomerStatus(customerEmail, CustomerManagement.CustType.INACTIVE.getValue());
+            updateCustomer();
+            updateInactiveCustomer();
+        });
+
+        reactivateCustomerButton.addActionListener(e -> {
+            String customerEmail = (String) inactiveCustomerTable.getValueAt(inactiveCustomerTable.getSelectedRow(), emailColumnNr);
+            customerManagement.updateCustomerStatus(customerEmail, CustomerManagement.CustType.PERSON.getValue()); //FIXME: What happens with corporation?
+            updateCustomer();
+            updateInactiveCustomer();
         });
 
 
@@ -115,6 +126,14 @@ public class Customers {
         customerTable.getColumnModel().getColumn(1).setMaxWidth(210);
         customerTable.getColumnModel().getColumn(2).setMinWidth(130);
 
+        inactiveCustomerModel = new MainTableModel();
+        inactiveCustomerModel.setColumnIdentifiers(header);
+
+        inactiveCustomerTable.setModel(inactiveCustomerModel);
+        inactiveCustomerTable.setAutoCreateRowSorter(true);
+        inactiveCustomerTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+
         // Serach field input changed?
         searchCustomers.getDocument().addDocumentListener(new DocumentListener() {
             @Override
@@ -143,10 +162,10 @@ public class Customers {
 
     }
 
-    // Update Users function
+    // Update Customers function
     public static void updateCustomer() {
 
-        // Get users from database
+        // Get customers from database
         ArrayList<Object[]> customers = customerManagement.getCustomers();
 
         updateCustomer(customers);
@@ -161,6 +180,26 @@ public class Customers {
         // Add users from arraylist to table
         for (Object[] customer : customers) {
             customerModel.addRow(customer);
+        }
+    }
+
+    // Update Inactive Customers function
+    public static void updateInactiveCustomer() {
+
+        // Get inactive customers from database
+        ArrayList<Object[]> inactiveCustomers = customerManagement.getDeletedCustomers();
+
+        updateInactiveCustomer(inactiveCustomers);
+    }
+
+    public static void updateInactiveCustomer(ArrayList<Object[]> inactiveCustomers) {
+
+        // Empties entries of Users table
+        inactiveCustomerModel.setRowCount(0);
+
+        // Add users from arraylist to table
+        for (Object[] customer : inactiveCustomers) {
+            inactiveCustomerModel.addRow(customer);
         }
     }
 

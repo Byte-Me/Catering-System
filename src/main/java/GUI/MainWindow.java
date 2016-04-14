@@ -63,6 +63,8 @@ public class MainWindow extends JFrame {
     private JToolBar menuBar;
     private JButton settingsButton;
     private JPanel statisticsSearchPanel;
+    private JTable inactiveCustomerTable;
+    private JButton reactivateCustomerButton;
 
 
     public MainWindow(UserManagement.UserType userType) {
@@ -77,7 +79,7 @@ public class MainWindow extends JFrame {
         // Will get disposed and garbage collected when MainWindow gets closed (When application is closed)
         Statistics statisticsPanel = new Statistics(statisticsSearchPanel, orderStatisticsPanel, statsPanel, barChartPanel);
         Users usersPanel = new Users(addUserButton, userTable, searchUsers, deleteUsersButton, editUserButton);
-        Customers customersPanel = new Customers(addCustomerButton, customerTable, searchCustomers, deleteCustomersButton, editCustomerButton);
+        Customers customersPanel = new Customers(addCustomerButton, customerTable, inactiveCustomerTable, searchCustomers, deleteCustomersButton, editCustomerButton, reactivateCustomerButton);
         Subscriptions subscriptionsPanel = new Subscriptions(subscriptionTable, searchSubscriptions, newSubscriptionButton, showEditSubscriptionButton, deleteSubscriptionButton);
         Orders ordersPanel = new Orders(ordersTable, searchOrders, addOrderButton, editOrderButton, deleteOrderButton);
         Driver driverPanel = new Driver(driverTable, mapPanel, generateDrivingRouteButton);
