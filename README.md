@@ -29,7 +29,6 @@ __Loginscreen is finished.__
 
 ### Users:
 - [x] Remove editing in cell, add edit button which opens a window similar to add user. This window also opens on double click.
-- [ ] Check out a different search-method.
 - [x] Ability to delete several users by marking them with ctrl.
 - [x] Ability to delete user with delete key.
 - [x] Clicking the edit button while having several users marked will open a message box saying this wont work.
@@ -38,10 +37,10 @@ __Loginscreen is finished.__
 
 ### Customers:
 - [x] Remove editing in cell, add edit button which opens a window similar to add user. This window also opens on double click.
-- [ ] Find customers set to inactive. Let admin restore data through file dropdown.
-- [ ] Check out a different search-method.
+- [x] Find customers set to inactive. Let admin restore data through file dropdown.
 - [x] Add single select to Customers.
 - [x] Right click user to choose wether to edit, delete or add new customer(LOW PRIORITY).
+- [ ] Divide customer type and ACTIVE/INACTIVE state of customer in database and create methods for setting/getting
 
 ### Orders:
 - [x] Change status integer to enum.
@@ -51,7 +50,6 @@ __Loginscreen is finished.__
 - [x] Double click in order list will open edit/show window.
 - [x] Add clock table to orders after date table.
 - [x] Change length of tables corresponding to text length.(Kan ses på mer senere)
-- [ ] Check out a different search-method.
 - [x] Search recipes in edit order. (Java implementation)
 - [x] Increase comment size and decrease recipelist size in edit order.
 - [x] Recipes and portions must switch places in addOrder.
