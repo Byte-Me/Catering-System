@@ -30,6 +30,8 @@ public class EditCustomer extends JDialog{
         private JButton cCancelButton;
         private JButton cAddCustomerButton;
         private JTabbedPane addCustTabs;
+    private JTextField cMail;
+    private JTextField cPhone;
 
     public CustomerManagement customerManagement = new CustomerManagement();
 
@@ -73,6 +75,8 @@ public class EditCustomer extends JDialog{
             } else { //customer
                 String[] add = formatAdress((String) custInfo[3]);
                 cName.setText((String) custInfo[0]);
+                cMail.setText((String) custInfo[1]);
+                cPhone.setText((String) custInfo[2]);
                 cAddress.setText(add[0]);
                 cPostalCode.setText(add[1]);
                 cCity.setText(add[2]);
@@ -118,12 +122,16 @@ public class EditCustomer extends JDialog{
             // Add Corporate Customer
             cAddCustomerButton.addActionListener(e -> {
                 String name1 = cName.getText();
+                String mail = cMail.getText();
+                String phone = cPhone.getText();
                 String adr = cAddress.getText();
                 String pc = cPostalCode.getText();
                 String pcCity = cCity.getText();
 
                 if(customerManagement.updateCustomerName(emailS,name1) &&
-                        customerManagement.updateCustomerAdress(emailS,adr,pc,pcCity)){
+                        customerManagement.updateCustomerAdress(emailS,adr,pc,pcCity) &&
+                        customerManagement.updateCustomerPhone(emailS,phone) &&
+                        customerManagement.updateCustomerEmail(emailS, mail)){
                     showMessageDialog(null, "Customer updated.");
                 }
                 else{
