@@ -1,6 +1,7 @@
 package Database;
 
 import Database.Management;
+import Food.FoodFinance;
 import org.apache.commons.dbutils.DbUtils;
 
 import java.io.InputStream;
@@ -17,6 +18,7 @@ import java.util.Map;
  * Created by Evdal on 07.03.2016.
  */
 public class OrderManagement extends Management {
+    private FinanceManagement financeManagement = new FinanceManagement();
     public OrderManagement(){
         super();
     }/*
@@ -82,6 +84,9 @@ public class OrderManagement extends Management {
                 DbUtils.closeQuietly(getScentence());
                 DbUtils.closeQuietly(getConnection());
             }
+        }
+        if(newStatus == OrderType.DELIVERED.getValue()){
+            financeManagement.addIncomeToDatabase(FoodFinance.findOrderPrice(orderID));
         }
         return numb > 0;
     }
@@ -219,7 +224,8 @@ public class OrderManagement extends Management {
                 }
                 for(Object[] name : recipes) { //[1] = quantity, [0] = name
 
-                    res = getScentence().executeQuery("SELECT recipe_id FROM recipe WHERE name = '" + name[0] + "';");
+                    res = getScentence().executeQuery("SELECT recipe_id FROM recipe WHERE name = '" + name[1] + "';");
+                    System.out.println("SELECT recipe_id FROM recipe WHERE name = '" + name[0] + "';");
                     if (res.next()) {
                         recipeIDs.add(res.getInt("recipe_id")); //Henter oppskrifts IDer for å koble oppskrifter med ordre.
                     } else {
@@ -232,9 +238,10 @@ public class OrderManagement extends Management {
 
                 for (int i = 0; i < recipeIDs.size(); i++) {
                     rowChanged = getScentence().executeUpdate("INSERT INTO order_recipe VALUES(" + orderID + ", " + recipeIDs.get(i) +
-                            ", '" + recipes.get(i)[1] + "');");
+                            ", '" + recipes.get(i)[0] + "');");
                     if (!(rowChanged > 0)) {
                         getScentence().executeQuery("ROLLBACK;");
+
                         return false;
                     }
                 }
@@ -265,7 +272,7 @@ public class OrderManagement extends Management {
         ArrayList<Object[]> orderRecipes = orderManagement.getRecipesFromOrder(orderId);
         */
     public Object[] getOrderInfoFromId(int orderId){
-        Object[] out = new Object[5];
+        Object[] out = new Object[6];
         if(setUp()) {
             try {
 

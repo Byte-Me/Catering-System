@@ -13,7 +13,7 @@ __Loginscreen is finished.__
 
 ### Statistics:
     Utsetter mye så andre kan gjøre det, se på metodene mine, mange er nesten like -evda
-- [ ] Dropdown calendar for dates.
+- [x] Dropdown calendar for dates.
 - [x] Orders as main graph, fills upper half. (BACKEND DONE)
 - [ ] Statistics as numbers in left lower corner:
     1.  Amount of orders.

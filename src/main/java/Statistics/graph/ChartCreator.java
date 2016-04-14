@@ -95,16 +95,22 @@ public class ChartCreator extends JFrame {
 
     private static DefaultCategoryDataset createDataset(ArrayList<String> xValues, //kan bare sende inn double eller int
                                                         ArrayList<Object> yValues, String dataInfo) {
-
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-        if(yValues.get(0) instanceof Integer) {
-            for (int i = 0; i < xValues.size(); i++) {
-                dataset.addValue((Integer)yValues.get(i), dataInfo, xValues.get(i));
-            }
+
+
+        if(xValues.isEmpty()){
+            dataset.addValue(0,"No data found","");
         }
-        else if(yValues.get(0) instanceof Double){
-            for (int i = 0; i < xValues.size(); i++) {
-                dataset.addValue((Double)yValues.get(i), dataInfo, xValues.get(i));
+        else {
+
+            if (yValues.get(0) instanceof Integer) {
+                for (int i = 0; i < xValues.size(); i++) {
+                    dataset.addValue((Integer) yValues.get(i), dataInfo, xValues.get(i));
+                }
+            } else if (yValues.get(0) instanceof Double) {
+                for (int i = 0; i < xValues.size(); i++) {
+                    dataset.addValue((Double) yValues.get(i), dataInfo, xValues.get(i));
+                }
             }
         }
 
