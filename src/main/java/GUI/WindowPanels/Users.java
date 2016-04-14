@@ -135,9 +135,8 @@ public class Users {
                     String message = "Are you sure you want to delete user: "+username+"?"; //username
                     int answer = showOptionDialog(null, message, "Delete User",YES_NO_OPTION,QUESTION_MESSAGE,null, new Object[]{"Yes", "No"}, "No");
                     if(answer == YES_OPTION){
-                        //userManagement.deleteUser(username); //TODO: lag backend.
-                        //userModel.removeRow(i);
-                        System.out.println("Deleteing user : "+username);
+                        userManagement.deleteUser(username); //TODO: lag backend.
+                        updateUsers();
                     }
                 }
             }

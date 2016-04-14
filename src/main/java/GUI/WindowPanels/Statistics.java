@@ -2,15 +2,22 @@ package GUI.WindowPanels;
 
 import java.awt.*;
 
+import HelperClasses.DateLabelFormatter;
 import Statistics.OrderStatistics;
+import org.jdatepicker.DateModel;
+import org.jdatepicker.JDatePicker;
+import org.jdatepicker.impl.JDatePanelImpl;
+import org.jdatepicker.impl.JDatePickerImpl;
+import org.jdatepicker.impl.UtilDateModel;
 import org.jfree.chart.ChartPanel;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.MaskFormatter;
+import java.awt.event.ActionListener;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
+import java.time.LocalDate;
+import java.util.*;
 
 /**
  * Created by olekristianaune on 13.03.2016.
@@ -20,47 +27,52 @@ public class Statistics {
     private JPanel barChartPanel;
     private JPanel statsPanel;
     OrderStatistics os = new OrderStatistics();
-    JFormattedTextField fromDate;
-    JFormattedTextField toDate;
+    JDatePickerImpl fromDate;
+    JDatePickerImpl toDate;
 
-    public Statistics(final JFormattedTextField fromDate, final JFormattedTextField toDate, JButton getStatisticsButton, JPanel orderStatisticsPanel, JPanel statsPanel,  JPanel barChartPanel) {
+    public Statistics(JPanel searchStatisticsPanel, JPanel orderStatisticsPanel, JPanel statsPanel,  JPanel barChartPanel) {
 
         this.orderStatisticsPanel = orderStatisticsPanel;
         this.barChartPanel = barChartPanel;
         this.statsPanel = statsPanel;
-        this.fromDate = fromDate;
-        this.toDate = toDate;
 
-        try {
-            final MaskFormatter maskFormatter1 = new MaskFormatter("####-##-##"); // Defining format pattern
-            final MaskFormatter maskFormatter2 = new MaskFormatter("####-##-##"); // Defining format pattern
+        // Labels
+        JLabel fromLabel = new JLabel("From: ");
+        JLabel toLabel = new JLabel("To: ");
 
-            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd"); // Setup date format
-            Date currDate = new Date(); // Get current date
-            Calendar cal = Calendar.getInstance();
-            cal.add(Calendar.DATE, -7);
-            Date lastWeekDate = new Date(cal.getTimeInMillis());
+        // Date Pickers start
+        UtilDateModel fModel = new UtilDateModel();
+        Calendar cal = new GregorianCalendar();
+        cal.add(Calendar.DAY_OF_MONTH, -7);
+        fModel.setDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE));
+        fModel.setSelected(true);
+        UtilDateModel tModel = new UtilDateModel();
+        cal.add(Calendar.DAY_OF_MONTH, 7);
+        tModel.setDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE));
+        tModel.setSelected(true);
+        Properties p = new Properties();
+        p.put("text.today", "Today");
+        p.put("text.month", "Month");
+        p.put("text.year", "Year");
 
-            maskFormatter1.setPlaceholder(dateFormat.format(lastWeekDate)); // Placeholder
-            maskFormatter2.setPlaceholder(dateFormat.format(currDate)); // Placeholder
+        JDatePanelImpl fromPanel = new JDatePanelImpl(fModel, p);
+        JDatePanelImpl toPanel = new JDatePanelImpl(tModel, p);
 
-            fromDate.setFormatterFactory(new JFormattedTextField.AbstractFormatterFactory() { // Add format to field
-                @Override
-                public JFormattedTextField.AbstractFormatter getFormatter(JFormattedTextField tf) {
-                    return maskFormatter1;
-                }
-            });
+        fromDate = new JDatePickerImpl(fromPanel, new DateLabelFormatter());
+        toDate = new JDatePickerImpl(toPanel, new DateLabelFormatter());
 
-            toDate.setFormatterFactory(new JFormattedTextField.AbstractFormatterFactory() { // Add format to field
-                @Override
-                public JFormattedTextField.AbstractFormatter getFormatter(JFormattedTextField tf) {
-                    return maskFormatter2;
-                }
-            });
 
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
+        // Get Statistics Button
+        JButton getStatisticsButton = new JButton("Get Statistics");
+
+
+        // Add components to JPanel
+        searchStatisticsPanel.setLayout(new FlowLayout());
+        searchStatisticsPanel.add(fromLabel);
+        searchStatisticsPanel.add(fromDate);
+        searchStatisticsPanel.add(toLabel);
+        searchStatisticsPanel.add(toDate);
+        searchStatisticsPanel.add(getStatisticsButton);
 
 
         getStatisticsButton.addActionListener(e -> {
@@ -74,8 +86,9 @@ public class Statistics {
 
     // TODO: This should be rewritten to only update components and not deleting and readding
     public void getStatistics() {
-        String fDate = fromDate.getText();
-        String tDate = toDate.getText();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String fDate = dateFormat.format((Date)fromDate.getModel().getValue());
+        String tDate = dateFormat.format((Date)toDate.getModel().getValue());
 
         orderStatisticsPanel.setLayout(new BorderLayout());
         barChartPanel.setLayout(new BorderLayout());
@@ -101,6 +114,7 @@ public class Statistics {
         statsPanel.setLayout(new BorderLayout());
         Double sumOrder = (Double)orderStats[1];
         statsPanel.add(new JLabel("Sum Orders: " + sumOrder.toString()), BorderLayout.NORTH);
+
     }
 
 }

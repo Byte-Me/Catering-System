@@ -13,7 +13,7 @@ __Loginscreen is finished.__
 
 ### Statistics:
     Utsetter mye så andre kan gjøre det, se på metodene mine, mange er nesten like -evda
-- [ ] Dropdown calendar for dates.
+- [x] Dropdown calendar for dates.
 - [x] Orders as main graph, fills upper half. (BACKEND DONE)
 - [ ] Statistics as numbers in left lower corner:
     1.  Amount of orders.
@@ -31,7 +31,7 @@ __Loginscreen is finished.__
 - [x] Remove editing in cell, add edit button which opens a window similar to add user. This window also opens on double click.
 - [ ] Check out a different search-method.
 - [x] Ability to delete several users by marking them with ctrl.
-- [ ] Ability to delete user with delete key. (TODO: backend)
+- [x] Ability to delete user with delete key.
 - [x] Clicking the edit button while having several users marked will open a message box saying this wont work.
 - [x] Fix IndexOutOfBounds når en column er merket, så unmerket, deretter edit user blir trykket.
 - [ ] Right click user to choose wether to edit, delete or add new user(LOW PRIORITY).

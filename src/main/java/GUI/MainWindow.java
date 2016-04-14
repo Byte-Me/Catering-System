@@ -62,6 +62,7 @@ public class MainWindow extends JFrame {
     private JButton newSubscriptionButton;
     private JToolBar menuBar;
     private JButton settingsButton;
+    private JPanel statisticsSearchPanel;
 
 
     public MainWindow(UserManagement.UserType userType) {
@@ -73,7 +74,7 @@ public class MainWindow extends JFrame {
 
         // Setup the different panels - keep referance for possible future need.
         // Will get disposed and garbage collected when MainWindow gets closed (When application is closed)
-        Statistics statisticsPanel = new Statistics(fromDate, toDate, getStatisticsButton, orderStatisticsPanel, statsPanel, barChartPanel);
+        Statistics statisticsPanel = new Statistics(statisticsSearchPanel, orderStatisticsPanel, statsPanel, barChartPanel);
         Users usersPanel = new Users(addUserButton, userTable, searchUsers, deleteUsersButton, editUserButton);
         Customers customersPanel = new Customers(addCustomerButton, customerTable, searchCustomers, deleteCustomersButton, editCustomerButton);
         Subscriptions subscriptionsPanel = new Subscriptions(subscriptionTable, searchSubscriptions, newSubscriptionButton, showEditSubscriptionButton, deleteSubscriptionButton);
