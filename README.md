@@ -15,7 +15,7 @@ __Loginscreen is finished.__
     Utsetter mye så andre kan gjøre det, se på metodene mine, mange er nesten like -evda
 - [x] Dropdown calendar for dates.
 - [x] Orders as main graph, fills upper half. (BACKEND DONE)
-- [ ] Statistics as numbers in left lower corner:
+- [x] Statistics as numbers in left lower corner:
     1.  Amount of orders.
     2.  Amount of cancelled orders.
     2.  Amount of new subscriptions.

@@ -39,12 +39,10 @@ public class SubscriptionManagement extends Management{
         ArrayList<Object[]> out = new ArrayList<Object[]>();
         if(setUp()){
             try {
-                System.out.println("Hei");
                 ResultSet res = getScentence().executeQuery("SELECT subscription.sub_id, customer.name, " +
                         "subscription.date_from, subscription.date_to, subscription.sub_type FROM subscription, " +
                         "customer WHERE subscription.customer_id = customer.customer_id AND subscription.status = "+SubType.ACTIVE.getValue()
                 +";");
-                System.out.println("Hei2");
 
                 while (res.next()){
                     out.add(createObj(res));
@@ -89,11 +87,8 @@ public class SubscriptionManagement extends Management{
         Object[] obj = new Object[5];
 
         obj[0] = res.getInt("sub_id");
-
-
         obj[1] = res.getString("name");
         obj[2] = res.getString("date_to");
-        System.out.println("Hei");
         obj[3] = res.getString("date_from");
         obj[4] = res.getInt("sub_type"); // frequency.
 
