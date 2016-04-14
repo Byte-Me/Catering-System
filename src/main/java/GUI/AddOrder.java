@@ -5,6 +5,8 @@ import Database.FoodManagement;
 import Database.OrderManagement;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.plaf.basic.BasicArrowButton;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.MaskFormatter;
@@ -13,6 +15,7 @@ import java.awt.event.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -36,6 +39,7 @@ public class AddOrder extends JDialog{
     private JButton addOrderButton;
     private JTextArea commentTextArea;
     private JFormattedTextField timeField;
+    private JTextField searchRecipes;
 
     private final String defaultTimeValue = "12:00";
     private final String seconds = ":00";
@@ -117,11 +121,41 @@ public class AddOrder extends JDialog{
         recipesList.setModel(recipeModel);
         recipesList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
+
         final ArrayList<Object[]> recipes = foodManagement.getRecipes();
 
         for (Object[] recipe : recipes) {
             recipeModel.addElement((String)recipe[1]);
         }
+
+        ArrayList<Object> searchList = new ArrayList<>(Arrays.asList(recipeModel.toArray()));
+        searchRecipes.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                searchRecipes();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                searchRecipes();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                searchRecipes();
+            }
+
+            private void searchRecipes() {
+                recipeModel.removeAllElements();
+                for (Object o : searchList) {
+                    String searchInput = searchRecipes.getText();
+                    if (((String)o).toLowerCase().contains(searchInput.toLowerCase())) {
+                        recipeModel.addElement((String)o);
+                    }
+                }
+                recipesList.validate();
+            }
+        });
 
         customerDropdown.addActionListener(e -> { //if value in dropdown is changed
             if (customerDropdown.getSelectedIndex() == customerDropdown.getItemCount()-1) { //if selected value is last index
@@ -220,6 +254,7 @@ public class AddOrder extends JDialog{
             }
 
             updateOrders();
+
             setVisible(false);
             dispose();
         });
@@ -244,4 +279,5 @@ public class AddOrder extends JDialog{
         customerDropdown.addItem(newCustomer);
 
     }
+
 }

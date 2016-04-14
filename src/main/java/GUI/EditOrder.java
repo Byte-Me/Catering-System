@@ -5,6 +5,8 @@ import Database.FoodManagement;
 import Database.OrderManagement;
 
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.MaskFormatter;
 import java.awt.*;
@@ -40,6 +42,7 @@ public class EditOrder extends JDialog {
     private JTextArea commentTextArea;
     private JFormattedTextField timeField;
     private JComboBox statusDropdown;
+    private JTextField searchRecipes;
     private static JComboBox<Object> custDropHelp;
 
     private final String defaultTimeValue = "12:00";
@@ -122,6 +125,35 @@ public class EditOrder extends JDialog {
         for (Object[] recipe : recipes) {
             recipeModel.addElement((String)recipe[1]);
         }
+
+        ArrayList<Object> searchList = new ArrayList<>(Arrays.asList(recipeModel.toArray()));
+        searchRecipes.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                searchRecipes();
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                searchRecipes();
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                searchRecipes();
+            }
+
+            private void searchRecipes() {
+                recipeModel.removeAllElements();
+                for (Object o : searchList) {
+                    String searchInput = searchRecipes.getText();
+                    if (((String)o).toLowerCase().contains(searchInput.toLowerCase())) {
+                        recipeModel.addElement((String)o);
+                    }
+                }
+                recipesList.validate();
+            }
+        });
 
 
         //Getting info about selected order.
