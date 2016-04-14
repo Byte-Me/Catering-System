@@ -25,11 +25,12 @@ public class Recipes extends JDialog {
     FoodManagement foodManagement = new FoodManagement();
 
     public Recipes() {
+        setTitle("Recipes");
         setContentPane(mainPane);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        pack();
-        setLocationRelativeTo(getParent());
-        setModal(true);
+
+        Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/Images/icon32.png"));
+        setIconImage(icon);
 
         String[] recipeHeader = {"ID", "Name"};
 
@@ -50,6 +51,9 @@ public class Recipes extends JDialog {
             dispose();
         });
 
+        pack();
+        setLocationRelativeTo(getParent());
+        setModal(true);
         setVisible(true);
     }
 

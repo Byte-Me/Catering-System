@@ -27,12 +27,12 @@ public class AddUser extends JDialog {
     UserManagement userManagement;
 
     public AddUser() {
+        setTitle("New User");
         setContentPane(mainPane);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-      //  mainPane.getRootPane().setDefaultButton(addUserButton);
-        pack();
-        setLocationRelativeTo(getParent());
-        setModal(true);
+
+        Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/Images/icon32.png"));
+        setIconImage(icon);
 
         // Setting up the userType select box
         userType.addItem("Admin");
@@ -66,6 +66,9 @@ public class AddUser extends JDialog {
             dispose();
         });
 
+        pack();
+        setLocationRelativeTo(getParent());
+        setModal(true);
         setVisible(true);
     }
 }

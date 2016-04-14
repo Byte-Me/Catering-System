@@ -66,6 +66,7 @@ public class MainWindow extends JFrame {
 
 
     public MainWindow(UserManagement.UserType userType) {
+        setTitle("Healthy Catering LTD");
         setContentPane(mainPanel); // Set the main content panel
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE); // Exit application when window is closed.
 
