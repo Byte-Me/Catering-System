@@ -34,14 +34,14 @@ __Loginscreen is finished.__
 - [x] Ability to delete user with delete key.
 - [x] Clicking the edit button while having several users marked will open a message box saying this wont work.
 - [x] Fix IndexOutOfBounds når en column er merket, så unmerket, deretter edit user blir trykket.
-- [ ] Right click user to choose wether to edit, delete or add new user(LOW PRIORITY).
+- [x] Right click user to choose wether to edit, delete or add new user(LOW PRIORITY).
 
 ### Customers:
 - [x] Remove editing in cell, add edit button which opens a window similar to add user. This window also opens on double click.
 - [ ] Find users set to inactive. Let admin restore data through file dropdown.
 - [ ] Check out a different search-method.
 - [x] Add single select to Customers.
-- [ ] Right click user to choose wether to edit, delete or add new customer(LOW PRIORITY).
+- [x] Right click user to choose wether to edit, delete or add new customer(LOW PRIORITY).
 
 ### Orders:
 - [x] Change status integer to enum.
@@ -56,6 +56,7 @@ __Loginscreen is finished.__
 - [ ] Increase comment size and decrease recipelist size in edit order.
 - [x] Recipes and portions must switch places in addOrder.
 - [ ] Change edit order calls from createOrder to updateOrder(WHEN BACKEND IS DONE).
+- [x] Right click order to choose wether to edit, delete or add new order(LOW PRIORITY).
 
 ### Driver:
 - [ ] Make google window-size dynamic. (CANT FIND SOLUTION)
