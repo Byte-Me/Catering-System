@@ -20,6 +20,7 @@ public class EditIngredient extends JDialog {
     FoodManagement foodManagement = new FoodManagement();
 
     public EditIngredient(String ingredient) {
+        setTitle("Edit Ingredient");
         setContentPane(mainPane);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         pack();
