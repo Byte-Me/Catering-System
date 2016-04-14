@@ -35,12 +35,12 @@ public class AddIngredient extends JDialog {
     FoodManagement foodManagement;
 
     public AddIngredient() {
+        setTitle("New Ingredient");
         setContentPane(mainPane);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        mainPane.getRootPane().setDefaultButton(addButton);
-        pack();
-        setLocationRelativeTo(getParent());
-        setModal(true);
+
+        Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/Images/icon32.png"));
+        setIconImage(icon);
 
         foodManagement = new FoodManagement();
 
@@ -114,6 +114,9 @@ public class AddIngredient extends JDialog {
             AddIngredient.this.dispose();
         });
 
+        pack();
+        setLocationRelativeTo(getParent());
+        setModal(true);
         setVisible(true);
     }
 

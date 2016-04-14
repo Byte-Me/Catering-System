@@ -31,11 +31,12 @@ public class AddRecipe extends JDialog {
     FoodManagement foodManagement;
 
     public AddRecipe() {
+        setTitle("New Recipe");
         setContentPane(mainPane);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        pack();
-        setLocationRelativeTo(getParent());
-        setModal(true);
+
+        Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/Images/icon32.png"));
+        setIconImage(icon);
 
         final int nameColumnNr = 0;
         final int quantityColumnNr = 1;
@@ -88,6 +89,9 @@ public class AddRecipe extends JDialog {
             dispose();
         });
 
+        pack();
+        setLocationRelativeTo(getParent());
+        setModal(true);
         setVisible(true);
     }
 

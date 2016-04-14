@@ -14,8 +14,12 @@ public class HelpWindow extends JDialog{
     Browser browser;
 
     public HelpWindow() {
+        setTitle("Help");
         setContentPane(mainPanel);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
+        Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/Images/icon32.png"));
+        setIconImage(icon);
 
         browser = new Browser();
         BrowserView browserView = new BrowserView(browser);

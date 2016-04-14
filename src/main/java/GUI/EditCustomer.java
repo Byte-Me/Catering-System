@@ -34,12 +34,13 @@ public class EditCustomer extends JDialog{
     public CustomerManagement customerManagement = new CustomerManagement();
 
         public EditCustomer(String emailS) {
-
+            setTitle("Edit Customer");
             setContentPane(mainPanel);
             setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-            pack();
-            setLocationRelativeTo(getParent());
-            setModal(true);
+
+            Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/Images/icon32.png"));
+            setIconImage(icon);
+
 
             // Close on cancel
             final ActionListener closeWindow = e -> {
@@ -137,6 +138,9 @@ public class EditCustomer extends JDialog{
                 dispose();
             });
 
+            pack();
+            setLocationRelativeTo(getParent());
+            setModal(true);
             setVisible(true);
 
         }

@@ -25,10 +25,13 @@ public class Login extends JFrame{
     private LoginManagement dbconnect;
 
     public Login() {
-
+        setTitle("Login");
         setContentPane(mainPanel);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         mainPanel.getRootPane().setDefaultButton(loginButton);
+
+        Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/Images/icon32.png"));
+        setIconImage(icon);
 
         Image logo = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/Images/icon-login.png"));
         logoLabel.setIcon(new ImageIcon(logo));

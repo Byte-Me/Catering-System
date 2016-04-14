@@ -26,12 +26,13 @@ public class GenerateShoppingList extends JDialog {
     private DefaultTableModel shoppingListModel = new DefaultTableModel();
 
     public GenerateShoppingList() {
+        setTitle("Shopping List");
         setContentPane(mainPane);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         mainPane.getRootPane().setDefaultButton(okButton);
-        pack();
-        setLocationRelativeTo(getParent());
-        setModal(true);
+
+        Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/Images/icon32.png"));
+        setIconImage(icon);
 
         String[] shoppingListHeader = {"Ingredient", "Quantity", "Unit", "Price"};
 
@@ -45,6 +46,9 @@ public class GenerateShoppingList extends JDialog {
             dispose();
         });
 
+        pack();
+        setLocationRelativeTo(getParent());
+        setModal(true);
         setVisible(true);
     }
     private void updateShoppingList() {

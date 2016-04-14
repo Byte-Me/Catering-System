@@ -27,12 +27,12 @@ public class EditUser extends JDialog{
 
 
     public EditUser(String username) {
+        setTitle("Edit User");
         setContentPane(mainPane);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        //  mainPane.getRootPane().setDefaultButton(addUserButton); //TODO: ønsker vi denne?
-        pack();
-        setLocationRelativeTo(getParent());
-        setModal(true);
+
+        Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/Images/icon32.png"));
+        setIconImage(icon);
 
         // Setting up the userType select box
         userType.addItem("Admin");
@@ -88,6 +88,9 @@ public class EditUser extends JDialog{
             dispose();
         });
 
+        pack();
+        setLocationRelativeTo(getParent());
+        setModal(true);
         setVisible(true);
     }
 }

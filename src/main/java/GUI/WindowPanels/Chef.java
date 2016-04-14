@@ -37,7 +37,7 @@ public class Chef {
 
         generateShoppingListButton.addActionListener(e -> new GenerateShoppingList());
 
-        String[] prepareHeader = {"Order ID","Recipe", "Amount", "Time", "Notes", "Status", ""}; // Header titles
+        String[] prepareHeader = {"Order ID","Recipe", "Amount", "Time", "Notes", "Status", "Update"}; // Header titles
         String[] ingredientHeader = {"Ingredient", "Quantity", "Unit"}; // Header titles
 
         prepareModel = new DefaultTableModel() {

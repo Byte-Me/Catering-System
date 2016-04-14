@@ -34,12 +34,12 @@ public class AddCustomer extends JDialog{
     public CustomerManagement customerManagement = new CustomerManagement();
 
     public AddCustomer() {
-
+        setTitle("New Customer");
         setContentPane(mainPanel);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        pack();
-        setLocationRelativeTo(getParent());
-        setModal(true);
+
+        Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/Images/icon32.png"));
+        setIconImage(icon);
 
         // Close on cancel
         final ActionListener closeWindow = e -> {
@@ -94,6 +94,9 @@ public class AddCustomer extends JDialog{
             }
         });
 
+        pack();
+        setLocationRelativeTo(getParent());
+        setModal(true);
         setVisible(true);
 
     }

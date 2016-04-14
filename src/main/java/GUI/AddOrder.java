@@ -55,11 +55,12 @@ public class AddOrder extends JDialog{
 
 
     public AddOrder() {
+        setTitle("New Order");
         setContentPane(mainPanel);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        pack();
-        setLocationRelativeTo(getParent());
-        setModal(true);
+
+        Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/Images/icon32.png"));
+        setIconImage(icon);
 
         /* Cancel button */
         cancelButton.addActionListener(e -> {
@@ -259,6 +260,9 @@ public class AddOrder extends JDialog{
             dispose();
         });
 
+        pack();
+        setLocationRelativeTo(getParent());
+        setModal(true);
         setVisible(true);
     }
 
