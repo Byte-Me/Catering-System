@@ -49,7 +49,28 @@ public class StatisticsManagement extends Management{
         if(setUp()) {
             try {
                 res = getScentence().executeQuery("SELECT `"+name+"`.date from `"+name+"` where `date` >= DATE '" + firstDate +
-                        "' AND `date` <= DATE '" + lastDate + "' order by date;");
+                        "' AND `date` <= DATE '" + lastDate + "' AND status > 0 order by date;");
+
+                while (res.next()) {
+                    out.add(res.getString("date"));
+                }
+            } catch (Exception e) {
+                System.err.println("Issue with getting dates");
+                return null;
+            } finally {
+                DbUtils.closeQuietly(getScentence());
+                DbUtils.closeQuietly(getConnection());
+            }
+        }
+        return out;
+    }
+    public ArrayList<String> getCancelledDates(String firstDate, String lastDate, String name){
+        ResultSet res;
+        ArrayList<String> out = new ArrayList<String>();
+        if(setUp()) {
+            try {
+                res = getScentence().executeQuery("SELECT `"+name+"`.date from `"+name+"` where `date` >= DATE '" + firstDate +
+                        "' AND `date` <= DATE '" + lastDate + "' AND status = 0 order by date;");
 
                 while (res.next()) {
                     out.add(res.getString("date"));

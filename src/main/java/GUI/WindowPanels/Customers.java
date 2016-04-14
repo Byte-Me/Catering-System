@@ -2,23 +2,20 @@ package GUI.WindowPanels;
 
 import Database.CustomerManagement;
 import GUI.AddCustomer;
-import GUI.AddUser;
 import GUI.EditCustomer;
-import GUI.EditUser;
 import HelperClasses.MainTableModel;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
-import static javax.swing.JOptionPane.*;
+import static javax.swing.JOptionPane.showMessageDialog;
 
 /**
  * Created by olekristianaune on 13.03.2016.

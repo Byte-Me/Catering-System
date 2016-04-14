@@ -2,7 +2,6 @@ package GUI.WindowPanels;
 
 import Database.OrderManagement;
 import GUI.AddOrder;
-import GUI.EditCustomer;
 import GUI.EditOrder;
 import HelperClasses.MainTableModel;
 
@@ -10,10 +9,7 @@ import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableModel;
-import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;

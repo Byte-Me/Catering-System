@@ -1,23 +1,20 @@
 package GUI.WindowPanels;
 
-import java.awt.*;
-
 import HelperClasses.DateLabelFormatter;
 import Statistics.OrderStatistics;
-import org.jdatepicker.DateModel;
-import org.jdatepicker.JDatePicker;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 import org.jfree.chart.ChartPanel;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
-import javax.swing.text.MaskFormatter;
-import java.awt.event.ActionListener;
-import java.text.DateFormat;
+import java.awt.*;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.util.*;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.Properties;
 
 /**
  * Created by olekristianaune on 13.03.2016.

@@ -1,9 +1,7 @@
 package GUI.WindowPanels;
 
 import Database.UserManagement;
-import GUI.AddOrder;
 import GUI.AddUser;
-import GUI.EditOrder;
 import GUI.EditUser;
 import HelperClasses.MainTableModel;
 

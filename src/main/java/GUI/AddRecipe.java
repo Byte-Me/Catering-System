@@ -3,13 +3,9 @@ package GUI;
 import Database.FoodManagement;
 
 import javax.swing.*;
-import javax.swing.JPanel;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * Created by asdfLaptop on 11.03.2016.

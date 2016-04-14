@@ -1,13 +1,9 @@
-import GUI.*;
-import Delivery.*;
-import com.apple.eawt.AboutHandler;
-import com.apple.eawt.AppEvent;
+import GUI.Login;
 import com.apple.eawt.Application;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
-import java.util.ArrayList;
 
 /**
  * Created by olekristianaune on 07.03.2016.

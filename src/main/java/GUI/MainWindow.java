@@ -82,7 +82,7 @@ public class MainWindow extends JFrame {
         Orders ordersPanel = new Orders(ordersTable, searchOrders, addOrderButton, editOrderButton, deleteOrderButton);
         Driver driverPanel = new Driver(driverTable, mapPanel, generateDrivingRouteButton);
         Chef chefPanel = new Chef(prepareTable, ingredientTable, generateShoppingListButton, recipesButton, addIngredientButton);
-
+        Subscriptions subPanel = new Subscriptions(subscriptionTable, searchSubscriptions, showEditSubscriptionButton,deleteSubscriptionButton,newSubscriptionButton);
         // Remove panes the user does not have access to
         switch (userType) {
             case ADMIN:

@@ -1,14 +1,11 @@
 package GUI;
 
-import Database.FoodManagement;
+import Database.FinanceManagement;
 import Food.CreateShoppingList;
 
 import javax.swing.*;
-import javax.swing.JPanel;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -24,6 +21,7 @@ public class GenerateShoppingList extends JDialog {
     private JLabel totalPriceLabel;
 
     private DefaultTableModel shoppingListModel = new DefaultTableModel();
+    private FinanceManagement financeManagement = new FinanceManagement();
 
     public GenerateShoppingList() {
         setTitle("Shopping List");
@@ -42,6 +40,15 @@ public class GenerateShoppingList extends JDialog {
         updateShoppingList();
 
         okButton.addActionListener(e -> {
+            if(addToStorageRButton.isSelected()){
+                double total = 0;
+                for(int i= 0;i<shoppingTable.getRowCount();i++){
+                    total += Double.valueOf((Integer)shoppingTable.getValueAt(i,3));
+                }
+                if(total > 0){
+                    financeManagement.addOutcomeToDatabase(total);
+                }
+            }
             setVisible(false);
             dispose();
         });
@@ -57,14 +64,12 @@ public class GenerateShoppingList extends JDialog {
         for(Object[] shoppingItem : shoppingItems){
             System.out.println(Arrays.toString(shoppingItem));
         }
-        if(shoppingListModel.getRowCount() > 0) {
-            for (int i = shoppingListModel.getRowCount() -1; i < -1; i--) {
-                shoppingListModel.removeRow(i);
-            }
-        }
-
+        shoppingListModel.setRowCount(0);
+        double totalPrice = 0;
         for (Object[] recipe : shoppingItems) {
+            totalPrice += Double.valueOf((Integer)recipe[3]);
             shoppingListModel.addRow(recipe);
         }
+        priceLabel.setText(Double.toString(totalPrice));
     }
 }

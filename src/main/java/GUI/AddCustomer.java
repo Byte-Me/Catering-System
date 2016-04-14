@@ -5,7 +5,6 @@ import GUI.WindowPanels.Customers;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import static javax.swing.JOptionPane.showMessageDialog;
@@ -30,6 +29,7 @@ public class AddCustomer extends JDialog{
     private JTextField cCity;
     private JButton cCancelButton;
     private JButton cAddCustomerButton;
+    private JTextField cEmailField;
 
     public CustomerManagement customerManagement = new CustomerManagement();
 

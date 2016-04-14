@@ -1,8 +1,8 @@
 package Statistics;
 
+import Database.FinanceManagement;
 import Database.StatisticsManagement;
 
-import javax.swing.*;
 import java.util.ArrayList;
 
 /**
@@ -10,6 +10,8 @@ import java.util.ArrayList;
  */
 public class FinanceStatistics {
     private static StatisticsManagement stat = new StatisticsManagement();
+    private static FinanceManagement finance = new FinanceManagement();
+
     public static double[] findFinanceStats(String dateFromS, String dateToS){ //[0] = income, [1] = outcome, [2]= net profit
         ArrayList<double[]> incomeOutcome = stat.getFinanceInfo(dateFromS,dateToS);
         double[] out = new double[3];
@@ -20,4 +22,5 @@ public class FinanceStatistics {
         out[2] = out[0]-out[1];
         return out;
     }
+
 }

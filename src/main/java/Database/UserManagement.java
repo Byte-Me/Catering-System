@@ -1,10 +1,12 @@
 package Database;
 
-import java.sql.*;
-import java.util.ArrayList;
-
-import Encryption.*;
+import Encryption.Encryption;
 import org.apache.commons.dbutils.DbUtils;
+
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class UserManagement extends Management {
 
@@ -69,6 +71,37 @@ public class UserManagement extends Management {
         return false;
 
     }
+    public ArrayList<Object[]> getDeletedUsers() {
+
+        ResultSet res = null;
+        ArrayList<Object[]> out = new ArrayList<Object[]>();
+        if (setUp()) {
+
+            try {
+
+                res = getScentence().executeQuery("select first_name, last_name, email, phone, username, access_level from user" +
+                        " WHERE access_level = "+UserType.INACTIVE.getValue()+" order by last_name;");
+                while (res.next()) {
+                    Object[] obj = new Object[6];
+                    obj[0] = res.getString("first_name");
+                    obj[1] = res.getString("last_name");
+                    obj[2] = res.getString("email");
+                    obj[3] = res.getString("phone");
+                    obj[4] = res.getString("username");
+                    // Convert access level from int to string
+
+                    obj[5] = UserType.valueOf(res.getInt("access_level"));
+                    out.add(obj);
+                }
+            } catch (SQLException e) {
+                System.err.println("Issue with executing SQL scentence.");
+                return null;
+            }
+            return out;
+        } else return null;
+
+    }
+
 
     public ArrayList<Object[]> userInfo() {
 
@@ -349,10 +382,6 @@ public class UserManagement extends Management {
 
 }
 
-    /*
-    TODO: Delete user.
-
-     */
 
 
 /*

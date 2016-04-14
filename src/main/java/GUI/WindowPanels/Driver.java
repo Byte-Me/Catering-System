@@ -2,7 +2,9 @@ package GUI.WindowPanels;
 
 import Database.OrderManagement;
 import HelperClasses.ToggleSelectionModel;
-import com.teamdev.jxbrowser.chromium.*;
+import com.teamdev.jxbrowser.chromium.Browser;
+import com.teamdev.jxbrowser.chromium.JSValue;
+import com.teamdev.jxbrowser.chromium.LoggerProvider;
 import com.teamdev.jxbrowser.chromium.swing.BrowserView;
 
 import javax.swing.*;
@@ -15,9 +17,7 @@ import java.util.logging.Level;
 import static Delivery.CreateDeliveryRoute.UseReadyOrders;
 import static Delivery.CreateDeliveryRoute.UseReadyOrdersLatLng;
 import static Delivery.DeliveryRoute.geoCoder;
-import static javax.swing.JOptionPane.YES_NO_OPTION;
-import static javax.swing.JOptionPane.YES_OPTION;
-import static javax.swing.JOptionPane.showConfirmDialog;
+import static javax.swing.JOptionPane.*;
 
 /**
  * Created by olekristianaune on 13.03.2016.

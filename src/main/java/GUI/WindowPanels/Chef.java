@@ -2,22 +2,16 @@ package GUI.WindowPanels;
 
 import Database.FoodManagement;
 import Database.OrderManagement;
-import Database.UserManagement;
 import GUI.AddIngredient;
 import GUI.GenerateShoppingList;
 import GUI.Recipes;
 
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.util.ArrayList;
+
 import static Database.OrderManagement.OrderType;
 import static javax.swing.JOptionPane.*;
-
-import javax.swing.*;
-import javax.swing.event.TableModelListener;
-import javax.swing.table.AbstractTableModel;
-import javax.swing.table.DefaultTableModel;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
 /**
  * Created by olekristianaune on 13.03.2016.
