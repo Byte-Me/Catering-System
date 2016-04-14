@@ -52,8 +52,8 @@ __Loginscreen is finished.__
 - [x] Add clock table to orders after date table.
 - [x] Change length of tables corresponding to text length.(Kan ses på mer senere)
 - [ ] Check out a different search-method.
-- [ ] Search recipes in edit order.
-- [ ] Increase comment size and decrease recipelist size in edit order.
+- [x] Search recipes in edit order. (Java implementation)
+- [x] Increase comment size and decrease recipelist size in edit order.
 - [x] Recipes and portions must switch places in addOrder.
 - [ ] Change edit order calls from createOrder to updateOrder(WHEN BACKEND IS DONE).
 - [x] Right click order to choose wether to edit, delete or add new order(LOW PRIORITY).
