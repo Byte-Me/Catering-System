@@ -14,12 +14,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
 
 import static GUI.WindowPanels.Orders.updateOrders;
 import static javax.swing.JOptionPane.showInputDialog;
@@ -190,9 +186,9 @@ public class EditOrder extends JDialog {
                 addOrderModel.addRow(new Object[]{selectedRecipe,portions});
             } else {
                 int row = existsInTable(recipeTable, selectedRecipe);
-                int currentPortions = (Integer)addOrderModel.getValueAt(row, 0);
+                int currentPortions = Integer.parseInt((String)addOrderModel.getValueAt(row, 1));
                 if (currentPortions + portions >= 1) {
-                    addOrderModel.setValueAt(currentPortions + portions, row, 0);
+                    addOrderModel.setValueAt(currentPortions + portions, row, 1);
                 }
             }
         });
@@ -232,7 +228,7 @@ public class EditOrder extends JDialog {
                             addOrderModel.addRow(new Object[]{selectedRecipe, portions});
                         } else {
                             int row = existsInTable(recipeTable, selectedRecipe);
-                            int currentPortions = (Integer) addOrderModel.getValueAt(row, 0);
+                            int currentPortions = Integer.parseInt((String) addOrderModel.getValueAt(row, 0));
                             if (currentPortions + portions >= 1) {
                                 addOrderModel.setValueAt(currentPortions + portions, row, 0);
                             }
@@ -298,7 +294,7 @@ public class EditOrder extends JDialog {
 
     private int existsInTable(JTable table, String entry) {
         for (int i = 0; i < table.getRowCount(); i++) {
-            if (table.getValueAt(i, 1).equals(entry)) {
+            if (table.getValueAt(i, 0).equals(entry)) {
                 return i;
             }
         }

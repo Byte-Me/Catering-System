@@ -1,15 +1,12 @@
 package GUI;
 
 import Database.FoodManagement;
+import GUI.WindowPanels.Chef;
+import HelperClasses.MainTableModel;
 
 import javax.swing.*;
-import javax.swing.JPanel;
-import javax.swing.border.Border;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.text.html.ObjectView;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 /**
@@ -28,6 +25,7 @@ public class AddIngredient extends JDialog {
     private JScrollPane toAdd;
     private JButton addButton;
     private JTextField price;
+    private JButton deleteButton;
 
     private static DefaultTableModel inStorageModel;
     private static DefaultTableModel toAddModel;
@@ -44,14 +42,14 @@ public class AddIngredient extends JDialog {
 
         foodManagement = new FoodManagement();
 
-        String[] ingredientHeader = {"Ingredient", "Quantity", "Unit"};
-        String[] ingredientAddHeader = {"Ingredient", "Quantity", "Unit", "Price"};
+        String[] ingredientHeader1 = {"Ingredient", "Quantity", "Unit"};
+        String[] ingredientHeader2 = {"Ingredient", "Quantity", "Unit", "Price"};
 
-        inStorageModel = new DefaultTableModel(); // Model of the table
+        inStorageModel = new MainTableModel(); // Model of the table
         toAddModel = new DefaultTableModel(); // Model of the table
 
-        inStorageModel.setColumnIdentifiers(ingredientHeader);
-        toAddModel.setColumnIdentifiers(ingredientAddHeader);
+        inStorageModel.setColumnIdentifiers(ingredientHeader1);
+        toAddModel.setColumnIdentifiers(ingredientHeader2);
 
         inStorageTable.setModel(inStorageModel); // Add model to table
         toAddTable.setModel(toAddModel); // Add model to table
@@ -85,8 +83,15 @@ public class AddIngredient extends JDialog {
             } catch(Exception e1) {}
         });
 
+        deleteButton.addActionListener(e -> {
+            if (toAddTable.getSelectedRow() >= 0) {
+                toAddModel.removeRow(toAddTable.getSelectedRow());
+            }
+        });
+
         addIngredientsButton.addActionListener(e -> {
             boolean ok = false;
+            String ingredientsAdded = "";
             // ArrayList<Object[]> ingToBeAdded = new ArrayList<Object[]>();
             for(int i = 0; i < toAddTable.getRowCount(); i++) {
                 Object[] obj = new Object[4];
@@ -96,14 +101,15 @@ public class AddIngredient extends JDialog {
                 obj[3] = toAddTable.getValueAt(i, 3);
 
                 if(toAddTable.getRowCount() > 0 && foodManagement.addIngredient((String)obj[0], (Integer)obj[1], (String)obj[2], (Integer)obj[3])) {
-                    JOptionPane.showMessageDialog(null, "Success!");
                     ok = true;
+                    ingredientsAdded += obj[0] + "\n";
                 }
             }
             if (!ok) {
-                JOptionPane.showMessageDialog(null, "Error!\n1. All fields must be filled. \n2. Units and price must be positive numbers.\n3. Two ingredients with the same name can\n not be added.\n(Edit the quantity instead!)");
+                JOptionPane.showMessageDialog(null, "Error, try again!");
             } else {
-                updateIngredients();
+                JOptionPane.showMessageDialog(null,"Added successfully:\n" + ingredientsAdded);
+                Chef.updateIngredients();
                 setVisible(false);
                 dispose();
             }
@@ -124,9 +130,7 @@ public class AddIngredient extends JDialog {
         FoodManagement foodManagement = new FoodManagement();
         ArrayList<Object[]> ingredients = foodManagement.getIngredients();
 
-        for(int i = 0; i < inStorageModel.getRowCount(); i++) {
-            inStorageModel.removeRow(i);
-        }
+        inStorageModel.setRowCount(0);
 
         for (Object[] ingredient : ingredients) {
             inStorageModel.addRow(ingredient);

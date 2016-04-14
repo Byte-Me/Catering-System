@@ -7,11 +7,13 @@ import Database.OrderManagement;
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.plaf.basic.BasicArrowButton;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.MaskFormatter;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -172,13 +174,15 @@ public class AddOrder extends JDialog{
         leftButton.addActionListener(e -> {
             String selectedRecipe = recipesList.getSelectedValue();
             int portions = Integer.parseInt(showInputDialog("How many portions of " + selectedRecipe.toLowerCase() + " do you want to add?")); // FIXME: Add failsafe for parsing integer
+
+
             if (existsInTable(orderRecepies, selectedRecipe) == -1) {
                 addOrderModel.addRow(new Object[]{selectedRecipe,portions});
             } else {
                 int row = existsInTable(orderRecepies, selectedRecipe);
-                int currentPortions = (Integer)addOrderModel.getValueAt(row, 0);
+                int currentPortions = (Integer)addOrderModel.getValueAt(row, 1);
                 if (currentPortions + portions >= 1) {
-                    addOrderModel.setValueAt(currentPortions + portions, row, 0);
+                    addOrderModel.setValueAt(currentPortions + portions, row, 1);
                 }
             }
         });
@@ -268,7 +272,7 @@ public class AddOrder extends JDialog{
 
     private int existsInTable(JTable table, String entry) {
         for (int i = 0; i < table.getRowCount(); i++) {
-            if (table.getValueAt(i, 1).equals(entry)) {
+            if (table.getValueAt(i, 0).equals(entry)) {
                 return i;
             }
         }

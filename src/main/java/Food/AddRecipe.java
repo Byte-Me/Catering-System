@@ -1,9 +1,5 @@
 package Food;
 
-import Database.FoodManagement;
-
-import java.util.ArrayList;
-
 /**
  * Created by Evdal on 07.03.2016.
  *

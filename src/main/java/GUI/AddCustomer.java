@@ -5,7 +5,6 @@ import GUI.WindowPanels.Customers;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import static javax.swing.JOptionPane.showMessageDialog;
@@ -30,6 +29,8 @@ public class AddCustomer extends JDialog{
     private JTextField cCity;
     private JButton cCancelButton;
     private JButton cAddCustomerButton;
+    private JTextField cEmailField;
+    private JTextField cPhone;
 
     public CustomerManagement customerManagement = new CustomerManagement();
 
@@ -76,12 +77,14 @@ public class AddCustomer extends JDialog{
 
         // Add Corporate Customer
         cAddCustomerButton.addActionListener(e -> {
-            String name1 = cName.getText();
+            String name = cName.getText();
+            String phone = cPhone.getText();
+            String mail = cEmailField.getText();
             String adr = cAddress.getText();
             String pc = cPostalCode.getText();
             String pcCity = cCity.getText();
 
-            boolean addedCustomer = customerManagement.addCustomerCompany(name1, "", "", adr, pc, pcCity);
+            boolean addedCustomer = customerManagement.addCustomerCompany(name, mail, phone, adr, pc, pcCity);
             //TODO: company må fikses. Alle nye customers blir company, finn evt. feil.
             if (addedCustomer) {
                 // Update customer list

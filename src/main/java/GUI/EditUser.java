@@ -5,7 +5,6 @@ import GUI.WindowPanels.Users;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.Arrays;
 
 /**
  * Created by Evdal on 09.04.2016.

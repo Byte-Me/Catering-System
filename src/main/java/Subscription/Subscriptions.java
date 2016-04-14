@@ -9,8 +9,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 
-import static java.util.Date.*;
-
 /**
  * Created by Evdal on 16.03.2016.
  */

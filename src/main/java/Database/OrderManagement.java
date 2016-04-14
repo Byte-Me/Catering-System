@@ -1,22 +1,17 @@
 package Database;
 
-import Database.Management;
+import Food.FoodFinance;
 import org.apache.commons.dbutils.DbUtils;
 
-import java.io.InputStream;
-import java.io.Reader;
-import java.math.BigDecimal;
-import java.net.URL;
-import java.sql.*;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Map;
 
 /**
  * Created by Evdal on 07.03.2016.
  */
 public class OrderManagement extends Management {
+    private FinanceManagement financeManagement = new FinanceManagement();
     public OrderManagement(){
         super();
     }/*
@@ -83,7 +78,35 @@ public class OrderManagement extends Management {
                 DbUtils.closeQuietly(getConnection());
             }
         }
+        if(newStatus == OrderType.DELIVERED.getValue()){
+            financeManagement.addIncomeToDatabase(FoodFinance.findOrderPrice(orderID));
+        }
         return numb > 0;
+    }
+    public ArrayList<Object[]> getDeletedOrders(){
+        ArrayList<Object[]> out = new ArrayList<Object[]>();
+        if(setUp()){
+
+            //Henter info fra ordre der ordren er merket som inaktiv.
+            try {
+
+                ResultSet res = getScentence().executeQuery("SELECT `order`.order_id, customer.name ,customer.phone, customer.adress, `order`.date, `order`.status " +
+                        "FROM `order`, customer WHERE `order`.customer_id = customer.customer_id AND `order`.status = "+OrdStatus.INACTIVE.getValue()+
+                        " ORDER BY `date` DESC, status DESC;");
+                while (res.next()){
+                    out.add(createList(res));
+
+                }
+            }
+            catch (Exception e){
+                System.err.println("Issue with fetching orders.");
+            }
+            finally {
+                DbUtils.closeQuietly(getScentence());
+                DbUtils.closeQuietly(getConnection());
+            }
+        }
+        return out;
     }
     public ArrayList<Object[]> getOrders(){
         ArrayList<Object[]> out = new ArrayList<Object[]>();
@@ -192,11 +215,10 @@ public class OrderManagement extends Management {
                     return false;
 
                 }
-                for(Object[] name : recipes) { //[0] = quantity, [1] = name
-
+                for(Object[] name : recipes) { //[1] = quantity, [0] = name
 
                     res = getScentence().executeQuery("SELECT recipe_id FROM recipe WHERE name = '" + name[1] + "';");
-
+                    System.out.println("SELECT recipe_id FROM recipe WHERE name = '" + name[0] + "';");
                     if (res.next()) {
                         recipeIDs.add(res.getInt("recipe_id")); //Henter oppskrifts IDer for å koble oppskrifter med ordre.
                     } else {
@@ -206,20 +228,21 @@ public class OrderManagement extends Management {
                     }
                 }
 
+
                 for (int i = 0; i < recipeIDs.size(); i++) {
                     rowChanged = getScentence().executeUpdate("INSERT INTO order_recipe VALUES(" + orderID + ", " + recipeIDs.get(i) +
                             ", '" + recipes.get(i)[0] + "');");
                     if (!(rowChanged > 0)) {
                         getScentence().executeQuery("ROLLBACK;");
+
                         return false;
                     }
                 }
-
                 getScentence().executeQuery("COMMIT;");
             }
 
             catch (Exception e){
-                System.err.println("Issue with creating order.");
+                System.out.println("Issue with creating order.");
                 try {
                     getScentence().executeQuery("ROLLBACK");
                 }
@@ -242,7 +265,7 @@ public class OrderManagement extends Management {
         ArrayList<Object[]> orderRecipes = orderManagement.getRecipesFromOrder(orderId);
         */
     public Object[] getOrderInfoFromId(int orderId){
-        Object[] out = new Object[5];
+        Object[] out = new Object[6];
         if(setUp()) {
             try {
 

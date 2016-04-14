@@ -1,6 +1,5 @@
 package Statistics;
 
-import Database.CustomerManagement;
 import Database.StatisticsManagement;
 import Statistics.graph.ChartCreator;
 

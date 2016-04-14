@@ -4,12 +4,11 @@ package Food;
  * Created by Evdal on 07.03.2016.
  */
 
-import Database.*;
+import Database.FoodManagement;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.stream.Collectors;
 
 public class CreateShoppingList {

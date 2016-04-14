@@ -19,9 +19,27 @@ public class SubscriptionStatistics extends Statistics{
     private StatisticsManagement stats = new StatisticsManagement();
     private SubscriptionManagement subMan = new SubscriptionManagement();
     private Subscriptions subs = new Subscriptions();
-    public JPanel subCreatedLineGraph(String dateFrom, String dateTo){
-        ArrayList<String> subscription = stats.getDates(dateFrom,dateTo,"subscription");
-        Date from = null;
+    public int getSubCount(String dateFrom, String dateTo) {
+        ArrayList<String> subscription = stats.getDates(dateFrom, dateTo, "subscription"); //kunne gjort i sql
+        return subscription.size();
+    }
+    public int getCancelledSubCount(String dateFrom, String dateTo) {
+        ArrayList<String> subscription = stats.getCancelledDates(dateFrom, dateTo, "subscription"); //kunne gjort i sql
+        return subscription.size();
+    }
+    public int getActiveSubCount(String dateFrom, String dateTo) {
+        ArrayList<String[]> subscription = stats.getSubDates(); //kunne gjort i sql
+        int count = 0;
+        for(String[] sub : subscription){
+            if(subs.checkSubscriptionActive(sub[0],sub[1],new Date())){
+                count++;
+            }
+        }
+        return count;
+    }
+
+
+        /*    Date from = null;
         Date to = null;
         JPanel chart = null;
         try {
@@ -49,6 +67,9 @@ public class SubscriptionStatistics extends Statistics{
         }
         return chart;
     }
+    */
+
+
     public JPanel subActiveLineGraph(String dateFrom, String dateTo){
         ArrayList<String[]> subscription = stats.getSubDates();
         Date from = null;
