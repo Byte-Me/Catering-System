@@ -140,19 +140,19 @@ public class Statistics {
         statsPanel.add(new JLabel(activeSubs, SwingConstants.RIGHT));
 
         // FINANSE
-        double[] financeStats = findFinanceStats(fDate, tDate);
+        long[] financeStats = findFinanceStats(fDate, tDate);
         // Income
-        String income = ((Double)financeStats[0]).toString();
+        String income = ((Long)financeStats[0]).toString();
         statsPanel.add(new JLabel("Income:"));
         statsPanel.add(new JLabel(income, SwingConstants.RIGHT));
 
         // Expenses
-        String expenses = ((Double)financeStats[1]).toString();
+        String expenses = ((Long)financeStats[1]).toString();
         statsPanel.add(new JLabel("Expenses:"));
         statsPanel.add(new JLabel(expenses, SwingConstants.RIGHT));
 
         // Net Profit
-        String profit = ((Double)financeStats[2]).toString();
+        String profit = ((Long)financeStats[2]).toString();
         statsPanel.add(new JLabel("Profit:"));
         statsPanel.add(new JLabel(profit, SwingConstants.RIGHT));
     }

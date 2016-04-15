@@ -12,9 +12,9 @@ public class FinanceStatistics {
     private static StatisticsManagement stat = new StatisticsManagement();
     private static FinanceManagement finance = new FinanceManagement();
 
-    public static double[] findFinanceStats(String dateFromS, String dateToS){ //[0] = income, [1] = outcome, [2]= net profit
-        ArrayList<double[]> incomeOutcome = stat.getFinanceInfo(dateFromS,dateToS);
-        double[] out = new double[3];
+    public static long[] findFinanceStats(String dateFromS, String dateToS){ //[0] = income, [1] = outcome, [2]= net profit
+        ArrayList<long[]> incomeOutcome = stat.getFinanceInfo(dateFromS,dateToS);
+        long[] out = new long[3];
         for(int i = 0; i<incomeOutcome.size();i++){
             out[0] += incomeOutcome.get(i)[0];
             out[1] += incomeOutcome.get(i)[1];
