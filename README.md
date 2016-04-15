@@ -26,6 +26,7 @@ __Loginscreen is finished.__
     7.  Net-profit.(SAME AS OUTCOME)
 - [x] Statistics in right corner: 
     1.  Amount of orders grouped by day of week.
+- [ ] Modify date ranges of JDatePicker
 
 ### Users:
 - [x] Remove editing in cell, add edit button which opens a window similar to add user. This window also opens on double click.
@@ -34,6 +35,8 @@ __Loginscreen is finished.__
 - [x] Clicking the edit button while having several users marked will open a message box saying this wont work.
 - [x] Fix IndexOutOfBounds når en column er merket, så unmerket, deretter edit user blir trykket.
 - [x] Right click user to choose wether to edit, delete or add new user(LOW PRIORITY).
+- [ ] Edit User -> Change Password: make new panel with two password-fields (new password and reenter password)
+- [ ] Show deleted (inactive) users, and add possibility to reactivate them (Same as customers)
 
 ### Customers:
 - [x] Remove editing in cell, add edit button which opens a window similar to add user. This window also opens on double click.
@@ -41,6 +44,7 @@ __Loginscreen is finished.__
 - [x] Add single select to Customers.
 - [x] Right click user to choose wether to edit, delete or add new customer(LOW PRIORITY).
 - [ ] Divide customer type and ACTIVE/INACTIVE state of customer in database and create methods for setting/getting
+- [ ] Test after implementing the above
 
 ### Orders:
 - [x] Change status integer to enum.
@@ -55,12 +59,16 @@ __Loginscreen is finished.__
 - [x] Recipes and portions must switch places in addOrder.
 - [ ] Change edit order calls from createOrder to updateOrder(WHEN BACKEND IS DONE).
 - [x] Right click order to choose wether to edit, delete or add new order(LOW PRIORITY).
+- [ ] Test after implementing the above
 
 ### Driver:
 - [ ] Make google window-size dynamic. (CANT FIND SOLUTION)
 - [x] Change list from jList to jTable. (FIXED)
 - [x] Add tables to JTable: order_id, Name, phone, address.
 - [ ] Fix error "UIDefaults.getUI() failed". (Probably linked to Look&Feel)
+- [ ] Check error: 'SLF4J: Failed to load class "org.slf4j.impl.StaticLoggerBinder".'
+- [ ] Check out map loading on tab change
+- [ ] Fix map center location (problems with asyncronous javascript)
 
 ### Chef:
 - [x] Create button where chef can set recipe as in progress. Then update button to ready for delivery.
