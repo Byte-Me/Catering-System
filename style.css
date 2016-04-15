@@ -25,3 +25,23 @@ h2 {
     margin-top: 10px;
     margin-bottom: 5px;
 }
+
+h3 {
+margin: 1px;
+color: #fff;
+padding: 3px 10px;
+cursor: pointer;
+position: relative;
+background-color:black;
+transition: background .4s;
+}
+
+p.active {
+    padding: 10px 0;
+}
+
+.collapse {
+margin: 0;
+padding: 0;
+width: 100%;
+}
