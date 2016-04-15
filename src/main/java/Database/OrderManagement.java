@@ -29,8 +29,8 @@ public class OrderManagement extends Management {
                             "`order`.customer_id = customer.customer_id AND `order`.status >= ? ORDER BY `date` DESC, status DESC;";
 
     String sqlOrderSearch = "SELECT `order`.order_id, customer.name ,customer.phone, customer.adress, `order`.date, `order`.status FROM `order`, customer WHERE " +
-                            "(order_id LIKE '%'+?+'%' OR `order`.status LIKE '%'+?+'%' OR `date` LIKE '%'+?+'%' OR `name` LIKE '%'+?+'%' OR phone LIKE '%'+?+'%' " +
-                            "OR adress LIKE '%'+?+'%') AND `order`.status >= ? AND `order`.customer_id = customer.customer_id ORDER BY `order`.status DESC, `date` DESC;";
+                            "(order_id LIKE ? OR `order`.status LIKE ? OR `date` LIKE ? OR `name` LIKE ? OR phone LIKE ? " +
+                            "OR adress LIKE ?) AND `order`.status >= ? AND `order`.customer_id = customer.customer_id ORDER BY `order`.status DESC, `date` DESC;";
 
     String sqlCreateOrderSub0 = "INSERT INTO `order` VALUES(DEFAULT, ?, ?, ?, ?, ?, ?);";
 
@@ -193,20 +193,21 @@ public class OrderManagement extends Management {
             conn = getConnection();
             try {
                 PreparedStatement prep = conn.prepareStatement(sqlOrderSearch);
-                prep.setString(1, searchTerm);
-                prep.setString(2, searchTerm);
-                prep.setString(3, searchTerm);
-                prep.setString(4, searchTerm);
-                prep.setString(5, searchTerm);
-                prep.setString(6, searchTerm);
+                prep.setString(1, "%" + searchTerm + "%");
+                prep.setString(2, "%" + searchTerm + "%");
+                prep.setString(3, "%" + searchTerm + "%");
+                prep.setString(4, "%" + searchTerm + "%");
+                prep.setString(5, "%" + searchTerm + "%");
+                prep.setString(6, "%" + searchTerm + "%");
                 prep.setInt(7, OrdStatus.ACTIVE.getValue());
 
                 ResultSet res = prep.executeQuery();
-                prep.close();
 
                 while (res.next()){
                     out.add(createList(res));
                 }
+
+                prep.close();
 
             } catch (Exception e) {
                 System.err.println("Issue with search.");
