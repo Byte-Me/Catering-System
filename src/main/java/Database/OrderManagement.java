@@ -23,26 +23,57 @@ public class OrderManagement extends Management {
         super();
     }
 
+        // SQL setning for UpdateStatus metode
     String sqlUpdateStatus = "UPDATE `order` SET status = ? WHERE order_id = ?;";
 
+        // SQL setning for getDeletedOrders metode
+    String sqlGetDeletedOrders = "SELECT `order`.order_id, customer.name ,customer.phone, customer.adress, `order`.date, `order`.status " +
+            "FROM `order`, customer WHERE `order`.customer_id = customer.customer_id AND `order`.status = ? ORDER BY `date` DESC, status DESC;";
+
+    // SQL setning for GetORders metode
     String sqlGetOrders = "SELECT `order`.order_id, customer.name ,customer.phone, customer.adress, `order`.date, `order`.status FROM `order`, customer WHERE " +
                             "`order`.customer_id = customer.customer_id AND `order`.status >= ? ORDER BY `date` DESC, status DESC;";
 
+        // SQL setning for OrderSearch metode
     String sqlOrderSearch = "SELECT `order`.order_id, customer.name ,customer.phone, customer.adress, `order`.date, `order`.status FROM `order`, customer WHERE " +
-                            "(order_id LIKE ? OR `order`.status LIKE ? OR `date` LIKE ? OR `name` LIKE ? OR phone LIKE ? " +
-                            "OR adress LIKE ?) AND `order`.status >= ? AND `order`.customer_id = customer.customer_id ORDER BY `order`.status DESC, `date` DESC;";
+                            "(order_id LIKE ? OR `order`.status LIKE ? OR `date` LIKE ? OR `name` LIKE ? OR phone LIKE ? OR adress LIKE ?) AND `order`.status >=" +
+                            " ? AND `order`.customer_id = customer.customer_id ORDER BY `order`.status DESC, `date` DESC;";
 
+        // SQL setning for CreateOrderSub metode
     String sqlCreateOrderSub0 = "INSERT INTO `order` VALUES(DEFAULT, ?, ?, ?, ?, ?, ?);";
 
-    // Andre setninger under +CreateOrderSub
+        // Andre setninger under CreateOrderSub
     String sqlCreateOrderSub1 = "SELECT LAST_INSERT_ID() as id;";
     String sqlCreateOrderSub2 = "SELECT recipe_id FROM recipe WHERE name = ?;";
     String sqlCreateOrderSub3 = "INSERT INTO order_recipe VALUES( ?, ?, ?);";
 
+        // SQL setning for createOrder metode
     String sqlCreateOrder = "SELECT customer_id FROM customer WHERE email = ?;";
-    String sqlGetOrderInfoFromId = "SELECT recipe.name, order_recipe.portions FROM recipe, order_recipe WHERE order_recipe.order_id = ? AND order_recipe.recipe_id = recipe.recipe_id;";
+
+        // SQL setning for getOrderInfoFromId metode
+    String sqlGetOrderInfoFromId = "SELECT `order`.status, `order`.date, customer.name, `order`.note, `order`.time FROM `order`," +
+                                    "customer WHERE `order`.order_id = ? AND `order`.customer_id = customer.customer_id;";
+
+        // SQL setning for getRecipeFromOrder metode
+    String sqlGetRecipesFromOrder = "SELECT recipe.name, order_recipe.portions FROM recipe, order_recipe WHERE order_recipe.order_id = ? AND order_recipe.recipe_id = recipe.recipe_id;";
+
+        // SQL setning for updateOrderDate metode
     String sqlUpdateOrderDate = "UPDATE order SET date = ? WHERE order_id = ?";
+
+        // SQL setning for updateOrderTime metode
     String sqlUpdateOrderTime = "UPDATE order SET time = ? WHERE order_id = ?";
+
+        // SQL setning for updateOrderCustomer metode
+    String sqlUpdateOrderCustomer = "UPDATE `order` SET customer_id = ? WHERE order_id = ? AND customer_id = ?;";
+
+        // SQL setning for updateOrderRecipe metode
+    String sqlUpdateOrderRecipe = "UPDATE order_recipe SET recipe_id = ? WHERE order_id = ? AND recipe_id = ?;";
+
+        // SQL setning for updateOrderPortion metode
+    String sqlUpdateOrderPortions = "UPDATE order_recipe SET portions = ? WHERE order_id = ? AND recipe_id = ?;";
+
+        // SQL setning for updateOrderComment metode
+    String sqlUpdateOrderComment = "UPDATE `order` SET note = ? WHERE order_id = ?;";
 
 
     Connection conn = null;
@@ -129,26 +160,28 @@ public class OrderManagement extends Management {
 
     }
     public ArrayList<Object[]> getDeletedOrders(){
-        ArrayList<Object[]> out = new ArrayList<Object[]>();
+        ArrayList<Object[]> out = new ArrayList<>();
         if(setUp()){
-
             //Henter info fra ordre der ordren er merket som inaktiv.
+            conn = getConnection();
             try {
+                PreparedStatement prep = conn.prepareStatement(sqlGetDeletedOrders);
+                prep.setInt(1, OrdStatus.INACTIVE.getValue());
 
-                ResultSet res = getScentence().executeQuery("SELECT `order`.order_id, customer.name ,customer.phone, customer.adress, `order`.date, `order`.status " +
-                        "FROM `order`, customer WHERE `order`.customer_id = customer.customer_id AND `order`.status = "+OrdStatus.INACTIVE.getValue()+
-                        " ORDER BY `date` DESC, status DESC;");
+                ResultSet res = prep.executeQuery();
                 while (res.next()){
                     out.add(createList(res));
 
                 }
+                prep.close();
             }
             catch (Exception e){
-                System.err.println("Issue with fetching orders.");
+                System.err.println("ERROR 005: Issue with fetching orders");
+
             }
             finally {
                 DbUtils.closeQuietly(getScentence());
-                DbUtils.closeQuietly(getConnection());
+                DbUtils.closeQuietly(conn);
             }
         }
         return out;
@@ -255,7 +288,6 @@ public class OrderManagement extends Management {
                 }
                 else{
                     conn.rollback();
-                    System.err.println("OVERRUN");
                     return false;
                 }
 
@@ -268,7 +300,6 @@ public class OrderManagement extends Management {
                         recipeIDs.add(res.getInt("recipe_id")); //Henter oppskrifts IDer for å koble oppskrifter med ordre.
                     } else {
                         conn.rollback();
-                        System.err.println("THE");
                         return false;
                     }
                     prep.close();
@@ -285,7 +316,6 @@ public class OrderManagement extends Management {
                     if (!(rowChanged > 0)) {
 
                         conn.rollback();
-                        System.err.println("CAPITALIST");
 
                         return false;
                     }
@@ -300,6 +330,7 @@ public class OrderManagement extends Management {
 
                 try {
                     conn.rollback();
+                    conn.setAutoCommit(true);
                 }
                 catch (SQLException ee){
                     System.err.println("Could not rollback");
@@ -315,11 +346,10 @@ public class OrderManagement extends Management {
                 }
 
                 DbUtils.closeQuietly(getScentence());
-                DbUtils.closeQuietly(getConnection());
+                DbUtils.closeQuietly(conn);
             }
         }
         else {
-            System.err.println("EVEN");
             return false;
         }
         return true;
@@ -332,7 +362,7 @@ public class OrderManagement extends Management {
         try {
             if(setUp()) {
                 conn = getConnection();
-                PreparedStatement prep = getConnection().prepareStatement(sqlCreateOrder);
+                PreparedStatement prep = conn.prepareStatement(sqlCreateOrder);
                 prep.setString(1, customerMail);
                 ResultSet res = prep.executeQuery();
 
@@ -344,7 +374,6 @@ public class OrderManagement extends Management {
                 //Deretter kalles create order for subscription med de nye verdiene.
             }
             if(!createOrderSub(id, date, recipes, note, time, -1)){
-                System.err.println("PLEASE");
                 return false;
             }
             //-1 er verdien som blir satt dersom det ikke finnes en subscription.
@@ -354,7 +383,7 @@ public class OrderManagement extends Management {
             return false;
         } finally {
             DbUtils.closeQuietly(getScentence());
-            DbUtils.closeQuietly(getConnection());
+            DbUtils.closeQuietly(conn);
         }
         return true;
     }
@@ -369,9 +398,7 @@ public class OrderManagement extends Management {
             conn = getConnection();
             try {
 
-                PreparedStatement prep = conn.prepareStatement("SELECT `order`.status, `order`.date, " +
-                        "customer.name, `order`.note, `order`.time FROM `order`, customer WHERE `order`.order_id = ?" +
-                        " AND `order`.customer_id = customer.customer_id;");
+                PreparedStatement prep = conn.prepareStatement(sqlGetOrderInfoFromId);
                 prep.setInt(1, orderId);
                 ResultSet res = prep.executeQuery();
                 if (res.next()){
@@ -387,7 +414,7 @@ public class OrderManagement extends Management {
                 System.err.println("Issue with finding order.");
             } finally {
                 DbUtils.closeQuietly(getScentence());
-                DbUtils.closeQuietly(getConnection());
+                DbUtils.closeQuietly(conn);
             }
 
         }
@@ -398,8 +425,7 @@ public class OrderManagement extends Management {
         if(setUp()) {
             conn = getConnection();
             try {
-
-                PreparedStatement prep = conn.prepareStatement(sqlGetOrderInfoFromId);
+                PreparedStatement prep = conn.prepareStatement(sqlGetRecipesFromOrder);
                 prep.setInt(1, orderId);
                 ResultSet res = prep.executeQuery();
                 while (res.next()){
@@ -407,28 +433,34 @@ public class OrderManagement extends Management {
                     obj[0] = res.getString("name");
                     obj[1] = res.getString("portions");
                     out.add(obj);
-
                 }
                 prep.close();
             } catch (Exception e) {
                 System.err.println("Issue with finding order.");
             } finally {
                 DbUtils.closeQuietly(getScentence());
-                DbUtils.closeQuietly(getConnection());
+                DbUtils.closeQuietly(conn);
             }
-
         }
         return out;
     }
 
-    public boolean UpdateOrderDate(String orderDate, int orderID){
+
+        // Sletter/ setter en ordre til inaktiv
+    public void deleteOrder(int orderID){
+        updateStatus(orderID, OrdStatus.INACTIVE.getValue());
+    }
+
+
+
+    public boolean updateOrderDate(String orderDate, int orderID){
         int rowChanged = 0;
         if(setUp()) {
             conn = getConnection();
             try {
-                getConnection().setAutoCommit(false);
+                conn.setAutoCommit(false);
 
-                PreparedStatement prep = getConnection().prepareStatement(sqlUpdateOrderDate);
+                PreparedStatement prep = conn.prepareStatement(sqlUpdateOrderDate);
                 prep.setString(1, orderDate);
                 prep.setInt(2, orderID);
                 rowChanged = prep.executeUpdate();
@@ -438,8 +470,8 @@ public class OrderManagement extends Management {
             } catch (SQLException e) {
                 System.err.println("Issue with updating order date");
                 try {
-                    getConnection().rollback();
-                    getConnection().setAutoCommit(true);
+                    conn.rollback();
+                    conn.setAutoCommit(true);
                 }catch (SQLException sqle){
                     System.err.println("Could not rollback");
                 }
@@ -453,11 +485,10 @@ public class OrderManagement extends Management {
                     sqle.printStackTrace();
                 }
                 DbUtils.closeQuietly(getScentence());
-                DbUtils.closeQuietly(getConnection());
+                DbUtils.closeQuietly(conn);
             }
         }
-        if(rowChanged > 0) return true;
-        return false;
+        return rowChanged > 0;
     }
 
     public boolean updateOrderTime(String orderTime, int orderID){
@@ -465,20 +496,18 @@ public class OrderManagement extends Management {
         if(setUp()) {
             conn = getConnection();
             try {
-                getConnection().setAutoCommit(false);
+                conn.setAutoCommit(false);
 
-                PreparedStatement prep = getConnection().prepareStatement(sqlUpdateOrderTime);
+                PreparedStatement prep = conn.prepareStatement(sqlUpdateOrderTime);
                 prep.setString(1, orderTime);
                 prep.setInt(2, orderID);
                 rowChanged = prep.executeUpdate();
 
-                getConnection().commit();
-
             } catch (SQLException e) {
                 System.err.println("Issue with updating order time");
                 try {
-                    getConnection().rollback();
-                    getConnection().setAutoCommit(true);
+                    conn.rollback();
+                    conn.setAutoCommit(true);
                 }catch (SQLException sqle){
                     System.err.println("Could not rollback");
                 }
@@ -486,28 +515,159 @@ public class OrderManagement extends Management {
                 return false;
             } finally {
                 try {
-                    getConnection().setAutoCommit(true);
+                    conn.commit();
+                    conn.setAutoCommit(true);
                 }catch (SQLException sqle){
                     sqle.printStackTrace();
                 }
                 DbUtils.closeQuietly(getScentence());
-                DbUtils.closeQuietly(getConnection());
+                DbUtils.closeQuietly(conn);
             }
         }
-        if(rowChanged > 0) return true;
-        return false;
+        return rowChanged > 0;
     }
-    /*
-    TODO: ska mekk
-    */
-    public boolean UpdateOrderCustomer(){
-        return false;
+
+    public boolean updateOrderCustomer(int orderID, int oldCustomerID, int newCustomerID){
+        int rowChanged = 0;
+        if(setUp()){
+            conn = getConnection();
+            try {
+                conn.setAutoCommit(false);
+                PreparedStatement prep = conn.prepareStatement(sqlUpdateOrderCustomer);
+                prep.setInt(1, newCustomerID);
+                prep.setInt(2, orderID);
+                prep.setInt(3, oldCustomerID);
+                rowChanged = prep.executeUpdate();
+
+                prep.close();
+            }catch (SQLException sqle){
+                System.err.println("ERROR 004: Issue updating order customer id");
+                try {
+                    conn.rollback();
+                    conn.setAutoCommit(true);
+                }catch (SQLException e){
+                    e.printStackTrace();
+                }
+                return false;
+            }finally {
+                try {
+                    conn.commit();
+                    conn.setAutoCommit(true);
+                }catch (SQLException e){
+                    e.printStackTrace();
+                }
+                DbUtils.closeQuietly(getScentence());
+                DbUtils.closeQuietly(conn);
+            }
+        }
+        return rowChanged > 0;
     }
-    public boolean UpdateOrderRecipe(){
-        return false;
+    public boolean updateOrderRecipe(int orderID, int oldRecipeID, int newRecipeID){
+        int rowChanged = 0;
+        if(setUp()){
+            conn = getConnection();
+            try {
+                conn.setAutoCommit(false);
+                PreparedStatement prep = conn.prepareStatement(sqlUpdateOrderRecipe);
+                prep.setInt(1, newRecipeID);
+                prep.setInt(2, orderID);
+                prep.setInt(3, oldRecipeID);
+                rowChanged = prep.executeUpdate();
+                prep.close();
+            }catch (SQLException sqle){
+                System.err.println("ERROR 007: Issue with updating order recipe");
+                try {
+                    conn.rollback();
+                    conn.setAutoCommit(true);
+                }catch (SQLException e){
+                    e.printStackTrace();
+                }
+                return false;
+
+            }finally {
+                try {
+                    conn.commit();
+                    conn.setAutoCommit(true);
+                }catch (SQLException e){
+                    e.printStackTrace();
+                }
+                DbUtils.closeQuietly(getScentence());
+                DbUtils.closeQuietly(conn);
+
+            }
+        }
+        return rowChanged > 0;
     }
-    public boolean UpdateOrderComment(){
-        return false;
+
+    public boolean updateRecipePortions(int newPortions, int recipeID, int orderID){
+        int rowChanged = 0;
+        if(setUp()){
+            conn = getConnection();
+            try {
+                conn.setAutoCommit(false);
+                PreparedStatement prep = conn.prepareStatement(sqlUpdateOrderPortions);
+                prep.setInt(1, newPortions);
+                prep.setInt(2, orderID);
+                prep.setInt(3, recipeID);
+                rowChanged = prep.executeUpdate();
+                prep.close();
+            }catch (SQLException sqle){
+                System.err.println("ERROR 008: Issue with updating order portions");
+                try {
+                    conn.rollback();
+                    conn.setAutoCommit(true);
+                }catch (SQLException e){
+                    e.printStackTrace();
+                }
+                return false;
+
+            }finally {
+                try {
+                    conn.commit();
+                    conn.setAutoCommit(true);
+                }catch (SQLException e){
+                    e.printStackTrace();
+                }
+                DbUtils.closeQuietly(getScentence());
+                DbUtils.closeQuietly(conn);
+
+            }
+        }
+        return rowChanged > 0;
+    }
+
+    public boolean updateOrderComment(String comment, int orderID){
+        int rowChaged = 0;
+        if(setUp()){
+            conn = getConnection();
+            try {
+                conn.setAutoCommit(false);
+                PreparedStatement prep = conn.prepareStatement(sqlUpdateOrderComment);
+                prep.setString(1, comment);
+                prep.setInt(2, orderID);
+                rowChaged = prep.executeUpdate();
+                prep.close();
+            }catch (SQLException sqle){
+                System.err.println("ERROR 009: Issue with updating order comment");
+                try {
+                    conn.rollback();
+                    conn.setAutoCommit(true);
+                }catch (SQLException e){
+                    e.printStackTrace();
+                }
+                return false;
+            }finally {
+                try {
+                    conn.commit();
+                    conn.setAutoCommit(true);
+                }catch (SQLException e){
+                    e.printStackTrace();
+                }
+                DbUtils.closeQuietly(getScentence());
+                DbUtils.closeQuietly(conn);
+            }
+        }
+        return rowChaged > 0;
     }
 }
 
