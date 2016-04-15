@@ -6,6 +6,8 @@ import HelperClasses.MainTableModel;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 /**
@@ -57,26 +59,47 @@ public class AddRecipe extends JDialog {
 
         moveRight.addActionListener(e -> copyPasteData(inRecipeTable.getSelectedRow(), false));
 
-        addRecipeButton.addActionListener(e -> {
-            foodManagement = new FoodManagement();
-            String recipeName = JOptionPane.showInputDialog(null, "Name of recipe: ");
-            String priceIn = JOptionPane.showInputDialog(null, "Salesprice for "+recipeName+": ");
-            int recipePrice = Integer.parseInt(priceIn);
-
-            ArrayList<Object[]> ingInfo = new ArrayList<>();
-            for(int i = 0; i < inRecipeTable.getRowCount(); i++) {
-                Object[] obj = new Object[2];
-                obj[0] = inRecipeTable.getValueAt(i, nameColumnNr);
-                obj[1] = inRecipeTable.getValueAt(i, quantityColumnNr);
-                ingInfo.add(obj);
+        inStorageTable.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if(e.getClickCount() == 2) {
+                    copyPasteData(inStorageTable.getSelectedRow(), true);
+                }
             }
+        });
 
-            if(foodManagement.addRecipe(recipeName, ingInfo, recipePrice) && recipeName != null && recipePrice > 0) {
-                JOptionPane.showMessageDialog(null, "Success!");
-                setVisible(false);
-                dispose();
-            } else {
-                JOptionPane.showMessageDialog(null, "Error. Try again!");
+
+        addRecipeButton.addActionListener(e -> {
+            try {
+                if (inRecipeTable.getRowCount() > 0) {
+                    foodManagement = new FoodManagement();
+                    int recipePrice = -1;
+                    String recipeName = JOptionPane.showInputDialog(null, "Name of recipe: ");
+                    if (!recipeName.isEmpty()) {
+                        String priceIn = JOptionPane.showInputDialog(null, "Salesprice for " + recipeName + ": ");
+                        recipePrice = Integer.parseInt(priceIn);
+                    }
+
+                    ArrayList<Object[]> ingInfo = new ArrayList<>();
+                    for(int i = 0; i < inRecipeTable.getRowCount(); i++) {
+                        Object[] obj = new Object[2];
+                        obj[0] = inRecipeTable.getValueAt(i, nameColumnNr);
+                        obj[1] = inRecipeTable.getValueAt(i, quantityColumnNr);
+                        ingInfo.add(obj);
+                    }
+
+                    if(foodManagement.addRecipe(recipeName, ingInfo, recipePrice) && !recipeName.isEmpty() && recipePrice > 0) {
+                        JOptionPane.showMessageDialog(null, "Success!");
+                        Recipes.updateRecipes();
+                        setVisible(false);
+                        dispose();
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Error. Try again!");
+                    }
+                }
+
+            } catch(Exception e1){
+                System.err.println("Error with adding recipe.");
             }
 
         });
@@ -115,12 +138,12 @@ public class AddRecipe extends JDialog {
         } catch (Exception e){}
     }
 
-    public static int existsInTable(JTable table, String name) {
+    private int existsInTable(JTable table, String name) {
         // Get row count
         int rowCount = table.getRowCount();
         // Check against all entries
         for (int i = 0; i < rowCount; i++) {
-            if (table.getValueAt(i, 0).toString() == name) {
+            if (table.getValueAt(i, 0).toString().equals(name)) {
                 return i;
             }
         }

@@ -12,6 +12,8 @@ import java.util.ArrayList;
  * Created by Evdal on 07.03.2016.
  */
 public class FoodManagement extends Management{
+    private final String deleteRecipe = "DELETE FROM recipe_grocery WHERE recipe_id = ?;";
+
     public FoodManagement(){
         super();
     }
@@ -216,6 +218,28 @@ public class FoodManagement extends Management{
         else return null;
     }
 
+    public String getRecipeName(int id)throws Exception{
+        ResultSet res;
+        String out = null;
+        if(setUp()){
+            try{
+                res = getScentence().executeQuery("SELECT name FROM recipe WHERE recipe_id = " + id + ";");
+                while (res.next()){
+                    out = res.getString("name");
+                }
+
+            } catch (Exception e){
+                System.err.println("Issue with getting name of recipe.");
+                return null;
+            }
+            finally {
+                DbUtils.closeQuietly(getScentence());
+                DbUtils.closeQuietly(getConnection());
+            }
+        }
+        return out;
+    }
+
     public boolean addRecipe(String name, ArrayList<Object[]> ingInfo, int price){
         int numb;
         if(setUp()){
@@ -253,8 +277,59 @@ public class FoodManagement extends Management{
             return true;
         }
         else return false;
-
     }
+
+    private boolean addGroceryRecipe(String name, ArrayList<Object[]> ingInfo, int price) {
+        int numb;
+        if(setUp()){
+            try{
+                ArrayList<String> names = new ArrayList<String>();
+                for(Object[] ing : ingInfo ){
+                    names.add((String)ing[0]);
+                }
+                String recipeID = getRecipeID(name);
+                ArrayList<Integer> IDs = getGroceryID(names);
+
+                for(int i= 0; i < IDs.size();i++){ //
+                    numb = getScentence().executeUpdate("INSERT INTO recipe_grocery VALUES('" + recipeID + "', '" + IDs.get(i).toString() + "', '"
+                            + ingInfo.get(i)[1] + "');");
+                    if(numb == 0)return false;
+                }
+
+                PreparedStatement prep = getConnection().prepareStatement("UPDATE recipe SET price = ?;");
+                prep.setInt(1, price);
+                prep.executeUpdate();
+
+            } catch (Exception e){
+                System.err.println("Issue with adding recipe to database.");
+                return false;
+            }
+            finally {
+                DbUtils.closeQuietly(getScentence());
+                DbUtils.closeQuietly(getConnection());
+
+            }
+            return true;
+        }
+        else return false;
+    }
+
+    public boolean updateRecipe(String name, ArrayList<Object[]> ingInfo, int price, int id){
+        int res = 0;
+        if(setUp()) {
+            try {
+                PreparedStatement prep = getConnection().prepareStatement(deleteRecipe);
+                prep.setInt(1, id);
+                prep.executeUpdate();
+                addGroceryRecipe(name, ingInfo, price);
+            } catch (Exception e) {
+                System.err.println("Issue with editing recipe.");
+                return false;
+            }
+        }
+        return true;
+    }
+
 
     public boolean addIngredient(String name, int price, String unit, int quantity){
         int res = 0;
@@ -473,24 +548,5 @@ public class FoodManagement extends Management{
         }
         return out;
     }
-    public boolean updateQuantity(String recipeName, String newData) throws Exception {
-        int rowChanged = 0;
-        if (super.setUp()) {
-            try {
-                int recipeID = Integer.parseInt(getRecipeID(recipeName));
-                rowChanged = getScentence().executeUpdate("UPDATE recipe_grocery SET amount = '" + newData + "' WHERE recipe_id = recipeID;");
-            } catch (SQLException e) {
-                System.err.println("Issue with executing database update.");
-                return false;
 
-            } finally {
-                DbUtils.closeQuietly(getScentence());
-                DbUtils.closeQuietly(getConnection());
-
-
-            }
-        }
-        if(rowChanged > 0) return true;
-        return false;
-    }
 }

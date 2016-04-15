@@ -25,7 +25,7 @@ public class Recipes extends JDialog {
 
     static DefaultTableModel recipesModel;
 
-    FoodManagement foodManagement = new FoodManagement();
+    static FoodManagement foodManagement = new FoodManagement();
 
     public Recipes() {
         setTitle("Recipes");
@@ -61,7 +61,7 @@ public class Recipes extends JDialog {
         editRecipeButton.addActionListener(e ->{
             try {
                 if (recipesTable.getSelectedRows().length == 1 ) { //TODO: sjekker ikke om flere columns er selected, velger øverste.
-                    int recipeId = (Integer) recipesTable.getValueAt(recipesTable.getSelectedRow(), 1);
+                    int recipeId = (Integer)recipesModel.getValueAt(recipesTable.getSelectedRow(), 0);
                     new EditRecipe(recipeId);
                 } else if(recipesTable.getSelectedRows().length < 1){
                     showMessageDialog(null, "A recipe needs to be selected.");
@@ -87,12 +87,10 @@ public class Recipes extends JDialog {
         setVisible(true);
     }
 
-    public void updateRecipes() {
+    public static void updateRecipes() {
         ArrayList<Object[]> recipes = foodManagement.getRecipes();
 
-        for(int i = 0; i < recipesModel.getRowCount(); i++) {
-            recipesModel.removeRow(i);
-        }
+        recipesModel.setRowCount(0);
 
         for (Object[] recipe : recipes) {
             recipesModel.addRow(recipe);
