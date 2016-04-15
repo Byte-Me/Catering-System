@@ -17,7 +17,7 @@ public class CreateDeliveryRoute {
             DeliveryManagement dm = new DeliveryManagement();
             ArrayList<String> adressNames = dm.getAdressReady();
             ArrayList<double[]> positions = tsp.createPositionsArray(adressNames);
-            tsp.bruteForceFindBestRoute(new ArrayList<double[]>(), positions);
+            tsp.bruteForceFindBestRoute(new ArrayList<>(), positions);
             ArrayList<String> tmp = tsp.positionsToAdresses(tsp.getBestRoute(), adressNames);
             out = dev.getDeliveryInfo(tmp);
         }
@@ -37,7 +37,7 @@ public class CreateDeliveryRoute {
             DeliveryManagement dm = new DeliveryManagement();
             ArrayList<String> adressNames = dm.getAdressReady();
             ArrayList<double[]> positions = tsp.createPositionsArray(adressNames);
-            tsp.bruteForceFindBestRoute(new ArrayList<double[]>(), positions);
+            tsp.bruteForceFindBestRoute(new ArrayList<>(), positions);
             out = tsp.getBestRoute();
         }
         catch (Exception e){

@@ -41,7 +41,7 @@ public class LoginManagement extends Management{
         //username = Even
         //password = pass
 
-        ResultSet res = null;
+        ResultSet res;
         if(setUp()) {
             try {
                 PreparedStatement prep = getConnection().prepareStatement("select username, hash, salt, access_level from user " +

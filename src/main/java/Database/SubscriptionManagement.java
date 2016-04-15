@@ -153,8 +153,9 @@ public class SubscriptionManagement extends Management{
                 DbUtils.closeQuietly(getConnection());
             }
         }
-        return 0;
+        return orders;
     }
+
     public int createSubscription(int custID, String dateFrom, String dateTo, int frequency){
         int subid = -1;
         if(setUp()){

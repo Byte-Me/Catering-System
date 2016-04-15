@@ -79,7 +79,7 @@ public class DeliveryRoute {/*
     }
 
     public static ArrayList<double[]> createAdressArray(ArrayList<String> adresses )throws Exception{
-        ArrayList<double[]> out = new ArrayList<double[]>();
+        ArrayList<double[]> out = new ArrayList<>();
 
         for (int i= 0; i<adresses.size();i++){
             out.add(geoCoder(adresses.get(i), i));
@@ -89,8 +89,8 @@ public class DeliveryRoute {/*
     }
 
     public static ArrayList<double[]> calculateOrder(ArrayList<double[]> positions){
-        ArrayList<Integer> indexed = new ArrayList<Integer>();
-        ArrayList<double[]> out = new ArrayList<double[]>();
+        ArrayList<Integer> indexed = new ArrayList<>();
+        ArrayList<double[]> out = new ArrayList<>();
         int prevPos;
         int nextPos;
         indexed.add(0);
@@ -123,7 +123,7 @@ public class DeliveryRoute {/*
         return out;
     }
     private static ArrayList<String> arrangeAdress(ArrayList<double[]> posList, ArrayList<String> originAdressList){
-        ArrayList<String> out = new ArrayList<String>();
+        ArrayList<String> out = new ArrayList<>();
         for(double[] pos : posList) {
             //Double d = new Double(pos[2]);
             out.add(originAdressList.get((int)pos[2]));

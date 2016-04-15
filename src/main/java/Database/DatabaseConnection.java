@@ -12,7 +12,7 @@ import java.sql.SQLException;
  */
 public class DatabaseConnection {
 
-    private final String username = "evend";  //
+    private final String username = "evend";
     private final String password = "aHqRlVPk";
     private final String databasedriver = "com.mysql.jdbc.Driver";
     private final String databasename = "jdbc:mysql://mysql.stud.iie.ntnu.no:3306/" + username +

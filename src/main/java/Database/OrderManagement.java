@@ -129,7 +129,7 @@ public class OrderManagement extends Management {
 
     }
     public ArrayList<Object[]> getDeletedOrders(){
-        ArrayList<Object[]> out = new ArrayList<Object[]>();
+        ArrayList<Object[]> out = new ArrayList<>();
         if(setUp()){
 
             //Henter info fra ordre der ordren er merket som inaktiv.
@@ -456,8 +456,7 @@ public class OrderManagement extends Management {
                 DbUtils.closeQuietly(getConnection());
             }
         }
-        if(rowChanged > 0) return true;
-        return false;
+        return rowChanged > 0;
     }
 
     public boolean updateOrderTime(String orderTime, int orderID){

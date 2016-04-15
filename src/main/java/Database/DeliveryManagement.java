@@ -91,9 +91,7 @@ public class DeliveryManagement extends Management{
                 res = getScentence().executeQuery("SELECT customer.adress FROM `order`, customer WHERE "+
                          "`order`.status = 3 AND `order`.customer_id = customer.customer_id;");
                 while (res.next()) {
-                    Object[] obj = new Object[3];
                     out.add(res.getString("adress"));
-
                 }
 
 
