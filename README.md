@@ -68,9 +68,9 @@ __Loginscreen is finished.__
 - [x] Time recipe needs to be done should be showed in To Prepare.
 - [ ] Add both current day and tomorrow in two different lists in to prepare.
 - [ ] Add price to upper JLabel in add ingredients.
-- [ ] Make everything in chef uneditable through cells.
-- [ ] Change edit recipes to edit/show. Doubleclick will go straight to edit.
-- [ ] Add edit button with double click functions for ingredients.
+- [x] Make everything in chef uneditable through cells.
+- [x] Change edit recipes to edit/show. Doubleclick will go straight to edit.
+- [x] Add edit button with double click functions for ingredients.
 - [ ] Make ingredients smaller and to prepare larger.
 - [ ] Fix shoppinglist! (BACKEND WORKS, FRONTEND NEEDS FIXING)
 - [ ] Add possibility to store info about shopping, usage and so on (LOW PRIORITY).
