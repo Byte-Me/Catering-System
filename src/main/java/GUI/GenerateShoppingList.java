@@ -4,6 +4,7 @@ import Database.FinanceManagement;
 import Database.FoodManagement;
 import Food.CreateShoppingList;
 import HelperClasses.DateLabelFormatter;
+import HelperClasses.MainTableModel;
 import org.jdatepicker.JDatePicker;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
@@ -12,6 +13,9 @@ import org.jdatepicker.impl.UtilDateModel;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -26,10 +30,11 @@ public class GenerateShoppingList extends JDialog {
     private JLabel priceLabel;
     private JLabel totalPriceLabel;
     private JPanel datePanel;
-    JDatePickerImpl fromDate;
-    JDatePickerImpl toDate;
+    private JDatePickerImpl fromDate;
+    private JDatePickerImpl toDate;
+    private JButton updateButton;
+    private DefaultTableModel shoppingListModel;
 
-    private DefaultTableModel shoppingListModel = new DefaultTableModel();
     private FinanceManagement financeManagement = new FinanceManagement();
     private final FoodManagement foodManagement = new FoodManagement();
 
@@ -41,6 +46,7 @@ public class GenerateShoppingList extends JDialog {
         // Labels
         JLabel fromLabel = new JLabel("From: ");
         JLabel toLabel = new JLabel("To: ");
+        shoppingListModel = new MainTableModel();
 
         // Date Pickers start
         UtilDateModel fModel = new UtilDateModel();
@@ -63,7 +69,7 @@ public class GenerateShoppingList extends JDialog {
         fromDate = new JDatePickerImpl(fromPanel, new DateLabelFormatter());
         toDate = new JDatePickerImpl(toPanel, new DateLabelFormatter());
 
-        JButton updateButton = new JButton("Update list");
+        updateButton = new JButton("Update list");
         updateButton.addActionListener(e -> updateShoppingList());
 
         // Add components to JPanel
@@ -82,7 +88,69 @@ public class GenerateShoppingList extends JDialog {
         shoppingListModel.setColumnIdentifiers(shoppingListHeader);
 
         shoppingTable.setModel(shoppingListModel);
+        shoppingTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        shoppingTable.setAutoCreateRowSorter(true);
+
         updateShoppingList();
+
+        JPopupMenu popupMenu = new JPopupMenu("Shopping List");
+        JMenuItem add = popupMenu.add(new AbstractAction("Edit Shopping List") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                editShoppingList();
+            }
+        });
+
+        shoppingTable.addMouseListener(new MouseAdapter() {
+
+            @Override
+            public void mousePressed(MouseEvent e) {
+
+                int r = shoppingTable.rowAtPoint(e.getPoint());
+                if (r >= 0 && r < shoppingTable.getRowCount()) {
+                    shoppingTable.setRowSelectionInterval(r, r);
+                } else {
+                    shoppingTable.clearSelection();
+                }
+
+                int rowindex = shoppingTable.getSelectedRow();
+                if (rowindex < 0)
+                    return;
+
+                if (e.isPopupTrigger() && e.getComponent() instanceof JTable) {
+                    popupMenu.show(e.getComponent(), e.getX(), e.getY());
+                }
+            }
+            @Override
+            public void mouseReleased(MouseEvent e) {
+
+                int r = shoppingTable.rowAtPoint(e.getPoint());
+                if (r >= 0 && r < shoppingTable.getRowCount()) {
+                    shoppingTable.setRowSelectionInterval(r, r);
+                } else {
+                    shoppingTable.clearSelection();
+                }
+
+                int rowindex = shoppingTable.getSelectedRow();
+                if (rowindex < 0)
+                    return;
+
+                if (e.isPopupTrigger() && e.getComponent() instanceof JTable) {
+                    popupMenu.show(e.getComponent(), e.getX(), e.getY());
+                }
+            }
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if(e.getClickCount() == 2) {
+                    if (shoppingTable.getSelectedRow() != -1) {
+                        editShoppingList();
+                    }
+                }
+            }
+
+        });
+
 
         okButton.addActionListener(e -> {
             if(addToStorageRButton.isSelected()){
@@ -112,11 +180,8 @@ public class GenerateShoppingList extends JDialog {
         String fDate = dateFormat.format((Date)fromDate.getModel().getValue());
         String tDate = dateFormat.format((Date)toDate.getModel().getValue());
         ArrayList<Object[]> shoppingItems = CreateShoppingList.withDates(fDate, tDate);
-        System.out.println(fDate +" "+tDate);
 
-        for(Object[] shoppingItem : shoppingItems){
-            System.out.println(Arrays.toString(shoppingItem));
-        }
+
         shoppingListModel.setRowCount(0);
         double totalPrice = 0;
         for (Object[] recipe : shoppingItems) {
@@ -124,5 +189,33 @@ public class GenerateShoppingList extends JDialog {
             shoppingListModel.addRow(recipe);
         }
         priceLabel.setText(Double.toString(totalPrice));
+        updateButton.setVisible(true);
+
+    }
+
+    private void editShoppingList(){
+        try{
+            String name = (String)shoppingTable.getValueAt(shoppingTable.getSelectedRow(),0);
+            int oldQuant = (Integer) shoppingTable.getValueAt(shoppingTable.getSelectedRow(),1);
+            String newQuantIn = JOptionPane.showInputDialog(null, "New quantity for "+name+".");
+            int newQuant = Integer.parseInt(newQuantIn);
+            if(newQuant>=0) {
+                //calculating new prices
+                int ingPrice = (Integer) shoppingTable.getValueAt(shoppingTable.getSelectedRow(), 3) / (Integer) shoppingTable.getValueAt(shoppingTable.getSelectedRow(), 1);
+                shoppingTable.setValueAt(newQuant, shoppingTable.getSelectedRow(), 1);
+                int priceDiff = ingPrice * (newQuant - oldQuant);
+                int newPrice = ingPrice*newQuant;
+                shoppingTable.setValueAt(newPrice, shoppingTable.getSelectedRow(), 3);
+                double newTotal = Double.parseDouble(priceLabel.getText())+priceDiff;
+                priceLabel.setText(Double.toString(newTotal));
+            }
+
+
+
+        }
+        catch (NumberFormatException ne){
+            //Cancel pressed or not an int
+            JOptionPane.showMessageDialog(null, "Issues with input.");
+        }
     }
 }
