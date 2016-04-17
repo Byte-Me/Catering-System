@@ -1,6 +1,7 @@
 package Database;
 
 import Food.FoodFinance;
+import Food.Storage;
 import org.apache.commons.dbutils.DbUtils;
 
 import java.sql.PreparedStatement;
@@ -23,26 +24,26 @@ public class OrderManagement extends Management {
         super();
     }
 
-    String sqlUpdateStatus = "UPDATE `order` SET status = ? WHERE order_id = ?;";
+    private final String sqlUpdateStatus = "UPDATE `order` SET status = ? WHERE order_id = ?;";
 
-    String sqlGetOrders = "SELECT `order`.order_id, customer.name ,customer.phone, customer.adress, `order`.date, `order`.status FROM `order`, customer WHERE " +
+    private final String sqlGetOrders = "SELECT `order`.order_id, customer.name ,customer.phone, customer.adress, `order`.date, `order`.status FROM `order`, customer WHERE " +
                             "`order`.customer_id = customer.customer_id AND `order`.status >= ? ORDER BY `date` DESC, status DESC;";
 
-    String sqlOrderSearch = "SELECT `order`.order_id, customer.name ,customer.phone, customer.adress, `order`.date, `order`.status FROM `order`, customer WHERE " +
+    private final String sqlOrderSearch = "SELECT `order`.order_id, customer.name ,customer.phone, customer.adress, `order`.date, `order`.status FROM `order`, customer WHERE " +
                             "(order_id LIKE ? OR `order`.status LIKE ? OR `date` LIKE ? OR `name` LIKE ? OR phone LIKE ? " +
                             "OR adress LIKE ?) AND `order`.status >= ? AND `order`.customer_id = customer.customer_id ORDER BY `order`.status DESC, `date` DESC;";
 
-    String sqlCreateOrderSub0 = "INSERT INTO `order` VALUES(DEFAULT, ?, ?, ?, ?, ?, ?);";
+    private final String sqlCreateOrderSub0 = "INSERT INTO `order` VALUES(DEFAULT, ?, ?, ?, ?, ?, ?);";
 
     // Andre setninger under +CreateOrderSub
-    String sqlCreateOrderSub1 = "SELECT LAST_INSERT_ID() as id;";
-    String sqlCreateOrderSub2 = "SELECT recipe_id FROM recipe WHERE name = ?;";
-    String sqlCreateOrderSub3 = "INSERT INTO order_recipe VALUES( ?, ?, ?);";
+    private final String sqlCreateOrderSub1 = "SELECT LAST_INSERT_ID() as id;";
+    private final String sqlCreateOrderSub2 = "SELECT recipe_id FROM recipe WHERE name = ?;";
+    private final String sqlCreateOrderSub3 = "INSERT INTO order_recipe VALUES( ?, ?, ?);";
 
-    String sqlCreateOrder = "SELECT customer_id FROM customer WHERE email = ?;";
-    String sqlGetOrderInfoFromId = "SELECT recipe.name, order_recipe.portions FROM recipe, order_recipe WHERE order_recipe.order_id = ? AND order_recipe.recipe_id = recipe.recipe_id;";
-    String sqlUpdateOrderDate = "UPDATE order SET date = ? WHERE order_id = ?";
-    String sqlUpdateOrderTime = "UPDATE order SET time = ? WHERE order_id = ?";
+    private final String sqlCreateOrder = "SELECT customer_id FROM customer WHERE email = ?;";
+    private final String sqlGetOrderInfoFromId = "SELECT recipe.name, order_recipe.portions, recipe_id FROM recipe, order_recipe WHERE order_recipe.order_id = ? AND order_recipe.recipe_id = recipe.recipe_id;";
+    private final String sqlUpdateOrderDate = "UPDATE order SET date = ? WHERE order_id = ?";
+    private final String sqlUpdateOrderTime = "UPDATE order SET time = ? WHERE order_id = ?";
 
 
     Connection conn = null;
@@ -85,6 +86,7 @@ public class OrderManagement extends Management {
         }
 
     }
+
     public boolean updateStatus(int orderID, int newStatus){
         int rowChanged = 0;
         if(newStatus < OrderType.INACTIVE.getValue() || newStatus > OrderType.DELIVERED.getValue()) {
@@ -124,6 +126,7 @@ public class OrderManagement extends Management {
         if(newStatus == OrderType.DELIVERED.getValue()){
             financeManagement.addIncomeToDatabase(FoodFinance.findOrderPrice(orderID));
         }
+
 
         return rowChanged > 0;
 
@@ -192,13 +195,14 @@ public class OrderManagement extends Management {
         if(setUp()) {
             conn = getConnection();
             try {
+                searchTerm = "%" + searchTerm + "%";
                 PreparedStatement prep = conn.prepareStatement(sqlOrderSearch);
-                prep.setString(1, "%" + searchTerm + "%");
-                prep.setString(2, "%" + searchTerm + "%");
-                prep.setString(3, "%" + searchTerm + "%");
-                prep.setString(4, "%" + searchTerm + "%");
-                prep.setString(5, "%" + searchTerm + "%");
-                prep.setString(6, "%" + searchTerm + "%");
+                prep.setString(1, searchTerm);
+                prep.setString(2, searchTerm);
+                prep.setString(3, searchTerm);
+                prep.setString(4, searchTerm);
+                prep.setString(5, searchTerm);
+                prep.setString(6, searchTerm);
                 prep.setInt(7, OrdStatus.ACTIVE.getValue());
 
                 ResultSet res = prep.executeQuery();
@@ -403,9 +407,10 @@ public class OrderManagement extends Management {
                 prep.setInt(1, orderId);
                 ResultSet res = prep.executeQuery();
                 while (res.next()){
-                    Object[] obj = new Object[2];
+                    Object[] obj = new Object[3];
                     obj[0] = res.getString("name");
                     obj[1] = res.getString("portions");
+                    obj[2] = res.getInt("recipe_id");
                     out.add(obj);
 
                 }

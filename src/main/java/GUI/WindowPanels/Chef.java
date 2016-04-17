@@ -2,6 +2,7 @@ package GUI.WindowPanels;
 
 import Database.FoodManagement;
 import Database.OrderManagement;
+import Food.Storage;
 import GUI.AddIngredient;
 import GUI.EditIngredient;
 import GUI.GenerateShoppingList;
@@ -84,20 +85,29 @@ public class Chef {
             while(count < prepareTable.getRowCount() && lookingForOrder){ //blar gjennom radene
                 if((Boolean)prepareTable.getValueAt(count, 6)){ //er checkbox checket?
 
-                    int input = showConfirmDialog(null,"Do you want update status for orderID " +prepareTable.getValueAt(count, 0)+"?","",YES_NO_OPTION);
-                    if(input==YES_OPTION) {
-                        if (OrderType.ACTIVE == prepareTable.getValueAt(count, 5)) { //er den aktiv, set til processsing
-                            orderManagement.updateStatus((Integer) prepareTable.getValueAt(count, 0), OrderType.PROCESSING.getValue());
+                    try {
+                        int input = showConfirmDialog(null, "Do you want update status for orderID " + prepareTable.getValueAt(count, 0) + "?", "", YES_NO_OPTION);
+                        if (input == YES_OPTION) {
+                            if (OrderType.ACTIVE == prepareTable.getValueAt(count, 5)) { //er den aktiv, set til processsing
+                                orderManagement.updateStatus((Integer) prepareTable.getValueAt(count, 0), OrderType.PROCESSING.getValue());
 
-                        } else {//er den processing, set til ready
-                            orderManagement.updateStatus((Integer) prepareTable.getValueAt(count, 0), OrderType.READY.getValue());
+                            } else {//er den processing, set til ready
+                                orderManagement.updateStatus((Integer) prepareTable.getValueAt(count, 0), OrderType.READY.getValue());
+                                int input1 = showConfirmDialog(null, "Do you want automatically remove ingredients from storage?", "", YES_NO_OPTION);
+                                if (input1 == YES_OPTION) {
+                                    Storage.removeFromStorage((Integer) prepareTable.getValueAt(count, 0));
+                                }
 
+
+                            }
+                            updatePrepareTable();
+                            lookingForOrder = false;
+                        } else {
+                            prepareTable.setValueAt(false, count, 6);
                         }
-                        updatePrepareTable();
-                        lookingForOrder = false;
                     }
-                    else{
-                        prepareTable.setValueAt(false,count, 6);
+                    catch (NumberFormatException ne){
+                        //
                     }
                 }
                 count++;

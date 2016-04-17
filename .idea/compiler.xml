@@ -25,7 +25,7 @@
         <module name="Catering-System" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
+    <bytecodeTargetLevel target="1.8">
       <module name="Catering-System" target="1.8" />
     </bytecodeTargetLevel>
   </component>

@@ -13,10 +13,13 @@ import java.util.stream.Collectors;
 
 public class CreateShoppingList {
     static NumberFormat formatter = new DecimalFormat("#0");
-    public static ArrayList<Object[]> useOrdersToday(){
+    public static ArrayList<Object[]> withDates(String fDate, String tDate){
 
         FoodManagement food = new FoodManagement();
-        ArrayList<Object[]> ingredientsNeeded = food.getIngredientsForShoppinglist(); // 0 is name, 1 is amount, 2 is unit and 3 is price.
+        fDate = fDate.replaceAll("-","");
+        tDate = tDate.replaceAll("-","");
+
+        ArrayList<Object[]> ingredientsNeeded = food.getIngredientsForShoppinglist(fDate, tDate); // 0 is name, 1 is amount, 2 is unit and 3 is price.
 
         ingredientsNeeded = shortenArrayList(ingredientsNeeded); //Samler ingredienser med samme navn og summerer quantity
 

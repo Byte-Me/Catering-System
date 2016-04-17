@@ -17,7 +17,7 @@ public class CustomerManagement extends Management{
 
     // Defines the Customer Types
     public enum CustType {
-        INACTIVE, PERSON, CORPORATION;
+        PERSON, CORPORATION;
 
         public int getValue() {
             return super.ordinal();
@@ -39,19 +39,43 @@ public class CustomerManagement extends Management{
         }
 
     }
+    public enum CustStatus {
+        INACTIVE, ACTIVE;
+
+        public int getValue() {
+            return super.ordinal();
+        }
+
+        public static CustStatus valueOf(int custStatusNr) {
+            for (CustStatus status : CustStatus.values()) {
+                if (status.ordinal() == custStatusNr) {
+                    return status;
+                }
+            }
+            return null;
+        }
+
+        @Override
+        public String toString() {
+            String constName = super.toString();
+            return constName.substring(0,1) + constName.substring(1).toLowerCase();
+        }
+
+    }
 
     public ArrayList<Object[]> getCustomers(){
         if(setUp()){
             ArrayList<Object[]> out = new ArrayList<Object[]>();
             ResultSet res;
             try{
-                res = getScentence().executeQuery("SELECT * FROM customer WHERE status > "+CustType.INACTIVE.getValue()+";"); //Status 1 for aktiv og 0 for inaktiv
+                res = getScentence().executeQuery("SELECT * FROM customer WHERE status > "+CustStatus.INACTIVE.getValue()+";"); //Status 1 for aktiv og 0 for inaktiv
                 while(res.next()) {
-                    Object[] obj = new Object[4];
+                    Object[] obj = new Object[5];
                     obj[0] = res.getString("name");
                     obj[1] = res.getString("email");
                     obj[2] = res.getString("phone");
                     obj[3] = res.getString("adress");
+                    obj[4] = res.getInt("cust_type");
                     out.add(obj);
                 }
 
@@ -74,13 +98,14 @@ public class CustomerManagement extends Management{
             ArrayList<Object[]> out = new ArrayList<Object[]>();
             ResultSet res = null;
             try{
-                res = getScentence().executeQuery("SELECT * FROM customer WHERE status = "+CustType.INACTIVE.getValue()+";"); //Status 1 for aktiv og 0 for inaktiv
+                res = getScentence().executeQuery("SELECT * FROM customer WHERE status = "+CustStatus.INACTIVE.getValue()+";"); //Status 1 for aktiv og 0 for inaktiv
                 while(res.next()) {
-                    Object[] obj = new Object[4];
+                    Object[] obj = new Object[5];
                     obj[0] = res.getString("name");
                     obj[1] = res.getString("email");
                     obj[2] = res.getString("phone");
                     obj[3] = res.getString("adress");
+                    obj[4] = res.getInt("cust_type");
                     out.add(obj);
                 }
 
@@ -105,14 +130,15 @@ public class CustomerManagement extends Management{
             try {
                 res = getScentence().executeQuery("SELECT * FROM customer WHERE name LIKE '%" + searchTerm + "%' OR email LIKE '%" +
                         searchTerm + "%' OR phone LIKE '%" + searchTerm +
-                        "%' OR adress LIKE '%" + searchTerm + "%' AND status >= 0 ORDER BY name;");
+                        "%' OR adress LIKE '%" + searchTerm + "%' AND status > "+CustStatus.INACTIVE.getValue()+" ORDER BY name;");
 
                 while (res.next()){
-                    Object[] obj = new Object[4];
+                    Object[] obj = new Object[5];
                     obj[0] = res.getString("name");
                     obj[1] = res.getString("email");
                     obj[2] = res.getString("phone");
                     obj[3] = res.getString("adress");
+                    obj[4] = res.getInt("cust_type");
                     out.add(obj);
                 }
 
@@ -128,7 +154,7 @@ public class CustomerManagement extends Management{
         }
         else return null;
     }
-    private boolean addCustomer(String name, String email, String phone, String adress, int status) {
+    private boolean addCustomer(String name, String email, String phone, String adress, int custType) {
         if (setUp()) {
             int numb = 0;
             ResultSet res = null;
@@ -136,13 +162,13 @@ public class CustomerManagement extends Management{
                 getScentence().executeQuery("START TRANSACTION;");
                 res = getScentence().executeQuery("SELECT name FROM customer WHERE email = '" + email + "';");
                 if(res.next()) {//finds if customer already in database
-                    res = getScentence().executeQuery("SELECT status FROM customer WHERE email = '" + email + "';");
+                    res = getScentence().executeQuery("SELECT cust_type FROM customer WHERE email = '" + email + "';");
 
                     if(res.next()) {
                         //find status of customer, if status = -1, make customer active, else return false.
                         //Customer already exists.
-                        if (res.getInt("status") < 0) {
-                            numb = getScentence().executeUpdate("UPDATE customer SET status = " + status + " WHERE email = '" + email + "';");
+                        if (res.getInt("status") == CustStatus.INACTIVE.getValue()) {
+                            numb = getScentence().executeUpdate("UPDATE customer SET cust_type = " + custType + " WHERE email = '" + email + "';");
                             getScentence().executeQuery("COMMIT;");
                             return true;
                         }
@@ -153,7 +179,7 @@ public class CustomerManagement extends Management{
                     }
                 }else { //If not in database, create customer.
                     numb = getScentence().executeUpdate("INSERT INTO customer VALUES(DEFAULT, '" + name + "', '" + email + "', '" + phone +
-                            "', '" + adress + "', "+status+");");
+                            "', '" + adress + "', "+custType+", "+CustStatus.ACTIVE.getValue()+");");
                 }
 
                 getScentence().executeQuery("COMMIT;");
@@ -323,7 +349,7 @@ public class CustomerManagement extends Management{
         return rowChanged > 0;
     }
     public boolean deleteCustomer(String email){
-        return updateCustomerStatus(email, CustType.INACTIVE.getValue());
+        return updateCustomerStatus(email, CustStatus.INACTIVE.getValue());
     }
 
 

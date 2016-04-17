@@ -102,23 +102,25 @@ public class SubscriptionManagement extends Management{
             try {
                 PreparedStatement prep = getConnection().prepareStatement("SELECT subscription.sub_id, customer.name, " +
                                 "subscription.date_from, subscription.date_to, subscription.sub_type" +
-                        " FROM subscription, customer WHERE subscription.sub_id LIKE ? OR customer.name LIKE ? OR subscription.date_from LIKE ? OR subscription.date_to LIKE ? OR subscription.sub_type LIKE ? ORDER BY customer.name;");
+                        " FROM subscription, customer WHERE subscription.customer_id = customer.customer_id AND (" +
+                        "subscription.sub_id LIKE ? OR customer.name LIKE ? OR subscription.date_from LIKE ? OR subscription.date_to " +
+                        "LIKE ? OR subscription.sub_type LIKE ?) ORDER BY sub_id;");
                 searchTerm = "%" + searchTerm + "%";
                 prep.setString(1, searchTerm);
                 prep.setString(2, searchTerm);
                 prep.setString(3, searchTerm);
                 prep.setString(4, searchTerm);
                 prep.setString(5, searchTerm);
-
                 res = prep.executeQuery();
 
                 while (res.next()) {
-                    Object[] obj = new Object[6];
+                    Object[] obj = new Object[5];
                     obj[0] = res.getInt("sub_id");
-                    obj[1] = res.getString("customer_name");
+                    obj[1] = res.getString("name");
                     obj[2] = res.getString("date_to");
                     obj[3] = res.getString("date_from");
                     obj[4] = res.getInt("sub_type");
+
                     out.add(obj);
                 }
             } catch (Exception e) {
@@ -222,13 +224,11 @@ public class SubscriptionManagement extends Management{
     public boolean deleteSubscription(int subId){ //setter orderstatus på alle ordre med riktig sub_id etter dagens dato til inaktiv
         if(setUp()){
             try {
-                int res = getScentence().executeUpdate("UPDATE `order` SET status = "+ OrdStatus.INACTIVE.getValue()+
+                getScentence().executeUpdate("UPDATE `order` SET status = "+ OrdStatus.INACTIVE.getValue()+
                         " WHERE sub_id = "+subId+" AND `date` >= CURRENT_DATE;");
-                if(res > 0){
-                    getScentence().executeUpdate("UPDATE `order` SET status = "+ OrdStatus.INACTIVE.getValue()+
-                            " WHERE sub_id = "+subId+" AND `date` >= CURRENT_DATE;");
-                }
-                else return false;
+                getScentence().executeUpdate("UPDATE `subscription` SET status = "+ OrdStatus.INACTIVE.getValue()+
+                        " WHERE sub_id = "+subId+";");
+
             }
             catch (Exception e){
                 System.err.println("Issue with deleting subscription.");
@@ -241,7 +241,7 @@ public class SubscriptionManagement extends Management{
         }
         return true;
     }
-    public boolean changeRecipes(int subID, int prevRecipeID, int newRecipeID){
+    public boolean changeRecipes(int subID, int prevRecipeID, int newRecipeID){ //DENNE MÅ ENDRES TODO
         int rowChanged = 0;
         if(setUp()){
             try{
