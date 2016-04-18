@@ -29,9 +29,7 @@ public abstract class Management {
             scentence = connection.createStatement();
         } catch (Exception e) {
             System.err.println("Connecting to database failed.");
-            DbUtils.closeQuietly(scentence);
-            DbUtils.closeQuietly(connection);
-            //    e.printStackTrace();
+            closeConnection();
             return false;
         }
         if(connection == null || scentence == null) return false;
@@ -39,16 +37,14 @@ public abstract class Management {
     }
     protected void closeConnection(){
         try {
-            DbUtils.closeQuietly(scentence);
-            DbUtils.closeQuietly(connection);
+            if(!scentence.isClosed())DbUtils.closeQuietly(scentence);
+            if(!connection.isClosed())DbUtils.closeQuietly(connection);
         }
         catch (Exception e){
             System.err.println("Problem with closing connection");
         }
-
-
-
     }
+
     protected String adressFormatter(String city, String postal_code, String street){
         return street + ", " + postal_code + " " + city + ", Norway";
     }
