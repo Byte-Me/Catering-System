@@ -42,7 +42,7 @@ public class Login extends JFrame{
             int userType = dbconnect.login(inputUsr, inputPass);
 
 
-            if ( userType >= 0) {
+            if ( userType >= UserManagement.UserType.INACTIVE.getValue()) { // TODO: Consider switching database to enum
                 // Logged in :)
 
                 // Open the main window

@@ -116,19 +116,22 @@ public class MainWindow extends JFrame {
                 dispose();
         }
 
-        updateTab(tabbedPane1.getSelectedIndex()); // TODO: Check if this is needed, initiate fist tab
-        startAutoUpdate(tabbedPane1.getSelectedIndex()); // Start autoUpdate of tabs - TODO: Check interval on timer
+        updateTab(tabbedPane1.getSelectedIndex()); // TODO: Check if this is needed, initiates first tab
+        startAutoUpdate(tabbedPane1.getSelectedIndex()); // Start autoUpdate of tabs (every 5 minutes)
         tabbedPane1.addChangeListener(e -> updateTab(tabbedPane1.getSelectedIndex()));
 
         JPopupMenu popupMenu = new JPopupMenu();
         popupMenu.add(new AbstractAction("User Settings") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                showMessageDialog(getParent(), "User Settings"); // FIXME: Change with actual User Settings panel
+                new UserSettings(new Object[]{}); // TODO: Get current user
             }
         });
         if (userType == UserManagement.UserType.ADMIN) {
             popupMenu.add(new AbstractAction("Program Settings") {
+                // Possibility to change address
+                // Also possible to change database?
+                // Is this saved locally to file?
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     showMessageDialog(getParent(), "Program Settings"); // FIXME: Change with actual Program Settings panel

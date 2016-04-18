@@ -34,10 +34,10 @@ public class EditUser extends JDialog{
         setIconImage(icon);
 
         // Setting up the userType select box
-        userType.addItem("Admin");
-        userType.addItem("Sale");
-        userType.addItem("Driver");
-        userType.addItem("Chef");
+        userType.addItem(UserManagement.UserType.ADMIN.toString());
+        userType.addItem(UserManagement.UserType.SALE.toString());
+        userType.addItem(UserManagement.UserType.DRIVER.toString());
+        userType.addItem(UserManagement.UserType.CHEF.toString());
 
         Object[] userInfo = userManagement.getSingleUserInfo(username); //Henter info om spesifikk bruker
 
