@@ -155,20 +155,20 @@ public class Orders {
     public static void updateOrders() {
 
         // Get users from database
-        ArrayList<Object[]> users = orderManagement.getOrders();
+        ArrayList<Object[]> orders = orderManagement.getOrders();
 
-        updateOrders(users);
+        updateOrders(orders);
 
     }
 
-    public static void updateOrders(ArrayList<Object[]> users) {
+    public static void updateOrders(ArrayList<Object[]> orders) {
 
         // Empties entries of Users table
         orderModel.setRowCount(0);
 
         // Add users from arraylist to table
-        for (Object[] user : users) {
-            orderModel.addRow(user);
+        for (Object[] order : orders) {
+            orderModel.addRow(order);
         }
     }
 

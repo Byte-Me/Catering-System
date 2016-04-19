@@ -1,7 +1,6 @@
 package GUI;
 
 import Database.LoginManagement;
-import Database.UserManagement;
 
 import javax.swing.*;
 import java.awt.*;
@@ -40,17 +39,17 @@ public class Login extends JFrame{
 
             dbconnect = new LoginManagement();
             Object[] user = dbconnect.login(inputUsr, inputPass);
-            int userType = (int)user[5];
+            int userType = (int) user[5];
 
 
-            if ( userType >= 0) {
+            if (userType >= 0) {
                 // Logged in :)
 
                 // Open the main window
                 new MainWindow(user);
 
-                setVisible(false); //you can't see me!
-                dispose(); //Destroy the JFrame object
+                Login.this.setVisible(false); //you can't see me!
+                Login.this.dispose(); //Destroy the JFrame object
             } else {
                 showMessageDialog(null, "Kunne ikke logge inn.");
             }

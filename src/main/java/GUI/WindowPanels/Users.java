@@ -10,6 +10,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -22,28 +23,32 @@ import static javax.swing.JOptionPane.*;
 public class Users {
 
     static UserManagement userManagement = new UserManagement();
-    static DefaultTableModel userModel;
-    private static JTable localUserTable;
+    static MainTableModel userModel;
+    static MainTableModel inactiveUserModel;
     static DefaultListSelectionModel listSelectionModel;
 
     // Create Users Pane
-    public Users(JButton addUserButton, final JTable userTable, final JTextField searchUsers, JButton deleteUsersButton, JButton editUserButton) {
+    public Users(JButton addUserButton, final JTable userTable, JTable inactiveUserTable, final JTextField searchUsers, JButton deleteUsersButton, JButton editUserButton, JButton reactivateUserButton) {
 
         final int usernameColumnNr = 4;
         final int userTypeColumnNr = 5;
 
-        localUserTable = userTable;
-
         String[] header = {"First Name", "Last Name", "Email", "Phone", "Username", "User Type"}; // Header titles
 
-        //gjør celler un-editable.
         userModel = new MainTableModel();
+        inactiveUserModel = new MainTableModel();
 
-        userModel.setColumnIdentifiers(header); // Add header to columns
+        // Add header to columns
+        userModel.setColumnIdentifiers(header);
+        inactiveUserModel.setColumnIdentifiers(header);
 
         userTable.setModel(userModel); // Add model to table
         userTable.setAutoCreateRowSorter(true); // Auto sort table by row
-       // userTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        userTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
+        inactiveUserTable.setModel(inactiveUserModel);
+        inactiveUserTable.setAutoCreateRowSorter(true);
+        inactiveUserTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         listSelectionModel = new DefaultListSelectionModel();
 
@@ -87,7 +92,12 @@ public class Users {
         popupMenu.add(new AbstractAction("Delete User") {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                if (userTable.getSelectedRow() != -1) {
+                    String username = (String) userModel.getValueAt(userTable.getSelectedRow(), usernameColumnNr);
+                    userManagement.deleteUser(username);
+                }
+                updateUsers();
+                updateInactiveUsers();
             }
         });
 
@@ -123,21 +133,21 @@ public class Users {
         });
 
         deleteUsersButton.addActionListener(e ->{
-            if(userTable.getSelectedRows().length < 1){
-                showMessageDialog(null, "A user needs to be selected.");
+            if (userTable.getSelectedRow() != -1) {
+                String username = (String) userModel.getValueAt(userTable.getSelectedRow(), usernameColumnNr);
+                userManagement.deleteUser(username);
             }
-            else{
-                int[] users = userTable.getSelectedRows();
-                for(int i = 0; i<users.length;i++){
-                    String username = (String)userModel.getValueAt(users[i], 4);
-                    String message = "Are you sure you want to delete user: "+username+"?"; //username
-                    int answer = showOptionDialog(null, message, "Delete User",YES_NO_OPTION,QUESTION_MESSAGE,null, new Object[]{"Yes", "No"}, "No");
-                    if(answer == YES_OPTION){
-                        userManagement.deleteUser(username); //TODO: lag backend.
-                        updateUsers();
-                    }
-                }
+            updateUsers();
+            updateInactiveUsers();
+        });
+
+        reactivateUserButton.addActionListener(e -> {
+            if (inactiveUserTable.getSelectedRow() != -1) {
+                String username = (String) inactiveUserModel.getValueAt(inactiveUserTable.getSelectedRow(), usernameColumnNr);
+                userManagement.reactivateUser(username);
             }
+            updateUsers();
+            updateInactiveUsers();
         });
 
         // Serach field input changed?
@@ -191,5 +201,24 @@ public class Users {
         for (Object[] user : users) {
             userModel.addRow(user);
         }
+    }
+
+    public static void updateInactiveUsers() {
+
+        ArrayList<Object[]> inactiveUsers = userManagement.getDeletedUsers();
+
+        updateInactiveUsers(inactiveUsers);
+    }
+
+    public static void updateInactiveUsers(ArrayList<Object[]> inactiveUsers) {
+
+        // Empties entries of Users table
+        inactiveUserModel.setRowCount(0);
+
+        // Add users from arraylist to table
+        for (Object[] user : inactiveUsers) {
+            inactiveUserModel.addRow(user);
+        }
+
     }
 }

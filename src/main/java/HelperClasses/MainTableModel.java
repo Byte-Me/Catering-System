@@ -19,7 +19,7 @@ public class MainTableModel extends DefaultTableModel {
                 return o.getClass();
             }
         }
-        return String.class;
+        return Object.class;
     }
 
 }

@@ -65,6 +65,11 @@ public class MainWindow extends JFrame {
     private JPanel statisticsSearchPanel;
     private JTable inactiveCustomerTable;
     private JButton reactivateCustomerButton;
+    private JPanel orders;
+    private JPanel subscriptions;
+    private JTable in;
+    private JButton reactivateUserButton;
+    private JTable inactiveUserTable;
 
 
     public MainWindow(Object[] user) {
@@ -78,7 +83,7 @@ public class MainWindow extends JFrame {
         // Setup the different panels - keep referance for possible future need.
         // Will get disposed and garbage collected when MainWindow gets closed (When application is closed)
         Statistics statisticsPanel = new Statistics(statisticsSearchPanel, orderStatisticsPanel, statsPanel, barChartPanel);
-        Users usersPanel = new Users(addUserButton, userTable, searchUsers, deleteUsersButton, editUserButton);
+        Users usersPanel = new Users(addUserButton, userTable, inactiveUserTable, searchUsers, deleteUsersButton, editUserButton, reactivateUserButton);
         Customers customersPanel = new Customers(addCustomerButton, customerTable, inactiveCustomerTable, searchCustomers, deleteCustomersButton, editCustomerButton, reactivateCustomerButton);
         Subscriptions subscriptionsPanel = new Subscriptions(subscriptionTable, searchSubscriptions, newSubscriptionButton, showEditSubscriptionButton, deleteSubscriptionButton);
         Orders ordersPanel = new Orders(ordersTable, searchOrders, addOrderButton, editOrderButton, deleteOrderButton);
