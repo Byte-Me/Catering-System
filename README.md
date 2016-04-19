@@ -35,7 +35,7 @@ __Loginscreen is finished.__
 - [x] Clicking the edit button while having several users marked will open a message box saying this wont work.
 - [x] Fix IndexOutOfBounds når en column er merket, så unmerket, deretter edit user blir trykket.
 - [x] Right click user to choose wether to edit, delete or add new user(LOW PRIORITY).
-- [ ] Edit User -> Change Password: make new panel with two password-fields (new password and reenter password)
+- [x] Edit User -> Change Password: make new panel with two password-fields (new password and reenter password)
 - [ ] Show deleted (inactive) users, and add possibility to reactivate them (Same as customers)
 
 ### Customers:

@@ -34,7 +34,6 @@ public class LoginManagement extends Management{
      */
     public Object[] login(String user, String pass){
 
-
         //Testbruker:
 
         //username = bruker
