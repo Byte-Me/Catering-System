@@ -41,7 +41,7 @@ public class OrderManagement extends Management {
     private final String sqlCreateOrderSub3 = "INSERT INTO order_recipe VALUES( ?, ?, ?);";
 
     private final String sqlCreateOrder = "SELECT customer_id FROM customer WHERE email = ?;";
-    private final String sqlGetOrderInfoFromId = "SELECT recipe.name, order_recipe.portions, recipe_id FROM recipe, order_recipe WHERE order_recipe.order_id = ? AND order_recipe.recipe_id = recipe.recipe_id;";
+    private final String sqlGetOrderInfoFromId = "SELECT recipe.name, order_recipe.portions, order_recipe.recipe_id FROM recipe, order_recipe WHERE order_recipe.order_id = ? AND order_recipe.recipe_id = recipe.recipe_id;";
     private final String sqlUpdateOrderDate = "UPDATE order SET date = ? WHERE order_id = ?";
     private final String sqlUpdateOrderTime = "UPDATE order SET time = ? WHERE order_id = ?";
 
@@ -263,9 +263,11 @@ public class OrderManagement extends Management {
                     return false;
                 }
 
-                for(Object[] name : recipes) { //[0] = quantity, [1] = name
+                for(Object[] name : recipes) { //[1] = quantity, [0] = name
                     prep = conn.prepareStatement(sqlCreateOrderSub2);
-                    prep.setObject(1, name[1]);
+                    prep.setObject(1, name[0]);
+                    System.out.println(prep.toString());
+
                     res = prep.executeQuery();
 
                     if (res.next()) {
@@ -283,7 +285,9 @@ public class OrderManagement extends Management {
                     prep = conn.prepareStatement(sqlCreateOrderSub3);
                     prep.setInt(1, orderID);
                     prep.setInt(2, recipeIDs.get(i));
-                    prep.setObject(3, recipes.get(i)[0]);
+                    prep.setInt(3, (Integer)recipes.get(i)[1]);
+                    System.out.println(prep.toString());
+
                     rowChanged = prep.executeUpdate();
 
                     if (!(rowChanged > 0)) {
@@ -384,6 +388,7 @@ public class OrderManagement extends Management {
                     out[2] = res.getString("time");
                     out[3] = res.getString("note");
                     out[4] = OrderType.valueOf(res.getInt("status"));
+
                 }
                 prep.close();
 

@@ -58,8 +58,18 @@ public class Chef {
         String[] ingredientHeader = {"Ingredient", "Quantity", "Unit"}; // Header titles
 
         ingredientModel = new MainTableModel();
-        prepareModel = new MainTableModel();
-
+        prepareModel = new DefaultTableModel(){
+            @Override
+            public Class<?> getColumnClass(int columnIndex) {
+                if (columnIndex == 6)
+                    return Boolean.class;
+                return super.getColumnClass(columnIndex);
+                }
+            @Override
+             public boolean isCellEditable(int row, int col) {
+                return (col == 6);
+             }
+        }; // Model of the table
         prepareModel.setColumnIdentifiers(prepareHeader); // Add header to columns
         ingredientModel.setColumnIdentifiers(ingredientHeader); // Add header to columns
 

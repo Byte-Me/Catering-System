@@ -4,6 +4,7 @@ import Database.SubscriptionManagement;
 import GUI.AddOrder;
 import GUI.AddSubscription;
 import GUI.EditOrder;
+import GUI.EditSubscription;
 import HelperClasses.MainTableModel;
 
 import javax.swing.*;
@@ -53,7 +54,7 @@ public class Subscriptions {
         editSubscriptionButton.addActionListener(e -> {
             if(subscriptionsTable.getSelectedColumn() >= 0) { //TODO: sjekker ikke om flere columns er selected, velger øverste.
                 int id = (Integer)subscriptionsTable.getValueAt(subscriptionsTable.getSelectedRow(), idColumnNr); //hent username for selected row
-                new EditOrder(id);
+                new EditSubscription(id);
             }
             else{
                 showMessageDialog(null, "An subscription needs to be selected.");

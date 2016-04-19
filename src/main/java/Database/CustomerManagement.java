@@ -281,10 +281,10 @@ public class CustomerManagement extends Management{
         return rowChanged > 0;
     }
     public Object[] getSingleCustomerInfo(String email){
-        Object[] out =  new Object[5];
+        Object[] out =  new Object[6];
         if (setUp()) {
             try {
-                ResultSet res = getScentence().executeQuery("SELECT name, email, phone, adress, status FROM customer WHERE email = '"
+                ResultSet res = getScentence().executeQuery("SELECT name, email, phone, adress, status, customer_id FROM customer WHERE email = '"
                         +email+"';");
                 if(res.next()){
                     out[0] = res.getString("name");
@@ -292,6 +292,7 @@ public class CustomerManagement extends Management{
                     out[2] = res.getString("phone");
                     out[3] = res.getString("adress");
                     out[4] = res.getInt("status");
+                    out[5] = res.getInt("customer_id");
                 }
             } catch (SQLException e) {
                 System.err.println("Issue with getting customer info.");

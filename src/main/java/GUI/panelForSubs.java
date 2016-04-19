@@ -35,6 +35,9 @@ public class PanelForSubs extends JPanel {
     private JTextArea commentArea;
     private JTextField searchField;
     private JList recipeList;
+    private JPanel mainPanel;
+    final DefaultTableModel recipeTableModel;
+    private int day;
 
     private FoodManagement foodManagement = new FoodManagement();
 
@@ -43,14 +46,16 @@ public class PanelForSubs extends JPanel {
     private final String defaultTimeValue = "12:00";
     private final String seconds = ":00";
 
-    public PanelForSubs() {
+    public PanelForSubs(int day){
 
 
         /* Create Order Table */
+        this.day = day;
+
         String[] headers = {"Recipe", "Portions"};
 
 
-        final DefaultTableModel addOrderModel = new DefaultTableModel() {
+        recipeTableModel = new DefaultTableModel() {
             @Override
             public boolean isCellEditable(int row, int column) {
                 //all cells false
@@ -59,9 +64,9 @@ public class PanelForSubs extends JPanel {
         };
 
 
-        addOrderModel.setColumnIdentifiers(headers);
+        recipeTableModel.setColumnIdentifiers(headers);
 
-        recipeTable.setModel(addOrderModel);
+        recipeTable.setModel(recipeTableModel);
 
 
         try {
@@ -129,12 +134,12 @@ public class PanelForSubs extends JPanel {
 
 
             if (existsInTable(recipeTable, selectedRecipe) == -1) {
-                addOrderModel.addRow(new Object[]{selectedRecipe,portions});
+                recipeTableModel.addRow(new Object[]{selectedRecipe,portions});
             } else {
                 int row = existsInTable(recipeTable, selectedRecipe);
-                int currentPortions = (Integer)addOrderModel.getValueAt(row, 1);
+                int currentPortions = (Integer)recipeTableModel.getValueAt(row, 1);
                 if (currentPortions + portions >= 1) {
-                    addOrderModel.setValueAt(currentPortions + portions, row, 1);
+                    recipeTableModel.setValueAt(currentPortions + portions, row, 1);
                 }
             }
         });
@@ -145,12 +150,12 @@ public class PanelForSubs extends JPanel {
                     String selectedRecipe = (String)recipeList.getSelectedValue();
                     int portions = Integer.parseInt(showInputDialog("How many portions of " + selectedRecipe.toLowerCase() + " do you want to add?")); // FIXME: Add failsafe for parsing integer
                     if (existsInTable(recipeTable, selectedRecipe) == -1) {
-                        addOrderModel.addRow(new Object[]{selectedRecipe,portions});
+                        recipeTableModel.addRow(new Object[]{selectedRecipe,portions});
                     } else {
                         int row = existsInTable(recipeTable, selectedRecipe);
-                        int currentPortions = (Integer)addOrderModel.getValueAt(row, 0);
+                        int currentPortions = (Integer)recipeTableModel.getValueAt(row, 0);
                         if (currentPortions + portions >= 1) {
-                            addOrderModel.setValueAt(currentPortions + portions, row, 0);
+                            recipeTableModel.setValueAt(currentPortions + portions, row, 0);
                         }
                     }
                 }
@@ -164,7 +169,7 @@ public class PanelForSubs extends JPanel {
                     String in = showInputDialog("How many portions of " + recipe.toLowerCase() + " do you want?");
                     if(!in.equals("")) {
                         int portions = Integer.parseInt(in); // FIXME: Add failsafe for parsing integer
-                        addOrderModel.setValueAt(portions, recipeTable.getSelectedRow(), quantityColumnNr);
+                        recipeTableModel.setValueAt(portions, recipeTable.getSelectedRow(), quantityColumnNr);
                     }
                     else{
                         showMessageDialog(null, "You need to input a number.");
@@ -180,7 +185,7 @@ public class PanelForSubs extends JPanel {
                 if(e.getKeyCode() == KeyEvent.VK_DELETE){
                     int[] selected = recipeTable.getSelectedRows();
                     for(int i =0; i<selected.length;i++){
-                        addOrderModel.removeRow(selected[i]);
+                        recipeTableModel.removeRow(selected[i]);
                     }
                 }
             }
@@ -190,7 +195,7 @@ public class PanelForSubs extends JPanel {
 
 
 
-        rightButton.addActionListener(e -> addOrderModel.removeRow(recipeTable.getSelectedRow()));
+        rightButton.addActionListener(e -> recipeTableModel.removeRow(recipeTable.getSelectedRow()));
         setVisible(true);
     }
     private int existsInTable(JTable table, String entry) {
@@ -201,5 +206,31 @@ public class PanelForSubs extends JPanel {
         }
         return -1;
     }
+    public JPanel getMainPanel(){
+        return mainPanel;
+    }
+    public Object[][] getValues(){
+        String selectedTime = timeTextField.getText();
+        String comment = commentArea.getText();
 
+        Object[][] selectedRecipes = new Object[5][recipeTableModel.getRowCount()];
+        for (int i = 0; i < recipeTableModel.getRowCount(); i++) {
+            selectedRecipes[0][i] = recipeTableModel.getValueAt(i, 0);
+            selectedRecipes[1][i] = recipeTableModel.getValueAt(i, 1);
+        }
+        selectedRecipes[2][0] = day;
+        selectedRecipes[3][0] = comment;
+        selectedRecipes[4][0] = selectedTime;
+
+        return selectedRecipes;
+
+    }
+
+    public void addValues(Object[] values){
+        for(Object[] obj : (ArrayList<Object[]>)values[0]){
+            recipeTableModel.addRow(obj);
+        }
+        commentArea.setText((String)values[1]);
+        timeTextField.setValue(values[2]);
+    }
 }

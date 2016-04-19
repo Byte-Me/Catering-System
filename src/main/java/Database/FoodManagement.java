@@ -201,9 +201,8 @@ public class FoodManagement extends Management{
 
     private ArrayList<Integer> getGroceryID (ArrayList<String> ingNames) throws Exception {
         ArrayList<Integer> out = new ArrayList<Integer>();
-        ResultSet res = null;
         for (String name : ingNames) {
-            res = getScentence().executeQuery("SELECT grocery_id FROM grocery WHERE name = '" + name + "';");
+            ResultSet res = getScentence().executeQuery("SELECT grocery_id FROM grocery WHERE name = '" + name + "';");
             if(res.next())out.add(res.getInt("grocery_id"));
 
         }
@@ -354,7 +353,7 @@ public class FoodManagement extends Management{
         if(setUp()){
             ResultSet res;
             try{
-                res = getScentence().executeQuery("SELECT recipe_grocery.amount, grocery.name, grocery.unit, grocery_id FROM grocery, recipe_grocery WHERE recipe_id = " + id + " AND recipe_grocery.grocery_id = grocery.grocery_id;");
+                res = getScentence().executeQuery("SELECT recipe_grocery.amount, grocery.name, grocery.unit, recipe_grocery.grocery_id FROM grocery, recipe_grocery WHERE recipe_id = " + id + " AND recipe_grocery.grocery_id = grocery.grocery_id;");
                 while(res.next()){
                     Object[] obj = new Object[4];
                     obj[0] = res.getString("name");

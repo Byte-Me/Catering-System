@@ -1,9 +1,11 @@
 package Food;
 
+import Database.FinanceManagement;
 import Database.FoodManagement;
 import Database.OrderManagement;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Created by Evdal on 15.03.2016.
@@ -13,11 +15,12 @@ public class Storage {
     // kan sende inn hele shoppinglisten!!!
     private static OrderManagement orderManagement = new OrderManagement();
     private static FoodManagement foodManagement = new FoodManagement();
+    private static FinanceManagement financeManagement = new FinanceManagement();
 
 
     public static boolean removeFromStorage(int orderID){
         ArrayList<Object[]> recipeInfo = orderManagement.getRecipesFromOrder(orderID); //0 = name, 1 = portion, 2 = id
-        //get recipes
+        //get
         for(Object[] recipe : recipeInfo){
             //get ingredients in recipe
             ArrayList<Object[]> ingredients = foodManagement.getRecipeIngredients((Integer) recipe[2]); //1 = amount, 3 = id

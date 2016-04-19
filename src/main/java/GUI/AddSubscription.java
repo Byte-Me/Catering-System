@@ -3,17 +3,27 @@ package GUI;
 import Database.CustomerManagement;
 import Database.FoodManagement;
 import Database.OrderManagement;
+import Database.SubscriptionManagement;
 import GUI.WindowPanels.Driver;
+import HelperClasses.DateLabelFormatter;
+import Subscription.Subscriptions;
+import javafx.scene.layout.Pane;
+import org.jdatepicker.impl.JDatePanelImpl;
+import org.jdatepicker.impl.JDatePickerImpl;
+import org.jdatepicker.impl.UtilDateModel;
 
 import javax.swing.*;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.MaskFormatter;
+import javax.swing.text.html.ObjectView;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
+import java.util.*;
 
 import static GUI.WindowPanels.Orders.updateOrders;
 import static javax.swing.JOptionPane.showInputDialog;
@@ -34,15 +44,24 @@ public class AddSubscription extends JDialog{
     private JCheckBox satCheckBox;
     private JCheckBox friCheckBox;
     private JComboBox customerDropdown;
-    private JButton createSubscriptionButton;
     private JTabbedPane dayTabbedPane;
-    private JFormattedTextField startDateField;
-    private JFormattedTextField endDateField;
+    private JPanel buttonPanel;
+    private JButton newSubscriptionButton;
+    private JPanel topPanel;
+    private JSpinner frequencySpinner;
+    private JDatePickerImpl startDatePick;
+    private JDatePickerImpl endDatePick;
+    private JTextArea commentArea;
     private PanelForSubs testP;
-    private PanelForSubs test;
-    private JPanel monPanel;
-    private JPanel tuePanel;
-    private JPanel wedPanel;
+    private PanelForSubs monPanel;
+    private PanelForSubs tuePanel;
+    private PanelForSubs wedPanel;
+    private PanelForSubs thuPanel;
+    private PanelForSubs friPanel;
+    private PanelForSubs satPanel;
+    private PanelForSubs sunPanel;
+
+
 
     private final String defaultTimeValue = "12:00";
     private final String seconds = ":00";
@@ -64,6 +83,13 @@ public class AddSubscription extends JDialog{
 
         Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/Images/icon32.png"));
         setIconImage(icon);
+        setPreferredSize(new Dimension(900,600));
+
+        //fixing only valid numbers in spinner
+        SpinnerModel model = new SpinnerNumberModel(1, 1, 100, 1);
+        frequencySpinner.setModel(model);
+        updateDropdown();
+
 
         /* Cancel button */
         cancelButton.addActionListener(e -> {
@@ -96,19 +122,6 @@ public class AddSubscription extends JDialog{
             dateMaskFormatter.setPlaceholder(dateFormat.format(tomorrowDate)); // Placeholder
             timeMaskFormatter.setPlaceholder(defaultTimeValue); // Placeholder
 
-            startDateField.setFormatterFactory(new JFormattedTextField.AbstractFormatterFactory() { // Add format to field
-                @Override
-                public JFormattedTextField.AbstractFormatter getFormatter(JFormattedTextField tf) {
-                    return dateMaskFormatter;
-                }
-            });
-
-            endDateField.setFormatterFactory(new JFormattedTextField.AbstractFormatterFactory() { // Add format to field
-                @Override
-                public JFormattedTextField.AbstractFormatter getFormatter(JFormattedTextField tf) {
-                    return dateMaskFormatter;
-                }
-            });
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -126,18 +139,10 @@ public class AddSubscription extends JDialog{
 
 
         monCheckBox.addActionListener(e ->{
-            JPanel day = new PanelForSubs();
-          //  day.setOpaque(false);
+            monPanel = new PanelForSubs(1);
             int index = 0;
-            JPanel panel = new JPanel();
-            panel.add(new JLabel("Dette funket"));
             if(monCheckBox.isSelected()) {
-      //          dayTabbedPane.insertTab("Monday",null,panel,null,index);
-                dayTabbedPane.insertTab("Monday",null,monPanel,null,index);
-             /*   dayTabbedPane.setTabComponentAt(index, day);
-                dayTabbedPane.setTitleAt(index, "Monday");
-                dayTabbedPane.setSelectedIndex(index);*/
-
+                dayTabbedPane.insertTab("Monday",null,monPanel.getMainPanel(),null,index);
 
             }
             else{
@@ -145,7 +150,7 @@ public class AddSubscription extends JDialog{
             }
         });
         tueCheckBox.addActionListener(e ->{
-            JPanel day = new PanelForSubs();
+            tuePanel = new PanelForSubs(2);
             if(tueCheckBox.isSelected()) {
                 int index =0;
                 for(int i = 0; i<dayTabbedPane.getTabCount();i++){
@@ -155,7 +160,7 @@ public class AddSubscription extends JDialog{
 
                 }
                 if(index > dayTabbedPane.getTabCount()) index = dayTabbedPane.getTabCount();
-                dayTabbedPane.insertTab("Tuesday",null,monPanel,null,index);
+                dayTabbedPane.insertTab("Tuesday",null,tuePanel.getMainPanel(),null,index);
 
 
                 dayTabbedPane.setSelectedIndex(index);
@@ -170,7 +175,7 @@ public class AddSubscription extends JDialog{
             }
         });
         wedCheckBox.addActionListener(e ->{
-            Component day = new PanelForSubs();
+            wedPanel = new PanelForSubs(3);
             if(wedCheckBox.isSelected()) {
                 int index =0;
                 for(int i = 0; i<dayTabbedPane.getTabCount();i++){
@@ -183,9 +188,8 @@ public class AddSubscription extends JDialog{
 
                 }
                 if(index > dayTabbedPane.getTabCount()) index = dayTabbedPane.getTabCount();
-                dayTabbedPane.add(day,index);
-                dayTabbedPane.setTitleAt(index, "Wednesday");
-                dayTabbedPane.setSelectedIndex(index);
+                dayTabbedPane.insertTab("Wednesday",null,wedPanel.getMainPanel(),null,index);
+
 
             }
             else{
@@ -197,7 +201,7 @@ public class AddSubscription extends JDialog{
             }
         });
         thuCheckBox.addActionListener(e ->{
-            Component day = new PanelForSubs();
+            thuPanel = new PanelForSubs(4);
             if(thuCheckBox.isSelected()){
                 int index =0;
                 for(int i = 0; i<dayTabbedPane.getTabCount();i++){
@@ -213,9 +217,8 @@ public class AddSubscription extends JDialog{
 
                 }
                 if(index > dayTabbedPane.getTabCount()) index = dayTabbedPane.getTabCount();
-                dayTabbedPane.add(day,index);
-                dayTabbedPane.setTitleAt(index, "Thursday");
-                dayTabbedPane.setSelectedIndex(index);
+                dayTabbedPane.insertTab("Thursday",null,thuPanel.getMainPanel(),null,index);
+
 
             }
         else{
@@ -227,7 +230,7 @@ public class AddSubscription extends JDialog{
         }
         });
         friCheckBox.addActionListener(e ->{
-            Component day = new PanelForSubs();
+            friPanel = new PanelForSubs(5);
             if(friCheckBox.isSelected()){
                 int index =0;
                 for(int i = 0; i<dayTabbedPane.getTabCount();i++){
@@ -246,9 +249,8 @@ public class AddSubscription extends JDialog{
 
                 }
                 if(index > dayTabbedPane.getTabCount()) index = dayTabbedPane.getTabCount();
-                dayTabbedPane.add(day,index);
-                dayTabbedPane.setTitleAt(index, "Friday");
-                dayTabbedPane.setSelectedIndex(index);
+                dayTabbedPane.insertTab("Friday",null,friPanel.getMainPanel(),null,index);
+
 
             }
             else{
@@ -261,7 +263,7 @@ public class AddSubscription extends JDialog{
             dayTabbedPane.revalidate();
         });
         satCheckBox.addActionListener(e ->{
-            Component day = new PanelForSubs();
+            satPanel = new PanelForSubs(6);
             if(satCheckBox.isSelected()){
                 int index =0;
                 for(int i = 0; i<dayTabbedPane.getTabCount();i++){
@@ -283,9 +285,8 @@ public class AddSubscription extends JDialog{
 
                 }
                 if(index > dayTabbedPane.getTabCount()) index = dayTabbedPane.getTabCount();
-                dayTabbedPane.add(day,index);
-                dayTabbedPane.setTitleAt(index, "Saturday");
-                dayTabbedPane.setSelectedIndex(index);
+                dayTabbedPane.insertTab("Saturday",null,satPanel.getMainPanel(),null,index);
+
             }
             else{
                 for(int i = 0; i<dayTabbedPane.getTabCount();i++) {
@@ -295,8 +296,9 @@ public class AddSubscription extends JDialog{
                 }
             }
         });
+
         sunCheckBox.addActionListener(e ->{
-            Component day = new PanelForSubs();
+            sunPanel = new PanelForSubs(7);
             if(sunCheckBox.isSelected()){
                 int index =0;
                 for(int i = 0; i<dayTabbedPane.getTabCount();i++){
@@ -321,9 +323,8 @@ public class AddSubscription extends JDialog{
 
                 }
                 if(index > dayTabbedPane.getTabCount()) index = dayTabbedPane.getTabCount();
-                dayTabbedPane.add(day,index);
-                dayTabbedPane.setTitleAt(index, "Sunday");
-                dayTabbedPane.setSelectedIndex(index);
+                dayTabbedPane.insertTab("Sunday",null,sunPanel.getMainPanel(),null,index);
+
 
             }
             else{
@@ -335,35 +336,69 @@ public class AddSubscription extends JDialog{
             }
         });
 
+
         /* Left and Right buttons for adding and removing recipes from orders */
-/*
-        createSubscriptionButton.addActionListener(e -> {
+
+
+
+        newSubscriptionButton.addActionListener(e -> {
+
+
+            ArrayList<PanelForSubs> panelList = new ArrayList<PanelForSubs>();
+            ArrayList<JCheckBox> checkList = new ArrayList<JCheckBox>();
+
             Object[] selectedCustomer = customers.get(customerDropdown.getSelectedIndex());
-            String selectedDate = startDateField.getText();
-            String selectedTime = endDateField.getText();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+            String fromDate = dateFormat.format((Date)startDatePick.getModel().getValue());
+            String toDate = dateFormat.format((Date)endDatePick.getModel().getValue());
+            int frequency = (Integer)frequencySpinner.getValue();
 
-            ArrayList<Object[]> selectedRecipes = new ArrayList<>();
-            for (int i = 0; i < addOrderModel.getRowCount(); i++) {
-                selectedRecipes.add(new Object[]{addOrderModel.getValueAt(i, 1), addOrderModel.getValueAt(i, 0)});
+            //creating lists for different checkboxes and panels
+
+            checkList.add(monCheckBox);
+            checkList.add(tueCheckBox);
+            checkList.add(wedCheckBox);
+            checkList.add(thuCheckBox);
+            checkList.add(friCheckBox);
+            checkList.add(satCheckBox);
+            checkList.add(sunCheckBox);
+
+            panelList.add(monPanel);
+            panelList.add(tuePanel);
+            panelList.add(wedPanel);
+            panelList.add(thuPanel);
+            panelList.add(friPanel);
+            panelList.add(satPanel);
+            panelList.add(sunPanel);
+
+            ArrayList<Object[][]> panelValues = new ArrayList<>();
+            for(int i = 0; i<panelList.size();i++){
+                if(checkList.get(i).isSelected()){
+                    Object[][] info = panelList.get(i).getValues();
+                    panelValues.add(info);
+                }
+            }//FIXME: legger bare inn første dag!!!
+
+            for(Object[][] obj : panelValues){
+                for(int i = 0; i<obj.length;i++){
+                    System.out.println(Arrays.toString(obj[i]));
+                }
             }
-
-            OrderManagement orderManagement = new OrderManagement();
-
-            boolean isAdded = orderManagement.createOrder((String)selectedCustomer[1], selectedDate, selectedRecipes, comment, selectedTime+seconds);
+            System.out.println(Arrays.toString(selectedCustomer));
+            boolean isAdded = Subscriptions.createSubscription((String)selectedCustomer[1],fromDate,toDate,frequency,panelValues);
             if(!isAdded) {
-                showMessageDialog(null, "Kunne ikke legge til order.");
+                showMessageDialog(null, "Could not create subscription.");
             }
-
-            updateOrders();
 
             setVisible(false);
             dispose();
         });
-*/
+
         pack();
         setLocationRelativeTo(getParent());
         setModal(true);
         setVisible(true);
+
     }
 
     private int existsInTable(JTable table, String entry) {
@@ -386,7 +421,27 @@ public class AddSubscription extends JDialog{
 
     private void createUIComponents() {
         // TODO: place custom component creation code here
-        testP = new PanelForSubs();
 
+        // Date Pickers start
+        UtilDateModel fModel = new UtilDateModel();
+        Calendar cal = new GregorianCalendar();
+        cal.add(Calendar.DAY_OF_MONTH, 1);
+        fModel.setDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE));
+        fModel.setSelected(true);
+        UtilDateModel tModel = new UtilDateModel();
+        cal.add(Calendar.MONTH, 1);
+        tModel.setDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE));
+        tModel.setSelected(true);
+        Properties p = new Properties();
+        p.put("text.today", "Today");
+        p.put("text.month", "Month");
+        p.put("text.year", "Year");
+
+        JDatePanelImpl fromPanel = new JDatePanelImpl(fModel, p);
+        JDatePanelImpl toPanel = new JDatePanelImpl(tModel, p);
+
+        startDatePick = new JDatePickerImpl(fromPanel, new DateLabelFormatter());
+        endDatePick = new JDatePickerImpl(toPanel, new DateLabelFormatter());
     }
+
 }
