@@ -40,12 +40,10 @@ public class AddOrder extends JDialog{
     private JButton cancelButton;
     private JButton addOrderButton;
     private JTextArea commentTextArea;
-    private JFormattedTextField timeField;
     private JTextField searchRecipes;
     private JDatePickerImpl datePicker;
+    private JSpinner timeSpinner;
 
-    private final String defaultTimeValue = "12:00";
-    private final String seconds = ":00";
     private final String newCustomer = "+ New customer";
     private final int recipeColumnNr = 0;
     private final int quantityColumnNr = 1;
@@ -90,21 +88,11 @@ public class AddOrder extends JDialog{
         /* Create Customer Dropdown */
         updateDropdown();
 
-        try {
-            /* FormattedTextField for date, default value set to tomorrow */
-            final MaskFormatter timeMaskFormatter = new MaskFormatter("##:##"); // Defining format pattern
-
-            timeMaskFormatter.setPlaceholder(defaultTimeValue); // Placeholder
-
-            timeField.setFormatterFactory(new JFormattedTextField.AbstractFormatterFactory() { // Add format to field
-                @Override
-                public JFormattedTextField.AbstractFormatter getFormatter(JFormattedTextField tf) {
-                    return timeMaskFormatter;
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        // TimeSpinner
+        SpinnerDateModel timeModel = new SpinnerDateModel();
+        timeModel.setCalendarField(Calendar.MINUTE);
+        timeSpinner.setModel(timeModel);
+        timeSpinner.setEditor(new JSpinner.DateEditor(timeSpinner, "HH:mm"));
 
         /* Create Recipe List */
         final DefaultListModel<String> recipeModel = new DefaultListModel<>();
@@ -230,9 +218,11 @@ public class AddOrder extends JDialog{
         addOrderButton.addActionListener(e -> {
             Object[] selectedCustomer = customers.get(customerDropdown.getSelectedIndex());
             Date selectedDate = (Date)datePicker.getModel().getValue();
-            DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-            String selectedDateString = format.format(selectedDate);
-            String selectedTime = timeField.getText();
+            DateFormat dFormat = new SimpleDateFormat("yyyy-MM-dd");
+            String selectedDateString = dFormat.format(selectedDate);
+            Date selectedTime = (Date)timeSpinner.getValue();
+            DateFormat tFormat = new SimpleDateFormat("HH:mm:ss");
+            String selectedTimeString = tFormat.format(selectedTime);
             String comment = commentTextArea.getText();
 
             ArrayList<Object[]> selectedRecipes = new ArrayList<>();
@@ -242,7 +232,7 @@ public class AddOrder extends JDialog{
 
             OrderManagement orderManagement = new OrderManagement();
 
-            boolean isAdded = orderManagement.createOrder((String)selectedCustomer[1], selectedDateString, selectedRecipes, comment, selectedTime+seconds);
+            boolean isAdded = orderManagement.createOrder((String)selectedCustomer[1], selectedDateString, selectedRecipes, comment, selectedTimeString);
             if(!isAdded) {
                 showMessageDialog(null, "Kunne ikke legge til order.");
             }

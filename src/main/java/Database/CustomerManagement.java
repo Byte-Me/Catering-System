@@ -45,13 +45,14 @@ public class CustomerManagement extends Management{
             ArrayList<Object[]> out = new ArrayList<>();
             ResultSet res;
             try{
-                res = getScentence().executeQuery("SELECT * FROM customer WHERE status > "+CustType.INACTIVE.getValue()+";"); //Status 1 for aktiv og 0 for inaktiv
+                res = getScentence().executeQuery("SELECT * FROM customer WHERE status = 1;"); //Status 1 for aktiv og 0 for inaktiv
                 while(res.next()) {
-                    Object[] obj = new Object[4];
+                    Object[] obj = new Object[5];
                     obj[0] = res.getString("name");
                     obj[1] = res.getString("email");
                     obj[2] = res.getString("phone");
                     obj[3] = res.getString("adress");
+                    obj[4] = res.getInt("cust_type");
                     out.add(obj);
                 }
 
@@ -74,13 +75,14 @@ public class CustomerManagement extends Management{
             ArrayList<Object[]> out = new ArrayList<>();
             ResultSet res;
             try{
-                res = getScentence().executeQuery("SELECT * FROM customer WHERE status = "+CustType.INACTIVE.getValue()+";"); //Status 1 for aktiv og 0 for inaktiv
+                res = getScentence().executeQuery("SELECT * FROM customer WHERE status = 0;"); //Status 1 for aktiv og 0 for inaktiv
                 while(res.next()) {
-                    Object[] obj = new Object[4];
+                    Object[] obj = new Object[5];
                     obj[0] = res.getString("name");
                     obj[1] = res.getString("email");
                     obj[2] = res.getString("phone");
                     obj[3] = res.getString("adress");
+                    obj[4] = res.getInt("status");
                     out.add(obj);
                 }
 

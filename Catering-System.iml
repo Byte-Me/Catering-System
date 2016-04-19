@@ -31,6 +31,8 @@
     <orderEntry type="library" name="Maven: com.teamdev.jxbrowser:jxbrowser-linux32:6.2" level="project" />
     <orderEntry type="library" name="Maven: com.teamdev.jxbrowser:jxbrowser-linux64:6.2" level="project" />
     <orderEntry type="library" name="Maven: com.teamdev.jxbrowser:jxbrowser-mac:6.2" level="project" />
-    <orderEntry type="library" name="licence (3)" level="project" />
+    <orderEntry type="library" name="Maven: org.slf4j:slf4j-log4j12:1.7.21" level="project" />
+    <orderEntry type="library" name="Maven: log4j:log4j:1.2.17" level="project" />
+    <orderEntry type="library" name="licence (4)" level="project" />
   </component>
 </module>

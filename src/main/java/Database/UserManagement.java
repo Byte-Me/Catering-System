@@ -95,7 +95,7 @@ public class UserManagement extends Management {
             try {
 
                 res = getScentence().executeQuery("select first_name, last_name, email, phone, username, access_level from user" +
-                        " WHERE access_level = "+UserType.INACTIVE.getValue()+" order by last_name;");
+                        " WHERE status = 0 order by last_name;");
                 while (res.next()) {
                     Object[] obj = new Object[6];
                     obj[0] = res.getString("first_name");
@@ -127,7 +127,7 @@ public class UserManagement extends Management {
             try {
 
                 res = getScentence().executeQuery("select first_name, last_name, email, phone, username, access_level from user" +
-                        " WHERE access_level < "+UserType.INACTIVE.getValue()+" order by last_name;");
+                        " WHERE status = 1 order by last_name;");
                 while (res.next()) {
                     Object[] obj = new Object[6];
                     obj[0] = res.getString("first_name");
@@ -457,7 +457,7 @@ public class UserManagement extends Management {
         if(setUp()) {
             try {
                 PreparedStatement prep = getConnection().prepareStatement("SELECT username, first_name, last_name, phone, email, access_level" +
-                        " FROM user WHERE username LIKE ? OR first_name LIKE ? OR last_name LIKE ? OR phone LIKE ? OR email LIKE ? OR access_level LIKE ? ORDER BY last_name;");
+                        " FROM user WHERE username LIKE ? OR first_name LIKE ? OR last_name LIKE ? OR phone LIKE ? OR email LIKE ? OR access_level LIKE ? AND status = 1 ORDER BY last_name;");
                 searchTerm = "%" + searchTerm + "%";
                 prep.setString(1, searchTerm);
                 prep.setString(2, searchTerm);
@@ -492,9 +492,55 @@ public class UserManagement extends Management {
         }
         else return null;
     }
-    public boolean deleteUser(String username){
-        return updateUserInfoAccessLevel(username, UserType.INACTIVE.getValue());
+
+    public boolean updateUserStatus(String username, int status) {
+        int rowChanged = 0;
+        if (setUp()) {
+            try {
+                getConnection().setAutoCommit(false);
+
+                PreparedStatement prep = getConnection().prepareStatement("UPDATE user SET status = ? WHERE username = ?;");
+                prep.setInt(1, status);
+                prep.setString(2, username);
+                rowChanged = prep.executeUpdate();
+
+                getConnection().commit();
+                prep.close();
+            } catch (SQLException e) {
+                System.err.println("Issue with executing database update.");
+
+                try {
+                    getConnection().rollback();
+                    getConnection().setAutoCommit(true);
+                }catch (SQLException sqle){
+                    System.err.println("Could not rollback");
+                }
+
+                return false;
+            } finally {
+
+                try {
+                    getConnection().setAutoCommit(true);
+                }
+                catch (SQLException sqle){
+                    sqle.printStackTrace();
+                }
+
+                DbUtils.closeQuietly(getScentence());
+                DbUtils.closeQuietly(getConnection());
+            }
+        }
+        return rowChanged > 0;
     }
+
+    public boolean deleteUser(String username){
+        return updateUserStatus(username, 0);
+    }
+
+    public boolean reactivateUser(String username){
+        return updateUserStatus(username, 1);
+    }
+
     /*
 
     public boolean deleteUser(){

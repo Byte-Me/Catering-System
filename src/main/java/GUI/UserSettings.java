@@ -43,28 +43,28 @@ public class UserSettings extends JDialog {
             // Update user information for current user
 
             // Check if it is necessary to update info (ie. if field info is different from info in user array
-            if (!user[1].toString().equals(firstName.getText())) {
+            if (!user[1].toString().equals(firstName.getText()) && !firstName.getText().isEmpty()) {
                 // Update first_name
                 updated = um.updateUserInfoFName(username, firstName.getText()); // TODO: Check if sucessful
                 if (updated) {
                     user[1] = firstName.getText();
                 }
             }
-            if (!user[2].toString().equals(lastName.getText())) {
+            if (!user[2].toString().equals(lastName.getText()) && !lastName.getText().isEmpty()) {
                 // Update last_name
                 updated = um.updateUserInfoLName(username, lastName.toString());  // TODO: Check if sucessful
                 if (updated) {
                     user[2] = lastName.getText();
                 }
             }
-            if (!user[3].toString().equals(email.getText())) {
+            if (!user[3].toString().equals(email.getText()) && !email.getText().isEmpty()) {
                 // Update email
                 updated = um.updateUserInfoEmail(username, email.getText());  // TODO: Check if sucessful
                 if (updated) {
                     user[3] = email.getText();
                 }
             }
-            if (!user[4].toString().equals(phone.getText())) {
+            if (!user[4].toString().equals(phone.getText()) && !phone.getText().isEmpty()) {
                 // Update phone
                 updated = um.updateUserInfoPhone(username, phone.toString());  // TODO: Check if sucessful
                 if (updated) {

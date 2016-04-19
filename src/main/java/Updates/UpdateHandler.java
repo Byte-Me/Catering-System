@@ -9,6 +9,7 @@ import static GUI.WindowPanels.Customers.updateInactiveCustomer;
 import static GUI.WindowPanels.Driver.updateDrivingRoute;
 import static GUI.WindowPanels.Orders.updateOrders;
 import static GUI.WindowPanels.Subscriptions.updateSubscriptions;
+import static GUI.WindowPanels.Users.updateInactiveUsers;
 import static GUI.WindowPanels.Users.updateUsers;
 
 /**
@@ -39,12 +40,14 @@ public class UpdateHandler {
     }
 
     private static void updateTab() {
+        // TODO: Do some check for database connetion
         switch (currTab) {
             case 0:
                 // Statistics - NO AUTO REFRESH HERE!
                 break;
             case 1:
                 updateUsers();
+                updateInactiveUsers();
                 break;
             case 2:
                 updateCustomer();

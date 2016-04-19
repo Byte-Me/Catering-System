@@ -109,7 +109,7 @@ public class Customers {
             }
         });
 
-        String[] header = {"Name", "Email", "Phone", "Address"}; // Header titles
+        String[] header = {"Name", "Email", "Phone", "Address", "Customer Type"}; // Header titles
 
         customerModel = new MainTableModel();
         customerModel.setColumnIdentifiers(header); // Add header to columns
@@ -121,8 +121,14 @@ public class Customers {
 
         //setting column widths -- FIXME: Find better way to do this
         customerTable.getColumnModel().getColumn(0).setMinWidth(210);
+        customerTable.getColumnModel().getColumn(0).setMaxWidth(210);
+        customerTable.getColumnModel().getColumn(1).setMinWidth(210);
         customerTable.getColumnModel().getColumn(1).setMaxWidth(210);
         customerTable.getColumnModel().getColumn(2).setMinWidth(130);
+        customerTable.getColumnModel().getColumn(2).setMaxWidth(130);
+
+        customerTable.getColumnModel().getColumn(4).setMinWidth(100);
+        customerTable.getColumnModel().getColumn(4).setMaxWidth(100);
 
         inactiveCustomerModel = new MainTableModel();
         inactiveCustomerModel.setColumnIdentifiers(header);
