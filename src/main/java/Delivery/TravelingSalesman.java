@@ -68,10 +68,8 @@ public class TravelingSalesman {
      ArrayList<double[]> citiesNotInRoute) throws Exception {
         if (!citiesNotInRoute.isEmpty()) {
             for (int i = 0; i < citiesNotInRoute.size(); i++) {
-                double[] justRemoved =
-                        (double[]) citiesNotInRoute.remove(0);
-                ArrayList<double[]> newRoute =
-                        (ArrayList<double[]>) r.clone();
+                double[] justRemoved = citiesNotInRoute.remove(0);
+                ArrayList<double[]> newRoute = (ArrayList<double[]>) r.clone();
                 newRoute.add(justRemoved);
 
                 bruteForceFindBestRoute(newRoute, citiesNotInRoute);
@@ -130,9 +128,9 @@ public class TravelingSalesman {
         double[] out = new double[3];
         final Geocoder geocoder = new Geocoder();
         GeocoderRequest geocoderRequest = new GeocoderRequestBuilder().setAddress(adress).getGeocoderRequest();
-        double latitude = 0;
-        double longitude = 0;
-        GeocodeResponse geocoderResponse = null;
+        double latitude;
+        double longitude;
+        GeocodeResponse geocoderResponse;
 
         try {
             geocoderResponse = geocoder.geocode(geocoderRequest);
@@ -165,7 +163,7 @@ public class TravelingSalesman {
     //Returns null if there is an issue with geocoding adresses. This needs too be handled elsewhere.
     public ArrayList<double[]> createPositionsArray(ArrayList<String> adresses){
 
-        ArrayList<String> fix = new ArrayList<String>();
+        ArrayList<String> fix = new ArrayList<>();
 
         for (String address : adresses) {
             if (!fix.contains(address)) {
@@ -173,7 +171,7 @@ public class TravelingSalesman {
             }
         }
 
-        ArrayList<double[]> out = new ArrayList<double[]>();
+        ArrayList<double[]> out = new ArrayList<>();
 
         for (int i = 0; i < fix.size(); i++) {
             try {
@@ -190,13 +188,13 @@ public class TravelingSalesman {
 
     public ArrayList<String> positionsToAdresses(ArrayList<double[]> inPositions,
                                                  ArrayList<String> originAdressList) {
-        ArrayList<String> fix = new ArrayList<String>();
+        ArrayList<String> fix = new ArrayList<>();
         for(String a : originAdressList){
             if (!fix.contains(a)) {
                 fix.add(a);
             }
         }
-        ArrayList<String> out = new ArrayList<String>();
+        ArrayList<String> out = new ArrayList<>();
         ArrayList<double[]> positions = (ArrayList<double[]>) inPositions.clone();
         positions.remove(0);
         positions.remove(positions.size() - 1);

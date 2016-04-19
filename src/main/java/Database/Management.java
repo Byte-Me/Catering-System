@@ -19,8 +19,7 @@ public abstract class Management {
 
     }
     protected boolean connected(){
-        if(scentence != null)return true;
-        else return false;
+        return scentence != null;
     }
     protected boolean setUp(){
         try {
@@ -34,8 +33,7 @@ public abstract class Management {
             //    e.printStackTrace();
             return false;
         }
-        if(connection == null || scentence == null) return false;
-        else return true;
+        return !(connection == null || scentence == null);
     }
     protected void closeConnection(){
         try {

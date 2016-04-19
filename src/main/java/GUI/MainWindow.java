@@ -67,7 +67,7 @@ public class MainWindow extends JFrame {
     private JButton reactivateCustomerButton;
 
 
-    public MainWindow(UserManagement.UserType userType) {
+    public MainWindow(Object[] user) {
         setTitle("Healthy Catering LTD");
         setContentPane(mainPanel); // Set the main content panel
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE); // Exit application when window is closed.
@@ -86,7 +86,7 @@ public class MainWindow extends JFrame {
         Chef chefPanel = new Chef(prepareTable, ingredientTable, generateShoppingListButton, recipesButton, addIngredientButton, editIngredientButton);
 
         // Remove panes the user does not have access to
-        switch (userType) {
+        switch (UserManagement.UserType.valueOf((int)user[5])) {
             case ADMIN:
                 // Admin have access to everything, therefore remove nothing.
                 break;
@@ -112,23 +112,27 @@ public class MainWindow extends JFrame {
                 break;
             default:
                 // For some reason we did not get a valid userType - print error message and close window.
-                System.err.println("GUI for UserType " + userType + " not defined.");
+                System.err.println("GUI for UserType " + UserManagement.UserType.valueOf((int)user[6]) + " not defined.");
                 dispose();
         }
 
-        updateTab(tabbedPane1.getSelectedIndex()); // TODO: Check if this is needed, initiate fist tab
-        startAutoUpdate(tabbedPane1.getSelectedIndex()); // Start autoUpdate of tabs - TODO: Check interval on timer
+        startAutoUpdate(tabbedPane1.getSelectedIndex()); // Start autoUpdate of tabs (every 5 minutes)
         tabbedPane1.addChangeListener(e -> updateTab(tabbedPane1.getSelectedIndex()));
 
         JPopupMenu popupMenu = new JPopupMenu();
         popupMenu.add(new AbstractAction("User Settings") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                showMessageDialog(getParent(), "User Settings"); // FIXME: Change with actual User Settings panel
+                new UserSettings(user);
             }
         });
-        if (userType == UserManagement.UserType.ADMIN) {
+        if (UserManagement.UserType.valueOf((int)user[5]) == UserManagement.UserType.ADMIN) {
             popupMenu.add(new AbstractAction("Program Settings") {
+                // Possibility to change address
+                // Also possible to change database?
+                // Is this saved locally to file?
+                // In that case who gets the updated info?
+                // If not, where do we save it?
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     showMessageDialog(getParent(), "Program Settings"); // FIXME: Change with actual Program Settings panel

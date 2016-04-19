@@ -42,7 +42,7 @@ public class CustomerManagement extends Management{
 
     public ArrayList<Object[]> getCustomers(){
         if(setUp()){
-            ArrayList<Object[]> out = new ArrayList<Object[]>();
+            ArrayList<Object[]> out = new ArrayList<>();
             ResultSet res;
             try{
                 res = getScentence().executeQuery("SELECT * FROM customer WHERE status > "+CustType.INACTIVE.getValue()+";"); //Status 1 for aktiv og 0 for inaktiv
@@ -71,8 +71,8 @@ public class CustomerManagement extends Management{
 
     public ArrayList<Object[]> getDeletedCustomers(){
         if(setUp()){
-            ArrayList<Object[]> out = new ArrayList<Object[]>();
-            ResultSet res = null;
+            ArrayList<Object[]> out = new ArrayList<>();
+            ResultSet res;
             try{
                 res = getScentence().executeQuery("SELECT * FROM customer WHERE status = "+CustType.INACTIVE.getValue()+";"); //Status 1 for aktiv og 0 for inaktiv
                 while(res.next()) {
@@ -99,8 +99,8 @@ public class CustomerManagement extends Management{
     }
 
     public ArrayList<Object[]> customerSearch(String searchTerm){
-        ResultSet res = null;
-        ArrayList<Object[]> out = new ArrayList<Object[]>();
+        ResultSet res;
+        ArrayList<Object[]> out = new ArrayList<>();
         if(setUp()) {
             try {
                 res = getScentence().executeQuery("SELECT * FROM customer WHERE name LIKE '%" + searchTerm + "%' OR email LIKE '%" +
@@ -131,7 +131,7 @@ public class CustomerManagement extends Management{
     private boolean addCustomer(String name, String email, String phone, String adress, int status) {
         if (setUp()) {
             int numb = 0;
-            ResultSet res = null;
+            ResultSet res;
             try{
                 getScentence().executeQuery("START TRANSACTION;");
                 res = getScentence().executeQuery("SELECT name FROM customer WHERE email = '" + email + "';");

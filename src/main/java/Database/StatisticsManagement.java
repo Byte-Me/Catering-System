@@ -45,7 +45,7 @@ public class StatisticsManagement extends Management{
     }
     public ArrayList<String> getDates(String firstDate, String lastDate, String name){
         ResultSet res;
-        ArrayList<String> out = new ArrayList<String>();
+        ArrayList<String> out = new ArrayList<>();
         if(setUp()) {
             try {
                 res = getScentence().executeQuery("SELECT `"+name+"`.date from `"+name+"` where `date` >= DATE '" + firstDate +
@@ -66,7 +66,7 @@ public class StatisticsManagement extends Management{
     }
     public ArrayList<String> getCancelledDates(String firstDate, String lastDate, String name){
         ResultSet res;
-        ArrayList<String> out = new ArrayList<String>();
+        ArrayList<String> out = new ArrayList<>();
         if(setUp()) {
             try {
                 res = getScentence().executeQuery("SELECT `"+name+"`.date from `"+name+"` where `date` >= DATE '" + firstDate +
@@ -87,7 +87,7 @@ public class StatisticsManagement extends Management{
     }
 
     public ArrayList<String[]> getSubDates(){
-        ArrayList<String[]> out = new ArrayList<String[]>();
+        ArrayList<String[]> out = new ArrayList<>();
         if(setUp()){
             try{
                 ResultSet res = getScentence().executeQuery("SELECT date_from, date_to FROM subscription;");

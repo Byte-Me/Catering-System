@@ -67,13 +67,15 @@ public class TestJUnitDB{
         int invalid = 0;
 
         try {
-            valid = logi.login(validUser[0], validUser[1]);
-            invalid = logi.login(invalidUser[0], invalidUser[1]);
+            Object[] user1 = logi.login(validUser[0], validUser[1]);
+            valid = (int)user1[5];
+            Object[] user2 = logi.login(invalidUser[0], invalidUser[1]);
+            invalid = (int)user2[5];
 
         }
         catch (Exception e){
             System.err.println("Issue with databaseconnections.");
-      //      e.printStackTrace();
+            e.printStackTrace();
         }
         assertEquals(ACCESS, valid);
         assertEquals(NO_ACCESS, invalid);

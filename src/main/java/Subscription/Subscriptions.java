@@ -21,7 +21,7 @@ public class Subscriptions {
 
     public ArrayList listActiveSubs() {
         ArrayList<Object[]> subs = subMan.getSubscriptions();
-        ArrayList<Object[]> activeSubs = new ArrayList<Object[]>();
+        ArrayList<Object[]> activeSubs = new ArrayList<>();
         for (Object[] sub : subs) {
             if (checkSubscriptionActive((String) sub[2], (String) sub[3], new Date())) { //2 = dayfrom, 3 = dayto
                 activeSubs.add(sub);
@@ -82,7 +82,7 @@ public class Subscriptions {
             // +++
         while (flag) {
             for (Object[][] obj : recipesWithDay) {
-                ArrayList<Object[]> recipes = new ArrayList<Object[]>();
+                ArrayList<Object[]> recipes = new ArrayList<>();
                 for (int i = 0; i < obj[0].length; i++) {
                     Object[] tmp = new Object[2];
                     tmp[0] = obj[0][i];

@@ -39,14 +39,15 @@ public class Login extends JFrame{
             String inputPass = new String(passwordPasswordField.getPassword());
 
             dbconnect = new LoginManagement();
-            int userType = dbconnect.login(inputUsr, inputPass);
+            Object[] user = dbconnect.login(inputUsr, inputPass);
+            int userType = (int)user[5];
 
 
             if ( userType >= 0) {
                 // Logged in :)
 
                 // Open the main window
-                new MainWindow(UserManagement.UserType.valueOf(userType));
+                new MainWindow(user);
 
                 setVisible(false); //you can't see me!
                 dispose(); //Destroy the JFrame object

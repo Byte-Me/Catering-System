@@ -13,7 +13,7 @@ public class Program {
         try {
             // Load system Look and Feel
             UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-            if (!System.getProperty("os.name").equals("Mac OS X")) { // Check if OS is Mac OS X
+            if (!System.getProperty("os.name").equals("Mac OS X")) { // Check OS is not Mac OS X
                 UIManager.setLookAndFeel("com.seaglasslookandfeel.SeaGlassLookAndFeel"); // Better look for windows (works on linux?)
             } else {
                 // Mac Stuff

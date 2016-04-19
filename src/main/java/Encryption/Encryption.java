@@ -18,7 +18,7 @@ public class Encryption {
         byte[] hashPass = stringToByte(hashString);
 
 
-        byte[] hash = null;
+        byte[] hash;
         KeySpec spec = new PBEKeySpec(pass.toCharArray(), salt, 65536, 128);
         try {
             SecretKeyFactory f = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
@@ -37,7 +37,7 @@ public class Encryption {
     public String[] passEncoding(String password){
         Random rand = new Random();
         byte[] salt = new byte[16];
-        byte[] hash = new byte[0];
+        byte[] hash;
         rand.nextBytes(salt);
         KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65536, 128);
         try {

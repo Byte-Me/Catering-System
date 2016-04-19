@@ -43,15 +43,14 @@ public class UserManagement extends Management {
     public boolean registerUser(String firstname, String lastname, String username,
                                 String password, String email, String phone, int accessLevel) {
         Encryption enc = new Encryption();
-        int rowChanged = 0; //
+        int rowChanged = 0;
         if (setUp()) {
             try {
                 String[] saltHash = enc.passEncoding(password);
                 try {
                     ResultSet res = getScentence().executeQuery("SELECT username FROM user WHERE username = '" + username + "';");
                     if(res.next()) return false;
-                }
-                catch (Exception e){
+                } catch (Exception e){
 
                 }
 
@@ -67,7 +66,7 @@ public class UserManagement extends Management {
                 try {
                     getConnection().rollback();
                     getConnection().setAutoCommit(true);
-                }catch (SQLException sqle){
+                } catch (SQLException sqle){
                     System.err.println("Could not rollback");
                 }
 
@@ -89,8 +88,8 @@ public class UserManagement extends Management {
     }
     public ArrayList<Object[]> getDeletedUsers() {
 
-        ResultSet res = null;
-        ArrayList<Object[]> out = new ArrayList<Object[]>();
+        ResultSet res;
+        ArrayList<Object[]> out = new ArrayList<>();
         if (setUp()) {
 
             try {
@@ -121,8 +120,8 @@ public class UserManagement extends Management {
 
     public ArrayList<Object[]> userInfo() {
 
-        ResultSet res = null;
-        ArrayList<Object[]> out = new ArrayList<Object[]>();
+        ResultSet res;
+        ArrayList<Object[]> out = new ArrayList<>();
         if (setUp()) {
 
             try {
@@ -453,8 +452,8 @@ public class UserManagement extends Management {
         return rowChanged > 0;
     }
     public ArrayList<Object[]> userSearch(String searchTerm){
-        ResultSet res = null;
-        ArrayList<Object[]> out = new ArrayList<Object[]>();
+        ResultSet res;
+        ArrayList<Object[]> out = new ArrayList<>();
         if(setUp()) {
             try {
                 PreparedStatement prep = getConnection().prepareStatement("SELECT username, first_name, last_name, phone, email, access_level" +

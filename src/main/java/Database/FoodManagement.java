@@ -20,7 +20,7 @@ public class FoodManagement extends Management{
 
     public ArrayList<Object[]> getIngredients(){
         ResultSet res;
-        ArrayList<Object[]> out = new ArrayList<Object[]>();
+        ArrayList<Object[]> out = new ArrayList<>();
         if(setUp()){
             try{
                 res = getScentence().executeQuery("SELECT grocery_id, `name`, quantity, unit FROM grocery;");
@@ -98,8 +98,7 @@ public class FoodManagement extends Management{
             }
         }
 
-        if(rowChanged > 0) return true;
-        return false;
+        return rowChanged > 0;
     }
 
     public boolean updateIngredientPrice(String name, int newData) {
@@ -121,8 +120,7 @@ public class FoodManagement extends Management{
             }
         }
 
-        if(rowChanged > 0) return true;
-        return false;
+        return rowChanged > 0;
     }
 
     public boolean updateIngredientQuantity(String name, int newData) {
@@ -167,8 +165,7 @@ public class FoodManagement extends Management{
             }
         }
 
-        if(rowChanged > 0) return true;
-        return false;
+        return rowChanged > 0;
     }
 
 
@@ -200,12 +197,13 @@ public class FoodManagement extends Management{
     }
 
     private ArrayList<Integer> getGroceryID (ArrayList<String> ingNames) throws Exception {
-        ArrayList<Integer> out = new ArrayList<Integer>();
-        ResultSet res = null;
+        ArrayList<Integer> out = new ArrayList<>();
+        ResultSet res;
         for (String name : ingNames) {
             res = getScentence().executeQuery("SELECT grocery_id FROM grocery WHERE name = '" + name + "';");
-            if(res.next())out.add(res.getInt("grocery_id"));
-
+            if(res.next()) {
+                out.add(res.getInt("grocery_id"));
+            }
         }
         return out;
     }
@@ -244,7 +242,7 @@ public class FoodManagement extends Management{
         int numb;
         if(setUp()){
             try{
-                ArrayList<String> names = new ArrayList<String>();
+                ArrayList<String> names = new ArrayList<>();
                 for(Object[] ing : ingInfo ){
                     names.add((String)ing[0]);
                 }
@@ -258,7 +256,7 @@ public class FoodManagement extends Management{
                 String recipeID = getRecipeID(name);
 
 
-                for(int i= 0; i < IDs.size();i++){ //
+                for(int i= 0; i < IDs.size();i++){
                     numb = getScentence().executeUpdate("INSERT INTO recipe_grocery VALUES('" + recipeID + "', '" + IDs.get(i).toString() + "', '"
                             + ingInfo.get(i)[1] + "');");
                     if(numb == 0)return false;
@@ -283,14 +281,14 @@ public class FoodManagement extends Management{
         int numb;
         if(setUp()){
             try{
-                ArrayList<String> names = new ArrayList<String>();
+                ArrayList<String> names = new ArrayList<>();
                 for(Object[] ing : ingInfo ){
                     names.add((String)ing[0]);
                 }
                 String recipeID = getRecipeID(name);
                 ArrayList<Integer> IDs = getGroceryID(names);
 
-                for(int i= 0; i < IDs.size();i++){ //
+                for(int i= 0; i < IDs.size();i++){
                     numb = getScentence().executeUpdate("INSERT INTO recipe_grocery VALUES('" + recipeID + "', '" + IDs.get(i).toString() + "', '"
                             + ingInfo.get(i)[1] + "');");
                     if(numb == 0)return false;
@@ -315,7 +313,6 @@ public class FoodManagement extends Management{
     }
 
     public boolean updateRecipe(String name, ArrayList<Object[]> ingInfo, int price, int id){
-        int res = 0;
         if(setUp()) {
             try {
                 PreparedStatement prep = getConnection().prepareStatement(deleteRecipe);
@@ -350,7 +347,7 @@ public class FoodManagement extends Management{
     }
 
     public ArrayList<Object[]> getRecipeIngredients(int id){
-        ArrayList<Object[]> out = new ArrayList<Object[]>();
+        ArrayList<Object[]> out = new ArrayList<>();
         if(setUp()){
             ResultSet res;
             try{
@@ -376,7 +373,7 @@ public class FoodManagement extends Management{
     }
 
     public ArrayList<Object[]> getIngredientsInStorage(ArrayList<String> names){
-        ArrayList<Object[]> out = new ArrayList<Object[]>();
+        ArrayList<Object[]> out = new ArrayList<>();
         if(setUp()){
             ResultSet res;
             try {
@@ -403,7 +400,7 @@ public class FoodManagement extends Management{
         return out; // returnerer i samme rekkefølge som
     }
 
-    public boolean addIngredientToStorage(String name, int addedValue){         //ingredients[0] = name og ingredients[1] = added values
+    public boolean addIngredientToStorage(String name, int addedValue){ //ingredients[0] = name og ingredients[1] = added values
         int numb = 0;
         if(setUp()){
             try {
@@ -412,8 +409,6 @@ public class FoodManagement extends Management{
                 if(res.next()) {
                     int newQuant = res.getInt("quantity") + addedValue;
                     numb = getScentence().executeUpdate("UPDATE grocery SET quantity = '" + newQuant + "' WHERE name = '" + name + "';");
-
-
                 }
                 getScentence().executeQuery("COMMIT;");
 
@@ -430,7 +425,7 @@ public class FoodManagement extends Management{
         return numb > 0;
     }
 
-    public boolean removeIngredientFromStorage(String name, int subtractedValue){         //ingredients[0] = name og ingredients[1] = added values
+    public boolean removeIngredientFromStorage(String name, int subtractedValue){ //ingredients[0] = name og ingredients[1] = added values
         int numb = 0;
         if(setUp()){
             try {
@@ -464,7 +459,7 @@ public class FoodManagement extends Management{
     }
 
     public ArrayList<Object[]> getRecipesForChef(){
-        ArrayList<Object[]> out = new ArrayList<Object[]>();
+        ArrayList<Object[]> out = new ArrayList<>();
         if(setUp()){
             try {
                 ResultSet res = getScentence().executeQuery("SELECT recipe.name, order_recipe.portions, `order`.time, " +
@@ -493,9 +488,9 @@ public class FoodManagement extends Management{
     }
 
     public ArrayList<Object[]> getIngredientsForShoppinglist(){
-        ArrayList<Object[]> out = new ArrayList<Object[]>();
+        ArrayList<Object[]> out = new ArrayList<>();
         ArrayList<Object[]> IDs = getRecipeIDs();
-       // ArrayList<Object[]>
+        // ArrayList<Object[]>
         if(setUp()) {
             try {
 
@@ -525,7 +520,7 @@ public class FoodManagement extends Management{
         return out;
     }
     public ArrayList<Object[]> getRecipeIDs(){
-        ArrayList<Object[]> out = new ArrayList<Object[]>();
+        ArrayList<Object[]> out = new ArrayList<>();
         if(setUp()) {
             try {
                 ResultSet res = getScentence().executeQuery("SELECT order_recipe.recipe_id, order_recipe.portions " +

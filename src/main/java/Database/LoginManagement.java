@@ -17,6 +17,8 @@ import java.sql.ResultSet;
 
 public class LoginManagement extends Management{
 
+    private String loginQuery = "SELECT username, first_name, last_name, email, phone, hash, salt, access_level FROM user WHERE username = ?;";
+
     public LoginManagement(){
         super();
     }
@@ -30,8 +32,7 @@ public class LoginManagement extends Management{
         returned, their password or username was wrong.
 
      */
-    public int login(String user, String pass){
-
+    public Object[] login(String user, String pass){
 
         //Testbruker:
 
@@ -41,28 +42,27 @@ public class LoginManagement extends Management{
         //username = Even
         //password = pass
 
-        ResultSet res = null;
+        ResultSet res;
         if(setUp()) {
             try {
-                PreparedStatement prep = getConnection().prepareStatement("select username, hash, salt, access_level from user " +
-                        "where username = ?;");
+                PreparedStatement prep = getConnection().prepareStatement(loginQuery);
                 prep.setString(1, user);
                 res = prep.executeQuery();
                 if (res.next()) {
                     Encryption encrypt = new Encryption();
                     if (encrypt.passDecoding(pass, res.getString("hash"), res.getString("salt"))) {
-                        return res.getInt("access_level");
+                        return new Object[] {res.getString("username"), res.getString("first_name"), res.getString("last_name"), res.getString("email"), res.getString("phone"), res.getInt("access_level")};
                     }
                 }
             } catch (Exception e) {
                 //     e.printStackTrace();
                 System.err.println("Issue with SQL connection.");
-                return -1;
+                return null;
             } finally {
                 super.closeConnection();
             }
         }
-        return -1;
+        return null;
     }
 
 }
