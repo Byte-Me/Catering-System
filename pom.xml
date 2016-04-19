@@ -73,6 +73,13 @@
             <artifactId>jxbrowser-cross-platform</artifactId>
             <version>6.2</version>
         </dependency>
+
+        <!-- logging dependencies -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.7.21</version>
+        </dependency>
     </dependencies>
 
 </project>
