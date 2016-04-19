@@ -1,6 +1,7 @@
 package Database;
 
 import Food.FoodFinance;
+import Food.Storage;
 import org.apache.commons.dbutils.DbUtils;
 
 import java.sql.PreparedStatement;
@@ -173,6 +174,7 @@ public class OrderManagement extends Management {
             financeManagement.addIncomeToDatabase(FoodFinance.findOrderPrice(orderID));
         }
 
+
         return rowChanged > 0;
 
     }
@@ -235,13 +237,14 @@ public class OrderManagement extends Management {
         if (setUp()) {
             conn = getConnection();
             try {
-                prep = conn.prepareStatement(sqlOrderSearch);
-                prep.setString(1, "%" + searchTerm + "%");
-                prep.setString(2, "%" + searchTerm + "%");
-                prep.setString(3, "%" + searchTerm + "%");
-                prep.setString(4, "%" + searchTerm + "%");
-                prep.setString(5, "%" + searchTerm + "%");
-                prep.setString(6, "%" + searchTerm + "%");
+                searchTerm = "%" + searchTerm + "%";
+                PreparedStatement prep = conn.prepareStatement(sqlOrderSearch);
+                prep.setString(1, searchTerm);
+                prep.setString(2, searchTerm);
+                prep.setString(3, searchTerm);
+                prep.setString(4, searchTerm);
+                prep.setString(5, searchTerm);
+                prep.setString(6, searchTerm);
                 prep.setInt(7, OrdStatus.ACTIVE.getValue());
 
                 res = prep.executeQuery();
@@ -295,7 +298,9 @@ public class OrderManagement extends Management {
 
                 for (Object[] name : recipes) { //[0] = quantity, [1] = name
                     prep = conn.prepareStatement(sqlCreateOrderSub2);
-                    prep.setObject(1, name[1]);
+                    prep.setObject(1, name[0]);
+                    System.out.println(prep.toString());
+
                     res = prep.executeQuery();
 
                     if (res.next()) {
@@ -310,7 +315,9 @@ public class OrderManagement extends Management {
                     prep = conn.prepareStatement(sqlCreateOrderSub3);
                     prep.setInt(1, orderID);
                     prep.setInt(2, recipeIDs.get(i));
-                    prep.setObject(3, recipes.get(i)[0]);
+                    prep.setInt(3, (Integer)recipes.get(i)[1]);
+                    System.out.println(prep.toString());
+
                     rowChanged = prep.executeUpdate();
 
                     if (!(rowChanged > 0)) {
@@ -400,6 +407,7 @@ public class OrderManagement extends Management {
                     out[2] = res.getString("time");
                     out[3] = res.getString("note");
                     out[4] = OrderType.valueOf(res.getInt("status"));
+
                 }
             } catch (Exception e) {
                 System.err.println("ERROR 012: Issue with finding order.");
@@ -418,11 +426,14 @@ public class OrderManagement extends Management {
             try {
                 prep = conn.prepareStatement(sqlGetRecipesFromOrder);
                 prep.setInt(1, orderId);
-                res = prep.executeQuery();
-                while (res.next()) {
-                    Object[] obj = new Object[2];
+
+                ResultSet res = prep.executeQuery();
+                while (res.next()){
+                    Object[] obj = new Object[3];
+
                     obj[0] = res.getString("name");
                     obj[1] = res.getString("portions");
+                    obj[2] = res.getInt("recipe_id");
                     out.add(obj);
                 }
             } catch (Exception e) {

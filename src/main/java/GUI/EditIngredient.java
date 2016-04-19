@@ -34,6 +34,8 @@ public class EditIngredient extends JDialog {
         ingredientAmount.setText(ingredientInfo[2].toString());
         ingredientUnit.setText((String)ingredientInfo[3]);
 
+        ingredientAmount.requestFocus();
+
         editIngredientButton.addActionListener(e -> {
             String name = ingredientName.getText();
             int price = Integer.parseInt(ingredientPrice.getText());

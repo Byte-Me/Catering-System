@@ -77,7 +77,6 @@ public class UpdateHandler {
         if(!autoUpdateStarted) {
             currTab = tabIndex;
             timer = new Timer(300000, e -> {
-                System.out.println("AutoUpdated tab " + currTab); // DEBUG
                 updateTab();
                 restartTimer();
             });

@@ -48,7 +48,7 @@ public class Customers {
 
         reactivateCustomerButton.addActionListener(e -> {
             String customerEmail = (String) inactiveCustomerTable.getValueAt(inactiveCustomerTable.getSelectedRow(), emailColumnNr);
-            customerManagement.updateCustomerStatus(customerEmail, CustomerManagement.CustType.PERSON.getValue()); //FIXME: What happens with corporation?
+            customerManagement.updateCustomerStatus(customerEmail, CustomerManagement.CustStatus.ACTIVE.getValue()); //FIXME: What happens with corporation?
             updateCustomer();
             updateInactiveCustomer();
         });
@@ -98,6 +98,23 @@ public class Customers {
                 }
             }
 
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                int r = customerTable.rowAtPoint(e.getPoint());
+                if (r >= 0 && r < customerTable.getRowCount()) {
+                    customerTable.setRowSelectionInterval(r, r);
+                } else {
+                    customerTable.clearSelection();
+                }
+
+                int rowindex = customerTable.getSelectedRow();
+                if (rowindex < 0)
+                    return;
+
+                if (e.isPopupTrigger() && e.getComponent() instanceof JTable) {
+                    popupMenu.show(e.getComponent(), e.getX(), e.getY());
+                }
+            }
             @Override
             public void mouseClicked(MouseEvent e) {
                 if(e.getClickCount() == 2) {
@@ -209,7 +226,7 @@ public class Customers {
 
     private static void deleteCustomer() {
         String customerEmail = (String) customerTable.getValueAt(customerTable.getSelectedRow(), emailColumnNr);
-        customerManagement.updateCustomerStatus(customerEmail, CustomerManagement.CustType.INACTIVE.getValue());
+        customerManagement.deleteCustomer(customerEmail);
         updateCustomer();
         updateInactiveCustomer();
     }

@@ -1,23 +1,26 @@
 package Subscription;
 
+import Database.CustomerManagement;
 import Database.OrderManagement;
 import Database.SubscriptionManagement;
+import sun.util.resources.cldr.rm.CalendarData_rm_CH;
 
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
+import java.util.*;
 
 /**
  * Created by Evdal on 16.03.2016.
  */
 public class Subscriptions {
 
-    private SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-    private OrderManagement order = new OrderManagement();
-    private SubscriptionManagement subMan = new SubscriptionManagement();
+    private static SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+    private static OrderManagement order = new OrderManagement();
+    private static SubscriptionManagement subMan = new SubscriptionManagement();
+    private static CustomerManagement custMan = new CustomerManagement();
+    private static Calendar cal = new GregorianCalendar();
+
 
     public ArrayList listActiveSubs() {
         ArrayList<Object[]> subs = subMan.getSubscriptions();
@@ -62,7 +65,7 @@ public class Subscriptions {
     If the customer wants every 4th monday (every month) the frequency is 4.
 
     recipesWithDay = An arraylist with information about all recipes and their portion size as well as the day for the recipes.
-    EKSAMPLE : {{"recipe1", "recipe2", "recipe3"},{3, 5, 3 }, {1}}
+    EKSAMPLE : {{"recipe1", "recipe2", "recipe3"},{3, 5, 3 }, {1},{comment},{time}}
     This example says i want 3 portions of "recipe1", 5 of "recipe2" and 3 of "recipe3" on monday.
     The Object list should include three lists. 1. is recipes, 2. are portions and the last only include the day as an INT,
     where Monday is 1 and Sunday is 7.
@@ -70,16 +73,17 @@ public class Subscriptions {
     note = information about each order, special needs etc.
      */
 
-    public boolean createSubscription(int custID, String dateFrom, String dateTo, int weeksBetween, ArrayList<Object[][]> recipesWithDay,
-                                      String note, String time) {
+    public static boolean createSubscription(String email, String dateFrom, String dateTo, int weeksBetween, ArrayList<Object[][]> recipesWithDay) {
+        Object[] cust = custMan.getSingleCustomerInfo(email);
+        int custID = (Integer)cust[5];
         int subID = subMan.createSubscription(custID, dateFrom, dateTo, weeksBetween);
         if (!(subID > 0)) {
-            System.out.println("FAGGOTS");
             return false;
         }
         String prevDate = dateFrom;
         boolean flag = true;
             // +++
+        int count = 0;
         while (flag) {
             for (Object[][] obj : recipesWithDay) {
                 ArrayList<Object[]> recipes = new ArrayList<>();
@@ -96,10 +100,10 @@ public class Subscriptions {
                 if (prevDate.equals("")){
                     return true;
                 }
-
-                if (!order.createOrderSub(custID, prevDate, recipes, note, time, subID)){
+                if (!order.createOrderSub(custID, prevDate, recipes, (String)obj[3][0], (String)obj[4][0], subID)){
                     return false;
                 }
+                count++;
 
             }
         }
@@ -107,7 +111,7 @@ public class Subscriptions {
     }
 
 
-    private String findNextDate(int day, String prevDateS, String dateTo, int frequency) {
+    private static String findNextDate(int day, String prevDateS, String dateTo, int frequency) {
         Date prevDate = null;
         try {
             prevDate = formatter.parse(prevDateS);
@@ -144,6 +148,85 @@ public class Subscriptions {
             }
         }
         return null;
+    }
+    public Object[] getSubInfoFromId(int subId){
+        Object[] out = new Object[5];
+        Object[] info = subMan.getSubInfoFromId(subId);
+
+        String customer = (String)info[0];
+        String dateFrom = (String)info[1];
+        String dateTo = (String)info[2];
+        int frequency = (Integer) info[3];
+
+        //obj[0] = recipeTableInfo, obj[1] = comment obj[2] = time, obj[3] = day
+        ArrayList<Object[]> recipeInfo = getRecipeInfoForSub(subId);
+        out[0] = recipeInfo;
+        out[1] = customer;
+        out[2] = dateFrom;
+        out[3] = dateTo;
+        out[4] = frequency;
+        System.out.println(Arrays.toString(out));
+
+        return out;
+
+
+    }
+    private ArrayList<Object[]> getRecipeInfoForSub(int id){
+
+        //henter orders som er laget med en spesiell subscription
+        ArrayList<Object[]> out = new ArrayList<Object[]>();
+        ArrayList<Object[]> orders = subMan.getOrderInfoFromSub(id); //lagt til ekstra plass for å si hvilken dag
+        //finner like ordere og forkorter slik at hver dag bare kommer en gang
+
+        orders = shortenOrders(orders);
+
+        if(orders.get(0) != null){
+            for (Object[] order : orders) {
+                String date = formatter.format((Date) order[2]);//
+
+                //henter info om oppskrifter for den dagen
+                Object[] obj = subMan.getRecipeInfoFromSubAndDate(id, date);
+                obj[3] = getDayOfWeek((Date) order[2]); //sender inn dagen sammen med oppskriftene
+                out.add(obj);
+                //obj[0] = recipeTableInfo, obj[1] = comment obj[2] = time, obj[3] = day
+            }
+        }
+
+        return out;
+    }
+    private ArrayList<Object[]> shortenOrders(ArrayList<Object[]> orders){
+        ArrayList<Object[]> out = new ArrayList<>();
+        for(Object[] order : orders){
+            boolean added = false;
+            for(Object[] o : out){
+                if(sameDay((Date)order[2],(Date)o[2])){
+                    added = true;
+                }
+            }
+            if(!added){
+                out.add(order);
+            }
+        }
+        return out;
+    }
+    private boolean sameDay(Date date1, Date date2){
+        cal.setTime(date1);
+        int day1 = cal.get(Calendar.DAY_OF_WEEK);
+        cal.setTime(date2);
+        int day2 = cal.get(Calendar.DAY_OF_WEEK);
+        if(day1 == day2) return true;
+        else return false;
+    }
+    private int getDayOfWeek(Date date){
+        cal.setTime(date);
+        int day = cal.get(Calendar.DAY_OF_WEEK);
+        if(day == 7){
+            day = 1; //fra søndag som første dag til mandag som første dag.
+        }
+        else{
+            day++;
+        }
+        return day;
     }
 
 }
