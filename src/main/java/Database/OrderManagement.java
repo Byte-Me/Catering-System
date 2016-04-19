@@ -56,7 +56,7 @@ public class OrderManagement extends Management {
             "customer WHERE `order`.order_id = ? AND `order`.customer_id = customer.customer_id;";
 
     // SQL setning for getRecipeFromOrder metode
-    String sqlGetRecipesFromOrder = "SELECT recipe.name, order_recipe.portions FROM recipe, order_recipe WHERE order_recipe.order_id = ? AND order_recipe.recipe_id = recipe.recipe_id;";
+    String sqlGetRecipesFromOrder = "SELECT recipe.name, order_recipe.portions, recipe.recipe_id FROM recipe, order_recipe WHERE order_recipe.order_id = ? AND order_recipe.recipe_id = recipe.recipe_id;";
 
     // SQL setning for updateOrderDate metode
     String sqlUpdateOrderDate = "UPDATE order SET date = ? WHERE order_id = ?";
@@ -75,6 +75,10 @@ public class OrderManagement extends Management {
 
     // SQL setning for updateOrderComment metode
     String sqlUpdateOrderComment = "UPDATE `order` SET note = ? WHERE order_id = ?;";
+
+
+    private final String sqlCreateOrder = "SELECT customer_id FROM customer WHERE email = ?;";
+    private final String getSqlGetRecipesFromOrder = "SELECT recipe.name, order_recipe.portions, order_recipe.recipe_id FROM recipe, order_recipe WHERE order_recipe.order_id = ? AND order_recipe.recipe_id = recipe.recipe_id;";
 
 
     Connection conn = null;
@@ -98,8 +102,8 @@ public class OrderManagement extends Management {
                 conn.commit();
                 conn.setAutoCommit(true);
             }
-            if (!res.isClosed()) res.close();
-            if (!prep.isClosed()) prep.close();
+            if (res != null && !res.isClosed()) res.close();
+            if (res != null && !prep.isClosed()) prep.close();
         } catch (SQLException sqle) {
             System.err.println("Finally Statement failed");
             sqle.printStackTrace();
@@ -108,22 +112,7 @@ public class OrderManagement extends Management {
     }
 
 
-    public enum OrdStatus {
-        INACTIVE(0),
-        ACTIVE(1),
-        READY_FOR_DELIVERY(2),
-        DELIVERED(3);
 
-        private int value;
-
-        OrdStatus(int value) {
-            this.value = value;
-        }
-
-        public int getValue() {
-            return value;
-        }
-    }
 
     public enum OrderType {
         INACTIVE, ACTIVE, PROCESSING, READY, DELIVERED;
@@ -167,6 +156,7 @@ public class OrderManagement extends Management {
                 return false;
             } finally {
                 finallyStatement();
+
             }
         }
 
@@ -186,7 +176,7 @@ public class OrderManagement extends Management {
             conn = getConnection();
             try {
                 prep = conn.prepareStatement(sqlGetDeletedOrders);
-                prep.setInt(1, OrdStatus.INACTIVE.getValue());
+                prep.setInt(1, OrderType.INACTIVE.getValue());
                 res = prep.executeQuery();
                 while (res.next()) {
                     out.add(createList(res));
@@ -207,7 +197,7 @@ public class OrderManagement extends Management {
             //Henter info fra ordre der ordren ikke er merket som inaktiv.
             try {
                 prep = conn.prepareStatement(sqlGetOrders);
-                prep.setInt(1, OrdStatus.ACTIVE.getValue());
+                prep.setInt(1, OrderType.ACTIVE.getValue());
                 res = prep.executeQuery();
                 while (res.next()) {
                     out.add(createList(res));
@@ -245,7 +235,7 @@ public class OrderManagement extends Management {
                 prep.setString(4, searchTerm);
                 prep.setString(5, searchTerm);
                 prep.setString(6, searchTerm);
-                prep.setInt(7, OrdStatus.ACTIVE.getValue());
+                prep.setInt(7, OrderType.ACTIVE.getValue());
 
                 res = prep.executeQuery();
                 while (res.next()) {
@@ -269,7 +259,7 @@ public class OrderManagement extends Management {
                 ArrayList<Integer> recipeIDs = new ArrayList<>();
                 conn.setAutoCommit(false);
                 prep = conn.prepareStatement(sqlCreateOrderSub0);
-                prep.setInt(1, OrdStatus.ACTIVE.getValue());
+                prep.setInt(1, OrderType.ACTIVE.getValue());
                 prep.setString(2, date);
                 prep.setInt(3, id);
                 prep.setString(4, note);
@@ -439,7 +429,9 @@ public class OrderManagement extends Management {
             } catch (Exception e) {
                 System.err.println("ERROR 013: Issue with finding order.");
             } finally {
-                finallyStatement();
+                DbUtils.closeQuietly(getConnection());
+                DbUtils.closeQuietly(getConnection());
+
             }
         }
         return out;
@@ -448,7 +440,7 @@ public class OrderManagement extends Management {
 
     // Sletter/ setter en ordre til inaktiv
     public void deleteOrder(int orderID) {
-        updateStatus(orderID, OrdStatus.INACTIVE.getValue());
+        updateStatus(orderID, OrderType.INACTIVE.getValue());
     }
 
     public boolean updateOrderDate(String orderDate, int orderID) {

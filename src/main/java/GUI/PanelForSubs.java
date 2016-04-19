@@ -14,6 +14,7 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -36,6 +37,7 @@ public class PanelForSubs extends JPanel {
     private JTextField searchField;
     private JList recipeList;
     private JPanel mainPanel;
+    private JSpinner timeSpinner;
     final DefaultTableModel recipeTableModel;
     private int day;
 
@@ -68,24 +70,14 @@ public class PanelForSubs extends JPanel {
 
         recipeTable.setModel(recipeTableModel);
 
-
-        try {
-            /* FormattedTextField for date, default value set to tomorrow */
-            final MaskFormatter timeMaskFormatter = new MaskFormatter("##:##"); // Defining format pattern
-
-
-            timeMaskFormatter.setPlaceholder(defaultTimeValue); // Placeholder
+        //set up timeSpinner
+        SpinnerDateModel timeModel = new SpinnerDateModel();
+        timeModel.setCalendarField(Calendar.MINUTE);
+        timeSpinner.setModel(timeModel);
+        timeSpinner.setEditor(new JSpinner.DateEditor(timeSpinner, "HH:mm"));
 
 
-            timeTextField.setFormatterFactory(new JFormattedTextField.AbstractFormatterFactory() { // Add format to field
-                @Override
-                public JFormattedTextField.AbstractFormatter getFormatter(JFormattedTextField tf) {
-                    return timeMaskFormatter;
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
 
         /* Create Recipe List */
         final DefaultListModel<String> recipeModel = new DefaultListModel<>();
@@ -227,10 +219,15 @@ public class PanelForSubs extends JPanel {
     }
 
     public void addValues(Object[] values){
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
         for(Object[] obj : (ArrayList<Object[]>)values[0]){
             recipeTableModel.addRow(obj);
         }
         commentArea.setText((String)values[1]);
-        timeTextField.setValue(values[2]);
+        try {
+            timeSpinner.getModel().setValue(timeFormat.parse((String)values[2]));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
     }
 }

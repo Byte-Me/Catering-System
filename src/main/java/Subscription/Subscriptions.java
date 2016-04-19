@@ -180,7 +180,7 @@ public class Subscriptions {
 
         orders = shortenOrders(orders);
 
-        if(orders.get(0) != null){
+        if(!orders.isEmpty()){
             for (Object[] order : orders) {
                 String date = formatter.format((Date) order[2]);//
 

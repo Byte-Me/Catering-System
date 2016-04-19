@@ -89,7 +89,7 @@ public class Subscriptions {
             public void actionPerformed(ActionEvent e) {
                 if (subscriptionsTable.getSelectedRow() != -1) {
                     int id = (Integer) subscriptionsTable.getValueAt(subscriptionsTable.getSelectedRow(), idColumnNr);
-                    new EditOrder(id);
+                    new EditSubscription(id);
                 }
             }
         });
@@ -152,7 +152,7 @@ public class Subscriptions {
             public void mouseClicked(MouseEvent e) {
                 if(e.getClickCount() == 2) {
                     int id = (Integer) subscriptionsTable.getValueAt(subscriptionsTable.getSelectedRow(), idColumnNr);
-                    new EditOrder(id);
+                    new EditSubscription(id);
                 }
             }
         });
