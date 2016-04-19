@@ -12,7 +12,6 @@ import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.text.MaskFormatter;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -24,6 +23,8 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import static GUI.WindowPanels.Orders.updateOrders;
 import static javax.swing.JOptionPane.showInputDialog;
@@ -286,11 +287,11 @@ public class EditOrder extends JDialog {
             boolean isUpdated = orderManagement.createOrder((String)selectedCustomer[1], selectedDateString, selectedRecipes, comment, selectedTimeString);
             if(!isUpdated) {
                 showMessageDialog(null, "Issue with editing order.");
+            } else {
+                updateOrders();
+                setVisible(false);
+                dispose();
             }
-
-            updateOrders();
-            setVisible(false);
-            dispose();
         });
 
         pack();

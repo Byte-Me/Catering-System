@@ -3,6 +3,8 @@ package Database;
 import org.apache.commons.dbutils.DbUtils;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 
 
@@ -28,25 +30,21 @@ public abstract class Management {
             scentence = connection.createStatement();
         } catch (Exception e) {
             System.err.println("Connecting to database failed.");
-            DbUtils.closeQuietly(scentence);
-            DbUtils.closeQuietly(connection);
-            //    e.printStackTrace();
+            closeConnection();
             return false;
         }
         return !(connection == null || scentence == null);
     }
     protected void closeConnection(){
         try {
-            DbUtils.closeQuietly(scentence);
-            DbUtils.closeQuietly(connection);
+            if(!scentence.isClosed() || scentence == null)DbUtils.closeQuietly(scentence);
+            if(!connection.isClosed() || connection == null)DbUtils.closeQuietly(connection);
         }
         catch (Exception e){
             System.err.println("Problem with closing connection");
         }
-
-
-
     }
+
     protected String adressFormatter(String city, String postal_code, String street){
         return street + ", " + postal_code + " " + city + ", Norway";
     }
@@ -72,4 +70,5 @@ public abstract class Management {
     }
 
     protected Connection getConnection() { return connection; }
+
 }
