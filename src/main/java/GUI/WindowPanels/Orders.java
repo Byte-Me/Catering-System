@@ -23,7 +23,7 @@ public class Orders {
 
     static OrderManagement orderManagement = new OrderManagement();
     static MainTableModel orderModel;
-    private final int orderColumnNr = 0;
+    private final int idColumnNr = 0;
 
     public Orders(JTable ordersTable, final JTextField searchOrders, JButton addOrderButton, JButton editOrderButton, JButton deleteOrderButton) {
 
@@ -59,7 +59,7 @@ public class Orders {
 
         editOrderButton.addActionListener(e -> {
             if(ordersTable.getSelectedColumn() >= 0) {
-                int id = (Integer)ordersTable.getValueAt(ordersTable.getSelectedRow(), orderColumnNr); //hent username for selected row
+                int id = (Integer)ordersTable.getValueAt(ordersTable.getSelectedRow(), idColumnNr); //hent username for selected row
                 new EditOrder(id);
             }
             else{
@@ -69,7 +69,7 @@ public class Orders {
 
         deleteOrderButton.addActionListener(e -> {
             if(ordersTable.getSelectedColumn() >= 0){
-                int id = (Integer)ordersTable.getValueAt(ordersTable.getSelectedRow(), orderColumnNr);
+                int id = (Integer)ordersTable.getValueAt(ordersTable.getSelectedRow(), idColumnNr);
                 orderManagement.deleteOrder(id);
                 updateOrders();
             }
@@ -91,7 +91,7 @@ public class Orders {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (ordersTable.getSelectedRow() != -1) {
-                    int id = (Integer) ordersTable.getValueAt(ordersTable.getSelectedRow(), orderColumnNr);
+                    int id = (Integer) ordersTable.getValueAt(ordersTable.getSelectedRow(), idColumnNr);
                     new EditOrder(id);
                 }
             }
@@ -99,7 +99,11 @@ public class Orders {
         popupMenu.add(new AbstractAction("Delete Order") {
             @Override
             public void actionPerformed(ActionEvent e) {
-
+                if(ordersTable.getSelectedColumn() >= 0){
+                    int id = (Integer)ordersTable.getValueAt(ordersTable.getSelectedRow(), idColumnNr);
+                    orderManagement.deleteOrder(id);
+                    updateOrders();
+                }
             }
         });
 
@@ -108,6 +112,25 @@ public class Orders {
 
             @Override
             public void mousePressed(MouseEvent e) {
+
+                int r = ordersTable.rowAtPoint(e.getPoint());
+                if (r >= 0 && r < ordersTable.getRowCount()) {
+                    ordersTable.setRowSelectionInterval(r, r);
+                } else {
+                    ordersTable.clearSelection();
+                }
+
+                int rowindex = ordersTable.getSelectedRow();
+                if (rowindex < 0)
+                    return;
+
+                if (e.isPopupTrigger() && e.getComponent() instanceof JTable) {
+                    popupMenu.show(e.getComponent(), e.getX(), e.getY());
+                }
+            }
+            @Override
+            public void mouseReleased(MouseEvent e) {
+
                 int r = ordersTable.rowAtPoint(e.getPoint());
                 if (r >= 0 && r < ordersTable.getRowCount()) {
                     ordersTable.setRowSelectionInterval(r, r);
@@ -128,7 +151,7 @@ public class Orders {
             public void mouseClicked(MouseEvent e) {
                 if(e.getClickCount() == 2) {
                     if (ordersTable.getSelectedRow() != -1) {
-                        int id = (Integer) ordersTable.getValueAt(ordersTable.getSelectedRow(), orderColumnNr);
+                        int id = (Integer) ordersTable.getValueAt(ordersTable.getSelectedRow(), idColumnNr);
                         new EditOrder(id);
                     }
                 }

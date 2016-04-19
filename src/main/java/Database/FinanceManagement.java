@@ -6,12 +6,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Created by Evdal on 09.04.2016.
  */
 public class FinanceManagement extends Management{
-    private final String getRecipes = "SELECT portions, price FROM order_recipe, recipe WHERE order_id = ? AND recipe.recipe_id = order_recipe.recipe_id;";
+    private final String getRecipes = "SELECT portions, price, recipe.recipe_id FROM order_recipe, recipe WHERE order_recipe.order_id = ? AND recipe.recipe_id = order_recipe.recipe_id;";
 
     public FinanceManagement(){
         super();
@@ -58,6 +59,7 @@ public class FinanceManagement extends Management{
             try{                                                                                //VALUES(income, outcome, date)
                 PreparedStatement prep = getConnection().prepareStatement(getRecipes);
                 prep.setInt(1, id);
+                System.out.println(prep.toString());
                 ResultSet res = prep.executeQuery();
                 while (res.next()){
                     Object[] obj = new Object[2];

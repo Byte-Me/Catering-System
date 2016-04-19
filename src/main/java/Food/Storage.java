@@ -1,8 +1,11 @@
 package Food;
 
+import Database.FinanceManagement;
 import Database.FoodManagement;
+import Database.OrderManagement;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Created by Evdal on 15.03.2016.
@@ -10,13 +13,24 @@ import java.util.ArrayList;
 public class Storage {
 
     // kan sende inn hele shoppinglisten!!!
-    public boolean removeFromStorage(ArrayList<Object[]> ing){ //tar inn liste med to objekter i hvert element. 0 = navn og 1 = amount;
-        FoodManagement food = new FoodManagement();
-        for(Object[] i : ing){
-            Object[] tmp = new Object[]{i[0], i[1]}; //name , quantity
-            if(!food.removeIngredientFromStorage((String)i[0], (Integer)i[1])){
-                return false;
+    private static OrderManagement orderManagement = new OrderManagement();
+    private static FoodManagement foodManagement = new FoodManagement();
+    private static FinanceManagement financeManagement = new FinanceManagement();
+
+
+    public static boolean removeFromStorage(int orderID){
+        ArrayList<Object[]> recipeInfo = orderManagement.getRecipesFromOrder(orderID); //0 = name, 1 = portion, 2 = id
+        //get
+        for(Object[] recipe : recipeInfo){
+            //get ingredients in recipe
+            ArrayList<Object[]> ingredients = foodManagement.getRecipeIngredients((Integer) recipe[2]); //1 = amount, 3 = id
+            for(Object[] ing : ingredients){
+                //remove ingredient, subtractedValue = amount*portion
+                if(!foodManagement.removeIngredientFromStorage((Integer)ing[3], (Integer)ing[1]*(Integer)recipe[1])){
+                    return false;
+                }
             }
+
         }
         return true;
     }

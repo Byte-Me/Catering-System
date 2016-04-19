@@ -120,7 +120,23 @@ public class Users {
                     popupMenu.show(e.getComponent(), e.getX(), e.getY());
                 }
             }
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                int r = userTable.rowAtPoint(e.getPoint());
+                if (r >= 0 && r < userTable.getRowCount()) {
+                    userTable.setRowSelectionInterval(r, r);
+                } else {
+                    userTable.clearSelection();
+                }
 
+                int rowindex = userTable.getSelectedRow();
+                if (rowindex < 0)
+                    return;
+
+                if (e.isPopupTrigger() && e.getComponent() instanceof JTable) {
+                    popupMenu.show(e.getComponent(), e.getX(), e.getY());
+                }
+            }
             @Override
             public void mouseClicked(MouseEvent e) {
                 if(e.getClickCount() == 2) {
