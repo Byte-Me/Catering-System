@@ -59,6 +59,7 @@ __Loginscreen is finished.__
 - [x] Recipes and portions must switch places in addOrder.
 - [ ] Change edit order calls from createOrder to updateOrder(WHEN BACKEND IS DONE).
 - [x] Right click order to choose wether to edit, delete or add new order(LOW PRIORITY).
+- [x] Implement JDatePicker
 - [ ] Test after implementing the above
 
 ### Driver:

@@ -3,6 +3,10 @@ package GUI;
 import Database.CustomerManagement;
 import Database.FoodManagement;
 import Database.OrderManagement;
+import HelperClasses.DateLabelFormatter;
+import org.jdatepicker.impl.JDatePanelImpl;
+import org.jdatepicker.impl.JDatePickerImpl;
+import org.jdatepicker.impl.UtilDateModel;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -14,8 +18,12 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 import static GUI.WindowPanels.Orders.updateOrders;
 import static javax.swing.JOptionPane.showInputDialog;
@@ -28,7 +36,6 @@ public class EditOrder extends JDialog {
 
     private JPanel mainPanel;
     private JComboBox<Object> customerDropdown;
-    private JFormattedTextField dateField;
     private JTable recipeTable;
     private JList<String> recipesList;
     private JButton leftButton;
@@ -39,6 +46,7 @@ public class EditOrder extends JDialog {
     private JFormattedTextField timeField;
     private JComboBox statusDropdown;
     private JTextField searchRecipes;
+    private JDatePickerImpl datePicker;
     private static JComboBox<Object> custDropHelp;
 
     private final String defaultTimeValue = "12:00";
@@ -50,6 +58,8 @@ public class EditOrder extends JDialog {
     private CustomerManagement customerManagement = new CustomerManagement();
     private ArrayList<Object[]> customers;
     private OrderManagement orderManagement = new OrderManagement();
+
+    private UtilDateModel model; // DatePicker model
 
 
     public EditOrder(int orderId) {
@@ -91,17 +101,8 @@ public class EditOrder extends JDialog {
 
         try {
             /* FormattedTextField for date, default value set to tomorrow */
-            final MaskFormatter dateMaskFormatter = new MaskFormatter("####-##-##"); // Defining format pattern
             final MaskFormatter timeMaskFormatter = new MaskFormatter("##:##"); // Defining format pattern
 
-
-
-            dateField.setFormatterFactory(new JFormattedTextField.AbstractFormatterFactory() { // Add format to field
-                @Override
-                public JFormattedTextField.AbstractFormatter getFormatter(JFormattedTextField tf) {
-                    return dateMaskFormatter;
-                }
-            });
             timeField.setFormatterFactory(new JFormattedTextField.AbstractFormatterFactory() { // Add format to field
                 @Override
                 public JFormattedTextField.AbstractFormatter getFormatter(JFormattedTextField tf) {
@@ -160,7 +161,13 @@ public class EditOrder extends JDialog {
         //Adding info to textboxes.
         String customerName = (String)orderInfo[0];
         customerDropdown.setSelectedItem(customerName);
-        dateField.setText((String)orderInfo[1]);
+
+        // set value of JDatePicker
+        String sDate = (String)orderInfo[1];
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        LocalDate date = LocalDate.parse(sDate, formatter);
+        model.setDate(date.getYear(), date.getMonthValue(), date.getDayOfMonth());
+
         timeField.setText((String)orderInfo[2]);
         commentTextArea.setText((String)orderInfo[3]);
         statusDropdown.setSelectedItem(orderInfo[4]);
@@ -266,7 +273,9 @@ public class EditOrder extends JDialog {
         //adds
         addOrderButton.addActionListener(e -> {
             Object[] selectedCustomer = customers.get(customerDropdown.getSelectedIndex());
-            String selectedDate = dateField.getText();
+            Date selectedDate = (Date)datePicker.getModel().getValue();
+            DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            String selectedDateString = format.format(selectedDate);
             String selectedTime = timeField.getText();
             String comment = commentTextArea.getText();
 
@@ -276,7 +285,7 @@ public class EditOrder extends JDialog {
             }
 
             OrderManagement orderManagement = new OrderManagement();
-            boolean isUpdated = orderManagement.createOrder((String)selectedCustomer[1], selectedDate, selectedRecipes, comment, selectedTime+seconds);
+            boolean isUpdated = orderManagement.createOrder((String)selectedCustomer[1], selectedDateString, selectedRecipes, comment, selectedTime+seconds);
             if(!isUpdated) {
                 showMessageDialog(null, "Issue with editing order.");
             }
@@ -290,6 +299,22 @@ public class EditOrder extends JDialog {
         setLocationRelativeTo(getParent());
         setModal(true);
         setVisible(true);
+    }
+
+    private void createUIComponents() { // Creates the JDatePicker
+        // Date Pickers start
+        model = new UtilDateModel();
+        Calendar cal = new GregorianCalendar();
+        model.setDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE));
+        model.setSelected(true);
+        Properties p = new Properties();
+        p.put("text.today", "Today");
+        p.put("text.month", "Month");
+        p.put("text.year", "Year");
+
+        JDatePanelImpl datePanel = new JDatePanelImpl(model, p);
+
+        datePicker = new JDatePickerImpl(datePanel, new DateLabelFormatter());
     }
 
     private int existsInTable(JTable table, String entry) {

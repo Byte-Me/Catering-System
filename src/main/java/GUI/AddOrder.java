@@ -3,6 +3,10 @@ package GUI;
 import Database.CustomerManagement;
 import Database.FoodManagement;
 import Database.OrderManagement;
+import HelperClasses.DateLabelFormatter;
+import org.jdatepicker.impl.JDatePanelImpl;
+import org.jdatepicker.impl.JDatePickerImpl;
+import org.jdatepicker.impl.UtilDateModel;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -16,10 +20,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
+import java.util.*;
 
 import static GUI.WindowPanels.Orders.updateOrders;
 import static javax.swing.JOptionPane.showInputDialog;
@@ -32,7 +33,6 @@ public class AddOrder extends JDialog{
 
     private JPanel mainPanel;
     private JComboBox<Object> customerDropdown;
-    private JFormattedTextField dateField;
     private JTable orderRecepies;
     private JList<String> recipesList;
     private JButton leftButton;
@@ -42,6 +42,7 @@ public class AddOrder extends JDialog{
     private JTextArea commentTextArea;
     private JFormattedTextField timeField;
     private JTextField searchRecipes;
+    private JDatePickerImpl datePicker;
 
     private final String defaultTimeValue = "12:00";
     private final String seconds = ":00";
@@ -91,24 +92,10 @@ public class AddOrder extends JDialog{
 
         try {
             /* FormattedTextField for date, default value set to tomorrow */
-            final MaskFormatter dateMaskFormatter = new MaskFormatter("####-##-##"); // Defining format pattern
             final MaskFormatter timeMaskFormatter = new MaskFormatter("##:##"); // Defining format pattern
 
-            DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd"); // Setup date format
-
-            Calendar cal = Calendar.getInstance();
-            cal.add(Calendar.DATE, 1);
-            Date tomorrowDate = new Date(cal.getTimeInMillis());
-
-            dateMaskFormatter.setPlaceholder(dateFormat.format(tomorrowDate)); // Placeholder
             timeMaskFormatter.setPlaceholder(defaultTimeValue); // Placeholder
 
-            dateField.setFormatterFactory(new JFormattedTextField.AbstractFormatterFactory() { // Add format to field
-                @Override
-                public JFormattedTextField.AbstractFormatter getFormatter(JFormattedTextField tf) {
-                    return dateMaskFormatter;
-                }
-            });
             timeField.setFormatterFactory(new JFormattedTextField.AbstractFormatterFactory() { // Add format to field
                 @Override
                 public JFormattedTextField.AbstractFormatter getFormatter(JFormattedTextField tf) {
@@ -242,7 +229,9 @@ public class AddOrder extends JDialog{
 
         addOrderButton.addActionListener(e -> {
             Object[] selectedCustomer = customers.get(customerDropdown.getSelectedIndex());
-            String selectedDate = dateField.getText();
+            Date selectedDate = (Date)datePicker.getModel().getValue();
+            DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+            String selectedDateString = format.format(selectedDate);
             String selectedTime = timeField.getText();
             String comment = commentTextArea.getText();
 
@@ -253,7 +242,7 @@ public class AddOrder extends JDialog{
 
             OrderManagement orderManagement = new OrderManagement();
 
-            boolean isAdded = orderManagement.createOrder((String)selectedCustomer[1], selectedDate, selectedRecipes, comment, selectedTime+seconds);
+            boolean isAdded = orderManagement.createOrder((String)selectedCustomer[1], selectedDateString, selectedRecipes, comment, selectedTime+seconds);
             if(!isAdded) {
                 showMessageDialog(null, "Kunne ikke legge til order.");
             }
@@ -268,6 +257,22 @@ public class AddOrder extends JDialog{
         setLocationRelativeTo(getParent());
         setModal(true);
         setVisible(true);
+    }
+
+    private void createUIComponents() { // Creates the JDatePicker
+        // Date Pickers start
+        UtilDateModel model = new UtilDateModel();
+        Calendar cal = new GregorianCalendar();
+        model.setDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH), cal.get(Calendar.DATE));
+        model.setSelected(true);
+        Properties p = new Properties();
+        p.put("text.today", "Today");
+        p.put("text.month", "Month");
+        p.put("text.year", "Year");
+
+        JDatePanelImpl datePanel = new JDatePanelImpl(model, p);
+
+        datePicker = new JDatePickerImpl(datePanel, new DateLabelFormatter());
     }
 
     private int existsInTable(JTable table, String entry) {
