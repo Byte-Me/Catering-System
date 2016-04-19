@@ -14,6 +14,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -264,26 +265,30 @@ public class EditOrder extends JDialog {
         rightButton.addActionListener(e -> addOrderModel.removeRow(recipeTable.getSelectedRow()));
 
         //adds
-        addOrderButton.addActionListener(e -> {
-            Object[] selectedCustomer = customers.get(customerDropdown.getSelectedIndex());
-            String selectedDate = dateField.getText();
-            String selectedTime = timeField.getText();
-            String comment = commentTextArea.getText();
+        addOrderButton.addActionListener(e -> {/*
+        TODO: SKA GJØRES, EG BÆRE MÅ TA EN KRAFTIG SHIT
+            try {
+                Object[] selectedCustomer = customers.get(customerDropdown.getSelectedIndex());
+                String selectedDate = dateField.getText();
+                String selectedTime = timeField.getText();
+                String comment = commentTextArea.getText();
 
-            ArrayList<Object[]> selectedRecipes = new ArrayList<>();
-            for (int i = 0; i < addOrderModel.getRowCount(); i++) {
-                selectedRecipes.add(new Object[]{addOrderModel.getValueAt(i, 1), addOrderModel.getValueAt(i, 0)});
+                ArrayList<Object[]> selectedRecipes = new ArrayList<>();
+                for (int i = 0; i < addOrderModel.getRowCount(); i++) {
+                    selectedRecipes.add(new Object[]{addOrderModel.getValueAt(i, 1), addOrderModel.getValueAt(i, 0)});
+                }
+
+                OrderManagement orderManagement = new OrderManagement();
+                if (orderManagement.updateOrderDate(selectedDate, )) {
+                    showMessageDialog(null, "Issue with editing order.");
+                }
+
+                updateOrders();
+                setVisible(false);
+                dispose();
             }
-
-            OrderManagement orderManagement = new OrderManagement();
-            boolean isUpdated = orderManagement.createOrder((String)selectedCustomer[1], selectedDate, selectedRecipes, comment, selectedTime+seconds);
-            if(!isUpdated) {
-                showMessageDialog(null, "Issue with editing order.");
-            }
-
-            updateOrders();
-            setVisible(false);
-            dispose();
+            catch (Exception ee){
+            }*/
         });
 
         pack();

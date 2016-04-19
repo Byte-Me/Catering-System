@@ -3,6 +3,8 @@ package Database;
 import org.apache.commons.dbutils.DbUtils;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Statement;
 
 
@@ -37,8 +39,8 @@ public abstract class Management {
     }
     protected void closeConnection(){
         try {
-            if(!scentence.isClosed())DbUtils.closeQuietly(scentence);
-            if(!connection.isClosed())DbUtils.closeQuietly(connection);
+            if(!scentence.isClosed() || scentence == null)DbUtils.closeQuietly(scentence);
+            if(!connection.isClosed() || connection == null)DbUtils.closeQuietly(connection);
         }
         catch (Exception e){
             System.err.println("Problem with closing connection");
@@ -70,4 +72,5 @@ public abstract class Management {
     }
 
     protected Connection getConnection() { return connection; }
+
 }

@@ -58,13 +58,25 @@ public class Orders {
         ordersTable.getColumnModel().getColumn(5).setMaxWidth(100);
 
         editOrderButton.addActionListener(e -> {
-            if(ordersTable.getSelectedColumn() >= 0) { //TODO: sjekker ikke om flere columns er selected, velger øverste.
+            if(ordersTable.getSelectedColumn() >= 0) {
                 int id = (Integer)ordersTable.getValueAt(ordersTable.getSelectedRow(), orderColumnNr); //hent username for selected row
                 new EditOrder(id);
             }
             else{
                 showMessageDialog(null, "An order needs to be selected.");
             }
+        });
+
+        deleteOrderButton.addActionListener(e -> {
+            if(ordersTable.getSelectedColumn() >= 0){
+                int id = (Integer)ordersTable.getValueAt(ordersTable.getSelectedRow(), orderColumnNr);
+                orderManagement.deleteOrder(id);
+                updateOrders();
+            }
+            else {
+                showMessageDialog(null, "An order needs to be selected");
+            }
+
         });
 
         // Right Click Menu

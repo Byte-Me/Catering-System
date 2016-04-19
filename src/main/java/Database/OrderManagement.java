@@ -48,7 +48,7 @@ public class OrderManagement extends Management {
     String sqlCreateOrderSub3 = "INSERT INTO order_recipe VALUES( ?, ?, ?);";
 
     // SQL setning for createOrder metode
-    String sqlCreateOrder = "SELECT customer_id FROM customer WHERE email = ?;";
+    String sqlGetEmail = "SELECT customer_id FROM customer WHERE email = ?;";
 
     // SQL setning for getOrderInfoFromId metode
     String sqlGetOrderInfoFromId = "SELECT `order`.status, `order`.date, customer.name, `order`.note, `order`.time FROM `order`," +
@@ -93,12 +93,12 @@ public class OrderManagement extends Management {
 
     public void finallyStatement() {
         try {
-            if (!conn.getAutoCommit() || conn == null) {
+            if (!conn.getAutoCommit()) {
                 conn.commit();
                 conn.setAutoCommit(true);
             }
-            if (!res.isClosed() || res == null) res.close();
-            if (!prep.isClosed() || prep == null) prep.close();
+            if (!res.isClosed()) res.close();
+            if (!prep.isClosed()) prep.close();
         } catch (SQLException sqle) {
             System.err.println("Finally Statement failed");
             sqle.printStackTrace();
@@ -330,15 +330,36 @@ public class OrderManagement extends Management {
         }
         return true;
     }
+/*
+    public int getOrderID(String email){
+        int id = -1;
+        if(setUp()){
+            try {
+                conn = getConnection();
+                prep = conn.prepareStatement(sqlGetEmail);
+                prep.setString(1, email);
+                res = prep.executeQuery();
+
+                if (res.next()) {
+                    id = res.getInt("customer_id");
+                }
+            }catch (SQLException sqle){
+                System.err.println("ERROR 014: Issue with finding order id");
+            }finally {
+                finallyStatement();
+            }
+        }
+        return id;
+    }*/
 
 
-    public boolean createOrder(String customerMail, String date, ArrayList<Object[]> recipes, String note, String time) {
+    public boolean createOrder(String email, String date, ArrayList<Object[]> recipes, String note, String time) {
         int id = -1;
         try {
             if (setUp()) {
                 conn = getConnection();
-                prep = conn.prepareStatement(sqlCreateOrder);
-                prep.setString(1, customerMail);
+                prep = conn.prepareStatement(sqlGetEmail);
+                prep.setString(1, email);
                 res = prep.executeQuery();
 
                 if (res.next()) {
