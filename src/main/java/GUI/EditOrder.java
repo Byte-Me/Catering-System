@@ -43,10 +43,10 @@ public class EditOrder extends JDialog {
     private JButton cancelButton;
     private JButton addOrderButton;
     private JTextArea commentTextArea;
-    private JFormattedTextField timeField;
     private JComboBox statusDropdown;
     private JTextField searchRecipes;
     private JDatePickerImpl datePicker;
+    private JSpinner timeSpinner;
     private static JComboBox<Object> custDropHelp;
 
     private final String defaultTimeValue = "12:00";
@@ -97,20 +97,6 @@ public class EditOrder extends JDialog {
         // Create Status Dropdown
         for(OrderManagement.OrderType status : OrderManagement.OrderType.values()){
             statusDropdown.addItem(status);
-        }
-
-        try {
-            /* FormattedTextField for date, default value set to tomorrow */
-            final MaskFormatter timeMaskFormatter = new MaskFormatter("##:##"); // Defining format pattern
-
-            timeField.setFormatterFactory(new JFormattedTextField.AbstractFormatterFactory() { // Add format to field
-                @Override
-                public JFormattedTextField.AbstractFormatter getFormatter(JFormattedTextField tf) {
-                    return timeMaskFormatter;
-                }
-            });
-        } catch (Exception e) {
-            e.printStackTrace();
         }
 
         /* Create Recipe List */
@@ -168,7 +154,17 @@ public class EditOrder extends JDialog {
         LocalDate date = LocalDate.parse(sDate, formatter);
         model.setDate(date.getYear(), date.getMonthValue(), date.getDayOfMonth());
 
-        timeField.setText((String)orderInfo[2]);
+        // TimeSpinner
+        SpinnerDateModel timeModel = new SpinnerDateModel();
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+        try {
+            timeModel.setValue(timeFormat.parse((String)orderInfo[2]));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        timeSpinner.setModel(timeModel); // TODO: Set default if parse error?
+        timeSpinner.setEditor(new JSpinner.DateEditor(timeSpinner, "HH:mm"));
+
         commentTextArea.setText((String)orderInfo[3]);
         statusDropdown.setSelectedItem(orderInfo[4]);
 
@@ -276,7 +272,9 @@ public class EditOrder extends JDialog {
             Date selectedDate = (Date)datePicker.getModel().getValue();
             DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
             String selectedDateString = format.format(selectedDate);
-            String selectedTime = timeField.getText();
+            Date selectedTime = (Date)timeSpinner.getValue();
+            DateFormat tFormat = new SimpleDateFormat("HH:mm:ss");
+            String selectedTimeString = tFormat.format(selectedTime);
             String comment = commentTextArea.getText();
 
             ArrayList<Object[]> selectedRecipes = new ArrayList<>();
@@ -285,7 +283,7 @@ public class EditOrder extends JDialog {
             }
 
             OrderManagement orderManagement = new OrderManagement();
-            boolean isUpdated = orderManagement.createOrder((String)selectedCustomer[1], selectedDateString, selectedRecipes, comment, selectedTime+seconds);
+            boolean isUpdated = orderManagement.createOrder((String)selectedCustomer[1], selectedDateString, selectedRecipes, comment, selectedTimeString);
             if(!isUpdated) {
                 showMessageDialog(null, "Issue with editing order.");
             }
