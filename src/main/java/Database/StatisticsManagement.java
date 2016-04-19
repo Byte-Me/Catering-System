@@ -19,18 +19,18 @@ public class StatisticsManagement extends Management{
     Antall ordre per tid
 
 */
-    public ArrayList<double[]> getFinanceInfo(String firstDate, String lastDate){
+    public ArrayList<long[]> getFinanceInfo(String firstDate, String lastDate){
         ResultSet res;
-        ArrayList<double[]> out = new ArrayList<>();
+        ArrayList<long[]> out = new ArrayList<>();
         if(setUp()) {
             try {
                 res = getScentence().executeQuery("SELECT income, outcome from `finance` where `date` >= DATE '" + firstDate +
                         "' AND `date` <= DATE '" + lastDate + "' order by date;");
 
                 while (res.next()) {
-                    double[] dou = new double[2];
-                    dou[0] = res.getDouble("income");
-                    dou[1] = res.getDouble("outcome");
+                    long[] dou = new long[2];
+                    dou[0] = res.getLong("income");
+                    dou[1] = res.getLong("outcome");
                     out.add(dou);
                 }
             } catch (Exception e) {
