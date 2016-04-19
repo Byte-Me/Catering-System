@@ -1,9 +1,9 @@
 package GUI;
 
+import Database.UserManagement;
+
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  * Created by olekristianaune on 18.04.2016.
@@ -29,17 +29,51 @@ public class UserSettings extends JDialog {
         Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/Images/icon32.png"));
         setIconImage(icon);
 
+        String username = user[0].toString();
+
         // Set these fields
-        firstName.setText("First");
-        lastName.setText("Last");
-        email.setText("Mail");
-        phone.setText("Phone");
+        firstName.setText(user[1].toString());
+        lastName.setText(user[2].toString());
+        email.setText(user[3].toString());
+        phone.setText(user[4].toString());
 
         saveButton.addActionListener(e -> {
-            // TODO: Update user information for current user
+            UserManagement um = new UserManagement();
+            boolean updated;
+            // Update user information for current user
 
+            // Check if it is necessary to update info (ie. if field info is different from info in user array
+            if (!user[1].toString().equals(firstName.getText())) {
+                // Update first_name
+                updated = um.updateUserInfoFName(username, firstName.getText()); // TODO: Check if sucessful
+                if (updated) {
+                    user[1] = firstName.getText();
+                }
+            }
+            if (!user[2].toString().equals(lastName.getText())) {
+                // Update last_name
+                updated = um.updateUserInfoLName(username, lastName.toString());  // TODO: Check if sucessful
+                if (updated) {
+                    user[2] = lastName.getText();
+                }
+            }
+            if (!user[3].toString().equals(email.getText())) {
+                // Update email
+                updated = um.updateUserInfoEmail(username, email.getText());  // TODO: Check if sucessful
+                if (updated) {
+                    user[3] = email.getText();
+                }
+            }
+            if (!user[4].toString().equals(phone.getText())) {
+                // Update phone
+                updated = um.updateUserInfoPhone(username, phone.toString());  // TODO: Check if sucessful
+                if (updated) {
+                    user[4] = phone.getText();
+                }
+            }
             if (password1.getText().equals(password2.getText()) && !password1.getText().isEmpty() && !password2.getText().isEmpty()) {
-                // TODO: Update password
+                // Update password
+                updated = um.updateUserPass(username, password1.getText());  // TODO: Check if sucessful
             }
 
             if (true) { // Some condition here to check that the information was updated
