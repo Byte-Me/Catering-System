@@ -8,7 +8,7 @@ import java.util.Base64;
 import java.util.Random;
 
 /**
- * Created by Evdal on 07.03.2016.
+ * Created by M/ed on 07.03.2016.
  */
 public class Encryption {
 
