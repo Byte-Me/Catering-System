@@ -75,27 +75,30 @@ public class AddRecipe extends JDialog {
                     foodManagement = new FoodManagement();
                     int recipePrice = -1;
                     String recipeName = JOptionPane.showInputDialog(null, "Name of recipe: ");
-                    if (!recipeName.isEmpty()) {
+                    if (!recipeName.isEmpty() && !recipeExists(recipeName)) {
                         String priceIn = JOptionPane.showInputDialog(null, "Salesprice for " + recipeName + ": ");
                         recipePrice = Integer.parseInt(priceIn);
-                    }
 
-                    ArrayList<Object[]> ingInfo = new ArrayList<>();
-                    for(int i = 0; i < inRecipeTable.getRowCount(); i++) {
-                        Object[] obj = new Object[2];
-                        obj[0] = inRecipeTable.getValueAt(i, nameColumnNr);
-                        obj[1] = inRecipeTable.getValueAt(i, quantityColumnNr);
-                        ingInfo.add(obj);
-                    }
+                        ArrayList<Object[]> ingInfo = new ArrayList<>();
+                        for(int i = 0; i < inRecipeTable.getRowCount(); i++) {
+                            Object[] obj = new Object[2];
+                            obj[0] = inRecipeTable.getValueAt(i, nameColumnNr);
+                            obj[1] = inRecipeTable.getValueAt(i, quantityColumnNr);
+                            ingInfo.add(obj);
+                        }
 
-                    if(foodManagement.addRecipe(recipeName, ingInfo, recipePrice) && !recipeName.isEmpty() && recipePrice > 0) {
-                        JOptionPane.showMessageDialog(null, "Success!");
-                        Recipes.updateRecipes();
-                        setVisible(false);
-                        dispose();
+                        if(foodManagement.addRecipe(recipeName, ingInfo, recipePrice) && !recipeName.isEmpty() && recipePrice > 0) {
+                            JOptionPane.showMessageDialog(null, "Success!");
+                            Recipes.updateRecipes();
+                            setVisible(false);
+                            dispose();
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Error. Try again!");
+                        }
                     } else {
-                        JOptionPane.showMessageDialog(null, "Error. Try again!");
+                        JOptionPane.showMessageDialog(null, "Input a recipe name, which also does not already exist.");
                     }
+
                 }
 
             } catch(Exception e1){
@@ -148,6 +151,17 @@ public class AddRecipe extends JDialog {
             }
         }
         return -1;
+    }
+
+    private boolean recipeExists(String name) {
+        FoodManagement fm = new FoodManagement();
+        ArrayList<Object[]> recipes = fm.getRecipes();
+        for(int i = 0; i < recipes.size(); i++) {
+            if(recipes.get(i)[1].equals(name)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public static void updateIngredients() {
