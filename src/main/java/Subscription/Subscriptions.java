@@ -138,8 +138,7 @@ public class Subscriptions {
             }
             cal.add(Calendar.DAY_OF_YEAR, 1);
             if (cal.getFirstDayOfWeek() == cal.get(Calendar.DAY_OF_WEEK)) stillNotEndOfWeek = false;
-            System.out.println("Current day: " + cal.get(Calendar.DAY_OF_WEEK) + " Goal day: " + day);
-            if (cal.get(Calendar.DAY_OF_WEEK) == day) { //TODO: DAY MÅ VÆRE PÅ SAMME FORM SOM CALENDAR!!!!
+            if (cal.get(Calendar.DAY_OF_WEEK) == day) {
                 if (count == frequency - 1 || stillNotEndOfWeek) {
                     return formatter.format(cal.getTime());
                 }

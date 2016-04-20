@@ -69,8 +69,8 @@ public class SubscriptionManagement extends Management{
                 System.err.println("Issue with subscriptions.");
             }
             finally {
-                DbUtils.closeQuietly(getScentence());
-                DbUtils.closeQuietly(getConnection());
+                finallyStatement(res,prep);
+
             }
         }
         return out;
@@ -93,8 +93,8 @@ public class SubscriptionManagement extends Management{
                 System.err.println("Issue with subscriptions.");
             }
             finally {
-                DbUtils.closeQuietly(getScentence());
-                DbUtils.closeQuietly(getConnection());
+                finallyStatement(res,prep);
+
             }
         }
         return out;
@@ -167,8 +167,8 @@ public class SubscriptionManagement extends Management{
 
             }
             finally {
-                DbUtils.closeQuietly(getScentence());
-                DbUtils.closeQuietly(getConnection());
+                finallyStatement(res,prep);
+
             }
         }
         return orders;
@@ -207,8 +207,8 @@ public class SubscriptionManagement extends Management{
                     getScentence().executeQuery("COMMIT;");
                 } catch (SQLException e) {
                 }
-                DbUtils.closeQuietly(getScentence());
-                DbUtils.closeQuietly(getConnection());
+                finallyStatement(res,prep);
+
 
             }
 
@@ -234,8 +234,8 @@ public class SubscriptionManagement extends Management{
                 System.err.println("Issue with getting data from subId");
                 return false;
             } finally {
-                DbUtils.closeQuietly(getScentence());
-                DbUtils.closeQuietly(getScentence());
+                finallyStatement(res,prep);
+
             }
         }
         return out > -1;
@@ -255,8 +255,8 @@ public class SubscriptionManagement extends Management{
                 return false;
             }
             finally {
-                DbUtils.closeQuietly(getScentence());
-                DbUtils.closeQuietly(getConnection());
+                finallyStatement(res,prep);
+
             }
         }
         return rowChanged > 0;
@@ -279,7 +279,7 @@ public class SubscriptionManagement extends Management{
                 return null;
             }
             finally {
-                closeConnection();
+                finallyStatement(res,prep);
             }
         }
         return out;
@@ -303,7 +303,7 @@ public class SubscriptionManagement extends Management{
                 return null;
             }
             finally {
-                closeConnection();
+                finallyStatement(res,prep);
             }
         }
         return out;
@@ -342,7 +342,7 @@ public class SubscriptionManagement extends Management{
                 return null;
             }
             finally {
-                closeConnection();
+                finallyStatement(res,prep);
             }
         }
         return out;
@@ -367,24 +367,11 @@ public class SubscriptionManagement extends Management{
                 return false;
             }
             finally {
-                finallyStatement();
+                finallyStatement(res, prep);
             }
         }
         return true;
-    }
-    public void finallyStatement() {
-        try {
-            if (!conn.getAutoCommit()) {
-                conn.commit();
-                conn.setAutoCommit(true);
-            }
-            if (res != null && !res.isClosed()) res.close();
-            if (res != null && !prep.isClosed()) prep.close();
-        } catch (SQLException sqle) {
-            System.err.println("Finally Statement failed");
-            sqle.printStackTrace();
-        }
-        closeConnection();
+
     }
 
 }

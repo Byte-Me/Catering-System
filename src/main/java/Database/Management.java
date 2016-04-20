@@ -67,8 +67,8 @@ public abstract class Management {
                 connection.commit();
                 connection.setAutoCommit(true);
             }
-            if (!res.isClosed()) res.close();
-            if (!prep.isClosed()) prep.close();
+            if (res != null &&!res.isClosed()) res.close();
+            if (prep != null && !prep.isClosed()) prep.close();
         } catch (SQLException sqle) {
             System.err.println("Finally Statement failed");
             sqle.printStackTrace();
