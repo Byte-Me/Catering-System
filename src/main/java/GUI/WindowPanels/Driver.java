@@ -1,6 +1,7 @@
 package GUI.WindowPanels;
 
 import Database.OrderManagement;
+import Database.SettingsManagement;
 import HelperClasses.ToggleSelectionModel;
 import com.teamdev.jxbrowser.chromium.Browser;
 import com.teamdev.jxbrowser.chromium.JSValue;
@@ -23,7 +24,11 @@ import static javax.swing.JOptionPane.*;
  * Created by olekristianaune on 13.03.2016.
  */
 public class Driver {
-    private static final String cateringAdress = "Trondheim, Norway";
+    static SettingsManagement sm = new SettingsManagement();
+    private static String address = sm.getSystemAddress();
+    private static String city = sm.getSystemCity();
+    private static String country = sm.getSystemCountry();
+    private static final String cateringAdress =  address + ", " + city +  ", " + country;
     static DefaultTableModel driverModel;
     private OrderManagement orderManagement = new OrderManagement();
 
@@ -157,6 +162,7 @@ public class Driver {
     }
 
     private static String getDrivingRoute() {
+        System.out.println(cateringAdress); // DEBUG
         ArrayList<double[]> coords = UseReadyOrdersLatLng(cateringAdress);
         try {
             // TODO - make more robust, coords may be empty and return null !IMPORTANT
