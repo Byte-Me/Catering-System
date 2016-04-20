@@ -26,7 +26,7 @@ public class Storage {
             ArrayList<Object[]> ingredients = foodManagement.getRecipeIngredients((Integer) recipe[2]); //1 = amount, 3 = id
             for(Object[] ing : ingredients){
                 //remove ingredient, subtractedValue = amount*portion
-                if(!foodManagement.removeIngredientFromStorage((Integer)ing[3], (Integer)ing[1]*(Integer)recipe[1])){
+                if(!foodManagement.removeIngredientFromStorage((Integer)ing[3], (Integer)ing[1]*Integer.parseInt((String)recipe[1]))){ //java.lang.ClassCastException: java.lang.String cannot be cast to java.lang.Integer(?)
                     return false;
                 }
             }
