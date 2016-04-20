@@ -316,7 +316,7 @@ public class CustomerManagement extends Management{
         if (setUp()) {
             try {
                 conn = getConnection();
-                prep = conn.prepareStatement("SELECT name, email, phone, adress, status, customer_id FROM customer WHERE email = ?;");
+                prep = conn.prepareStatement("SELECT name, email, phone, adress, cust_type, customer_id FROM customer WHERE email = ?;");
                 prep.setString(1, email);
                 res = prep.executeQuery();
                 if(res.next()){
@@ -324,7 +324,7 @@ public class CustomerManagement extends Management{
                     out[1] = res.getString("email");
                     out[2] = res.getString("phone");
                     out[3] = res.getString("adress");
-                    out[4] = res.getInt("status");
+                    out[4] = CustType.valueOf(res.getInt("cust_type"));
                     out[5] = res.getInt("customer_id");
                 }
             } catch (SQLException e) {

@@ -43,6 +43,8 @@ public class LoginManagement extends Management{
         //password = pass
 
         ResultSet res;
+        Object[] out = new Object[6];
+        out[5] = -1;
         if(setUp()) {
             try {
                 PreparedStatement prep = getConnection().prepareStatement(loginQuery);
@@ -57,12 +59,12 @@ public class LoginManagement extends Management{
             } catch (Exception e) {
                 //     e.printStackTrace();
                 System.err.println("Issue with SQL connection.");
-                return null;
+                return out;
             } finally {
                 closeConnection();
             }
         }
-        return null;
+        return out;
     }
 
 }

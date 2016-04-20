@@ -81,7 +81,9 @@ public class AddIngredient extends JDialog {
                     wrongInputNumber(price);
                     JOptionPane.showMessageDialog(null, "Error!\n1. All fields must be filled. \n2. Units and price must be positive numbers.\n3. Two ingredients with the same name can\n not be added.\n(Edit the quantity instead!)");
                 }
-            } catch(Exception e1) {}
+            } catch(Exception e1) {
+                JOptionPane.showMessageDialog(null, "Error!\n1. All fields must be filled. \n2. Units and price must be positive numbers.\n3. Two ingredients with the same name can\n not be added.\n(Edit the quantity instead!)");
+            }
         });
 
         deleteButton.addActionListener(e -> {
