@@ -8,6 +8,7 @@ import GUI.EditIngredient;
 import GUI.GenerateShoppingList;
 import GUI.Recipes;
 import HelperClasses.MainTableModel;
+import HelperClasses.ToggleSelectionModel;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -29,6 +30,30 @@ public class Chef {
     static FoodManagement foodManagement = new FoodManagement();
 
     public Chef(JTable prepareTable, JTable ingredientTable, JButton generateShoppingListButton, JButton recipesButton, JButton addIngredientButton, JButton editIngredientButton) {
+        String[] prepareHeader = {"Order ID","Recipe", "Amount", "Time", "Notes", "Status", "Update"}; // Header titles
+        String[] ingredientHeader = {"Ingredient", "Quantity", "Unit"}; // Header titles
+
+        ingredientModel = new MainTableModel();
+        prepareModel = new DefaultTableModel(){
+            @Override
+            public Class<?> getColumnClass(int columnIndex) {
+                if (columnIndex == 6)
+                    return Boolean.class;
+                return super.getColumnClass(columnIndex);
+            }
+            @Override
+            public boolean isCellEditable(int row, int col) {
+                return (col == 6);
+            }
+        }; // Model of the table
+
+        prepareModel.setColumnIdentifiers(prepareHeader); // Add header to columns
+        ingredientModel.setColumnIdentifiers(ingredientHeader); // Add header to columns
+
+        prepareTable.setModel(prepareModel); // Add model to table
+        ingredientTable.setModel(ingredientModel); // Add model to table
+        ingredientTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        prepareTable.setSelectionModel(new ToggleSelectionModel()); // Makes the list toggleable
 
         recipesButton.addActionListener(e -> new Recipes());
 
@@ -54,29 +79,6 @@ public class Chef {
 
         generateShoppingListButton.addActionListener(e -> new GenerateShoppingList());
 
-        String[] prepareHeader = {"Order ID","Recipe", "Amount", "Time", "Notes", "Status", "Update"}; // Header titles
-        String[] ingredientHeader = {"Ingredient", "Quantity", "Unit"}; // Header titles
-
-        ingredientModel = new MainTableModel();
-        prepareModel = new DefaultTableModel(){
-            @Override
-            public Class<?> getColumnClass(int columnIndex) {
-                if (columnIndex == 6)
-                    return Boolean.class;
-                return super.getColumnClass(columnIndex);
-                }
-            @Override
-             public boolean isCellEditable(int row, int col) {
-                return (col == 6);
-             }
-        }; // Model of the table
-        prepareModel.setColumnIdentifiers(prepareHeader); // Add header to columns
-        ingredientModel.setColumnIdentifiers(ingredientHeader); // Add header to columns
-
-        prepareTable.setModel(prepareModel); // Add model to table
-        ingredientTable.setModel(ingredientModel); // Add model to table
-        ingredientTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-
         ingredientTable.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -87,10 +89,6 @@ public class Chef {
             }
         });
 
-        //update order process
-   /*     prepareModel.addTableModelListener(e ->{
-
-        });*/
         prepareTable.getSelectionModel().addListSelectionListener(e -> {
             int count = 0;
             boolean lookingForOrder = true;

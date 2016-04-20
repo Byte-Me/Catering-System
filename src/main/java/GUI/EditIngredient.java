@@ -23,6 +23,7 @@ public class EditIngredient extends JDialog {
         setTitle("Edit Ingredient");
         setContentPane(mainPane);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
         pack();
         setLocationRelativeTo(getParent());
         setModal(true);
