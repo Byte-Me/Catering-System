@@ -65,8 +65,9 @@ public class EditRecipe extends JDialog {
             try {
                 foodManagement = new FoodManagement();
                 String recipeName = foodManagement.getRecipeName(recipeId);
-                String priceIn = JOptionPane.showInputDialog(null, "New salesprice for " + recipeName + ": ");
-                int recipePrice = 0;
+                int prevPrice = foodManagement.getRecipePrice(recipeName);
+                String priceIn = JOptionPane.showInputDialog(null, "New salesprice for " + recipeName + ": \nPrevious price: " + prevPrice);
+                int recipePrice = -1;
                 try {
                     recipePrice = Integer.parseInt(priceIn);
                 } catch (NumberFormatException e1) {

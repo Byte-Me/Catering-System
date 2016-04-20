@@ -37,29 +37,35 @@ public class EditIngredient extends JDialog {
 
         ingredientAmount.requestFocus();
 
-        editIngredientButton.addActionListener(e -> {
-            String name = ingredientName.getText();
-            int price = Integer.parseInt(ingredientPrice.getText());
-            int quantity = Integer.parseInt(ingredientAmount.getText());
-            String unit = ingredientUnit.getText();
+        editIngredientButton.addActionListener(e -> { // Rar bug med å edite både navn og unit sammen, alle andre kombinasjoner funker (virker det som).
+            try {
+                String name = ingredientName.getText();
+                int price = Integer.parseInt(ingredientPrice.getText());
+                int quantity = Integer.parseInt(ingredientAmount.getText());
+                String unit = ingredientUnit.getText();
 
-            if(foodManagement.updateIngredientName(ingredient, name) &&
-                    foodManagement.updateIngredientPrice(ingredient, price) &&
-                    foodManagement.updateIngredientQuantity(ingredient, quantity) &&
-                    foodManagement.updateIngredientUnit(ingredient, unit))
-            {
+                if(!name.isEmpty() && price > 0 && quantity > 0 && !unit.isEmpty()) {
+                    if(foodManagement.updateIngredientPrice(ingredient, price) &&
+                            foodManagement.updateIngredientQuantity(ingredient, quantity) &&
+                            foodManagement.updateIngredientName(ingredient, name) &&
+                            foodManagement.updateIngredientUnit(ingredient, unit)) {
 
-                JOptionPane.showMessageDialog(null, "Ingredient updated.");
-            }
-            else{
+                        JOptionPane.showMessageDialog(null, "Ingredient updated.");
+                        setVisible(false);
+                        dispose();
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Ingredient updated.");
+                        setVisible(false);
+                        dispose();
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "Issue with updating ingredient.");
+                }
+
+                Chef.updateIngredients();
+            } catch(Exception e2) {
                 JOptionPane.showMessageDialog(null, "Issue with updating ingredient.");
             }
-
-            Chef.updateIngredients();
-
-            setVisible(false);
-            dispose();
-
         });
 
         cancelButton.addActionListener(e -> {

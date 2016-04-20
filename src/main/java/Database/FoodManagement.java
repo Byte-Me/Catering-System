@@ -311,7 +311,7 @@ public class FoodManagement extends Management{
                     if(numb == 0)return false;
                 }
 
-                PreparedStatement prep = getConnection().prepareStatement("UPDATE recipe SET price = ?;");
+                PreparedStatement prep = getConnection().prepareStatement("UPDATE recipe SET price = ? WHERE name = '" + name + "';");
                 prep.setInt(1, price);
                 prep.executeUpdate();
 
@@ -415,7 +415,7 @@ public class FoodManagement extends Management{
                 DbUtils.closeQuietly(getConnection());
             }
         }
-        return out; // returnerer i samme rekkefølge som
+        return out;
     }
 
     public boolean addIngredientToStorage(String name, int addedValue){ //ingredients[0] = name og ingredients[1] = added values
@@ -564,5 +564,60 @@ public class FoodManagement extends Management{
         return out;
     }
 
+    public int getRecipePrice(String name)throws Exception{
+        ResultSet res;
+        int out = -1;
+        if(setUp()){
+            try{
+                res = getScentence().executeQuery("SELECT price FROM recipe WHERE name = '" + name + "';");
+                if(res.next()) {
+                    out = res.getInt("price");
+                }
 
+            } catch (Exception e){
+                System.err.println("Issue with getting price of recipe.");
+                return -1;
+            }
+            finally {
+                DbUtils.closeQuietly(getScentence());
+                DbUtils.closeQuietly(getConnection());
+            }
+        }
+        return out;
+    }
+    //FIXME
+    /*
+    public ArrayList<Object[]> prepareSearch(String searchTerm){
+        ResultSet res;
+        ArrayList<Object[]> out = new ArrayList<>();
+        if(setUp()) {
+            try {
+                PreparedStatement prep = getConnection().prepareStatement("SELECT order_recipe.order_id, recipe.name" +
+                        " FROM order_recipe, recipe WHERE recipe.recipe_id = order_recipe.recipe_id AND (" +
+                        "recipe.recipe_id LIKE ? OR recipe.name LIKE ?");
+                searchTerm = "%" + searchTerm + "%";
+                prep.setString(1, searchTerm);
+                prep.setString(2, searchTerm);
+                res = prep.executeQuery();
+
+                while (res.next()) {
+                    Object[] obj = new Object[2];
+                    obj[0] = res.getInt("order_id");
+                    obj[1] = res.getString("name");
+                    out.add(obj);
+                }
+            } catch (Exception e) {
+                System.err.println("Issue with search.");
+                e.printStackTrace();
+                return null;
+            } finally {
+                DbUtils.closeQuietly(getScentence());
+                DbUtils.closeQuietly(getConnection());
+            }
+
+            return out;
+        }
+        else return null;
+    }
+    */
 }
