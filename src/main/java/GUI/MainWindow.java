@@ -157,6 +157,7 @@ public class MainWindow extends JFrame {
 
         pack(); // Pack the window
         setSize(1000, 600); // Set window to desired size
+        setExtendedState(JFrame.MAXIMIZED_BOTH); // Set to fullscreen
         setLocationRelativeTo(null); // Open window in center of screen
 
         setVisible(true); // Show the window
