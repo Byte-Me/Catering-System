@@ -228,7 +228,7 @@ public class OrderManagement extends Management {
             conn = getConnection();
             try {
                 searchTerm = "%" + searchTerm + "%";
-                PreparedStatement prep = conn.prepareStatement(sqlOrderSearch);
+                prep = conn.prepareStatement(sqlOrderSearch);
                 prep.setString(1, searchTerm);
                 prep.setString(2, searchTerm);
                 prep.setString(3, searchTerm);
@@ -416,14 +416,11 @@ public class OrderManagement extends Management {
             try {
                 prep = conn.prepareStatement(sqlGetRecipesFromOrder);
                 prep.setInt(1, orderId);
-
-                ResultSet res = prep.executeQuery();
-                while (res.next()){
-                    Object[] obj = new Object[3];
-
+                res = prep.executeQuery();
+                while (res.next()) {
+                    Object[] obj = new Object[2];
                     obj[0] = res.getString("name");
                     obj[1] = res.getString("portions");
-                    obj[2] = res.getInt("recipe_id");
                     out.add(obj);
                 }
             } catch (Exception e) {
