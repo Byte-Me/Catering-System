@@ -543,14 +543,14 @@
                 <properties/>
                 <border type="none"/>
                 <children>
-                  <splitpane id="c85b7">
+                  <splitpane id="c85b7" binding="chefSplitPane">
                     <constraints>
                       <grid row="0" column="0" row-span="1" col-span="5" vsize-policy="3" hsize-policy="3" anchor="0" fill="3" indent="0" use-parent-layout="false">
                         <preferred-size width="200" height="200"/>
                       </grid>
                     </constraints>
                     <properties>
-                      <dividerLocation value="1000"/>
+                      <dividerLocation value="-1"/>
                     </properties>
                     <border type="none"/>
                     <children>
@@ -573,7 +573,7 @@
                         </constraints>
                         <properties>
                           <minimumSize width="27" height="44"/>
-                          <preferredSize width="300" height="439"/>
+                          <preferredSize width="-1" height="-1"/>
                         </properties>
                         <border type="none" title="Ingredients"/>
                         <children>
