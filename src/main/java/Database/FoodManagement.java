@@ -214,6 +214,24 @@ public class FoodManagement extends Management{
         }
         else return null;
     }
+    public int getRecipeIDPub(String name){
+        int out = -1;
+        if(setUp()) {
+            try {
+
+                ResultSet res = getScentence().executeQuery("SELECT recipe_id FROM recipe WHERE name = '" + name + "';");
+                if (res.next()) {
+                    out = res.getInt("recipe_id");
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } finally {
+                DbUtils.closeQuietly(getScentence());
+                DbUtils.closeQuietly(getConnection());
+            }
+        }
+        return out;
+    }
 
     public String getRecipeName(int id)throws Exception{
         ResultSet res;

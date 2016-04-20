@@ -143,6 +143,7 @@ public class AddSubscription extends JDialog{
             int index = 0;
             if(monCheckBox.isSelected()) {
                 dayTabbedPane.insertTab("Monday",null,monPanel.getMainPanel(),null,index);
+                dayTabbedPane.setSelectedIndex(index);
 
             }
             else{
@@ -161,8 +162,6 @@ public class AddSubscription extends JDialog{
                 }
                 if(index > dayTabbedPane.getTabCount()) index = dayTabbedPane.getTabCount();
                 dayTabbedPane.insertTab("Tuesday",null,tuePanel.getMainPanel(),null,index);
-
-
                 dayTabbedPane.setSelectedIndex(index);
 
             }
@@ -189,6 +188,7 @@ public class AddSubscription extends JDialog{
                 }
                 if(index > dayTabbedPane.getTabCount()) index = dayTabbedPane.getTabCount();
                 dayTabbedPane.insertTab("Wednesday",null,wedPanel.getMainPanel(),null,index);
+                dayTabbedPane.setSelectedIndex(index);
 
 
             }
@@ -218,6 +218,7 @@ public class AddSubscription extends JDialog{
                 }
                 if(index > dayTabbedPane.getTabCount()) index = dayTabbedPane.getTabCount();
                 dayTabbedPane.insertTab("Thursday",null,thuPanel.getMainPanel(),null,index);
+                dayTabbedPane.setSelectedIndex(index);
 
 
             }
@@ -250,6 +251,7 @@ public class AddSubscription extends JDialog{
                 }
                 if(index > dayTabbedPane.getTabCount()) index = dayTabbedPane.getTabCount();
                 dayTabbedPane.insertTab("Friday",null,friPanel.getMainPanel(),null,index);
+                dayTabbedPane.setSelectedIndex(index);
 
 
             }
@@ -286,6 +288,7 @@ public class AddSubscription extends JDialog{
                 }
                 if(index > dayTabbedPane.getTabCount()) index = dayTabbedPane.getTabCount();
                 dayTabbedPane.insertTab("Saturday",null,satPanel.getMainPanel(),null,index);
+                dayTabbedPane.setSelectedIndex(index);
 
             }
             else{
@@ -324,6 +327,7 @@ public class AddSubscription extends JDialog{
                 }
                 if(index > dayTabbedPane.getTabCount()) index = dayTabbedPane.getTabCount();
                 dayTabbedPane.insertTab("Sunday",null,sunPanel.getMainPanel(),null,index);
+                dayTabbedPane.setSelectedIndex(index);
 
 
             }

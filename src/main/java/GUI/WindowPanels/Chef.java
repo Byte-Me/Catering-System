@@ -88,7 +88,10 @@ public class Chef {
         });
 
         //update order process
-        prepareModel.addTableModelListener(e ->{
+   /*     prepareModel.addTableModelListener(e ->{
+
+        });*/
+        prepareTable.getSelectionModel().addListSelectionListener(e -> {
             int count = 0;
             boolean lookingForOrder = true;
 
@@ -121,6 +124,26 @@ public class Chef {
                     }
                 }
                 count++;
+            }            try {
+                if (!e.getValueIsAdjusting()) { // Ensures value changed only fires once on change completed
+                    if (prepareTable.getSelectionModel().isSelectionEmpty()) {
+                        updateIngredients();
+                    } else {
+                        String recipe = (String)prepareModel.getValueAt(prepareTable.getSelectedRow(), 1);
+                        int recipeId = foodManagement.getRecipeIDPub(recipe);
+                        ArrayList<Object[]> recipeInfo = foodManagement.getRecipeIngredients(recipeId);
+
+                        ingredientModel.setRowCount(0);
+
+                        for (Object[] tmp : recipeInfo) {
+                            ingredientModel.addRow(tmp);
+                        }
+                    }
+
+                }
+            } catch(Exception ignore) {
+                System.err.println("Error with getting ingredients in recipe.");
+                ignore.printStackTrace();
             }
         });
 

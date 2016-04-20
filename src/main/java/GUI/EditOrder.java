@@ -144,6 +144,7 @@ public class EditOrder extends JDialog {
         //Getting info about selected order.
         Object[] orderInfo = orderManagement.getOrderInfoFromId(orderId);
         ArrayList<Object[]> orderRecipes = orderManagement.getRecipesFromOrder(orderId);
+        System.out.println(Arrays.toString(orderInfo));
 
         //Adding info to textboxes.
         String customerName = (String)orderInfo[0];
