@@ -70,6 +70,7 @@ public class MainWindow extends JFrame {
     private JTable in;
     private JButton reactivateUserButton;
     private JTable inactiveUserTable;
+    private JSplitPane chefSplitPane;
 
 
     public MainWindow(Object[] user) {
@@ -88,7 +89,7 @@ public class MainWindow extends JFrame {
         Subscriptions subscriptionsPanel = new Subscriptions(subscriptionTable, searchSubscriptions, newSubscriptionButton, showEditSubscriptionButton, deleteSubscriptionButton);
         Orders ordersPanel = new Orders(ordersTable, searchOrders, addOrderButton, editOrderButton, deleteOrderButton);
         Driver driverPanel = new Driver(driverTable, mapPanel, generateDrivingRouteButton);
-        Chef chefPanel = new Chef(prepareTable, ingredientTable, generateShoppingListButton, recipesButton, addIngredientButton, editIngredientButton);
+        Chef chefPanel = new Chef(prepareTable, ingredientTable, generateShoppingListButton, recipesButton, addIngredientButton, editIngredientButton, chefSplitPane);
 
         // Remove panes the user does not have access to
         switch (UserManagement.UserType.valueOf((int)user[5])) {

@@ -31,7 +31,7 @@ public class Chef {
     private OrderManagement orderManagement = new OrderManagement();
     static FoodManagement foodManagement = new FoodManagement();
 
-    public Chef(JTable prepareTable, JTable ingredientTable, JButton generateShoppingListButton, JButton recipesButton, JButton addIngredientButton, JButton editIngredientButton) {
+    public Chef(JTable prepareTable, JTable ingredientTable, JButton generateShoppingListButton, JButton recipesButton, JButton addIngredientButton, JButton editIngredientButton, JSplitPane chefSplitPane) {
         String[] prepareHeader = {"Order ID","Recipe", "Amount", "Time", "Notes", "Status", "Update"}; // Header titles
         String[] ingredientHeader = {"Ingredient", "Quantity", "Unit"}; // Header titles
 
@@ -61,6 +61,8 @@ public class Chef {
 
         ingredientTable.setAutoCreateRowSorter(true);
         prepareTable.setAutoCreateRowSorter(true);
+
+        chefSplitPane.setResizeWeight(0.50);
 
         recipesButton.addActionListener(e -> new Recipes());
 
