@@ -14,6 +14,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
+import static javax.swing.JOptionPane.showInputDialog;
 import static javax.swing.JOptionPane.showMessageDialog;
 
 /**
@@ -69,9 +70,12 @@ public class Orders {
 
         deleteOrderButton.addActionListener(e -> {
             if(ordersTable.getSelectedColumn() >= 0){
-                int id = (Integer)ordersTable.getValueAt(ordersTable.getSelectedRow(), idColumnNr);
-                orderManagement.deleteOrder(id);
-                updateOrders();
+                int confirm = JOptionPane.showConfirmDialog(null, "Are you sure you want to delete order nr "+ordersTable.getValueAt(ordersTable.getSelectedRow(), idColumnNr)+"?",null,JOptionPane.YES_NO_OPTION);
+                if(confirm == JOptionPane.YES_OPTION) {
+                    int id = (Integer) ordersTable.getValueAt(ordersTable.getSelectedRow(), idColumnNr);
+                    orderManagement.deleteOrder(id);
+                    updateOrders();
+                }
             }
             else {
                 showMessageDialog(null, "An order needs to be selected");
