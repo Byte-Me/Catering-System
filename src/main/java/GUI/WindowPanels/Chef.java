@@ -23,7 +23,7 @@ import static Database.OrderManagement.OrderType;
 import static javax.swing.JOptionPane.*;
 
 /**
- * Created by olekristianaune on 13.03.2016.
+ * Created by magnusfn on 13.03.2016.
  */
 public class Chef {
     static DefaultTableModel prepareModel;
