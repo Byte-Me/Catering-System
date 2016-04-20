@@ -35,13 +35,7 @@ public class Customers {
         addCustomerButton.addActionListener(e -> new AddCustomer());
 
         editCustomerButton.addActionListener(e -> {
-            if(customerTable.getSelectedColumn() >= 0) { //TODO: sjekker ikke om flere columns er selected, velger øverste.
-                String email = (String) customerTable.getValueAt(customerTable.getSelectedRow(), emailColumnNr); //hent username for selected row
-                new EditCustomer(email);
-            }
-            else{
-                showMessageDialog(null, "A customer needs to be selected.");
-            }
+            editCustomer();
         });
 
         deleteCustomerButton.addActionListener(e1 -> deleteCustomer());
@@ -65,10 +59,7 @@ public class Customers {
         popupMenu.add(new AbstractAction("Edit Customer") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (customerTable.getSelectedRow() != -1) {
-                    String email = (String) customerTable.getValueAt(customerTable.getSelectedRow(), emailColumnNr);
-                    new EditCustomer(email);
-                }
+                editCustomer();
             }
         });
         popupMenu.add(new AbstractAction("Delete Customer") {
@@ -221,6 +212,15 @@ public class Customers {
         // Add users from arraylist to table
         for (Object[] customer : inactiveCustomers) {
             inactiveCustomerModel.addRow(customer);
+        }
+    }
+
+    private static void editCustomer() {
+        if (customerTable.getSelectedRow() != -1) {
+            String email = (String) customerTable.getValueAt(customerTable.getSelectedRow(), emailColumnNr);
+            new EditCustomer(email);
+        } else {
+            showMessageDialog(null, "A customer needs to be selected.");
         }
     }
 
