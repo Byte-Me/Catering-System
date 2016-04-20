@@ -65,7 +65,7 @@ public class UserManagement extends Management {
                 }
 
                 conn.setAutoCommit(false);
-                prep = conn.prepareStatement("INSERT INTO user VALUES(DEFAULT, ?, ?, ?, ?, ?, ?, ?, ?);");
+                prep = conn.prepareStatement("INSERT INTO user VALUES(DEFAULT, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
                 prep.setString(1, username);
                 prep.setString(2, saltHash[0]);
                 prep.setString(3, saltHash[1]);
@@ -74,6 +74,7 @@ public class UserManagement extends Management {
                 prep.setString(6, phone);
                 prep.setString(7, email);
                 prep.setInt(8, accessLevel);
+                prep.setInt(9, 1);
                 rowChanged = prep.executeUpdate();
 
             } catch (Exception e) {
@@ -111,6 +112,7 @@ public class UserManagement extends Management {
             }finally {
                 finallyStatement(res, prep);
             }
+
             return out;
         } else return null;
     }

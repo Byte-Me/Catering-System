@@ -202,7 +202,9 @@ public class PanelForSubs extends JPanel {
         return mainPanel;
     }
     public Object[][] getValues(){
-        String selectedTime = timeTextField.getText();
+        Date selectedTime = (Date)timeSpinner.getValue();
+        DateFormat tFormat = new SimpleDateFormat("HH:mm:ss");
+        String selectedTimeString = tFormat.format(selectedTime);
         String comment = commentArea.getText();
 
         Object[][] selectedRecipes = new Object[5][recipeTableModel.getRowCount()];
@@ -212,7 +214,7 @@ public class PanelForSubs extends JPanel {
         }
         selectedRecipes[2][0] = day;
         selectedRecipes[3][0] = comment;
-        selectedRecipes[4][0] = selectedTime;
+        selectedRecipes[4][0] = selectedTimeString;
 
         return selectedRecipes;
 

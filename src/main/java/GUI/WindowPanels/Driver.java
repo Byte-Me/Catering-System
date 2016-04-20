@@ -17,6 +17,7 @@ import java.util.logging.Level;
 
 import static Delivery.CreateDeliveryRoute.UseReadyOrders;
 import static Delivery.CreateDeliveryRoute.UseReadyOrdersLatLng;
+import static Delivery.CreateDeliveryRoute.orderListForTable;
 import static Delivery.DeliveryRoute.geoCoder;
 import static javax.swing.JOptionPane.*;
 
@@ -112,7 +113,7 @@ public class Driver {
     }
 
     public static void updateDrivingRoute() {
-        ArrayList<Object[]> orders = UseReadyOrders(cateringAdress);
+        ArrayList<Object[]> orders = orderListForTable(cateringAdress);
 
         // Empties entries of Users table
         driverModel.setRowCount(0);
@@ -150,7 +151,6 @@ public class Driver {
 
             // FIXME: The following executes before the new map is generated.
             if(!loaded.isUndefined()) {
-                System.out.println("Map loaded?");
                 double mapLat = browser.executeJavaScriptAndReturnValue("map.getCenter().lat();").getNumberValue();
                 double mapLng = browser.executeJavaScriptAndReturnValue("map.getCenter().lng();").getNumberValue();
                 int mapZoom = (int) browser.executeJavaScriptAndReturnValue("map.getZoom();").getNumberValue();

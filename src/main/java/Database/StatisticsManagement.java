@@ -37,8 +37,7 @@ public class StatisticsManagement extends Management{
                 System.err.println("Issue with getting finance from db");
                 return null;
             } finally {
-                DbUtils.closeQuietly(getScentence());
-                DbUtils.closeQuietly(getConnection());
+                closeConnection();
             }
         }
         return out;
@@ -58,8 +57,7 @@ public class StatisticsManagement extends Management{
                 System.err.println("Issue with getting dates");
                 return null;
             } finally {
-                DbUtils.closeQuietly(getScentence());
-                DbUtils.closeQuietly(getConnection());
+                closeConnection();
             }
         }
         return out;
@@ -79,8 +77,7 @@ public class StatisticsManagement extends Management{
                 System.err.println("Issue with getting dates");
                 return null;
             } finally {
-                DbUtils.closeQuietly(getScentence());
-                DbUtils.closeQuietly(getConnection());
+                closeConnection();
             }
         }
         return out;
@@ -100,8 +97,7 @@ public class StatisticsManagement extends Management{
                 return null;
             }
             finally {
-                DbUtils.closeQuietly(getScentence());
-                DbUtils.closeQuietly(getConnection());
+                closeConnection();
             }
         }
         return out;

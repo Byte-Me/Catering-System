@@ -4,6 +4,7 @@ package Delivery;
 import Database.DeliveryManagement;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Created by Evdal on 14.03.2016.
@@ -16,9 +17,9 @@ public class CreateDeliveryRoute {
             TravelingSalesman tsp = new TravelingSalesman(startAdress);
             DeliveryManagement dm = new DeliveryManagement();
             ArrayList<String> adressNames = dm.getAdressReady();
-            ArrayList<double[]> positions = tsp.createPositionsArray(adressNames);
+            ArrayList<double[]> positions = tsp.createPositionsArrayShortened(adressNames);
             tsp.bruteForceFindBestRoute(new ArrayList<>(), positions);
-            ArrayList<String> tmp = tsp.positionsToAdresses(tsp.getBestRoute(), adressNames);
+            ArrayList<String> tmp = tsp.positionsToAdressesShortened(tsp.getBestRoute(), adressNames);
             out = dev.getDeliveryInfo(tmp);
         }
         catch (Exception e){
@@ -28,6 +29,28 @@ public class CreateDeliveryRoute {
 
         return out;
     }
+
+    public static ArrayList<Object[]> orderListForTable(String startAdress){
+        ArrayList<Object[]> out;
+        DeliveryManagement dev = new DeliveryManagement();
+        try {
+            TravelingSalesman tsp = new TravelingSalesman(startAdress);
+            DeliveryManagement dm = new DeliveryManagement();
+            ArrayList<String> adressNames = dm.getAdressReady();
+            ArrayList<double[]> positions = tsp.createPositionsArrayShortened(adressNames);
+            tsp.bruteForceFindBestRoute(new ArrayList<>(), positions);
+            ArrayList<String> tmp = tsp.positionsToAdressesShortened(tsp.getBestRoute(), adressNames);
+            ArrayList<double[]> br = tsp.getBestRoute();
+            out = dev.getDeliveryInfo(tmp);
+        }
+        catch (Exception e){
+            System.err.println("Issue with creating delivery route.");
+            return null;
+        }
+
+        return out;
+    }
+
 
     public static ArrayList<double[]> UseReadyOrdersLatLng(String startAdress){
 

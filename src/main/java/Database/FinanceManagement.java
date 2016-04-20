@@ -65,8 +65,8 @@ public class FinanceManagement extends Management{
                 conn = getConnection();
                 prep = conn.prepareStatement(sqlGetRecipes);
                 prep.setInt(1, id);
-                System.out.println(prep.toString());
                 res = prep.executeQuery();
+
                 while (res.next()){
                     Object[] obj = new Object[2];
                     obj[0] = res.getInt("portions");
