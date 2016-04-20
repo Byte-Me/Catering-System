@@ -22,8 +22,8 @@ public class MainWindow extends JFrame {
     private JPanel statistics;
     private JPanel driver;
     private JPanel chef;
-    private JPanel administration;
-    private JPanel sale;
+    private JPanel users;
+    private JPanel customers;
     private JButton addUserButton;
     private JTable userTable;
     private JFormattedTextField fromDate;
@@ -97,7 +97,7 @@ public class MainWindow extends JFrame {
                 break;
             case SALE:
                 // Sale
-                tabbedPane1.remove(administration);
+                tabbedPane1.remove(users);
                 tabbedPane1.remove(chef);
                 tabbedPane1.remove(driver);
                 break;
@@ -105,15 +105,19 @@ public class MainWindow extends JFrame {
                 // Chef
                 tabbedPane1.remove(statistics);
                 tabbedPane1.remove(driver);
-                tabbedPane1.remove(administration);
-                tabbedPane1.remove(sale);
+                tabbedPane1.remove(users);
+                tabbedPane1.remove(customers);
+                tabbedPane1.remove(subscriptions);
+                tabbedPane1.remove(orders);
                 break;
             case DRIVER:
                 // Driver
                 tabbedPane1.remove(statistics);
                 tabbedPane1.remove(chef);
-                tabbedPane1.remove(administration);
-                tabbedPane1.remove(sale);
+                tabbedPane1.remove(users);
+                tabbedPane1.remove(customers);
+                tabbedPane1.remove(subscriptions);
+                tabbedPane1.remove(orders);
                 break;
             default:
                 // For some reason we did not get a valid userType - print error message and close window.
@@ -157,9 +161,9 @@ public class MainWindow extends JFrame {
 
         pack(); // Pack the window
         setSize(1000, 600); // Set window to desired size
-        setExtendedState(JFrame.MAXIMIZED_BOTH); // Set to fullscreen
         setLocationRelativeTo(null); // Open window in center of screen
-
+        setExtendedState(JFrame.MAXIMIZED_BOTH); // Set to fullscreen
         setVisible(true); // Show the window
     }
 }
+
