@@ -57,7 +57,7 @@ public class UserManagement extends Management {
                 getConnection().setAutoCommit(false);
                 rowChanged = getScentence().executeUpdate("INSERT INTO user VALUES(DEFAULT, '" + username +
                         "', '" + saltHash[0] + "', '" + saltHash[1] + "', '" + firstname + "', '" + lastname
-                        + "', '" + phone + "', '" + email + "', " + accessLevel + ");");
+                        + "', '" + phone + "', '" + email + "', " + accessLevel + ", "+1+");");
 
                 getConnection().commit();
             } catch (Exception e) {

@@ -15,11 +15,11 @@ public class AddUser extends JDialog {
     private JTextField email;
     private JComboBox<String> userType;
     private JTextField userName;
-    private JTextField password;
     private JPanel mainPane;
     private JButton cancelButton;
     private JButton addUserButton;
     private JTextField phone;
+    private JPasswordField password;
     private JRadioButton changePasswordRadioButton;
 
     UserManagement userManagement;
@@ -45,7 +45,7 @@ public class AddUser extends JDialog {
             String phoneNr = phone.getText();
             int type1 = userType.getSelectedIndex();
             String uName = userName.getText();
-            String pass = password.getText();
+            String pass = new String(password.getPassword());
 
 
             userManagement = new UserManagement();
