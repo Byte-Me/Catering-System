@@ -13,7 +13,7 @@ public class UserManagement extends Management {
 
     // Defines the User Types
     public enum UserType {
-        ADMIN, SALE, DRIVER, CHEF,INACTIVE;
+        ADMIN, SALE, DRIVER, CHEF;
 
         public int getValue() {
             return super.ordinal();
