@@ -6,6 +6,7 @@ import Database.OrderManagement;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * Created by Evdal on 15.03.2016.
@@ -26,8 +27,7 @@ public class Storage {
             ArrayList<Object[]> ingredients = foodManagement.getRecipeIngredients((Integer) recipe[2]); //1 = amount, 3 = id
             for(Object[] ing : ingredients){
                 //remove ingredient, subtractedValue = amount*portion
-                System.out.println(Arrays.toString(ing));
-                if(!foodManagement.removeIngredientFromStorage(Integer.parseInt((String)ing[3]), (Integer)ing[1]*(Integer)recipe[1])){
+                if(!foodManagement.removeIngredientFromStorage((Integer)ing[3], (Integer)ing[1]*Integer.parseInt((String)recipe[1]))){
                     return false;
                 }
             }

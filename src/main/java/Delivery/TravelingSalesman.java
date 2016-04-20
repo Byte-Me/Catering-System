@@ -8,6 +8,7 @@ import com.google.code.geocoder.model.GeocoderResult;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -161,7 +162,7 @@ public class TravelingSalesman {
      */
 
     //Returns null if there is an issue with geocoding adresses. This needs too be handled elsewhere.
-    public ArrayList<double[]> createPositionsArray(ArrayList<String> adresses){
+    public ArrayList<double[]> createPositionsArrayShortened(ArrayList<String> adresses){
 
         ArrayList<String> fix = new ArrayList<>();
 
@@ -185,15 +186,38 @@ public class TravelingSalesman {
         return out;
 
     }
+    public ArrayList<double[]> createPositionsArray(ArrayList<String> adresses){
 
-    public ArrayList<String> positionsToAdresses(ArrayList<double[]> inPositions,
+
+
+        ArrayList<double[]> out = new ArrayList<>();
+
+        for (int i = 0; i < adresses.size(); i++) {
+            try {
+                out.add(geoCoder(adresses.get(i), i));
+            }
+            catch (Exception e){
+                System.err.println("Issue with GeoCoding: " + adresses.get(i));
+                return null;
+            }
+        }
+
+        return out;
+
+    }
+    public ArrayList<String> positionsToAdressesShortened(ArrayList<double[]> inPositions,
                                                  ArrayList<String> originAdressList) {
         ArrayList<String> fix = new ArrayList<>();
-        for(String a : originAdressList){
+        for (String a : originAdressList) {
             if (!fix.contains(a)) {
                 fix.add(a);
             }
         }
+        return positionsToAdresses(inPositions,fix);
+    }
+    public ArrayList<String> positionsToAdresses(ArrayList<double[]> inPositions,
+                                                 ArrayList<String> originAdressList) {
+
         ArrayList<String> out = new ArrayList<>();
         ArrayList<double[]> positions = (ArrayList<double[]>) inPositions.clone();
         positions.remove(0);
@@ -201,7 +225,7 @@ public class TravelingSalesman {
         positions.trimToSize();
     //    out.add(startPoint);
         for (double[] pos : positions) {
-            out.add(fix.get((int) pos[2])); //TODO: STARTPOINT, IS IT NEEDED?
+            out.add(originAdressList.get((int) pos[2])); //TODO: STARTPOINT, IS IT NEEDED?
         }
  //       out.add(startPoint);
         return out;

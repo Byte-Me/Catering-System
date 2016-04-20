@@ -16,6 +16,7 @@ import java.util.logging.Level;
 
 import static Delivery.CreateDeliveryRoute.UseReadyOrders;
 import static Delivery.CreateDeliveryRoute.UseReadyOrdersLatLng;
+import static Delivery.CreateDeliveryRoute.orderListForTable;
 import static Delivery.DeliveryRoute.geoCoder;
 import static javax.swing.JOptionPane.*;
 
@@ -107,7 +108,7 @@ public class Driver {
     }
 
     public static void updateDrivingRoute() {
-        ArrayList<Object[]> orders = UseReadyOrders(cateringAdress);
+        ArrayList<Object[]> orders = orderListForTable(cateringAdress);
 
         // Empties entries of Users table
         driverModel.setRowCount(0);
