@@ -17,7 +17,7 @@ public class CustomerManagement extends Management{
 
     // Defines the Customer Types
     public enum CustType {
-        PERSON, CORPORATION;
+        PRIVATE, CORPORATION;
 
         public int getValue() {
             return super.ordinal();
@@ -76,7 +76,7 @@ public class CustomerManagement extends Management{
                     obj[1] = res.getString("email");
                     obj[2] = res.getString("phone");
                     obj[3] = res.getString("adress");
-                    obj[4] = res.getInt("cust_type");
+                    obj[4] = CustType.valueOf(res.getInt("cust_type"));
                     out.add(obj);
                 }
 
@@ -107,7 +107,7 @@ public class CustomerManagement extends Management{
                     obj[1] = res.getString("email");
                     obj[2] = res.getString("phone");
                     obj[3] = res.getString("adress");
-                    obj[4] = res.getInt("cust_type");
+                    obj[4] = CustType.valueOf(res.getInt("cust_type"));
 
                     out.add(obj);
                 }
@@ -212,7 +212,7 @@ public class CustomerManagement extends Management{
 
         String adress = adressFormatter(city, postCode, streetAdress);
         String name = nameFormatter(firstname, lastname);
-        if(addCustomer(name, email, phone, adress, CustType.PERSON.getValue())) return true;
+        if(addCustomer(name, email, phone, adress, CustType.PRIVATE.getValue())) return true;
         else return false;
 
     }

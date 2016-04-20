@@ -19,8 +19,8 @@ public abstract class Statistics {
         return (int) TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
     }
     protected ArrayList[]valuesMonth(ArrayList<String> values){
-        ArrayList<Double> yValues = new ArrayList<Double>();
-        ArrayList<String> xValues = new ArrayList<String>();
+        ArrayList<Double> yValues = new ArrayList<>();
+        ArrayList<String> xValues = new ArrayList<>();
         String curDate = values.get(0);
         int count;
 
@@ -43,8 +43,8 @@ public abstract class Statistics {
         return new ArrayList[]{xValues, yValues};
     }
     protected ArrayList[] valuesWeek(ArrayList<String> values){
-        ArrayList<Double> yValues = new ArrayList<Double>();
-        ArrayList<String> xValues = new ArrayList<String>();
+        ArrayList<Double> yValues = new ArrayList<>();
+        ArrayList<String> xValues = new ArrayList<>();
         String curDate = values.get(0);
         int count;
         try {
@@ -66,8 +66,8 @@ public abstract class Statistics {
         return new ArrayList[]{xValues, yValues};
     }
     protected ArrayList[] valuesDay(ArrayList<String> values){
-        ArrayList<Double> yValues = new ArrayList<Double>();
-        ArrayList<String> xValues = new ArrayList<String>();
+        ArrayList<Double> yValues = new ArrayList<>();
+        ArrayList<String> xValues = new ArrayList<>();
         String curDate = values.get(0);
         int count;
         try {
@@ -88,9 +88,12 @@ public abstract class Statistics {
         }
         return new ArrayList[]{xValues, yValues};
     }
-    protected int getDayofWeek(Date date){ //return ints from 1-7, sunday is 1.
+    protected int getDayofWeek(Date date){ //return ints from 1-7, monday - sunday
         cal.setTime(date);
-        return cal.get(cal.DAY_OF_WEEK);
+        if (cal.get(cal.DAY_OF_WEEK) == 1) { // Move sunday til end of week
+            return 7;
+        }
+        return cal.get(cal.DAY_OF_WEEK) - 1; // Rest of weekdays moved one position
 
     }
     protected Date nextDate(Date date, int time){ //Calendar int, month, year, week, day.

@@ -132,7 +132,7 @@ public class MainWindow extends JFrame {
             }
         });
         if (UserManagement.UserType.valueOf((int)user[5]) == UserManagement.UserType.ADMIN) {
-            popupMenu.add(new AbstractAction("Program Settings") {
+            popupMenu.add(new AbstractAction("System Settings") {
                 // Possibility to change address
                 // Also possible to change database?
                 // Is this saved locally to file?
@@ -140,7 +140,7 @@ public class MainWindow extends JFrame {
                 // If not, where do we save it?
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    showMessageDialog(getParent(), "Program Settings"); // FIXME: Change with actual Program Settings panel
+                    new SystemSettings();
                 }
             });
         }
@@ -157,8 +157,8 @@ public class MainWindow extends JFrame {
 
         pack(); // Pack the window
         setSize(1000, 600); // Set window to desired size
-        setExtendedState(JFrame.MAXIMIZED_BOTH); // Set to fullscreen
         setLocationRelativeTo(null); // Open window in center of screen
+        setExtendedState(JFrame.MAXIMIZED_BOTH); // Set to fullscreen
 
         setVisible(true); // Show the window
     }

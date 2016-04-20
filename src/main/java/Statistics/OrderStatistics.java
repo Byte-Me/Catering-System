@@ -98,13 +98,13 @@ public class OrderStatistics extends Statistics{
                 }
             }
             ArrayList<String> xValues = new ArrayList<>(7);
-            xValues.add("Sunday");
             xValues.add("Monday");
             xValues.add("Tuesday");
             xValues.add("Wednesday");
             xValues.add("Thursday");
             xValues.add("Friday");
             xValues.add("Saturday");
+            xValues.add("Sunday");
             chart = ChartCreator.createBarChart("Orders by weekday", "Days", "Amount", xValues,
                     yValues, "");
         }

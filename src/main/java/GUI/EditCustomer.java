@@ -55,10 +55,10 @@ public class EditCustomer extends JDialog{
 
             Object[] custInfo = customerManagement.getSingleCustomerInfo(emailS);
 
-            int custStatus = (Integer) custInfo[4];
-            addCustTabs.setSelectedIndex(custStatus-1); //HACK
+            CustomerManagement.CustType custStatus = (CustomerManagement.CustType) custInfo[4];
+            //addCustTabs.setSelectedIndex(custStatus); // What is this for??
 
-            if (custStatus == CustomerManagement.CustType.PERSON.getValue()) { //Person
+            if (custStatus == CustomerManagement.CustType.PRIVATE) { //Person
 
                 String[] fAndLName = formatName((String) custInfo[0]);
                 String[] add = formatAdress((String) custInfo[3]);
@@ -72,7 +72,7 @@ public class EditCustomer extends JDialog{
 
                 addCustTabs.remove(1); //Remove corporation tab
 
-            } else { //customer
+            } else if (custStatus == CustomerManagement.CustType.CORPORATION) { //customer
                 String[] add = formatAdress((String) custInfo[3]);
                 cName.setText((String) custInfo[0]);
                 cMail.setText((String) custInfo[1]);
