@@ -112,6 +112,9 @@ public class UserManagement extends Management {
                 System.err.println("Issue with executing SQL scentence.");
                 return null;
             }
+            finally {
+                closeConnection();
+            }
             return out;
         } else return null;
 
@@ -143,6 +146,9 @@ public class UserManagement extends Management {
             } catch (SQLException e) {
                 System.err.println("Issue with executing SQL scentence.");
                 return null;
+            }
+            finally {
+                closeConnection();
             }
             return out;
         } else return null;
@@ -209,11 +215,11 @@ public class UserManagement extends Management {
             } finally {
                 try {
                     getConnection().setAutoCommit(true);
+
                 }catch (SQLException sqle){
                     sqle.printStackTrace();
                 }
-                DbUtils.closeQuietly(getScentence());
-                DbUtils.closeQuietly(getConnection());
+                closeConnection();
             }
         }
         return rowChanged > 0;
@@ -252,9 +258,7 @@ public class UserManagement extends Management {
                 }catch (SQLException sqle){
                     sqle.printStackTrace();
                 }
-
-                DbUtils.closeQuietly(getScentence());
-                DbUtils.closeQuietly(getConnection());
+                closeConnection();
             }
         }
         return rowChanged > 0;
@@ -291,9 +295,7 @@ public class UserManagement extends Management {
                 }catch (SQLException sqle){
                     sqle.printStackTrace();
                 }
-
-                DbUtils.closeQuietly(getScentence());
-                DbUtils.closeQuietly(getConnection());
+                closeConnection();
             }
         }
         return rowChanged > 0;
@@ -330,8 +332,7 @@ public class UserManagement extends Management {
                     sqle.printStackTrace();
                 }
 
-                DbUtils.closeQuietly(getScentence());
-                DbUtils.closeQuietly(getConnection());
+                closeConnection();
             }
         }
         return rowChanged > 0;
@@ -367,9 +368,7 @@ public class UserManagement extends Management {
                 }catch (SQLException sqle){
                     sqle.printStackTrace();
                 }
-
-                DbUtils.closeQuietly(getScentence());
-                DbUtils.closeQuietly(getConnection());
+                closeConnection();
             }
         }
         return rowChanged > 0;
@@ -405,9 +404,7 @@ public class UserManagement extends Management {
                 }catch (SQLException sqle){
                     sqle.printStackTrace();
                 }
-
-                DbUtils.closeQuietly(getScentence());
-                DbUtils.closeQuietly(getConnection());
+            closeConnection();
             }
         }
         return rowChanged > 0;
@@ -444,9 +441,7 @@ public class UserManagement extends Management {
                 catch (SQLException sqle){
                     sqle.printStackTrace();
                 }
-
-                DbUtils.closeQuietly(getScentence());
-                DbUtils.closeQuietly(getConnection());
+                closeConnection();
             }
         }
         return rowChanged > 0;
@@ -484,8 +479,7 @@ public class UserManagement extends Management {
                 System.err.println("Issue with search.");
                 return null;
             } finally {
-                DbUtils.closeQuietly(getScentence());
-                DbUtils.closeQuietly(getConnection());
+                closeConnection();
             }
 
             return out;
@@ -525,9 +519,7 @@ public class UserManagement extends Management {
                 catch (SQLException sqle){
                     sqle.printStackTrace();
                 }
-
-                DbUtils.closeQuietly(getScentence());
-                DbUtils.closeQuietly(getConnection());
+                closeConnection();
             }
         }
         return rowChanged > 0;

@@ -145,7 +145,6 @@ public class Driver {
 
             // FIXME: The following executes before the new map is generated.
             if(!loaded.isUndefined()) {
-                System.out.println("Map loaded?");
                 double mapLat = browser.executeJavaScriptAndReturnValue("map.getCenter().lat();").getNumberValue();
                 double mapLng = browser.executeJavaScriptAndReturnValue("map.getCenter().lng();").getNumberValue();
                 int mapZoom = (int) browser.executeJavaScriptAndReturnValue("map.getZoom();").getNumberValue();

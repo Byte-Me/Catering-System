@@ -26,7 +26,8 @@ public class Storage {
             ArrayList<Object[]> ingredients = foodManagement.getRecipeIngredients((Integer) recipe[2]); //1 = amount, 3 = id
             for(Object[] ing : ingredients){
                 //remove ingredient, subtractedValue = amount*portion
-                if(!foodManagement.removeIngredientFromStorage((Integer)ing[3], (Integer)ing[1]*(Integer)recipe[1])){
+                System.out.println(Arrays.toString(ing));
+                if(!foodManagement.removeIngredientFromStorage(Integer.parseInt((String)ing[3]), (Integer)ing[1]*(Integer)recipe[1])){
                     return false;
                 }
             }

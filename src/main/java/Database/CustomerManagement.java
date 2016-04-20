@@ -71,12 +71,13 @@ public class CustomerManagement extends Management{
                 res = getScentence().executeQuery("SELECT * FROM customer WHERE status = 1;"); //Status 1 for aktiv og 0 for inaktiv
 
                 while(res.next()) {
-                    Object[] obj = new Object[5];
+                    Object[] obj = new Object[6];
                     obj[0] = res.getString("name");
                     obj[1] = res.getString("email");
                     obj[2] = res.getString("phone");
                     obj[3] = res.getString("adress");
                     obj[4] = res.getInt("cust_type");
+                    obj[5] = res.getInt("customer_id");
                     out.add(obj);
                 }
 

@@ -13,9 +13,7 @@ public class FoodFinance {
     public static double findOrderPrice(int orderId){
         double out = 0;
         ArrayList<Object[]> recipePrices = financeManagement.getOrderRecipeInfo(orderId);
-        System.out.println("Hei");
         for(Object[] recipe : recipePrices){
-            System.out.println(Arrays.toString(recipe));
             out += Double.valueOf((Integer)recipe[0])* (Double)recipe[1];
         }
         return out;

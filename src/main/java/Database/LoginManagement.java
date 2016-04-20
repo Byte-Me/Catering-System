@@ -59,7 +59,7 @@ public class LoginManagement extends Management{
                 System.err.println("Issue with SQL connection.");
                 return null;
             } finally {
-                super.closeConnection();
+                closeConnection();
             }
         }
         return null;

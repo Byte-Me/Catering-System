@@ -139,7 +139,7 @@ public class TravelingSalesman {
             longitude = results.get(0).getGeometry().getLocation().getLng().doubleValue();
         }
         catch (IOException ioe){
-            System.out.println("Issue with IO.");
+            System.err.println("Issue with IO.");
             return null;
 
        } catch (Exception e) {

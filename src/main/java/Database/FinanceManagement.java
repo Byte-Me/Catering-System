@@ -59,7 +59,6 @@ public class FinanceManagement extends Management{
             try{                                                                                //VALUES(income, outcome, date)
                 PreparedStatement prep = getConnection().prepareStatement(getRecipes);
                 prep.setInt(1, id);
-                System.out.println(prep.toString());
                 ResultSet res = prep.executeQuery();
                 while (res.next()){
                     Object[] obj = new Object[2];

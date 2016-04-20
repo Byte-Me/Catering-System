@@ -2,6 +2,7 @@ package Database;
 
 import org.apache.commons.dbutils.DbUtils;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -23,7 +24,12 @@ public class SubscriptionManagement extends Management{
             " `order`.sub_id = ? AND `order`.`date` = ? AND order_recipe.recipe_id = recipe.recipe_id AND `order`.order_id = order_recipe.order_id;";
     private final String getRecipeInfoFromSubAndDate2 = "SELECT note, `time` FROM `order` WHERE" +
             " sub_id = ? AND `date` = ?;";
+    private final String deleteSubscription1 = "DELETE FROM subscription WHERE sub_id = ?";
+    private final String deleteSubscription2 = "DELETE FROM `order` WHERE sub_id = ?"; //resten er on cascade
 
+    Connection conn = null;
+    PreparedStatement prep = null;
+    ResultSet res = null;
 
     public SubscriptionManagement(){super();}
 
@@ -60,7 +66,7 @@ public class SubscriptionManagement extends Management{
 
             }
             catch (Exception e){
-                System.out.println("Issue with subscriptions.");
+                System.err.println("Issue with subscriptions.");
             }
             finally {
                 DbUtils.closeQuietly(getScentence());
@@ -84,7 +90,7 @@ public class SubscriptionManagement extends Management{
 
             }
             catch (Exception e){
-                System.out.println("Issue with subscriptions.");
+                System.err.println("Issue with subscriptions.");
             }
             finally {
                 DbUtils.closeQuietly(getScentence());
@@ -168,18 +174,20 @@ public class SubscriptionManagement extends Management{
         return orders;
     }
 
-    public int createSubscription(int custID, String dateFrom, String dateTo, int frequency){
+    public int createSubscription(int custID, String dateFrom, String dateTo, int frequency, int subId){ //subid = -1 if not exists
         int subid = -1;
         if(setUp()){
             try {
                 getScentence().executeQuery("START TRANSACTION");
-                PreparedStatement prep = getConnection().prepareStatement("INSERT INTO subscription VALUES (DEFAULT,?,?,?,?,CURRENT_DATE,?);");
+                if(subid >= 0){
+                    deleteSubscription(subId);
+                }
+                prep = getConnection().prepareStatement("INSERT INTO subscription VALUES (DEFAULT,?,?,?,?,CURRENT_DATE,?);");
                 prep.setInt(1, custID);
                 prep.setString(2, dateTo);
                 prep.setString(3, dateFrom);
                 prep.setInt(4, 1); //active
                 prep.setInt(5, frequency);
-                System.out.println(prep.toString());
                 prep.executeUpdate();
                 ResultSet res = getScentence().executeQuery("SELECT LAST_INSERT_ID() as id;");
                 if(res.next()){
@@ -221,7 +229,7 @@ public class SubscriptionManagement extends Management{
                     custId = res.getInt("customer_id");
 
                 }
-                out = createSubscription(custId, dateFrom,dateTo, frequency);
+                out = createSubscription(custId, dateFrom,dateTo, frequency, subId);
             } catch (SQLException e) {
                 System.err.println("Issue with getting data from subId");
                 return false;
@@ -233,26 +241,7 @@ public class SubscriptionManagement extends Management{
         return out > -1;
 
     }
-    public boolean deleteSubscription(int subId){ //setter orderstatus på alle ordre med riktig sub_id etter dagens dato til inaktiv
-        if(setUp()){
-            try {
-                getScentence().executeUpdate("UPDATE `order` SET status = "+ OrderType.INACTIVE.getValue()+
-                        " WHERE sub_id = "+subId+" AND `date` >= CURRENT_DATE;");
-                getScentence().executeUpdate("UPDATE `subscription` SET status = "+ OrderType.INACTIVE.getValue()+
-                        " WHERE sub_id = "+subId+";");
 
-            }
-            catch (Exception e){
-                System.err.println("Issue with deleting subscription.");
-                return false;
-            }
-            finally {
-                DbUtils.closeQuietly(getScentence());
-                DbUtils.closeQuietly(getConnection());
-            }
-        }
-        return true;
-    }
     public boolean changeRecipes(int subID, int prevRecipeID, int newRecipeID){ //DENNE MÅ ENDRES TODO
         int rowChanged = 0;
         if(setUp()){
@@ -290,8 +279,7 @@ public class SubscriptionManagement extends Management{
                 return null;
             }
             finally {
-                DbUtils.closeQuietly(getScentence());
-                DbUtils.closeQuietly(getConnection());
+                closeConnection();
             }
         }
         return out;
@@ -315,8 +303,7 @@ public class SubscriptionManagement extends Management{
                 return null;
             }
             finally {
-                DbUtils.closeQuietly(getScentence());
-                DbUtils.closeQuietly(getConnection());
+                closeConnection();
             }
         }
         return out;
@@ -355,11 +342,49 @@ public class SubscriptionManagement extends Management{
                 return null;
             }
             finally {
-                DbUtils.closeQuietly(getScentence());
-                DbUtils.closeQuietly(getConnection());
+                closeConnection();
             }
         }
         return out;
+    }
+    public boolean deleteSubscription(int subId){
+        if(setUp()){
+            try{
+                conn = getConnection();
+                conn.setAutoCommit(false);
+                //sletter subscriptionen
+                prep = getConnection().prepareStatement(deleteSubscription1);
+                prep.setInt(1,subId);
+                prep.executeUpdate();
+                //sletter orders koblet til sub
+                prep = getConnection().prepareStatement(deleteSubscription2);
+                prep.setInt(1,subId);
+                prep.executeUpdate();
+
+
+            }catch(Exception e){
+                System.err.println("Issue with getRecipeInfoFromSubAndDate.");
+                return false;
+            }
+            finally {
+                finallyStatement();
+            }
+        }
+        return true;
+    }
+    public void finallyStatement() {
+        try {
+            if (!conn.getAutoCommit()) {
+                conn.commit();
+                conn.setAutoCommit(true);
+            }
+            if (res != null && !res.isClosed()) res.close();
+            if (res != null && !prep.isClosed()) prep.close();
+        } catch (SQLException sqle) {
+            System.err.println("Finally Statement failed");
+            sqle.printStackTrace();
+        }
+        closeConnection();
     }
 
 }

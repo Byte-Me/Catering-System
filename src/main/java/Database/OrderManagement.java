@@ -19,6 +19,8 @@ import java.util.*;
 
 public class OrderManagement extends Management {
     private FinanceManagement financeManagement = new FinanceManagement();
+    private CustomerManagement customerManagement = new CustomerManagement();
+    private FoodManagement foodManagement  = new FoodManagement();
 
     public OrderManagement() {
         super();
@@ -34,6 +36,7 @@ public class OrderManagement extends Management {
     // SQL setning for GetORders metode
     String sqlGetOrders = "SELECT `order`.order_id, customer.name ,customer.phone, customer.adress, `order`.date, `order`.status FROM `order`, customer WHERE " +
             "`order`.customer_id = customer.customer_id AND `order`.status >= ? ORDER BY `date` DESC, status DESC;";
+
 
     // SQL setning for OrderSearch metode
     String sqlOrderSearch = "SELECT `order`.order_id, customer.name ,customer.phone, customer.adress, `order`.date, `order`.status FROM `order`, customer WHERE " +
@@ -59,16 +62,17 @@ public class OrderManagement extends Management {
     String sqlGetRecipesFromOrder = "SELECT recipe.name, order_recipe.portions, recipe.recipe_id FROM recipe, order_recipe WHERE order_recipe.order_id = ? AND order_recipe.recipe_id = recipe.recipe_id;";
 
     // SQL setning for updateOrderDate metode
-    String sqlUpdateOrderDate = "UPDATE order SET date = ? WHERE order_id = ?";
+    String sqlUpdateOrderDate = "UPDATE `order` SET date = ? WHERE order_id = ?";
 
     // SQL setning for updateOrderTime metode
-    String sqlUpdateOrderTime = "UPDATE order SET time = ? WHERE order_id = ?";
+    String sqlUpdateOrderTime = "UPDATE `order` SET time = ? WHERE order_id = ?";
 
     // SQL setning for updateOrderCustomer metode
-    String sqlUpdateOrderCustomer = "UPDATE `order` SET customer_id = ? WHERE order_id = ? AND customer_id = ?;";
+    String sqlUpdateOrderCustomer = "UPDATE `order` SET customer_id = ? WHERE order_id = ?;";
 
     // SQL setning for updateOrderRecipe metode
-    String sqlUpdateOrderRecipe = "UPDATE order_recipe SET recipe_id = ? WHERE order_id = ? AND recipe_id = ?;";
+    String sqlUpdateOrderRecipes1 = "DELETE FROM order_recipe WHERE order_id = ?";
+    String sqlUpdateOrderRecipes2 = "INSERT INTO order_recipe VALUES(?,?,?);";
 
     // SQL setning for updateOrderPortion metode
     String sqlUpdateOrderPortions = "UPDATE order_recipe SET portions = ? WHERE order_id = ? AND recipe_id = ?;";
@@ -289,7 +293,6 @@ public class OrderManagement extends Management {
                 for (Object[] name : recipes) { //[0] = quantity, [1] = name
                     prep = conn.prepareStatement(sqlCreateOrderSub2);
                     prep.setObject(1, name[0]);
-                    System.out.println(prep.toString());
 
                     res = prep.executeQuery();
 
@@ -305,8 +308,7 @@ public class OrderManagement extends Management {
                     prep = conn.prepareStatement(sqlCreateOrderSub3);
                     prep.setInt(1, orderID);
                     prep.setInt(2, recipeIDs.get(i));
-                    prep.setInt(3, (Integer)recipes.get(i)[1]);
-                    System.out.println(prep.toString());
+                    prep.setObject(3, recipes.get(i)[1]);
 
                     rowChanged = prep.executeUpdate();
 
@@ -487,16 +489,15 @@ public class OrderManagement extends Management {
         return rowChanged > 0;
     }
 
-    public boolean updateOrderCustomer(int orderID, int oldCustomerID, int newCustomerID) {
+    public boolean updateOrderCustomer(int orderID, int newCustId) {
         int rowChanged = 0;
         if (setUp()) {
             conn = getConnection();
             try {
                 conn.setAutoCommit(false);
                 prep = conn.prepareStatement(sqlUpdateOrderCustomer);
-                prep.setInt(1, newCustomerID);
+                prep.setInt(1, newCustId);
                 prep.setInt(2, orderID);
-                prep.setInt(3, oldCustomerID);
                 rowChanged = prep.executeUpdate();
             } catch (SQLException sqle) {
                 System.err.println("ERROR 004: Issue updating order customer id");
@@ -509,17 +510,23 @@ public class OrderManagement extends Management {
         return rowChanged > 0;
     }
 
-    public boolean updateOrderRecipe(int orderID, int oldRecipeID, int newRecipeID) {
+    public boolean updateOrderRecipes(int orderID, ArrayList<Object[]> recipes) { //obj[1] = recipe_id, obj[0] = portions
         int rowChanged = 0;
         if (setUp()) {
             conn = getConnection();
             try {
                 conn.setAutoCommit(false);
-                prep = conn.prepareStatement(sqlUpdateOrderRecipe);
-                prep.setInt(1, newRecipeID);
-                prep.setInt(2, orderID);
-                prep.setInt(3, oldRecipeID);
+                prep = conn.prepareStatement(sqlUpdateOrderRecipes1); //deletes order_recipe rows
+                prep.setInt(1, orderID);
                 rowChanged = prep.executeUpdate();
+                for(Object[] recipe : recipes){
+                    int recipeId = foodManagement.getRecipeIDPub((String)recipe[1]);
+                    prep = conn.prepareStatement(sqlUpdateOrderRecipes2);
+                    prep.setInt(1, orderID);
+                    prep.setInt(2,recipeId);
+                    prep.setObject(3,recipe[0]);
+                    prep.executeUpdate();
+                }
             } catch (SQLException sqle) {
                 System.err.println("ERROR 007: Issue with updating order recipe");
                 rollbackStatement();
@@ -573,7 +580,7 @@ public class OrderManagement extends Management {
                 finallyStatement();
             }
         }
-        return rowChaged > 0;
+        return true;
     }
 }
 

@@ -385,10 +385,8 @@ public class AddSubscription extends JDialog{
 
             for(Object[][] obj : panelValues){
                 for(int i = 0; i<obj.length;i++){
-                    System.out.println(Arrays.toString(obj[i]));
                 }
             }
-            System.out.println(Arrays.toString(selectedCustomer));
             boolean isAdded = Subscriptions.createSubscription((String)selectedCustomer[1],fromDate,toDate,frequency,panelValues);
             if(!isAdded) {
                 showMessageDialog(null, "Could not create subscription.");

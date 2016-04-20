@@ -456,7 +456,6 @@ public class FoodManagement extends Management{
 
 
                 }
-                System.out.println("Id: "+id+", SuValue: "+ subtractedValue);
                 getScentence().executeQuery("COMMIT;");
 
             }
