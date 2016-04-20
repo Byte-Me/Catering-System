@@ -43,8 +43,8 @@ public class EditRecipe extends JDialog {
 
         String[] ingredientHeader = {"Ingredient", "Quantity", "Unit"};
 
-        inStorageModel = new MainTableModel(); // Model of the table. Make uneditable?
-        inRecipeModel = new MainTableModel(); // Model of the table. Make uneditable?
+        inStorageModel = new MainTableModel(); // Model of the table.
+        inRecipeModel = new MainTableModel(); // Model of the table.
 
         inStorageModel.setColumnIdentifiers(ingredientHeader);
         inRecipeModel.setColumnIdentifiers(ingredientHeader);

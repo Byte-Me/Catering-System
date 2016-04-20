@@ -1,6 +1,7 @@
 package GUI.WindowPanels;
 
 import Database.OrderManagement;
+import Database.SettingsManagement;
 import HelperClasses.ToggleSelectionModel;
 import com.teamdev.jxbrowser.chromium.Browser;
 import com.teamdev.jxbrowser.chromium.JSValue;
@@ -16,6 +17,7 @@ import java.util.logging.Level;
 
 import static Delivery.CreateDeliveryRoute.UseReadyOrders;
 import static Delivery.CreateDeliveryRoute.UseReadyOrdersLatLng;
+import static Delivery.CreateDeliveryRoute.orderListForTable;
 import static Delivery.DeliveryRoute.geoCoder;
 import static javax.swing.JOptionPane.*;
 
@@ -23,7 +25,11 @@ import static javax.swing.JOptionPane.*;
  * Created by olekristianaune on 13.03.2016.
  */
 public class Driver {
-    private static final String cateringAdress = "Trondheim, Norway";
+    static SettingsManagement sm = new SettingsManagement();
+    private static String address = sm.getSystemAddress();
+    private static String city = sm.getSystemCity();
+    private static String country = sm.getSystemCountry();
+    private static final String cateringAdress =  address + ", " + city +  ", " + country;
     static DefaultTableModel driverModel;
     private OrderManagement orderManagement = new OrderManagement();
 
@@ -107,7 +113,7 @@ public class Driver {
     }
 
     public static void updateDrivingRoute() {
-        ArrayList<Object[]> orders = UseReadyOrders(cateringAdress);
+        ArrayList<Object[]> orders = orderListForTable(cateringAdress);
 
         // Empties entries of Users table
         driverModel.setRowCount(0);
@@ -145,7 +151,6 @@ public class Driver {
 
             // FIXME: The following executes before the new map is generated.
             if(!loaded.isUndefined()) {
-                System.out.println("Map loaded?");
                 double mapLat = browser.executeJavaScriptAndReturnValue("map.getCenter().lat();").getNumberValue();
                 double mapLng = browser.executeJavaScriptAndReturnValue("map.getCenter().lng();").getNumberValue();
                 int mapZoom = (int) browser.executeJavaScriptAndReturnValue("map.getZoom();").getNumberValue();
@@ -157,6 +162,7 @@ public class Driver {
     }
 
     private static String getDrivingRoute() {
+        System.out.println(cateringAdress); // DEBUG
         ArrayList<double[]> coords = UseReadyOrdersLatLng(cateringAdress);
         try {
             // TODO - make more robust, coords may be empty and return null !IMPORTANT

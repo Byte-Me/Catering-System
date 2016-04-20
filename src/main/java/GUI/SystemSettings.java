@@ -13,6 +13,8 @@ public class SystemSettings extends JDialog {
     private JTextField address;
     private JButton cancelButton;
     private JButton saveButton;
+    private JTextField city;
+    private JTextField country;
 
     public SystemSettings() {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
@@ -22,6 +24,8 @@ public class SystemSettings extends JDialog {
         SettingsManagement sm = new SettingsManagement();
 
         address.setText(sm.getSystemAddress());
+        city.setText(sm.getSystemCity());
+        country.setText(sm.getSystemCountry());
 
         cancelButton.addActionListener(e -> {
             setVisible(false);
@@ -30,7 +34,9 @@ public class SystemSettings extends JDialog {
 
         saveButton.addActionListener(e -> { // TODO: Add some failsafe!
             String addressString = address.getText();
-            if( sm.setSystemAddress(addressString) ) {
+            String cityString = city.getText();
+            String countryString = country.getText();
+            if( sm.setSystemAddress(addressString) && sm.setSystemCity(cityString) && sm.setSystemCountry(countryString) ) {
                 setVisible(false);
                 dispose();
             }

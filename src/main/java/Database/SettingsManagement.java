@@ -22,6 +22,18 @@ public class SettingsManagement extends Management {
     // SQL setning for setting address
     private static String sqlInsertAddress = "UPDATE `settings` SET content = ? WHERE id = 'address';";
 
+    // SQL setning for getting city
+    private static String sqlSelectCity = "SELECT `content` FROM `settings` WHERE id = 'city';";
+
+    // SQL setning for setting city
+    private static String sqlInsertCity = "UPDATE `settings` SET content = ? WHERE id = 'city';";
+
+    // SQL setning for getting country
+    private static String sqlSelectCountry = "SELECT `content` FROM `settings` WHERE id = 'country';";
+
+    // SQL setning for setting country
+    private static String sqlInsertCountry = "UPDATE `settings` SET content = ? WHERE id = 'country';";
+
 
     Connection conn = null;
     PreparedStatement prep = null;
@@ -97,5 +109,96 @@ public class SettingsManagement extends Management {
         return rowChanged > 0;
 
     }
+
+    public String getSystemCity() {
+        String out = null;
+        if (setUp()) {
+            conn = getConnection();
+            try {
+                conn.setAutoCommit(false);
+                prep = conn.prepareStatement(sqlSelectCity);
+                res = prep.executeQuery();
+                while (res.next()) {
+                    out = res.getString("content");
+                }
+            } catch (Exception e) {
+                System.err.println("ERROR 103: Issue with getting system city.");
+                return null;
+            } finally {
+                finallyStatement();
+            }
+        }
+        return out;
+
+    }
+
+    public boolean setSystemCity(String newValue) {
+        int rowChanged = 0;
+        if (setUp()) {
+            conn = getConnection();
+            try {
+                conn.setAutoCommit(false);
+                prep = conn.prepareStatement(sqlInsertCity);
+                prep.setString(1, newValue);
+                rowChanged = prep.executeUpdate();
+            } catch (Exception e) {
+                System.err.println("ERROR 104: Issue with updating system city.");
+                return false;
+            } finally {
+                finallyStatement();
+
+            }
+        }
+
+        return rowChanged > 0;
+
+    }
+
+
+    public String getSystemCountry() {
+        String out = null;
+        if (setUp()) {
+            conn = getConnection();
+            try {
+                conn.setAutoCommit(false);
+                prep = conn.prepareStatement(sqlSelectCountry);
+                res = prep.executeQuery();
+                while (res.next()) {
+                    out = res.getString("content");
+                }
+            } catch (Exception e) {
+                System.err.println("ERROR 105: Issue with getting system country.");
+                return null;
+            } finally {
+                finallyStatement();
+            }
+        }
+        return out;
+
+    }
+
+    public boolean setSystemCountry(String newValue) {
+        int rowChanged = 0;
+        if (setUp()) {
+            conn = getConnection();
+            try {
+                conn.setAutoCommit(false);
+                prep = conn.prepareStatement(sqlInsertCountry);
+                prep.setString(1, newValue);
+                rowChanged = prep.executeUpdate();
+            } catch (Exception e) {
+                System.err.println("ERROR 106: Issue with updating system country.");
+                return false;
+            } finally {
+                finallyStatement();
+
+            }
+        }
+
+        return rowChanged > 0;
+
+    }
+
+
 
 }

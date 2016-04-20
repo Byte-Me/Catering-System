@@ -10,10 +10,6 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="Maven: org.slf4j:slf4j-log4j12:1.7.21" level="project" />
-    <orderEntry type="library" name="Maven: log4j:log4j:1.2.17" level="project" />
-    <orderEntry type="library" name="Maven: org.slf4j:slf4j-log4j12:1.7.21" level="project" />
-    <orderEntry type="library" name="Maven: log4j:log4j:1.2.17" level="project" />
     <orderEntry type="library" name="Maven: com.seaglasslookandfeel:seaglasslookandfeel:0.2.1" level="project" />
     <orderEntry type="library" name="Maven: com.google.code.geocoder-java:geocoder-java:0.16" level="project" />
     <orderEntry type="library" name="Maven: com.google.code.gson:gson:2.2.4" level="project" />
@@ -38,7 +34,7 @@
     <orderEntry type="library" name="Maven: org.slf4j:slf4j-log4j12:1.7.21" level="project" />
     <orderEntry type="library" name="Maven: log4j:log4j:1.2.17" level="project" />
     <orderEntry type="module-library">
-      <library name="Maven: com.teamdev.jxbrowser:license:1.0.0">
+      <library name="Maven: com.teamdev.jxbrowser:license:1.0.">
         <CLASSES>
           <root url="jar://$MODULE_DIR$/lib/licence.jar!/" />
         </CLASSES>

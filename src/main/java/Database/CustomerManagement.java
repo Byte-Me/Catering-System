@@ -2,6 +2,7 @@ package Database;
 
 import org.apache.commons.dbutils.DbUtils;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -63,31 +64,35 @@ public class CustomerManagement extends Management{
 
     }
 
+    Connection conn = null;
+    PreparedStatement prep = null;
+    ResultSet res = null;
+
     public ArrayList<Object[]> getCustomers(){
         if(setUp()){
             ArrayList<Object[]> out = new ArrayList<>();
-            ResultSet res;
             try{
-                res = getScentence().executeQuery("SELECT * FROM customer WHERE status = 1;"); //Status 1 for aktiv og 0 for inaktiv
-
+                conn = getConnection();
+                prep = conn.prepareStatement("SELECT * FROM customer WHERE status = 1;");//Status 1 for aktiv og 0 for inaktiv
+                res = prep.executeQuery();
                 while(res.next()) {
-                    Object[] obj = new Object[5];
+                    Object[] obj = new Object[6];
                     obj[0] = res.getString("name");
                     obj[1] = res.getString("email");
                     obj[2] = res.getString("phone");
                     obj[3] = res.getString("adress");
                     obj[4] = CustType.valueOf(res.getInt("cust_type"));
+                    obj[5] = res.getInt("customer_id");
+
                     out.add(obj);
                 }
-
             }
             catch (Exception e){
                 System.err.println("Issue with getting customers.");
                 return null;
             }
             finally{
-                DbUtils.closeQuietly(getScentence());
-                DbUtils.closeQuietly(getScentence());
+                finallyStatement(res, prep);
             }
             return out;
         }
@@ -97,10 +102,10 @@ public class CustomerManagement extends Management{
     public ArrayList<Object[]> getDeletedCustomers(){
         if(setUp()){
             ArrayList<Object[]> out = new ArrayList<>();
-            ResultSet res;
             try{
-                res = getScentence().executeQuery("SELECT * FROM customer WHERE status = 0;"); //Status 1 for aktiv og 0 for inaktiv
-
+                conn = getConnection();
+                prep = conn.prepareStatement("SELECT * FROM customer WHERE status = 0;"); //Status 1 for aktiv og 0 for inaktiv
+                res = prep.executeQuery();
                 while(res.next()) {
                     Object[] obj = new Object[5];
                     obj[0] = res.getString("name");
@@ -111,15 +116,13 @@ public class CustomerManagement extends Management{
 
                     out.add(obj);
                 }
-
             }
             catch (Exception e){
                 System.err.println("Issue with getting customers.");
                 return null;
             }
             finally{
-                DbUtils.closeQuietly(getScentence());
-                DbUtils.closeQuietly(getScentence());
+                finallyStatement(res, prep);
             }
             return out;
         }
@@ -127,13 +130,16 @@ public class CustomerManagement extends Management{
     }
 
     public ArrayList<Object[]> customerSearch(String searchTerm){
-        ResultSet res;
         ArrayList<Object[]> out = new ArrayList<>();
         if(setUp()) {
             try {
-                res = getScentence().executeQuery("SELECT * FROM customer WHERE name LIKE '%" + searchTerm + "%' OR email LIKE '%" +
-                        searchTerm + "%' OR phone LIKE '%" + searchTerm +
-                        "%' OR adress LIKE '%" + searchTerm + "%' AND status = 1 ORDER BY name;");
+                conn = getConnection();
+                prep = conn.prepareStatement("SELECT * FROM customer WHERE name LIKE ? OR email LIKE ? OR phone LIKE ? OR adress LIKE ? AND status = 1 ORDER BY name;");
+                prep.setString(1, "%" + searchTerm + "%");
+                prep.setString(2, "%" + searchTerm + "%");
+                prep.setString(3, "%" + searchTerm + "%");
+                prep.setString(4, "%" + searchTerm + "%");
+                res = prep.executeQuery();
 
                 while (res.next()){
                     Object[] obj = new Object[5];
@@ -149,94 +155,116 @@ public class CustomerManagement extends Management{
                 System.err.println("Issue with search.");
                 return null;
             } finally {
-                DbUtils.closeQuietly(getScentence());
-                DbUtils.closeQuietly(getConnection());
+                finallyStatement(res, prep);
             }
-
             return out;
         }
         else return null;
     }
     private boolean addCustomer(String name, String email, String phone, String adress, int custType) {
         if (setUp()) {
-            int numb = 0;
-            ResultSet res;
+            int rowChanged = 0;
             try{
-                getScentence().executeQuery("START TRANSACTION;");
-                res = getScentence().executeQuery("SELECT name FROM customer WHERE email = '" + email + "';");
-                if(res.next()) {//finds if customer already in database
-                    res = getScentence().executeQuery("SELECT cust_type FROM customer WHERE email = '" + email + "';");
+                conn = getConnection();
+                prep = conn.prepareStatement("SELECT name FROM customer WHERE email = ?;");
+                prep.setString(1, email);
+                res = prep.executeQuery();
 
+                if(res.next()) {//finds if customer already in database
+                    prep = conn.prepareStatement("SELECT cust_type FROM customer WHERE email = ?;");
+                    prep.setString(1, email);
+                    res = prep.executeQuery();
                     if(res.next()) {
                         //find status of customer, if status = -1, make customer active, else return false.
                         //Customer already exists.
                         if (res.getInt("status") == CustStatus.INACTIVE.getValue()) {
-                            numb = getScentence().executeUpdate("UPDATE customer SET cust_type = " + custType + " WHERE email = '" + email + "';");
-                            getScentence().executeQuery("COMMIT;");
+                            try {
+                                conn.setAutoCommit(false);
+                                prep = conn.prepareStatement("UPDATE customer SET cust_type = ? WHERE email = ?;");
+                                prep.setInt(1, custType);
+                                prep.setString(2, email);
+                                rowChanged = prep.executeUpdate();
+                            }catch (SQLException sqle){
+                                System.err.println("ERROR 201: Update customer type failed");
+                                rollbackStatement();
+                                return false;
+                            }finally {
+                                conn.commit();
+                                conn.setAutoCommit(true);
+                            }
                             return true;
                         }
-                        else{
-                            getScentence().executeQuery("COMMIT;");
-                            return false;
-                        }
+                        else return false;
                     }
                 }else { //If not in database, create customer.
-                    numb = getScentence().executeUpdate("INSERT INTO customer VALUES(DEFAULT, '" + name + "', '" + email + "', '" + phone +
-                            "', '" + adress + "', "+custType+", "+CustStatus.ACTIVE.getValue()+");");
+                    try {
+                        conn.setAutoCommit(false);
+                        prep = conn.prepareStatement("INSERT INTO customer VALUES(DEFAULT, ?, ?, ?, ?, ?, ?);");
+                        prep.setString(1, name);
+                        prep.setString(2, email);
+                        prep.setString(3, phone);
+                        prep.setString(4, adress);
+                        prep.setInt(5, custType);
+                        prep.setInt(6, CustStatus.ACTIVE.getValue());
+                        rowChanged = prep.executeUpdate();
+                    }catch (SQLException sqle){
+                        System.err.println("ERROR 202: Failed to create customer");
+                        rollbackStatement();
+                        return false;
+                    }finally {
+                        conn.commit();
+                        conn.setAutoCommit(true);
+                    }
                 }
-
-                getScentence().executeQuery("COMMIT;");
             }
             catch (Exception e){
                 System.err.println("Issue with adding customer.");
+                rollbackStatement();
                 return false;
             }
             finally{
-                DbUtils.closeQuietly(getScentence());
-                DbUtils.closeQuietly(getConnection());
+                finallyStatement(res, prep);
             }
-            if(numb > 0) return true;
-            else return false;
+            return rowChanged > 0;
         }
         else return false;
     }
+
     public boolean addCustomerCompany(String name, String email, String phone, String streetAdress, String postCode, String city){
         String adress = adressFormatter(city, postCode, streetAdress);
-        if(addCustomer(name, email, phone, adress, CustType.CORPORATION.getValue())) return true;
-        else return false;
-
-
+        return addCustomer(name, email, phone, adress, CustType.CORPORATION.getValue());
     }
+
     public boolean addCustomerPerson(String firstname, String lastname, String email, String phone,
                                   String streetAdress, String postCode, String city){
 
         String adress = adressFormatter(city, postCode, streetAdress);
         String name = nameFormatter(firstname, lastname);
-        if(addCustomer(name, email, phone, adress, CustType.PRIVATE.getValue())) return true;
-        else return false;
 
+        return addCustomer(name, email, phone, adress, CustType.PRIVATE.getValue());
     }
+
     public boolean updateCustomerName(String email, String fName, String lName) {
         String newData = nameFormatter(fName,lName);
-        if(updateCustomerName(email, newData)) return true;
-        return false;
+        return updateCustomerName(email, newData);
     }
 
     public boolean updateCustomerName(String email, String newData) {
         int rowChanged = 0;
         if (setUp()) {
             try {
-                PreparedStatement prep = getConnection().prepareStatement("UPDATE customer SET `name` = ? WHERE email = ?;");
+                conn = getConnection();
+                conn.setAutoCommit(false);
+                prep = conn.prepareStatement("UPDATE customer SET `name` = ? WHERE email = ?;");
                 prep.setString(1, newData);
                 prep.setString(2, email);
                 rowChanged = prep.executeUpdate();
             } catch (SQLException e) {
                 System.err.println("Issue with executing database update.");
+                rollbackStatement();
                 return false;
-
             } finally {
-                DbUtils.closeQuietly(getScentence());
-                DbUtils.closeQuietly(getConnection());
+                finallyStatement(res, prep);
             }
         }
         return rowChanged > 0;
@@ -245,19 +273,19 @@ public class CustomerManagement extends Management{
         int rowChanged = 0;
         if (setUp()) {
             try {
-                PreparedStatement prep = getConnection().prepareStatement("UPDATE customer SET email = ? WHERE email = ?;");
+                conn = getConnection();
+                conn.setAutoCommit(false);
+                prep = conn.prepareStatement("UPDATE customer SET email = ? WHERE email = ?;");
                 prep.setString(1, newData);
                 prep.setString(2, email);
                 rowChanged = prep.executeUpdate();
             } catch (SQLException e) {
                 System.err.println("Issue with executing database update.");
+                rollbackStatement();
                 return false;
 
             } finally {
-                DbUtils.closeQuietly(getScentence());
-                DbUtils.closeQuietly(getConnection());
-
-
+                finallyStatement(res, prep);
             }
         }
         return rowChanged > 0;
@@ -266,19 +294,19 @@ public class CustomerManagement extends Management{
         int rowChanged = 0;
         if (setUp()) {
             try {
-                PreparedStatement prep = getConnection().prepareStatement("UPDATE customer SET phone = ? WHERE email = ?;");
+                conn = getConnection();
+                conn.setAutoCommit(false);
+                prep = conn.prepareStatement("UPDATE customer SET phone = ? WHERE email = ?;");
                 prep.setString(1, newData);
                 prep.setString(2, email);
                 rowChanged = prep.executeUpdate();
             } catch (SQLException e) {
                 System.err.println("Issue with executing database update.");
+                rollbackStatement();
                 return false;
 
             } finally {
-                DbUtils.closeQuietly(getScentence());
-                DbUtils.closeQuietly(getConnection());
-
-
+                finallyStatement(res, prep);
             }
         }
         return rowChanged > 0;
@@ -287,8 +315,10 @@ public class CustomerManagement extends Management{
         Object[] out =  new Object[6];
         if (setUp()) {
             try {
-                ResultSet res = getScentence().executeQuery("SELECT name, email, phone, adress, status, customer_id FROM customer WHERE email = '"
-                        +email+"';");
+                conn = getConnection();
+                prep = conn.prepareStatement("SELECT name, email, phone, adress, status, customer_id FROM customer WHERE email = ?;");
+                prep.setString(1, email);
+                res = prep.executeQuery();
                 if(res.next()){
                     out[0] = res.getString("name");
                     out[1] = res.getString("email");
@@ -302,9 +332,7 @@ public class CustomerManagement extends Management{
                 return null;
 
             } finally {
-                DbUtils.closeQuietly(getScentence());
-                DbUtils.closeQuietly(getConnection());
-
+                finallyStatement(res, prep);
             }
         }
         return out;
@@ -314,19 +342,19 @@ public class CustomerManagement extends Management{
         String newData = adressFormatter(city, postCode,street);
         if (setUp()) {
             try {
-                PreparedStatement prep = getConnection().prepareStatement("UPDATE customer SET adress = ? WHERE email = ?;");
+                conn = getConnection();
+                conn.setAutoCommit(false);
+                prep = conn.prepareStatement("UPDATE customer SET adress = ? WHERE email = ?;");
                 prep.setString(1, newData);
                 prep.setString(2, email);
                 rowChanged = prep.executeUpdate();
             } catch (SQLException e) {
                 System.err.println("Issue with executing database update.");
+                rollbackStatement();
                 return false;
 
             } finally {
-                DbUtils.closeQuietly(getScentence());
-                DbUtils.closeQuietly(getConnection());
-
-
+                finallyStatement(res, prep);
             }
         }
         return rowChanged > 0;
@@ -335,19 +363,19 @@ public class CustomerManagement extends Management{
         int rowChanged = 0;
         if (setUp()) {
             try {
-                PreparedStatement prep = getConnection().prepareStatement("UPDATE customer SET status = ? WHERE email = ?;");
+                conn = getConnection();
+                conn.setAutoCommit(false);
+                prep = conn.prepareStatement("UPDATE customer SET status = ? WHERE email = ?;");
                 prep.setInt(1, newData);
                 prep.setString(2, email);
                 rowChanged = prep.executeUpdate();
             } catch (SQLException e) {
                 System.err.println("Issue with executing database update.");
+                rollbackStatement();
                 return false;
 
             } finally {
-                DbUtils.closeQuietly(getScentence());
-                DbUtils.closeQuietly(getConnection());
-
-
+                finallyStatement(res, prep);
             }
         }
         return rowChanged > 0;

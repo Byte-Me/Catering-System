@@ -174,6 +174,8 @@ public class EditSubscription extends JDialog{
         newSubscriptionButton.addActionListener(e -> {
 
 
+            ArrayList<PanelForSubs> panelList = new ArrayList<PanelForSubs>();
+            ArrayList<JCheckBox> checkList = new ArrayList<JCheckBox>();
 
             Object[] selectedCustomer = customers.get(customerDropdown.getSelectedIndex());
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -182,8 +184,23 @@ public class EditSubscription extends JDialog{
             int frequency = (Integer)frequencySpinner.getValue();
 
             //creating lists for different checkboxes and panels
+            checkList = new ArrayList<>();
+            checkList.add(monCheckBox);
+            checkList.add(tueCheckBox);
+            checkList.add(wedCheckBox);
+            checkList.add(thuCheckBox);
+            checkList.add(friCheckBox);
+            checkList.add(satCheckBox);
+            checkList.add(sunCheckBox);
 
-
+            panelList = new ArrayList<>();
+            panelList.add(monPanel);
+            panelList.add(tuePanel);
+            panelList.add(wedPanel);
+            panelList.add(thuPanel);
+            panelList.add(friPanel);
+            panelList.add(satPanel);
+            panelList.add(sunPanel);
 
             ArrayList<Object[][]> panelValues = new ArrayList<>();
             for(int i = 0; i<panelList.size();i++){
@@ -193,10 +210,13 @@ public class EditSubscription extends JDialog{
                 }
             }//FIXME: legger bare inn første dag!!!
 
-
-            boolean isAdded = Subscriptions.createSubscription((String)selectedCustomer[1],fromDate,toDate,frequency,panelValues);
+            for(Object[][] obj : panelValues){
+                for(int i = 0; i<obj.length;i++){
+                }
+            }
+            boolean isAdded = Subscriptions.editSubscription((String)selectedCustomer[1],fromDate,toDate,frequency,panelValues, subId);
             if(!isAdded) {
-                showMessageDialog(null, "Could not create subscription.");
+                showMessageDialog(null, "Could not edit subscription.");
             }
 
             setVisible(false);
@@ -307,6 +327,9 @@ public class EditSubscription extends JDialog{
 
         frequencySpinner.getModel().setValue(info[4]);
 
+        newSubscriptionButton.addActionListener(e ->{
+
+        });
 
     }
 

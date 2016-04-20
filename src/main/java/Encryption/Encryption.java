@@ -72,7 +72,7 @@ public class Encryption {
     public static void main(String[] args) throws Exception {
         Encryption en = new Encryption();
         String[] passInfo = en.passEncoding("password");
-        if (en.passDecoding("password", "2oUGF8AAgobU1E3rcAtyiw==", "oQaZgG266KjDzEkGTgXYMQ==")) System.out.println("Success!");
+        if (en.passDecoding("password", "2oUGF8AAgobU1E3rcAtyiw==", "oQaZgG266KjDzEkGTgXYMQ=="));
         //}*/
     }
 }

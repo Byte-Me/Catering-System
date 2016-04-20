@@ -40,7 +40,7 @@ public class Subscriptions {
             from = formatter.parse(dateFrom);
             to = formatter.parse(dateTo);
         } catch (ParseException e) {
-            System.out.println("Issue with parsing dates in subscriptions.");
+            System.err.println("Issue with parsing dates in subscriptions.");
         }
         if (from.before(today) && to.after(today)) {
             return true;
@@ -72,11 +72,14 @@ public class Subscriptions {
 
     note = information about each order, special needs etc.
      */
+    public static boolean createSubscription(String email, String dateFrom, String dateTo, int weeksBetween, ArrayList<Object[][]> recipesWithDay){
+        return editSubscription(email, dateFrom,dateTo,weeksBetween,recipesWithDay,-1);
+    }
 
-    public static boolean createSubscription(String email, String dateFrom, String dateTo, int weeksBetween, ArrayList<Object[][]> recipesWithDay) {
+    public static boolean editSubscription(String email, String dateFrom, String dateTo, int weeksBetween, ArrayList<Object[][]> recipesWithDay, int subId) {
         Object[] cust = custMan.getSingleCustomerInfo(email);
         int custID = (Integer)cust[5];
-        int subID = subMan.createSubscription(custID, dateFrom, dateTo, weeksBetween);
+        int subID = subMan.createSubscription(custID, dateFrom, dateTo, weeksBetween, subId);
         if (!(subID > 0)) {
             return false;
         }
@@ -130,9 +133,7 @@ public class Subscriptions {
 
         boolean stillNotEndOfWeek = true;
         while (frequency >= count) {
-            System.out.println(formatter.format(cal.getTime()));
             if(formatter.format(cal.getTime()).equals(dateTo)) {
-                //System.out.println(dateTo);
                 return "";
             }
             cal.add(Calendar.DAY_OF_YEAR, 1);
@@ -165,8 +166,6 @@ public class Subscriptions {
         out[2] = dateFrom;
         out[3] = dateTo;
         out[4] = frequency;
-        System.out.println(Arrays.toString(out));
-
         return out;
 
 

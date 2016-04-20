@@ -144,7 +144,6 @@ public class EditOrder extends JDialog {
         //Getting info about selected order.
         Object[] orderInfo = orderManagement.getOrderInfoFromId(orderId);
         ArrayList<Object[]> orderRecipes = orderManagement.getRecipesFromOrder(orderId);
-        System.out.println(Arrays.toString(orderInfo));
 
         //Adding info to textboxes.
         String customerName = (String)orderInfo[0];
@@ -268,7 +267,7 @@ public class EditOrder extends JDialog {
 
         rightButton.addActionListener(e -> addOrderModel.removeRow(recipeTable.getSelectedRow()));
 
-        //adds
+        //skal edit order knappen hete addOrderButton?
         addOrderButton.addActionListener(e -> {
             Object[] selectedCustomer = customers.get(customerDropdown.getSelectedIndex());
             Date selectedDate = (Date)datePicker.getModel().getValue();
@@ -283,15 +282,21 @@ public class EditOrder extends JDialog {
             for (int i = 0; i < addOrderModel.getRowCount(); i++) {
                 selectedRecipes.add(new Object[]{addOrderModel.getValueAt(i, 1), addOrderModel.getValueAt(i, 0)});
             }
-
             OrderManagement orderManagement = new OrderManagement();
-            boolean isUpdated = orderManagement.createOrder((String)selectedCustomer[1], selectedDateString, selectedRecipes, comment, selectedTimeString);
-            if(!isUpdated) {
-                showMessageDialog(null, "Issue with editing order.");
-            } else {
+
+            if(
+                    orderManagement.updateOrderRecipes(orderId,selectedRecipes) &&
+                    orderManagement.updateOrderDate(selectedDateString,orderId)&&
+                            orderManagement.updateOrderComment(comment,orderId) &&
+                            orderManagement.updateOrderCustomer(orderId,(Integer)selectedCustomer[5])&&
+                            orderManagement.updateOrderTime(selectedTimeString,orderId)
+                    ){
                 updateOrders();
                 setVisible(false);
                 dispose();
+            } else {
+            showMessageDialog(null, "Issue with editing order.");
+
             }
         });
 
