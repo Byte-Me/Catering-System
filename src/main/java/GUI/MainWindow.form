@@ -547,7 +547,7 @@
                       </grid>
                     </constraints>
                     <properties>
-                      <dividerLocation value="444"/>
+                      <dividerLocation value="1000"/>
                     </properties>
                     <border type="none"/>
                     <children>
@@ -568,7 +568,10 @@
                         <constraints>
                           <splitpane position="right"/>
                         </constraints>
-                        <properties/>
+                        <properties>
+                          <minimumSize width="27" height="44"/>
+                          <preferredSize width="300" height="439"/>
+                        </properties>
                         <border type="none" title="Ingredients"/>
                         <children>
                           <component id="79ce0" class="javax.swing.JTable" binding="ingredientTable">
