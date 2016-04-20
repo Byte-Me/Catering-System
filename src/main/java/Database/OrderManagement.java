@@ -81,33 +81,6 @@ public class OrderManagement extends Management {
     PreparedStatement prep = null;
     ResultSet res = null;
 
-    public void rollbackStatement() {
-        try {
-            if (!conn.getAutoCommit()) {
-                conn.rollback();
-                conn.setAutoCommit(true);
-            }
-        } catch (SQLException ee) {
-            System.err.println("Rollback Statement failed");
-        }
-    }
-
-    public void finallyStatement() {
-        try {
-            if (!conn.getAutoCommit()) {
-                conn.commit();
-                conn.setAutoCommit(true);
-            }
-            if (!res.isClosed()) res.close();
-            if (!prep.isClosed()) prep.close();
-        } catch (SQLException sqle) {
-            System.err.println("Finally Statement failed");
-            sqle.printStackTrace();
-        }
-        closeConnection();
-    }
-
-
     public enum OrdStatus {
         INACTIVE(0),
         ACTIVE(1),
@@ -158,7 +131,7 @@ public class OrderManagement extends Management {
             conn = getConnection();
             try {
                 conn.setAutoCommit(false);
-                prep = conn.prepareStatement(sqlUpdateStatus);
+                PreparedStatement prep = conn.prepareStatement(sqlUpdateStatus);
                 prep.setInt(1, newStatus);
                 prep.setInt(2, orderID);
                 rowChanged = prep.executeUpdate();
@@ -166,17 +139,13 @@ public class OrderManagement extends Management {
                 System.err.println("ERROR 010: Issue with updating order status.");
                 return false;
             } finally {
-                finallyStatement();
+                finallyStatement(res, prep);
             }
         }
-
         if (newStatus == OrderType.DELIVERED.getValue()) {
             financeManagement.addIncomeToDatabase(FoodFinance.findOrderPrice(orderID));
         }
-
-
         return rowChanged > 0;
-
     }
 
     public ArrayList<Object[]> getDeletedOrders() {
@@ -194,7 +163,7 @@ public class OrderManagement extends Management {
             } catch (Exception e) {
                 System.err.println("ERROR 005: Issue with fetching orders");
             } finally {
-                finallyStatement();
+                finallyStatement(res, prep);
             }
         }
         return out;
@@ -215,7 +184,7 @@ public class OrderManagement extends Management {
             } catch (Exception e) {
                 System.err.println("ERROR 003: Issue with fetching orders.");
             } finally {
-                finallyStatement();
+                finallyStatement(res, prep);
             }
         }
         return out;
@@ -255,7 +224,7 @@ public class OrderManagement extends Management {
             } catch (Exception e) {
                 System.err.println("Issue with search.");
             } finally {
-                finallyStatement();
+                finallyStatement(res, prep);
             }
         }
         return out;
@@ -315,7 +284,7 @@ public class OrderManagement extends Management {
                     prep = conn.prepareStatement(sqlCreateOrderSub3);
                     prep.setInt(1, orderID);
                     prep.setInt(2, recipeIDs.get(i));
-                    prep.setInt(3, (Integer)recipes.get(i)[1]);
+                    prep.setInt(3, (Integer) recipes.get(i)[1]);
                     System.out.println(prep.toString());
 
                     rowChanged = prep.executeUpdate();
@@ -330,7 +299,7 @@ public class OrderManagement extends Management {
                 rollbackStatement();
                 return false;
             } finally {
-                finallyStatement();
+                finallyStatement(res, prep);
             }
         } else {
             return false;
@@ -384,7 +353,7 @@ public class OrderManagement extends Management {
             System.err.println("ERROR 011: Issue with registering order.");
             return false;
         } finally {
-            finallyStatement();
+            finallyStatement(res, prep);
         }
         return true;
     }
@@ -412,7 +381,7 @@ public class OrderManagement extends Management {
             } catch (Exception e) {
                 System.err.println("ERROR 012: Issue with finding order.");
             } finally {
-                finallyStatement();
+                finallyStatement(res, prep);
             }
 
         }
@@ -436,7 +405,7 @@ public class OrderManagement extends Management {
             } catch (Exception e) {
                 System.err.println("ERROR 013: Issue with finding order.");
             } finally {
-                finallyStatement();
+                finallyStatement(res, prep);
             }
         }
         return out;
@@ -448,137 +417,74 @@ public class OrderManagement extends Management {
         updateStatus(orderID, OrdStatus.INACTIVE.getValue());
     }
 
-    public boolean updateOrderDate(String orderDate, int orderID) {
+    private boolean updateDatabase(String sql, int orderID, String input, String errorMessage) {
         int rowChanged = 0;
         if (setUp()) {
             conn = getConnection();
             try {
                 conn.setAutoCommit(false);
-                prep = conn.prepareStatement(sqlUpdateOrderDate);
-                prep.setString(1, orderDate);
+                prep = conn.prepareStatement(sql);
+                prep.setString(1, input);
                 prep.setInt(2, orderID);
                 rowChanged = prep.executeUpdate();
             } catch (SQLException e) {
-                System.err.println("Issue with updating order date");
+                System.err.println(errorMessage);
                 rollbackStatement();
                 return false;
             } finally {
-                finallyStatement();
+                finallyStatement(res, prep);
             }
         }
         return rowChanged > 0;
+    }
+
+    private boolean updateDatabase(String sql, int orderID, int input1, int input2, String errorMessage) {
+        int rowChanged = 0;
+        if (setUp()) {
+            conn = getConnection();
+            try {
+                conn.setAutoCommit(false);
+                prep = conn.prepareStatement(sql);
+                prep.setInt(1, input1);
+                prep.setInt(2, orderID);
+                prep.setInt(3, input2);
+                rowChanged = prep.executeUpdate();
+            } catch (SQLException sqle) {
+                System.err.println(errorMessage);
+                rollbackStatement();
+                return false;
+            } finally {
+                finallyStatement(res, prep);
+            }
+        }
+        return rowChanged > 0;
+    }
+
+    public boolean updateOrderDate(String orderDate, int orderID) {
+        return updateDatabase(sqlUpdateOrderDate, orderID, orderDate, "Issue with updating order date");
     }
 
     public boolean updateOrderTime(String orderTime, int orderID) {
-        int rowChanged = 0;
-        if (setUp()) {
-            conn = getConnection();
-            try {
-                conn.setAutoCommit(false);
-                prep = conn.prepareStatement(sqlUpdateOrderTime);
-                prep.setString(1, orderTime);
-                prep.setInt(2, orderID);
-                rowChanged = prep.executeUpdate();
-
-            } catch (SQLException e) {
-                System.err.println("Issue with updating order time");
-                rollbackStatement();
-                return false;
-
-            } finally {
-                finallyStatement();
-            }
-        }
-        return rowChanged > 0;
+        return updateDatabase(sqlUpdateOrderTime, orderID, orderTime, "Issue with updating order time");
     }
 
     public boolean updateOrderCustomer(int orderID, int oldCustomerID, int newCustomerID) {
-        int rowChanged = 0;
-        if (setUp()) {
-            conn = getConnection();
-            try {
-                conn.setAutoCommit(false);
-                prep = conn.prepareStatement(sqlUpdateOrderCustomer);
-                prep.setInt(1, newCustomerID);
-                prep.setInt(2, orderID);
-                prep.setInt(3, oldCustomerID);
-                rowChanged = prep.executeUpdate();
-            } catch (SQLException sqle) {
-                System.err.println("ERROR 004: Issue updating order customer id");
-                rollbackStatement();
-                return false;
-            } finally {
-                finallyStatement();
-            }
-        }
-        return rowChanged > 0;
+        return updateDatabase(sqlUpdateOrderCustomer, orderID, newCustomerID, oldCustomerID, "Issue updating order customer");
     }
+/*
 
-    public boolean updateOrderRecipe(int orderID, int oldRecipeID, int newRecipeID) {
-        int rowChanged = 0;
-        if (setUp()) {
-            conn = getConnection();
-            try {
-                conn.setAutoCommit(false);
-                prep = conn.prepareStatement(sqlUpdateOrderRecipe);
-                prep.setInt(1, newRecipeID);
-                prep.setInt(2, orderID);
-                prep.setInt(3, oldRecipeID);
-                rowChanged = prep.executeUpdate();
-            } catch (SQLException sqle) {
-                System.err.println("ERROR 007: Issue with updating order recipe");
-                rollbackStatement();
-                return false;
+        BRUK EVEN SIN
 
-            } finally {
-                finallyStatement();
-            }
-        }
-        return rowChanged > 0;
+    public boolean updateOrderRecipes(int orderID, int oldRecipeID, int newRecipeID) {
+
     }
+    */
 
     public boolean updateRecipePortions(int newPortions, int recipeID, int orderID) {
-        int rowChanged = 0;
-        if (setUp()) {
-            conn = getConnection();
-            try {
-                conn.setAutoCommit(false);
-                prep = conn.prepareStatement(sqlUpdateOrderPortions);
-                prep.setInt(1, newPortions);
-                prep.setInt(2, orderID);
-                prep.setInt(3, recipeID);
-                rowChanged = prep.executeUpdate();
-            } catch (SQLException sqle) {
-                System.err.println("ERROR 008: Issue with updating order portions");
-                rollbackStatement();
-                return false;
-
-            } finally {
-                finallyStatement();
-            }
-        }
-        return rowChanged > 0;
+        return updateDatabase(sqlUpdateOrderPortions, orderID, newPortions, recipeID, "Issue with updating order portions");
     }
 
     public boolean updateOrderComment(String comment, int orderID) {
-        int rowChaged = 0;
-        if (setUp()) {
-            conn = getConnection();
-            try {
-                conn.setAutoCommit(false);
-                prep = conn.prepareStatement(sqlUpdateOrderComment);
-                prep.setString(1, comment);
-                prep.setInt(2, orderID);
-                rowChaged = prep.executeUpdate();
-            } catch (SQLException sqle) {
-                System.err.println("ERROR 009: Issue with updating order comment");
-                rollbackStatement();
-                return false;
-            } finally {
-                finallyStatement();
-            }
-        }
-        return rowChaged > 0;
+        return updateDatabase(sqlUpdateOrderComment, orderID, comment, "Issue with updating order comment");
     }
 }
-

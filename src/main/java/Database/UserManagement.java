@@ -3,6 +3,7 @@ package Database;
 import Encryption.Encryption;
 import org.apache.commons.dbutils.DbUtils;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -40,62 +41,59 @@ public class UserManagement extends Management {
         super();
     }
 
+    Connection conn = null;
+    PreparedStatement prep = null;
+    ResultSet res = null;
+
     public boolean registerUser(String firstname, String lastname, String username,
                                 String password, String email, String phone, int accessLevel) {
         Encryption enc = new Encryption();
         int rowChanged = 0;
         if (setUp()) {
             try {
+                conn = getConnection();
                 String[] saltHash = enc.passEncoding(password);
                 try {
-                    ResultSet res = getScentence().executeQuery("SELECT username FROM user WHERE username = '" + username + "';");
+                    prep = conn.prepareStatement("SELECT username FROM user WHERE username = ?;");
+                    prep.setString(1, username);
+                    res = prep.executeQuery();
                     if(res.next()) return false;
                 } catch (Exception e){
-
+                    rollbackStatement();
+                    e.printStackTrace();
+                    return false;
                 }
 
-                getConnection().setAutoCommit(false);
-                rowChanged = getScentence().executeUpdate("INSERT INTO user VALUES(DEFAULT, '" + username +
-                        "', '" + saltHash[0] + "', '" + saltHash[1] + "', '" + firstname + "', '" + lastname
-                        + "', '" + phone + "', '" + email + "', " + accessLevel + ");");
+                conn.setAutoCommit(false);
+                prep = conn.prepareStatement("INSERT INTO user VALUES(DEFAULT, ?, ?, ?, ?, ?, ?, ?, ?);");
+                prep.setString(1, username);
+                prep.setString(2, saltHash[0]);
+                prep.setString(3, saltHash[1]);
+                prep.setString(4, firstname);
+                prep.setString(5, lastname);
+                prep.setString(6, phone);
+                prep.setString(7, email);
+                prep.setInt(8, accessLevel);
+                rowChanged = prep.executeUpdate();
 
-                getConnection().commit();
             } catch (Exception e) {
                 System.err.println("Issue with creating user.");
-
-                try {
-                    getConnection().rollback();
-                    getConnection().setAutoCommit(true);
-                } catch (SQLException sqle){
-                    System.err.println("Could not rollback");
-                }
-
+                rollbackStatement();
                 return false;
             } finally {
-
-                try {
-                    getConnection().setAutoCommit(true);
-                }catch (SQLException sqle){
-                    sqle.printStackTrace();
-                }
-
-                DbUtils.closeQuietly(getScentence());
-                DbUtils.closeQuietly(getConnection());
-
+                finallyStatement(res, prep);
             }
         }
         return rowChanged > 0;
     }
     public ArrayList<Object[]> getDeletedUsers() {
-
-        ResultSet res;
         ArrayList<Object[]> out = new ArrayList<>();
         if (setUp()) {
-
             try {
+                conn = getConnection();
+                prep = conn.prepareStatement("SELECT first_name, last_name, email, phone, username, access_level FROM user WHERE status = 0 ORDER BY last_name;");
+                res = prep.executeQuery();
 
-                res = getScentence().executeQuery("select first_name, last_name, email, phone, username, access_level from user" +
-                        " WHERE status = 0 order by last_name;");
                 while (res.next()) {
                     Object[] obj = new Object[6];
                     obj[0] = res.getString("first_name");
@@ -103,31 +101,29 @@ public class UserManagement extends Management {
                     obj[2] = res.getString("email");
                     obj[3] = res.getString("phone");
                     obj[4] = res.getString("username");
-                    // Convert access level from int to string
-
                     obj[5] = UserType.valueOf(res.getInt("access_level"));
                     out.add(obj);
                 }
+
             } catch (SQLException e) {
                 System.err.println("Issue with executing SQL scentence.");
                 return null;
+            }finally {
+                finallyStatement(res, prep);
             }
             return out;
         } else return null;
-
     }
 
 
     public ArrayList<Object[]> userInfo() {
-
-        ResultSet res;
         ArrayList<Object[]> out = new ArrayList<>();
         if (setUp()) {
-
             try {
+                conn = getConnection();
+                prep = conn.prepareStatement("select first_name, last_name, email, phone, username, access_level from user WHERE status = 1 order by last_name;");
+                res = prep.executeQuery();
 
-                res = getScentence().executeQuery("select first_name, last_name, email, phone, username, access_level from user" +
-                        " WHERE status = 1 order by last_name;");
                 while (res.next()) {
                     Object[] obj = new Object[6];
                     obj[0] = res.getString("first_name");
@@ -135,14 +131,14 @@ public class UserManagement extends Management {
                     obj[2] = res.getString("email");
                     obj[3] = res.getString("phone");
                     obj[4] = res.getString("username");
-                    // Convert access level from int to string
-
                     obj[5] = UserType.valueOf(res.getInt("access_level"));
                     out.add(obj);
                 }
             } catch (SQLException e) {
                 System.err.println("Issue with executing SQL scentence.");
                 return null;
+            } finally {
+                finallyStatement(res, prep);
             }
             return out;
         } else return null;
@@ -153,9 +149,10 @@ public class UserManagement extends Management {
         Object[] out = new Object[6];
         if(setUp()){
             try {
-
-                ResultSet res = getScentence().executeQuery("SELECT first_name, last_name, email, phone, username, access_level" +
-                        " FROM user WHERE username = '"+username+"';");
+                conn = getConnection();
+                prep = conn.prepareStatement("SELECT first_name, last_name, email, phone, username, access_level FROM user WHERE username = ?;");
+                prep.setString(1, username);
+                res = prep.executeQuery();
                 if(res.next()){
                     out[0] = res.getString("first_name");
                     out[1] = res.getString("last_name");
@@ -170,8 +167,7 @@ public class UserManagement extends Management {
                 return null;
             }
             finally {
-                DbUtils.closeQuietly(getScentence());
-                DbUtils.closeQuietly(getConnection());
+                finallyStatement(res, prep);
             }
         }
         return out;
@@ -189,31 +185,19 @@ public class UserManagement extends Management {
         int rowChanged = 0;
         if (setUp()) {
             try {
-                getConnection().setAutoCommit(false);
-
-                PreparedStatement prep = getConnection().prepareStatement("UPDATE user SET first_name = ? WHERE username = ?;");
+                conn = getConnection();
+                conn.setAutoCommit(false);
+                prep = conn.prepareStatement("UPDATE user SET first_name = ? WHERE username = ?;");
                 prep.setString(1, newData);
                 prep.setString(2, username);
                 rowChanged = prep.executeUpdate();
 
-                getConnection().commit();
             } catch (SQLException e) {
                 System.err.println("Issue with executing database update.");
-                try {
-                    getConnection().rollback();
-                    getConnection().setAutoCommit(true);
-                }catch (SQLException sqle){
-                    System.err.println("Could not rollback");
-                }
+                rollbackStatement();
                 return false;
             } finally {
-                try {
-                    getConnection().setAutoCommit(true);
-                }catch (SQLException sqle){
-                    sqle.printStackTrace();
-                }
-                DbUtils.closeQuietly(getScentence());
-                DbUtils.closeQuietly(getConnection());
+                finallyStatement(res, prep);
             }
         }
         return rowChanged > 0;
@@ -223,38 +207,22 @@ public class UserManagement extends Management {
         int rowChanged = 0;
         if (setUp()) {
             try {
-                getConnection().setAutoCommit(false);
-
+                conn = getConnection();
+                conn.setAutoCommit(false);
                 Encryption enc = new Encryption();
                 String[] saltHash = enc.passEncoding(newData);
-                PreparedStatement prep = getConnection().prepareStatement("UPDATE user SET salt = ?, hash = ? WHERE username = ?;");
+                prep = conn.prepareStatement("UPDATE user SET salt = ?, hash = ? WHERE username = ?;");
                 prep.setString(1, saltHash[0]);
                 prep.setString(2, saltHash[1]);
                 prep.setString(3, username);
                 rowChanged = prep.executeUpdate();
 
-                getConnection().commit();
             } catch (SQLException e) {
                 System.err.println("Issue with executing database update.");
-
-                try {
-                    getConnection().rollback();
-                    getConnection().setAutoCommit(true);
-                }catch (SQLException sqle){
-                    System.err.println("Could not rollback");
-                }
-
+                rollbackStatement();
                 return false;
             } finally {
-
-                try {
-                    getConnection().setAutoCommit(true);
-                }catch (SQLException sqle){
-                    sqle.printStackTrace();
-                }
-
-                DbUtils.closeQuietly(getScentence());
-                DbUtils.closeQuietly(getConnection());
+                finallyStatement(res, prep);
             }
         }
         return rowChanged > 0;
@@ -265,149 +233,82 @@ public class UserManagement extends Management {
         int rowChanged = 0;
         if (setUp()) {
             try {
-                getConnection().setAutoCommit(false);
-
-                PreparedStatement prep = getConnection().prepareStatement("UPDATE user SET last_name = ? WHERE username = ?;");
+                conn = getConnection();
+                conn.setAutoCommit(false);
+                prep = conn.prepareStatement("UPDATE user SET last_name = ? WHERE username = ?;");
                 prep.setString(1, newData);
                 prep.setString(2, username);
                 rowChanged = prep.executeUpdate();
-
-                getConnection().commit();
-                prep.close();
             } catch (SQLException e) {
                 System.err.println("Issue with executing database update.");
-
-                try {
-                    getConnection().rollback();
-                    getConnection().setAutoCommit(true);
-                }catch (SQLException sqle){
-                    System.err.println("Could not rollback");
-                }
-
+                rollbackStatement();
                 return false;
             } finally {
-                try {
-                    getConnection().setAutoCommit(true);
-                }catch (SQLException sqle){
-                    sqle.printStackTrace();
-                }
-
-                DbUtils.closeQuietly(getScentence());
-                DbUtils.closeQuietly(getConnection());
+                finallyStatement(res, prep);
             }
         }
         return rowChanged > 0;
     }
+
     public boolean updateUserInfoUsername(String username, String newData) {
         int rowChanged = 0;
         if (setUp()) {
             try {
-                getConnection().setAutoCommit(false);
-
-                PreparedStatement prep = getConnection().prepareStatement("UPDATE user SET username = ? WHERE username = ?;");
+                conn = getConnection();
+                conn.setAutoCommit(false);
+                prep = conn.prepareStatement("UPDATE user SET username = ? WHERE username = ?;");
                 prep.setString(1, newData);
                 prep.setString(2, username);
                 rowChanged = prep.executeUpdate();
-
-                getConnection().commit();
-                prep.close();
             } catch (SQLException e) {
                 System.err.println("Issue with executing database update.");
-
-                try {
-                    getConnection().rollback();
-                    getConnection().setAutoCommit(true);
-                }catch (SQLException sqle){
-                    System.err.println("Could not rollback");
-                }
-
+                rollbackStatement();
                 return false;
             } finally {
-
-                try {
-                    getConnection().setAutoCommit(true);
-                }catch (SQLException sqle){
-                    sqle.printStackTrace();
-                }
-
-                DbUtils.closeQuietly(getScentence());
-                DbUtils.closeQuietly(getConnection());
+                finallyStatement(res, prep);
             }
         }
         return rowChanged > 0;
     }
+
     public boolean updateUserInfoPhone(String username, String newData) {
         int rowChanged = 0;
         if (setUp()) {
             try {
-                getConnection().setAutoCommit(false);
-
-                PreparedStatement prep = getConnection().prepareStatement("UPDATE user SET phone = ? WHERE username = ?;");
+                conn = getConnection();
+                conn.setAutoCommit(false);
+                prep = conn.prepareStatement("UPDATE user SET phone = ? WHERE username = ?;");
                 prep.setString(1, newData);
                 prep.setString(2, username);
                 rowChanged = prep.executeUpdate();
 
-                getConnection().commit();
-                prep.close();
             } catch (SQLException e) {
                 System.err.println("Issue with executing database update.");
-
-                try {
-                    getConnection().rollback();
-                    getConnection().setAutoCommit(true);
-                }catch (SQLException sqle){
-                    System.err.println("Could not rollback");
-                }
-
+                rollbackStatement();
                 return false;
             } finally {
-
-                try {
-                    getConnection().setAutoCommit(true);
-                }catch (SQLException sqle){
-                    sqle.printStackTrace();
-                }
-
-                DbUtils.closeQuietly(getScentence());
-                DbUtils.closeQuietly(getConnection());
+                finallyStatement(res, prep);
             }
         }
         return rowChanged > 0;
     }
+
     public boolean updateUserInfoEmail(String username, String newData) {
         int rowChanged = 0;
         if (setUp()) {
             try {
-                getConnection().setAutoCommit(false);
-
-                PreparedStatement prep = getConnection().prepareStatement("UPDATE user SET email = ? WHERE username = ?;");
+                conn = getConnection();
+                conn.setAutoCommit(false);
+                prep = conn.prepareStatement("UPDATE user SET email = ? WHERE username = ?;");
                 prep.setString(1, newData);
                 prep.setString(2, username);
                 rowChanged = prep.executeUpdate();
-
-                getConnection().commit();
-                prep.close();
             } catch (SQLException e) {
                 System.err.println("Issue with executing database update.");
-
-                try {
-                    getConnection().rollback();
-                    getConnection().setAutoCommit(true);
-                }catch (SQLException sqle){
-                    System.err.println("Could not rollback");
-                }
-
+                rollbackStatement();
                 return false;
             } finally {
-
-                try {
-                    getConnection().setAutoCommit(true);
-                }catch (SQLException sqle){
-                    sqle.printStackTrace();
-                }
-
-                DbUtils.closeQuietly(getScentence());
-                DbUtils.closeQuietly(getConnection());
+                finallyStatement(res, prep);
             }
         }
         return rowChanged > 0;
@@ -416,58 +317,37 @@ public class UserManagement extends Management {
         int rowChanged = 0;
         if (setUp()) {
             try {
-                getConnection().setAutoCommit(false);
-
-                PreparedStatement prep = getConnection().prepareStatement("UPDATE user SET access_level = ? WHERE username = ?;");
+                conn = getConnection();
+                conn.setAutoCommit(false);
+                prep = conn.prepareStatement("UPDATE user SET access_level = ? WHERE username = ?;");
                 prep.setInt(1, newData);
                 prep.setString(2, username);
                 rowChanged = prep.executeUpdate();
-
-                getConnection().commit();
-                prep.close();
             } catch (SQLException e) {
                 System.err.println("Issue with executing database update.");
-
-                try {
-                    getConnection().rollback();
-                    getConnection().setAutoCommit(true);
-                }catch (SQLException sqle){
-                    System.err.println("Could not rollback");
-                }
-
+                rollbackStatement();
                 return false;
             } finally {
-
-                try {
-                    getConnection().setAutoCommit(true);
-                }
-                catch (SQLException sqle){
-                    sqle.printStackTrace();
-                }
-
-                DbUtils.closeQuietly(getScentence());
-                DbUtils.closeQuietly(getConnection());
+                finallyStatement(res, prep);
             }
         }
         return rowChanged > 0;
     }
     public ArrayList<Object[]> userSearch(String searchTerm){
-        ResultSet res;
         ArrayList<Object[]> out = new ArrayList<>();
         if(setUp()) {
             try {
-                PreparedStatement prep = getConnection().prepareStatement("SELECT username, first_name, last_name, phone, email, access_level" +
-                        " FROM user WHERE username LIKE ? OR first_name LIKE ? OR last_name LIKE ? OR phone LIKE ? OR email LIKE ? OR access_level LIKE ? AND status = 1 ORDER BY last_name;");
-                searchTerm = "%" + searchTerm + "%";
-                prep.setString(1, searchTerm);
-                prep.setString(2, searchTerm);
-                prep.setString(3, searchTerm);
-                prep.setString(4, searchTerm);
-                prep.setString(5, searchTerm);
-                prep.setString(6, searchTerm);
-
+                conn = getConnection();
+                prep = conn.prepareStatement("SELECT username, first_name, last_name, phone, email, access_level" +
+                        " FROM user WHERE username LIKE ? OR first_name LIKE ? OR last_name LIKE ? OR phone LIKE" +
+                        " ? OR email LIKE ? OR access_level LIKE ? AND status = 1 ORDER BY last_name;");
+                prep.setString(1, "%" + searchTerm + "%");
+                prep.setString(2, "%" + searchTerm + "%");
+                prep.setString(3, "%" + searchTerm + "%");
+                prep.setString(4, "%" + searchTerm + "%");
+                prep.setString(5, "%" + searchTerm + "%");
+                prep.setString(6, "%" + searchTerm + "%");
                 res = prep.executeQuery();
-
                 while (res.next()) {
                     Object[] obj = new Object[6];
                     obj[0] = res.getString("first_name");
@@ -475,19 +355,15 @@ public class UserManagement extends Management {
                     obj[2] = res.getString("email");
                     obj[3] = res.getString("phone");
                     obj[4] = res.getString("username");
-                    // Convert access level from int to string
                     obj[5] = UserType.valueOf(res.getInt("access_level"));
                     out.add(obj);
                 }
-                prep.close();
             } catch (Exception e) {
                 System.err.println("Issue with search.");
                 return null;
             } finally {
-                DbUtils.closeQuietly(getScentence());
-                DbUtils.closeQuietly(getConnection());
+                finallyStatement(res, prep);
             }
-
             return out;
         }
         else return null;
@@ -497,37 +373,18 @@ public class UserManagement extends Management {
         int rowChanged = 0;
         if (setUp()) {
             try {
-                getConnection().setAutoCommit(false);
-
-                PreparedStatement prep = getConnection().prepareStatement("UPDATE user SET status = ? WHERE username = ?;");
+                conn = getConnection();
+                conn.setAutoCommit(false);
+                prep = conn.prepareStatement("UPDATE user SET status = ? WHERE username = ?;");
                 prep.setInt(1, status);
                 prep.setString(2, username);
                 rowChanged = prep.executeUpdate();
-
-                getConnection().commit();
-                prep.close();
             } catch (SQLException e) {
                 System.err.println("Issue with executing database update.");
-
-                try {
-                    getConnection().rollback();
-                    getConnection().setAutoCommit(true);
-                }catch (SQLException sqle){
-                    System.err.println("Could not rollback");
-                }
-
+                rollbackStatement();
                 return false;
             } finally {
-
-                try {
-                    getConnection().setAutoCommit(true);
-                }
-                catch (SQLException sqle){
-                    sqle.printStackTrace();
-                }
-
-                DbUtils.closeQuietly(getScentence());
-                DbUtils.closeQuietly(getConnection());
+                finallyStatement(res, prep);
             }
         }
         return rowChanged > 0;

@@ -2,10 +2,7 @@ package Database;
 
 import org.apache.commons.dbutils.DbUtils;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 
 /**
@@ -52,18 +49,32 @@ public abstract class Management {
         return lastname + ", " + firstname;
     }
 
-    /*
-    public void closeConnection(){
+    public void rollbackStatement() {
         try {
+            if (!connection.getAutoCommit()) {
+                connection.rollback();
+                connection.setAutoCommit(true);
+            }
+        } catch (SQLException ee) {
+            System.err.println("Rollback Statement failed");
+        }
+    }
 
-            scentence.close();
-            connection.close();
+
+    public void finallyStatement(ResultSet res, PreparedStatement prep) {
+        try {
+            if (!connection.getAutoCommit()) {
+                connection.commit();
+                connection.setAutoCommit(true);
+            }
+            if (!res.isClosed() && res != null) res.close();
+            if (!prep.isClosed()) prep.close();
+        } catch (SQLException sqle) {
+            System.err.println("Finally Statement failed");
+            sqle.printStackTrace();
         }
-        catch (Exception e){
-            System.err.println("Closing database failed.");
-         //   e.printStackTrace();
-        }
-    }*/
+        closeConnection();
+    }
 
     protected Statement getScentence() {
         return scentence;

@@ -2,6 +2,7 @@ package Database;
 
 import org.apache.commons.dbutils.DbUtils;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,55 +13,60 @@ import java.util.Arrays;
  * Created by Evdal on 09.04.2016.
  */
 public class FinanceManagement extends Management{
-    private final String getRecipes = "SELECT portions, price, recipe.recipe_id FROM order_recipe, recipe WHERE order_recipe.order_id = ? AND recipe.recipe_id = order_recipe.recipe_id;";
+    private final String sqlGetRecipes = "SELECT portions, price, recipe.recipe_id FROM order_recipe, recipe WHERE order_recipe.order_id = ? AND recipe.recipe_id = order_recipe.recipe_id;";
+    private final String sqlAddIncome = "INSERT INTO finance VALUES(?,0,CURRENT_DATE);";
+    private final String sqlAddOutcome = "INSERT INTO finance VALUES(0,?,CURRENT_DATE)";
+
+    Connection conn = null;
+    ResultSet res = null;
+    PreparedStatement prep = null;
+
 
     public FinanceManagement(){
         super();
     }
-    public boolean addIncomeToDatabase(double income){
+
+    private boolean addDoubleToDatabase(String sql, Double input, String errMsg){
         if(setUp()){
             try{
-                PreparedStatement prep = getConnection().prepareStatement("INSERT INTO finance VALUES(?,0,CURRENT_DATE);");
-                prep.setDouble(1, income);
+                conn = getConnection();
+                conn.setAutoCommit(false);
+                prep = conn.prepareStatement(sql);
+                prep.setDouble(1, input);
                 if(prep.executeUpdate() <= 0)return false;
-
             }catch (SQLException e){
-                System.err.println("Issue with adding income to database.");
+                System.err.println(errMsg);
+                rollbackStatement();
                 return false;
             }
             finally {
-                DbUtils.closeQuietly(getScentence());
-                DbUtils.closeQuietly(getConnection());
+                finallyStatement(res, prep);
             }
         }
         return true;
     }
+
+    /**
+     *  Hadde bare lyst så jeg laget en add metode
+     */
+
+    public boolean addIncomeToDatabase(double income){
+        return addDoubleToDatabase(sqlAddIncome, income, "Issue with adding income to database");
+    }
+
     public boolean addOutcomeToDatabase(double outcome){
-        if(setUp()){
-            try{                                                                                //VALUES(income, outcome, date)
-                PreparedStatement prep = getConnection().prepareStatement("INSERT INTO finance VALUES(0,?,CURRENT_DATE)");
-                prep.setDouble(1, outcome);
-                if(prep.executeUpdate() <= 0)return false;
-
-            }catch (SQLException e){
-                System.err.println("Issue with adding income to database.");
-                return false;
-            }
-            finally {
-                DbUtils.closeQuietly(getScentence());
-                DbUtils.closeQuietly(getConnection());
-            }
-        }
-        return true;
+        return addDoubleToDatabase(sqlAddOutcome, outcome, "Issue with adding outcome to database");
     }
+
     public ArrayList<Object[]> getOrderRecipeInfo(int id){
         ArrayList<Object[]> out = new ArrayList<>();
         if(setUp()){
-            try{                                                                                //VALUES(income, outcome, date)
-                PreparedStatement prep = getConnection().prepareStatement(getRecipes);
+            try{
+                conn = getConnection();
+                prep = conn.prepareStatement(sqlGetRecipes);
                 prep.setInt(1, id);
                 System.out.println(prep.toString());
-                ResultSet res = prep.executeQuery();
+                res = prep.executeQuery();
                 while (res.next()){
                     Object[] obj = new Object[2];
                     obj[0] = res.getInt("portions");
@@ -71,8 +77,7 @@ public class FinanceManagement extends Management{
                 System.err.println("Issue with getting recipe price.");
             }
             finally {
-                DbUtils.closeQuietly(getScentence());
-                DbUtils.closeQuietly(getConnection());
+                finallyStatement(res, prep);
             }
         }
         return out;

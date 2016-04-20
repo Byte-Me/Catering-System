@@ -267,7 +267,7 @@ public class EditOrder extends JDialog {
 
         rightButton.addActionListener(e -> addOrderModel.removeRow(recipeTable.getSelectedRow()));
 
-        //adds
+        //skal edit order knappen hete addOrderButton?
         addOrderButton.addActionListener(e -> {
             Object[] selectedCustomer = customers.get(customerDropdown.getSelectedIndex());
             Date selectedDate = (Date)datePicker.getModel().getValue();
