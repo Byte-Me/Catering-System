@@ -37,8 +37,8 @@ public abstract class Management {
     }
     protected void closeConnection(){
         try {
-            if(!scentence.isClosed() || scentence == null)DbUtils.closeQuietly(scentence);
-            if(!connection.isClosed() || connection == null)DbUtils.closeQuietly(connection);
+            if(!scentence.isClosed() && scentence != null)DbUtils.closeQuietly(scentence);
+            if(!connection.isClosed() && connection != null)DbUtils.closeQuietly(connection);
         }
         catch (Exception e){
             System.err.println("Problem with closing connection");
@@ -52,18 +52,7 @@ public abstract class Management {
         return lastname + ", " + firstname;
     }
 
-    /*
-    public void closeConnection(){
-        try {
 
-            scentence.close();
-            connection.close();
-        }
-        catch (Exception e){
-            System.err.println("Closing database failed.");
-         //   e.printStackTrace();
-        }
-    }*/
 
     protected Statement getScentence() {
         return scentence;

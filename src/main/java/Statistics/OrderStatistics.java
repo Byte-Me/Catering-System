@@ -28,7 +28,7 @@ public class OrderStatistics extends Statistics{
         ArrayList<String> orders = stat.getDates(startDateS, endDateS, "order");
         JPanel chart = null;
         if (orders.isEmpty()) {
-            chart = ChartCreator.createLineChart("No orders found", "", "", new ArrayList<String>(),
+            chart = ChartCreator.createLineChart("No orders found", "", "", new ArrayList<>(),
                     new ArrayList<>(), "orders");
         }
         else {
@@ -108,7 +108,9 @@ public class OrderStatistics extends Statistics{
             chart = ChartCreator.createBarChart("Orders by weekday", "Days", "Amount", xValues,
                     yValues, "");
         }
-
+        chart.setDomainZoomable(false); // Remove zooming
+        chart.setRangeZoomable(false); // Remove zooming
+        chart.setPopupMenu(null); // Remove Popup menu
         return chart;
 
     }

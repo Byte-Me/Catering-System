@@ -70,7 +70,7 @@ public class EditSubscription extends JDialog{
 
 
     public EditSubscription(int subId) {
-        setTitle("New Subscription");
+        setTitle("Edit Subscription");
         setContentPane(mainPanel);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
@@ -193,12 +193,7 @@ public class EditSubscription extends JDialog{
                 }
             }//FIXME: legger bare inn første dag!!!
 
-            for(Object[][] obj : panelValues){
-                for(int i = 0; i<obj.length;i++){
-                    System.out.println(Arrays.toString(obj[i]));
-                }
-            }
-            System.out.println(Arrays.toString(selectedCustomer));
+
             boolean isAdded = Subscriptions.createSubscription((String)selectedCustomer[1],fromDate,toDate,frequency,panelValues);
             if(!isAdded) {
                 showMessageDialog(null, "Could not create subscription.");
@@ -261,7 +256,6 @@ public class EditSubscription extends JDialog{
     private void fillSubInfo(int id){
         Object[] info = subs.getSubInfoFromId(id);
         ArrayList<Object[]> panelInfo = (ArrayList<Object[]>)info[0];
-        System.out.println(panelInfo);
         for(Object[] panel : panelInfo) {
             checkList.get((Integer) panel[3] - 1).setSelected(true);
         }
@@ -295,7 +289,6 @@ public class EditSubscription extends JDialog{
         int count = 0;
         for(int i =0;i<panelList.size();i++){
             if(panelList.get(i) != null) {
-                System.out.println(panelList);
                 panelList.get(i).addValues(panelInfo.get(count)); //panel[3]= day, -1 for index
                 count++;
             }
@@ -318,11 +311,14 @@ public class EditSubscription extends JDialog{
     }
 
     private void addMonPanel(){
-        monPanel = new PanelForSubs(1);
+        if(monPanel == null) {
+            monPanel = new PanelForSubs(1);
+        }
         int index = 0;
         if(monCheckBox.isSelected()) {
             dayTabbedPane.insertTab("Monday",null,monPanel.getMainPanel(),null,index);
             panelList.add(monPanel);
+            dayTabbedPane.setSelectedIndex(index);
 
         }
         else{
@@ -330,7 +326,9 @@ public class EditSubscription extends JDialog{
         }
     }
     private void addTuePanel(){
-        tuePanel = new PanelForSubs(2);
+        if(tuePanel == null) {
+            tuePanel = new PanelForSubs(2);
+        }
         if(tueCheckBox.isSelected()) {
             int index =0;
             for(int i = 0; i<dayTabbedPane.getTabCount();i++){
@@ -342,6 +340,7 @@ public class EditSubscription extends JDialog{
             if(index > dayTabbedPane.getTabCount()) index = dayTabbedPane.getTabCount();
             dayTabbedPane.insertTab("Tuesday",null,tuePanel.getMainPanel(),null,index);
             panelList.add(tuePanel);
+            dayTabbedPane.setSelectedIndex(index);
 
         }
         else{
@@ -353,7 +352,9 @@ public class EditSubscription extends JDialog{
         }
     }
     private void addWedPanel(){
-        wedPanel = new PanelForSubs(3);
+        if(wedPanel == null) {
+            wedPanel = new PanelForSubs(3);
+        }
         if(wedCheckBox.isSelected()) {
             int index =0;
             for(int i = 0; i<dayTabbedPane.getTabCount();i++){
@@ -368,6 +369,7 @@ public class EditSubscription extends JDialog{
             if(index > dayTabbedPane.getTabCount()) index = dayTabbedPane.getTabCount();
             dayTabbedPane.insertTab("Wednesday",null,wedPanel.getMainPanel(),null,index);
             panelList.add(wedPanel);
+            dayTabbedPane.setSelectedIndex(index);
 
 
         }
@@ -380,7 +382,9 @@ public class EditSubscription extends JDialog{
         }
     }
     private void addThuPanel(){
-        thuPanel = new PanelForSubs(4);
+        if(thuPanel == null) {
+            thuPanel = new PanelForSubs(4);
+        }
         if(thuCheckBox.isSelected()){
             int index =0;
             for(int i = 0; i<dayTabbedPane.getTabCount();i++){
@@ -398,6 +402,7 @@ public class EditSubscription extends JDialog{
             if(index > dayTabbedPane.getTabCount()) index = dayTabbedPane.getTabCount();
             dayTabbedPane.insertTab("Thursday",null,thuPanel.getMainPanel(),null,index);
             panelList.add(thuPanel);
+            dayTabbedPane.setSelectedIndex(index);
 
 
         }
@@ -410,7 +415,9 @@ public class EditSubscription extends JDialog{
         }
     }
     private void addFriPanel(){
-        friPanel = new PanelForSubs(5);
+        if(friPanel == null) {
+            friPanel = new PanelForSubs(5);
+        }
         if(friCheckBox.isSelected()){
             int index =0;
             for(int i = 0; i<dayTabbedPane.getTabCount();i++){
@@ -431,6 +438,7 @@ public class EditSubscription extends JDialog{
             if(index > dayTabbedPane.getTabCount()) index = dayTabbedPane.getTabCount();
             dayTabbedPane.insertTab("Friday",null,friPanel.getMainPanel(),null,index);
             panelList.add(friPanel);
+            dayTabbedPane.setSelectedIndex(index);
 
 
         }
@@ -444,7 +452,9 @@ public class EditSubscription extends JDialog{
         dayTabbedPane.revalidate();
     }
     private void addSatPanel(){
-        satPanel = new PanelForSubs(6);
+        if(satPanel == null) {
+            satPanel = new PanelForSubs(6);
+        }
         if(satCheckBox.isSelected()){
             int index =0;
             for(int i = 0; i<dayTabbedPane.getTabCount();i++){
@@ -468,6 +478,8 @@ public class EditSubscription extends JDialog{
             if(index > dayTabbedPane.getTabCount()) index = dayTabbedPane.getTabCount();
             dayTabbedPane.insertTab("Saturday",null,satPanel.getMainPanel(),null,index);
             panelList.add(satPanel);
+            dayTabbedPane.setSelectedIndex(index);
+
         }
         else{
             for(int i = 0; i<dayTabbedPane.getTabCount();i++) {
@@ -478,7 +490,9 @@ public class EditSubscription extends JDialog{
         }
     }
     private void addSunPanel(){
-        sunPanel = new PanelForSubs(7);
+        if(sunPanel == null) {
+            sunPanel = new PanelForSubs(7);
+        }
         if(sunCheckBox.isSelected()){
             int index =0;
             for(int i = 0; i<dayTabbedPane.getTabCount();i++){
@@ -505,6 +519,7 @@ public class EditSubscription extends JDialog{
             if(index > dayTabbedPane.getTabCount()) index = dayTabbedPane.getTabCount();
             dayTabbedPane.insertTab("Sunday",null,sunPanel.getMainPanel(),null,index);
             panelList.add(sunPanel);
+            dayTabbedPane.setSelectedIndex(index);
 
 
         }

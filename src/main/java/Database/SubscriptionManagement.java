@@ -7,7 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import static Database.OrderManagement.OrdStatus;
+import static Database.OrderManagement.OrderType;
 
 /**
  * Created by Evdal on 16.03.2016.
@@ -236,9 +236,9 @@ public class SubscriptionManagement extends Management{
     public boolean deleteSubscription(int subId){ //setter orderstatus på alle ordre med riktig sub_id etter dagens dato til inaktiv
         if(setUp()){
             try {
-                getScentence().executeUpdate("UPDATE `order` SET status = "+ OrdStatus.INACTIVE.getValue()+
+                getScentence().executeUpdate("UPDATE `order` SET status = "+ OrderType.INACTIVE.getValue()+
                         " WHERE sub_id = "+subId+" AND `date` >= CURRENT_DATE;");
-                getScentence().executeUpdate("UPDATE `subscription` SET status = "+ OrdStatus.INACTIVE.getValue()+
+                getScentence().executeUpdate("UPDATE `subscription` SET status = "+ OrderType.INACTIVE.getValue()+
                         " WHERE sub_id = "+subId+";");
 
             }
@@ -344,7 +344,7 @@ public class SubscriptionManagement extends Management{
                 prep = getConnection().prepareStatement(getRecipeInfoFromSubAndDate2);
                 prep.setInt(1, subId);
                 prep.setString(2, date);
-                prep.executeQuery();
+                res = prep.executeQuery();
                 if(res.next()){
                     out[1] = res.getString("note");
                     out[2] = res.getString("time");

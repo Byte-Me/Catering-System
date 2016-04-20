@@ -56,7 +56,7 @@ public class ChartCreator extends JFrame {
         JFreeChart lineChart = ChartFactory.createLineChart(title, xTitle, yTitle,
                 createDataset(xValues, yValues, dataInfo), PlotOrientation.VERTICAL, false, false, false);
         StandardChartTheme theme = (StandardChartTheme)org.jfree.chart.StandardChartTheme.createJFreeTheme();
-        String fontName = "Lucida Sans";
+        String fontName = "Helvetica";
         theme.setExtraLargeFont( new Font(fontName,Font.PLAIN, 16) ); //title
         theme.setLargeFont( new Font(fontName,Font.BOLD, 15)); //axis-title
         theme.setRegularFont( new Font(fontName,Font.PLAIN, 11));
@@ -83,6 +83,9 @@ public class ChartCreator extends JFrame {
         chartPanel.setPreferredSize( new java.awt.Dimension( 1000 , 367 ) );
         // preffered size is set, might want variables for dimensions.
 
+        chartPanel.setDomainZoomable(false); // Remove zooming
+        chartPanel.setRangeZoomable(false); // Remove zooming
+        chartPanel.setPopupMenu(null); // Remove Popup menu
         return chartPanel;
 
     }
