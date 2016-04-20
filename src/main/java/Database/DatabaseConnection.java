@@ -26,11 +26,9 @@ public class DatabaseConnection {
             connection = DriverManager.getConnection(databasename);
         } catch (ClassNotFoundException cnfe) {
             System.err.println("Issue with database driver.");
-            //cnfe.printStackTrace();
         } catch (SQLException SQLe) {
             System.err.println("Issue with connecting to database.");
         }
-
     }
     public Connection getConnection(){
         return connection;
