@@ -91,6 +91,24 @@ public class MainWindow extends JFrame {
         Driver driverPanel = new Driver(driverTable, mapPanel, generateDrivingRouteButton);
         Chef chefPanel = new Chef(prepareTable, ingredientTable, generateShoppingListButton, recipesButton, addIngredientButton, editIngredientButton, chefSplitPane);
 
+        // Get tab icon images
+        Image statisticsIcon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/Images/tabs/statistics.png"));
+        Image usersIcon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/Images/tabs/users.png"));
+        Image customersIcon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/Images/tabs/customers.png"));
+        Image subscriptionsIcon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/Images/tabs/subscriptions.png"));
+        Image ordersIcon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/Images/tabs/orders.png"));
+        Image driverIcon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/Images/tabs/driver.png"));
+        Image chefIcon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/Images/tabs/chef.png"));
+
+        // Set tab icons in correct tabs
+        tabbedPane1.setIconAt(tabbedPane1.indexOfComponent(statistics), new ImageIcon(statisticsIcon));
+        tabbedPane1.setIconAt(tabbedPane1.indexOfComponent(users), new ImageIcon(usersIcon));
+        tabbedPane1.setIconAt(tabbedPane1.indexOfComponent(customers), new ImageIcon(customersIcon));
+        tabbedPane1.setIconAt(tabbedPane1.indexOfComponent(subscriptions), new ImageIcon(subscriptionsIcon));
+        tabbedPane1.setIconAt(tabbedPane1.indexOfComponent(orders), new ImageIcon(ordersIcon));
+        tabbedPane1.setIconAt(tabbedPane1.indexOfComponent(driver), new ImageIcon(driverIcon));
+        tabbedPane1.setIconAt(tabbedPane1.indexOfComponent(chef), new ImageIcon(chefIcon));
+
         // Remove panes the user does not have access to
         switch (UserManagement.UserType.valueOf((int)user[5])) {
             case ADMIN:
