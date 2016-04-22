@@ -15,16 +15,16 @@ public class Login extends JFrame{
     private JPasswordField passwordPasswordField;
     private JButton loginButton;
     private JButton cancelButton;
-    private JPanel mainPanel;
+    private JPanel mainPane;
     private JLabel logoLabel;
 
     private LoginManagement dbconnect;
 
     public Login() {
         setTitle("Login");
-        setContentPane(mainPanel);
+        setContentPane(mainPane);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        mainPanel.getRootPane().setDefaultButton(loginButton);
+        mainPane.getRootPane().setDefaultButton(loginButton);
 
         Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/Images/icon32.png"));
         setIconImage(icon);
