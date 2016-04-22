@@ -125,6 +125,7 @@ public class MainWindow extends JFrame {
                 dispose();
         }
 
+        updateTab(tabbedPane1.getSelectedIndex());
         startAutoUpdate(tabbedPane1.getSelectedIndex()); // Start autoUpdate of tabs (every 5 minutes)
         tabbedPane1.addChangeListener(e -> updateTab(tabbedPane1.getSelectedIndex()));
 

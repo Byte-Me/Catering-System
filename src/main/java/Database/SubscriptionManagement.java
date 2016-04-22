@@ -55,22 +55,22 @@ public class SubscriptionManagement extends Management{
         ArrayList<Object[]> out = new ArrayList<>();
         if(setUp()){
             try {
-                ResultSet res = getScentence().executeQuery("SELECT subscription.sub_id, customer.name, " +
+                conn = getConnection();
+                prep = conn.prepareStatement("SELECT subscription.sub_id, customer.name, " +
                         "subscription.date_from, subscription.date_to, subscription.sub_type FROM subscription, " +
-                        "customer WHERE subscription.customer_id = customer.customer_id AND subscription.status = "+SubType.ACTIVE.getValue()
-                +";");
-
+                        "customer WHERE subscription.customer_id = customer.customer_id AND subscription.status = ?;");
+                prep.setInt(1, SubType.ACTIVE.getValue());
+                res = prep.executeQuery();
                 while (res.next()){
                     out.add(createObj(res));
                 }
-
             }
             catch (Exception e){
                 System.err.println("Issue with subscriptions.");
+                return null;
             }
             finally {
                 finallyStatement(res,prep);
-
             }
         }
         return out;
@@ -79,22 +79,22 @@ public class SubscriptionManagement extends Management{
         ArrayList<Object[]> out = new ArrayList<Object[]>();
         if(setUp()){
             try {
-                ResultSet res = getScentence().executeQuery("SELECT subscription.sub_id, customer.name, " +
+                conn = getConnection();
+                prep = conn.prepareStatement("SELECT subscription.sub_id, customer.name, " +
                         "subscription.date_from, subscription.date_to, subscription.sub_type FROM subscription, " +
-                        "customer WHERE subscription.customer_ID = customer.customer_id AND "+SubType.INACTIVE.getValue()
-                        +" = subscription.status;");
-
+                        "customer WHERE subscription.customer_ID = customer.customer_id AND ? = subscription.status;");
+                prep.setInt(1, SubType.INACTIVE.getValue());
+                res = prep.executeQuery();
                 while (res.next()){
                     out.add(createObj(res));
                 }
-
             }
             catch (Exception e){
                 System.err.println("Issue with subscriptions.");
+                return null;
             }
             finally {
                 finallyStatement(res,prep);
-
             }
         }
         return out;
@@ -112,21 +112,20 @@ public class SubscriptionManagement extends Management{
     }
 
     public ArrayList<Object[]> subscriptionSearch(String searchTerm){
-        ResultSet res;
         ArrayList<Object[]> out = new ArrayList<>();
         if(setUp()) {
             try {
-                PreparedStatement prep = getConnection().prepareStatement("SELECT subscription.sub_id, customer.name, " +
+                conn = getConnection();
+                prep = conn.prepareStatement("SELECT subscription.sub_id, customer.name, " +
                                 "subscription.date_from, subscription.date_to, subscription.sub_type" +
                         " FROM subscription, customer WHERE subscription.customer_id = customer.customer_id AND (" +
                         "subscription.sub_id LIKE ? OR customer.name LIKE ? OR subscription.date_from LIKE ? OR subscription.date_to " +
                         "LIKE ? OR subscription.sub_type LIKE ?) ORDER BY sub_id;");
-                searchTerm = "%" + searchTerm + "%";
-                prep.setString(1, searchTerm);
-                prep.setString(2, searchTerm);
-                prep.setString(3, searchTerm);
-                prep.setString(4, searchTerm);
-                prep.setString(5, searchTerm);
+                prep.setString(1, "%" + searchTerm + "%");
+                prep.setString(2, "%" + searchTerm + "%");
+                prep.setString(3, "%" + searchTerm + "%");
+                prep.setString(4, "%" + searchTerm + "%");
+                prep.setString(5, "%" + searchTerm + "%");
                 res = prep.executeQuery();
 
                 while (res.next()) {
@@ -136,17 +135,14 @@ public class SubscriptionManagement extends Management{
                     obj[2] = res.getString("date_to");
                     obj[3] = res.getString("date_from");
                     obj[4] = res.getInt("sub_type");
-
                     out.add(obj);
                 }
             } catch (Exception e) {
                 System.err.println("Issue with search.");
                 return null;
             } finally {
-                DbUtils.closeQuietly(getScentence());
-                DbUtils.closeQuietly(getConnection());
+                finallyStatement(res, prep);
             }
-
             return out;
         }
         else return null;
@@ -156,15 +152,16 @@ public class SubscriptionManagement extends Management{
         int orders = 0;
         if(setUp()){
             try{
-                ResultSet res = getScentence().executeQuery("SELECT count(order_id) as orders from `order` WHERE " +
-                        "sub_id = " + subId + ";");
+                conn = getConnection();
+                prep = conn.prepareStatement("SELECT count(order_id) as orders from `order` WHERE sub_id = ?;");
+                prep.setInt(1, subId);
+                res = prep.executeQuery();
                 if(res.next()){
                     orders = res.getInt("orders");
                 }
             }
             catch (Exception e){
                 System.err.println("Issue with subscriptions.");
-
             }
             finally {
                 finallyStatement(res,prep);
@@ -178,96 +175,44 @@ public class SubscriptionManagement extends Management{
         int subid = -1;
         if(setUp()){
             try {
-                getScentence().executeQuery("START TRANSACTION");
+                conn = getConnection();
+                conn.setAutoCommit(false);
                 if(subid >= 0){
                     deleteSubscription(subId);
                 }
-                prep = getConnection().prepareStatement("INSERT INTO subscription VALUES (DEFAULT,?,?,?,?,CURRENT_DATE,?);");
+                prep = conn.prepareStatement("INSERT INTO subscription VALUES (DEFAULT,?,?,?,?,CURRENT_DATE,?);");
                 prep.setInt(1, custID);
                 prep.setString(2, dateTo);
                 prep.setString(3, dateFrom);
                 prep.setInt(4, 1); //active
                 prep.setInt(5, frequency);
                 prep.executeUpdate();
-                ResultSet res = getScentence().executeQuery("SELECT LAST_INSERT_ID() as id;");
+
+                prep = conn.prepareStatement("SELECT LAST_INSERT_ID() as id;");
+                res = prep.executeQuery();
                 if(res.next()){
                     subid = res.getInt("id");
                 }
 
             } catch (SQLException e) {
                 System.err.println("Issue with creating subscription");
-                try {
-                    getScentence().executeQuery("ROLLBACK");
-                } catch (SQLException e1) {
-                    System.err.println("Issue with rolling back subscription transaction.");
-                }
+                rollbackStatement();
                 return -1;
             } finally {
-                try {
-                    getScentence().executeQuery("COMMIT;");
-                } catch (SQLException e) {
-                }
-                finallyStatement(res,prep);
-
-
+                finallyStatement(res, prep);
             }
-
         }
         return subid;
     }
-    public boolean increaseSubLength(int subId, String dateTo){
-        int out = -1;
-        if(setUp()){
-            String dateFrom = null;
-            int frequency = 0;
-            int custId = 0;
-            try {
-                ResultSet res = getScentence().executeQuery("SELECT date_to, customer_id, sub_type FROM subscription WHERE sub_id = "+subId+";");
-                if(res.next()) {
-                    dateFrom = res.getString("date_to"); //Henter den gamle til_datoen TODO: test for duplicate orders!
-                    frequency = res.getInt("sub_type");
-                    custId = res.getInt("customer_id");
 
-                }
-                out = createSubscription(custId, dateFrom,dateTo, frequency, subId);
-            } catch (SQLException e) {
-                System.err.println("Issue with getting data from subId");
-                return false;
-            } finally {
-                finallyStatement(res,prep);
-
-            }
-        }
-        return out > -1;
-
-    }
-
-    public boolean changeRecipes(int subID, int prevRecipeID, int newRecipeID){ //DENNE MÅ ENDRES TODO
-        int rowChanged = 0;
-        if(setUp()){
-            try{
-                rowChanged = getScentence().executeUpdate("UPDATE order_recipe SET recipe_id  = " + newRecipeID+
-                        " WHERE order_id IN(SELECT " + "order_id FROM `order` WHERE sub_id = "+subID+") AND " +
-                        "order_recipe.recipe_id = "+prevRecipeID+";");
-
-            }catch(Exception e){
-                System.err.println("Issue with changing recipes.");
-                return false;
-            }
-            finally {
-                finallyStatement(res,prep);
-
-            }
-        }
-        return rowChanged > 0;
-    }
-    public Object[] getSubInfoFromId(int subId){ //DENNE MÅ ENDRES TODO
+    public Object[] getSubInfoFromId(int subId){
         Object[] out = new Object[4];
         if(setUp()){
             try{
-                PreparedStatement prep = getConnection().prepareStatement(getSubInfoFromId);
+                conn = getConnection();
+                prep = conn.prepareStatement(getSubInfoFromId);
                 prep.setInt(1,subId);
-                ResultSet res = prep.executeQuery();
+                res = prep.executeQuery();
                 if (res.next()){
                     out[0] = res.getString("name");
                     out[1] = res.getString("date_from");
@@ -288,9 +233,10 @@ public class SubscriptionManagement extends Management{
         ArrayList<Object[]> out = new ArrayList<>();
         if(setUp()){
             try{
-                PreparedStatement prep = getConnection().prepareStatement(getOrderInfoFromSub);
+                conn = getConnection();
+                prep = conn.prepareStatement(getOrderInfoFromSub);
                 prep.setInt(1,subId);
-                ResultSet res = prep.executeQuery();
+                res = prep.executeQuery();
                 while (res.next()){
                     Object[] obj = new Object[4];
                     obj[0] = res.getString("time");
@@ -308,14 +254,15 @@ public class SubscriptionManagement extends Management{
         }
         return out;
     }
-    public Object[] getRecipeInfoFromSubAndDate(int subId, String date){ //DENNE MÅ ENDRES TODO
+    public Object[] getRecipeInfoFromSubAndDate(int subId, String date){
         Object[] out = new Object[4];
         if(setUp()){
             try{
-                PreparedStatement prep = getConnection().prepareStatement(getRecipeInfoFromSubAndDate);
+                conn = getConnection();
+                prep = conn.prepareStatement(getRecipeInfoFromSubAndDate);
                 prep.setInt(1,subId);
                 prep.setString(2,date);
-                ResultSet res = prep.executeQuery();
+                res = prep.executeQuery();
                 ArrayList<Object[]> recipeTableInfo = new ArrayList<>();
 
                 //find recipe info
@@ -324,11 +271,10 @@ public class SubscriptionManagement extends Management{
                     obj[0] = res.getString("name");
                     obj[1] = res.getString("portions");
                     recipeTableInfo.add(obj);
-
                 }
                 out[0] = recipeTableInfo;
                 //find specific day info
-                prep = getConnection().prepareStatement(getRecipeInfoFromSubAndDate2);
+                prep = conn.prepareStatement(getRecipeInfoFromSubAndDate2);
                 prep.setInt(1, subId);
                 prep.setString(2, date);
                 res = prep.executeQuery();
@@ -364,6 +310,7 @@ public class SubscriptionManagement extends Management{
 
             }catch(Exception e){
                 System.err.println("Issue with getRecipeInfoFromSubAndDate.");
+                rollbackStatement();
                 return false;
             }
             finally {
