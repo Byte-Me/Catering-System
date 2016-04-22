@@ -2,6 +2,8 @@ package Updates;
 
 import javax.swing.*;
 
+import java.awt.*;
+
 import static GUI.WindowPanels.Chef.updateIngredients;
 import static GUI.WindowPanels.Chef.updatePrepareTable;
 import static GUI.WindowPanels.Customers.updateCustomer;
@@ -17,12 +19,13 @@ import static GUI.WindowPanels.Users.updateUsers;
  */
 public class UpdateHandler {
     private static Timer timer;
-    private static int currTab;
+    private static JTabbedPane tabbedPane;
+    private static Component[] tabs;
     private static boolean autoUpdateStarted = false;
 
     // Used for right click handler
     public static int getCurrTab() {
-        return currTab;
+        return tabbedPane.getSelectedIndex();
     }
 
     private static void startTimer() {
@@ -33,49 +36,56 @@ public class UpdateHandler {
         timer.restart();
     }
 
-    // Used for updates from the GUI
-    public static void updateTab(int tabIndex) {
-        currTab = tabIndex;
-        updateTab();
+    private static String findNameOfPane(int index) {
+        tabs = tabbedPane.getComponents();
+        if (tabs[index] != null && index < tabs.length) {
+            return tabs[index].getName().toLowerCase();
+        }
+        return null;
     }
 
-    private static void updateTab() {
+    public static void updateTab() {
         // TODO: Do some check for database connetion
-        switch (currTab) {
-            case 0:
+
+        String currentTab = findNameOfPane(tabbedPane.getSelectedIndex());
+
+        System.out.println("Updating: " + currentTab);
+
+        switch (currentTab) {
+            case "statistics":
                 // Statistics - NO AUTO REFRESH HERE!
                 break;
-            case 1:
+            case "users":
                 updateUsers();
                 updateInactiveUsers();
                 break;
-            case 2:
+            case "customers":
                 updateCustomer();
                 updateInactiveCustomer();
                 break;
-            case 3:
+            case "subscriptions":
                 updateSubscriptions();
                 break;
-            case 4:
+            case "orders":
                 updateOrders();
                 break;
-            case 5:
+            case "driver":
                 updateDrivingRoute();
                 break;
-            case 6:
+            case "chef":
                 updatePrepareTable();
                 updateIngredients();
                 break;
             default:
                 // Something wrong??
-                System.err.println("Unknown tab selected which index " + currTab);
+                System.err.println("Unknown tab selected which index " + getCurrTab());
         }
     }
 
     // FIXME: AutoUpdate can cause problems if trying to edit a cell when update happens - either no updates directly in table or handle selected cell before autoUpdating
-    public static void startAutoUpdate(int tabIndex) {
+    public static void startAutoUpdate(JTabbedPane tabbedPane) {
         if(!autoUpdateStarted) {
-            currTab = tabIndex;
+            UpdateHandler.tabbedPane = tabbedPane;
             timer = new Timer(300000, e -> {
                 updateTab();
                 restartTimer();

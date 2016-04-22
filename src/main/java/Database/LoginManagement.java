@@ -17,7 +17,7 @@ import java.sql.ResultSet;
 
 public class LoginManagement extends Management{
 
-    private String loginQuery = "SELECT username, first_name, last_name, email, phone, hash, salt, access_level FROM user WHERE username = ?;";
+    private String loginQuery = "SELECT username, first_name, last_name, email, phone, hash, salt, access_level, status FROM user WHERE username = ?;";
 
     public LoginManagement(){
         super();
@@ -43,8 +43,7 @@ public class LoginManagement extends Management{
         //password = pass
 
         ResultSet res;
-        Object[] out = new Object[6];
-        out[5] = -1;
+        Object[] out = new Object[7];
         if(setUp()) {
             try {
                 PreparedStatement prep = getConnection().prepareStatement(loginQuery);
@@ -53,7 +52,7 @@ public class LoginManagement extends Management{
                 if (res.next()) {
                     Encryption encrypt = new Encryption();
                     if (encrypt.passDecoding(pass, res.getString("hash"), res.getString("salt"))) {
-                        return new Object[] {res.getString("username"), res.getString("first_name"), res.getString("last_name"), res.getString("email"), res.getString("phone"), res.getInt("access_level")};
+                        return new Object[] {res.getString("username"), res.getString("first_name"), res.getString("last_name"), res.getString("email"), res.getString("phone"), res.getInt("access_level"), res.getInt("status")};
                     }
                 }
             } catch (Exception e) {

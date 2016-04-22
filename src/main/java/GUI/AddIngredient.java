@@ -35,7 +35,6 @@ public class AddIngredient extends JDialog {
     public AddIngredient() {
         setTitle("New Ingredient");
         setContentPane(mainPane);
-        setPreferredSize(new Dimension(1050, 500));
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/Images/icon32.png"));
