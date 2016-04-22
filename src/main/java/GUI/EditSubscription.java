@@ -218,7 +218,7 @@ public class EditSubscription extends JDialog{
             if(!isAdded) {
                 showMessageDialog(null, "Could not edit subscription.");
             }
-
+            GUI.WindowPanels.Subscriptions.updateSubscriptions();
             setVisible(false);
             dispose();
         });

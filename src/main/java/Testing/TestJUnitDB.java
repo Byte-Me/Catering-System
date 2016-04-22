@@ -229,14 +229,14 @@ public class TestJUnitDB{
       //  boolean bool = upt.createSubscription(10, "2016-03-20", "2016-05-08", 2, obj, "Bare cat ikke fish", "20:00:00");
         //assertTrue(bool);
     }
-    @Test
+    @Ignore
     public void testDeliveryRoute(){
         //assertNotNull(CreateDeliveryRoute.UseReadyOrders("Oslo, Norway"));
-        //assertNotNull(CreateDeliveryRoute.UseReadyOrdersLanLat("Oslo, Norway"));
+      /*  //assertNotNull(CreateDeliveryRoute.UseReadyOrdersLanLat("Oslo, Norway"));
         System.out.println(CreateDeliveryRoute.UseReadyOrders("Oslo, Norway"));
 
         System.out.println(CreateDeliveryRoute.UseReadyOrdersLatLng("Oslo, Norway"));
-
+*/
     }
     @After
     public void objTearDown(){
@@ -246,7 +246,6 @@ public class TestJUnitDB{
     @Test
     public void searchOrder(){
         ArrayList<Object[]> obj = orde.orderSearch("2016");
-
         assertTrue(!obj.isEmpty());
     }
     @AfterClass

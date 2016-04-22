@@ -164,7 +164,13 @@ public class AddOrder extends JDialog{
             public void mouseClicked(MouseEvent e) {
                 if(e.getClickCount() == 2){
                     String selectedRecipe = recipesList.getSelectedValue();
-                    int portions = Integer.parseInt(showInputDialog("How many portions of " + selectedRecipe.toLowerCase() + " do you want to add?")); // FIXME: Add failsafe for parsing integer
+                    int portions = 0; // FIXME: Add failsafe for parsing integer
+                    try {
+                        portions = Integer.parseInt(showInputDialog("How many portions of " + selectedRecipe.toLowerCase() + " do you want to add?"));
+                    } catch (NumberFormatException e1) {
+                    } catch (HeadlessException e1) {
+
+                    }
                     if (existsInTable(orderRecepies, selectedRecipe) == -1) {
                         addOrderModel.addRow(new Object[]{selectedRecipe,portions});
                     } else {

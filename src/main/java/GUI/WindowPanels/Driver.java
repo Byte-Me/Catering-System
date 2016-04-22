@@ -1,7 +1,10 @@
 package GUI.WindowPanels;
 
+import Database.DeliveryManagement;
 import Database.OrderManagement;
 import Database.SettingsManagement;
+import Database.UserManagement;
+import Delivery.CreateDeliveryRoute;
 import HelperClasses.ToggleSelectionModel;
 import com.teamdev.jxbrowser.chromium.Browser;
 import com.teamdev.jxbrowser.chromium.JSValue;
@@ -13,11 +16,10 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.logging.Level;
 
-import static Delivery.CreateDeliveryRoute.UseReadyOrders;
 import static Delivery.CreateDeliveryRoute.UseReadyOrdersLatLng;
-import static Delivery.CreateDeliveryRoute.orderListForTable;
 import static Delivery.DeliveryRoute.geoCoder;
 import static javax.swing.JOptionPane.*;
 
@@ -32,13 +34,25 @@ public class Driver {
     private static final String cateringAdress =  address + ", " + city +  ", " + country;
     static DefaultTableModel driverModel;
     private OrderManagement orderManagement = new OrderManagement();
+    private UserManagement userManagement = new UserManagement();
+    private static DeliveryManagement deliveryManagement = new DeliveryManagement();
 
     Browser browser;
     private static Number[] mapCenter;
 
-    public Driver(final JTable driverTable, JPanel mapPanel, JButton generateDrivingRouteButton) {
+    public static JComboBox driverDropdown;
 
-        String[] header = {"ID", "Name", "Phone", "Address","Delivered"}; // Header titles
+    private static final String[] readyHeader = {"ID", "Name", "Phone", "Address","Update"}; // Header titles
+    private static final String readyString = "Ready For Delivery";
+    private static final int adressColumn = 3;
+
+    private final String limitReachedErrorMessage = "Your limit for amount of deliveries per trip is reached. Update orders to delivered " +
+            "to register more orders.";
+
+    private String username;
+
+
+    public Driver(final JTable driverTable, JPanel mapPanel, JButton generateDrivingRouteButton, JComboBox driverDropdown, Object[] currentUser) {
 
         driverModel = new DefaultTableModel(){
             @Override
@@ -53,7 +67,8 @@ public class Driver {
             }
         }; // Model of the table
 
-        driverModel.setColumnIdentifiers(header);
+        username = (String)currentUser[0];
+        driverModel.setColumnIdentifiers(readyHeader);
 
         driverTable.setModel(driverModel); // Add model to jTable
         driverTable.setSelectionModel(new ToggleSelectionModel()); // Makes the list toggleable - used for zooming in and out on map
@@ -64,22 +79,40 @@ public class Driver {
         driverTable.getColumnModel().getColumn(0).setMinWidth(60);
         driverTable.getColumnModel().getColumn(0).setMaxWidth(60);
 
+        this.driverDropdown = driverDropdown;
+        updateDropdown();
+        updateDriverTable("Ready For Delivery");
+
         //updating orderstatus
         driverModel.addTableModelListener(e ->{
             int count = 0;
             boolean lookingForOrder = true;
-
+            int input = 0;
             while(count < driverTable.getRowCount() && lookingForOrder){
+                System.out.println("Rows: "+driverTable.getRowCount()+", count: "+count);
                 if((Boolean)driverTable.getValueAt(count, 4)){
-
-                    int input = showConfirmDialog(null,"Do you want update status for orderID " +driverTable.getValueAt(count, 0)+"?","",YES_NO_OPTION);
-                    if(input==YES_OPTION) {
-                        orderManagement.updateStatus(Integer.parseInt((String)driverTable.getValueAt(count, 0)), OrderManagement.OrderType.DELIVERED.getValue());
-                        updateDrivingRoute();
+                    if(isDrivingLimitReached(username)) {
+                        showMessageDialog(null, limitReachedErrorMessage);
                         lookingForOrder = false;
                     }
                     else{
-                        driverTable.setValueAt(false,count, 4);
+                        OrderManagement.OrderType type;
+                        if (driverDropdown.getSelectedIndex() == 0) {
+                            type = OrderManagement.OrderType.DRIVING;
+                        } else {
+                            type = OrderManagement.OrderType.DELIVERED;
+                        }
+                        input = showConfirmDialog(null, "Do you want update status for orderID " + driverTable.getValueAt(count, 0) + "?", null, YES_NO_OPTION);
+                        if (input == YES_OPTION) {
+                            int id = (Integer) driverTable.getValueAt(count, 0);
+                            deliveryManagement.connectDriverToOrder(username, id); //username
+                            orderManagement.updateStatus(id, type.getValue());
+                            updateDriverTable((String) driverDropdown.getItemAt(driverDropdown.getSelectedIndex()));
+                            lookingForOrder = false;
+                         } else {
+                            driverTable.setValueAt(false, count, 4);
+                            lookingForOrder = false;
+                        }
                     }
                 }
                 count++;
@@ -109,11 +142,16 @@ public class Driver {
 
             }
         });
+        driverDropdown.addActionListener(e ->{
+            //oppdaterer table om driver endres
+            String username = (String)driverDropdown.getItemAt(driverDropdown.getSelectedIndex());
+            updateDriverTable(username);
+        });
 
     }
-
+/*
     public static void updateDrivingRoute() {
-        ArrayList<Object[]> orders = orderListForTable(cateringAdress);
+        ArrayList<Object[]> orders = orderListForTable(cateringAdress, getAddresses());
 
         // Empties entries of Users table
         driverModel.setRowCount(0);
@@ -124,7 +162,7 @@ public class Driver {
             driverModel.addRow(order);
         }
     }
-
+*/
     public void createMap(JPanel mapPanel, JButton generateDrivingRouteButton) throws IOException {
 
         // Reduce logging -- doesn't work?
@@ -145,7 +183,7 @@ public class Driver {
 
         // Generate driving route
         generateDrivingRouteButton.addActionListener(e -> {
-            updateDrivingRoute();
+            updateDriverTable((String)driverDropdown.getItemAt(driverDropdown.getSelectedIndex()));
 
             JSValue loaded = browser.executeJavaScriptAndReturnValue(getDrivingRoute());
 
@@ -157,13 +195,15 @@ public class Driver {
 
                 mapCenter = new Number[]{mapLat, mapLng, mapZoom};
             }
+            updateDriverTableSorted((String)driverDropdown.getItemAt(driverDropdown.getSelectedIndex()));
 
         });
     }
 
     private static String getDrivingRoute() {
         System.out.println(cateringAdress); // DEBUG
-        ArrayList<double[]> coords = UseReadyOrdersLatLng(cateringAdress);
+
+        ArrayList<double[]> coords = UseReadyOrdersLatLng(cateringAdress, getAddresses());
         try {
             // TODO - make more robust, coords may be empty and return null !IMPORTANT
             String startPoint = "new google.maps.LatLng(" + coords.get(0)[0] + "," + coords.get(0)[1] + ")";
@@ -192,5 +232,41 @@ public class Driver {
         }
         return "";
 
+    }
+    private void updateDropdown(){
+        driverDropdown.removeAllItems();
+        ArrayList<Object[]> drivers = userManagement.getDrivers();
+        driverDropdown.addItem("Ready For Delivery");
+        for (Object[] driver : drivers) {
+            driverDropdown.addItem(driver[0]);
+        }
+    }
+    public static void updateDriverTable(String username){
+        driverModel.setRowCount(0);
+        ArrayList<Object[]> orders = deliveryManagement.getOrdersForDriver(username);
+        for(Object[] order : orders){
+            order[order.length-1] = false;
+            driverModel.addRow(order);
+        }
+    }
+    public static void updateDriverTableSorted(String username){
+        ArrayList<Object[]> sortedOrders = CreateDeliveryRoute.orderListForTable(cateringAdress,getAddresses());
+        driverModel.setRowCount(0);
+        for(Object[] order : sortedOrders){
+            order[order.length-1] = false;
+            driverModel.addRow(order);
+        }
+    }
+    private static ArrayList<String> getAddresses(){
+        ArrayList<String> out = new ArrayList<>();
+        for(int i = 0; i<driverModel.getRowCount();i++){
+            out.add((String)driverModel.getValueAt(i,adressColumn));
+        }
+        return out;
+    }
+    private boolean isDrivingLimitReached(String username){
+        int limit = 8;
+        int count = deliveryManagement.countDriverDeliveries(username);
+        return count >= limit;
     }
 }

@@ -6,11 +6,12 @@ import static GUI.WindowPanels.Chef.updateIngredients;
 import static GUI.WindowPanels.Chef.updatePrepareTable;
 import static GUI.WindowPanels.Customers.updateCustomer;
 import static GUI.WindowPanels.Customers.updateInactiveCustomer;
-import static GUI.WindowPanels.Driver.updateDrivingRoute;
+//import static GUI.WindowPanels.Driver.u;
 import static GUI.WindowPanels.Orders.updateOrders;
 import static GUI.WindowPanels.Subscriptions.updateSubscriptions;
 import static GUI.WindowPanels.Users.updateInactiveUsers;
 import static GUI.WindowPanels.Users.updateUsers;
+import static GUI.WindowPanels.Driver.*;
 
 /**
  * Created by olekristianaune on 05.04.2016.
@@ -60,7 +61,7 @@ public class UpdateHandler {
                 updateOrders();
                 break;
             case 5:
-                updateDrivingRoute();
+                updateDriverTable((String)driverDropdown.getItemAt(driverDropdown.getSelectedIndex()));
                 break;
             case 6:
                 updatePrepareTable();

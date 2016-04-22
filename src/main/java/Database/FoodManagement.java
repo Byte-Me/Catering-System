@@ -13,9 +13,34 @@ import java.util.ArrayList;
  */
 public class FoodManagement extends Management{
     private final String deleteRecipe = "DELETE FROM recipe_grocery WHERE recipe_id = ?;";
+    private final String updateOrderRecipeStatus = "UPDATE order_recipe SET status = ? WHERE order_id = ? AND recipe_id = ?";
 
     public FoodManagement(){
         super();
+    }
+
+    public enum OrderRecipeStatus {
+        WAITING, PROCESSING;
+
+        public int getValue() {
+            return super.ordinal();
+        }
+
+        public static OrderRecipeStatus valueOf(int custTypeNr) {
+            for (OrderRecipeStatus type : OrderRecipeStatus.values()) {
+                if (type.ordinal() == custTypeNr) {
+                    return type;
+                }
+            }
+            return null;
+        }
+
+        @Override
+        public String toString() {
+            String constName = super.toString();
+            return constName.substring(0,1) + constName.substring(1).toLowerCase();
+        }
+
     }
 
     public ArrayList<Object[]> getIngredients(){
@@ -481,9 +506,9 @@ public class FoodManagement extends Management{
         if(setUp()){
             try {
                 ResultSet res = getScentence().executeQuery("SELECT recipe.name, order_recipe.portions, `order`.time, " +
-                        "`order`.order_id, `order`.note, `order`.status FROM recipe, `order`, order_recipe WHERE " +
+                        "`order`.order_id, `order`.note, `order_recipe`.status FROM recipe, `order`, order_recipe WHERE " +
                         "`order`.order_id = order_recipe.order_id AND order_recipe.recipe_id = recipe.recipe_id " +
-                        "AND status > 0 AND status < 3 AND `order`.date = CURRENT_DATE ORDER BY `time` DESC;");
+                        "AND `order`.status = 1 AND `order`.date = CURRENT_DATE ORDER BY `time` DESC;");
                 while (res.next()){
                     Object[] obj = new Object[7];
                     obj[0] = res.getInt("order_id");
@@ -491,7 +516,7 @@ public class FoodManagement extends Management{
                     obj[2] = res.getString("portions");
                     obj[3] = res.getString("time");
                     obj[4] = res.getString("note");
-                    obj[5] = OrderManagement.OrderType.valueOf(res.getInt("status"));
+                    obj[5] = OrderRecipeStatus.valueOf(res.getInt("status"));
                     out.add(obj);
                 }
             }catch (Exception e){
@@ -558,6 +583,27 @@ public class FoodManagement extends Management{
                 DbUtils.closeQuietly(getScentence());
                 DbUtils.closeQuietly(getConnection());
 
+            }
+        }
+        return out;
+    }
+    public int updateOrderRecipeStatus(int orderId, int recipeId, int newStatus){
+        int out = 0;
+        if(setUp()){
+            try{
+                PreparedStatement prep = getConnection().prepareStatement(updateOrderRecipeStatus);
+                prep.setInt(1, newStatus);
+                prep.setInt(2, orderId);
+                prep.setInt(3, recipeId);
+                out = prep.executeUpdate();
+
+            } catch (Exception e){
+                System.err.println("Issue with updating recipe_grocery status");
+                return 0;
+            }
+            finally {
+                DbUtils.closeQuietly(getScentence());
+                DbUtils.closeQuietly(getConnection());
             }
         }
         return out;

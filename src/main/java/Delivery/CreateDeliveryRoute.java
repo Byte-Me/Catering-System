@@ -10,13 +10,13 @@ import java.util.Arrays;
  * Created by Evdal on 14.03.2016.
  */
 public class CreateDeliveryRoute {
-    public static ArrayList<Object[]> UseReadyOrders(String startAdress){
+    public static ArrayList<Object[]> UseReadyOrders(String startAdress, ArrayList<String> adressNames){
         ArrayList<Object[]> out;
         DeliveryManagement dev = new DeliveryManagement();
         try {
             TravelingSalesman tsp = new TravelingSalesman(startAdress);
             DeliveryManagement dm = new DeliveryManagement();
-            ArrayList<String> adressNames = dm.getAdressReady();
+        //    ArrayList<String> adressNames = dm.getAdressReady();
             ArrayList<double[]> positions = tsp.createPositionsArrayShortened(adressNames);
             tsp.bruteForceFindBestRoute(new ArrayList<>(), positions);
             ArrayList<String> tmp = tsp.positionsToAdressesShortened(tsp.getBestRoute(), adressNames);
@@ -30,16 +30,17 @@ public class CreateDeliveryRoute {
         return out;
     }
 
-    public static ArrayList<Object[]> orderListForTable(String startAdress){
+    public static ArrayList<Object[]> orderListForTable(String startAdress, ArrayList<String> adressNames){
         ArrayList<Object[]> out;
         DeliveryManagement dev = new DeliveryManagement();
         try {
             TravelingSalesman tsp = new TravelingSalesman(startAdress);
-            DeliveryManagement dm = new DeliveryManagement();
-            ArrayList<String> adressNames = dm.getAdressReady();
+          //  ArrayList<String> adressNames = dm.getAdressReady();
+            System.out.println(adressNames);
             ArrayList<double[]> positions = tsp.createPositionsArrayShortened(adressNames);
             tsp.bruteForceFindBestRoute(new ArrayList<>(), positions);
-            ArrayList<String> tmp = tsp.positionsToAdressesShortened(tsp.getBestRoute(), adressNames);
+            ArrayList<String> tmp = tsp.positionsToAdresses(tsp.getBestRoute(), adressNames);
+            System.out.println(tmp);
             ArrayList<double[]> br = tsp.getBestRoute();
             out = dev.getDeliveryInfo(tmp);
         }
@@ -52,13 +53,13 @@ public class CreateDeliveryRoute {
     }
 
 
-    public static ArrayList<double[]> UseReadyOrdersLatLng(String startAdress){
+    public static ArrayList<double[]> UseReadyOrdersLatLng(String startAdress, ArrayList<String> adressNames){
 
         ArrayList<double[]> out;
         try {
             TravelingSalesman tsp = new TravelingSalesman(startAdress);
             DeliveryManagement dm = new DeliveryManagement();
-            ArrayList<String> adressNames = dm.getAdressReady();
+       //     ArrayList<String> adressNames = dm.getAdressReady();
             ArrayList<double[]> positions = tsp.createPositionsArray(adressNames);
             tsp.bruteForceFindBestRoute(new ArrayList<>(), positions);
             out = tsp.getBestRoute();

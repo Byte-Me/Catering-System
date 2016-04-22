@@ -153,6 +153,8 @@ public class EditOrder extends JDialog {
         String sDate = (String)orderInfo[1];
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         LocalDate date = LocalDate.parse(sDate, formatter);
+        date = date.minusMonths(1); //QUICKFIX
+        //edit dato hopper en mnd hver gang en kunde endres.. TODO
         model.setDate(date.getYear(), date.getMonthValue(), date.getDayOfMonth());
 
         // TimeSpinner
@@ -277,6 +279,8 @@ public class EditOrder extends JDialog {
             DateFormat tFormat = new SimpleDateFormat("HH:mm:ss");
             String selectedTimeString = tFormat.format(selectedTime);
             String comment = commentTextArea.getText();
+            OrderManagement.OrderType type = (OrderManagement.OrderType)statusDropdown.getItemAt(statusDropdown.getSelectedIndex());
+            int newStatus = type.getValue();
 
             ArrayList<Object[]> selectedRecipes = new ArrayList<>();
             for (int i = 0; i < addOrderModel.getRowCount(); i++) {
@@ -289,7 +293,8 @@ public class EditOrder extends JDialog {
                     orderManagement.updateOrderDate(selectedDateString,orderId)&&
                             orderManagement.updateOrderComment(comment,orderId) &&
                             orderManagement.updateOrderCustomer(orderId,(Integer)selectedCustomer[5])&&
-                            orderManagement.updateOrderTime(selectedTimeString,orderId)
+                            orderManagement.updateOrderTime(selectedTimeString,orderId) &&
+                            orderManagement.updateStatus(orderId,newStatus)
                     ){
                 updateOrders();
                 setVisible(false);
@@ -337,7 +342,6 @@ public class EditOrder extends JDialog {
             customerDropdown.addItem(customer[0]);
         }
         customerDropdown.addItem(newCustomer);
-
     }
 
 }

@@ -71,6 +71,8 @@ public class MainWindow extends JFrame {
     private JButton reactivateUserButton;
     private JTable inactiveUserTable;
     private JSplitPane chefSplitPane;
+    private JComboBox driverDropdown;
+    private JButton driverDetailsButton;
 
 
     public MainWindow(Object[] user) {
@@ -88,7 +90,7 @@ public class MainWindow extends JFrame {
         Customers customersPanel = new Customers(addCustomerButton, customerTable, inactiveCustomerTable, searchCustomers, deleteCustomersButton, editCustomerButton, reactivateCustomerButton);
         Subscriptions subscriptionsPanel = new Subscriptions(subscriptionTable, searchSubscriptions, newSubscriptionButton, showEditSubscriptionButton, deleteSubscriptionButton);
         Orders ordersPanel = new Orders(ordersTable, searchOrders, addOrderButton, editOrderButton, deleteOrderButton);
-        Driver driverPanel = new Driver(driverTable, mapPanel, generateDrivingRouteButton);
+        Driver driverPanel = new Driver(driverTable, mapPanel, generateDrivingRouteButton, driverDropdown, user);
         Chef chefPanel = new Chef(prepareTable, ingredientTable, generateShoppingListButton, recipesButton, addIngredientButton, editIngredientButton, chefSplitPane);
 
         // Remove panes the user does not have access to

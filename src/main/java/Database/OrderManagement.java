@@ -44,12 +44,12 @@ public class OrderManagement extends Management {
             " ? AND `order`.customer_id = customer.customer_id ORDER BY `order`.status DESC, `date` DESC;";
 
     // SQL setning for CreateOrderSub metode
-    String sqlCreateOrderSub0 = "INSERT INTO `order` VALUES(DEFAULT, ?, ?, ?, ?, ?, ?);";
+    String sqlCreateOrderSub0 = "INSERT INTO `order` VALUES(DEFAULT, ?, ?, ?, ?, ?, ?,DEFAULT);";
 
     // Andre setninger under CreateOrderSub
     String sqlCreateOrderSub1 = "SELECT LAST_INSERT_ID() as id;";
     String sqlCreateOrderSub2 = "SELECT recipe_id FROM recipe WHERE name = ?;";
-    String sqlCreateOrderSub3 = "INSERT INTO order_recipe VALUES( ?, ?, ?);";
+    String sqlCreateOrderSub3 = "INSERT INTO order_recipe VALUES( ?, ?, ?, DEFAULT);";
 
     // SQL setning for createOrder metode
     String sqlGetEmail = "SELECT customer_id FROM customer WHERE email = ?;";
@@ -72,13 +72,15 @@ public class OrderManagement extends Management {
 
     // SQL setning for updateOrderRecipe metode
     String sqlUpdateOrderRecipes1 = "DELETE FROM order_recipe WHERE order_id = ?";
-    String sqlUpdateOrderRecipes2 = "INSERT INTO order_recipe VALUES(?,?,?);";
+    String sqlUpdateOrderRecipes2 = "INSERT INTO order_recipe VALUES(?,?,?,DEFAULT);";
 
     // SQL setning for updateOrderPortion metode
     String sqlUpdateOrderPortions = "UPDATE order_recipe SET portions = ? WHERE order_id = ? AND recipe_id = ?;";
 
     // SQL setning for updateOrderComment metode
     String sqlUpdateOrderComment = "UPDATE `order` SET note = ? WHERE order_id = ?;";
+
+
 
 
     private final String sqlCreateOrder = "SELECT customer_id FROM customer WHERE email = ?;";
@@ -91,7 +93,7 @@ public class OrderManagement extends Management {
 
 
     public enum OrderType {
-        INACTIVE, ACTIVE, PROCESSING, READY, DELIVERED;
+        INACTIVE, ACTIVE, READY, DRIVING,DELIVERED;
 
         public int getValue() {
             return super.ordinal();
@@ -253,13 +255,14 @@ public class OrderManagement extends Management {
                     }
                 } else {
                     rollbackStatement();
+                    System.out.println("2");
                     return false;
                 }
 
                 for (Object[] name : recipes) { //[0] = quantity, [1] = name
                     prep = conn.prepareStatement(sqlCreateOrderSub2);
                     System.out.println(Arrays.toString(name));
-                    prep.setString(1, (String)name[1]);
+                    prep.setObject(1, name[0]);
 
                     res = prep.executeQuery();
 
@@ -275,7 +278,7 @@ public class OrderManagement extends Management {
                     prep = conn.prepareStatement(sqlCreateOrderSub3);
                     prep.setInt(1, orderID);
                     prep.setInt(2, recipeIDs.get(i));
-                    prep.setObject(3, recipes.get(i)[0]);
+                    prep.setObject(3, recipes.get(i)[1]);
 
                     rowChanged = prep.executeUpdate();
 
@@ -285,6 +288,7 @@ public class OrderManagement extends Management {
                     }
                 }
             } catch (SQLException sqle) {
+                sqle.printStackTrace();
                 System.err.println("ERROR 001: Issue with creating order");
                 rollbackStatement();
                 return false;
