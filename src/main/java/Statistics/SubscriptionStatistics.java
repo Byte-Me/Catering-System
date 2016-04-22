@@ -38,6 +38,8 @@ public class SubscriptionStatistics extends Statistics{
         return count;
     }
 
+    // FIXME: Veit ikke om eg kan slett denna
+    {
 
         /*    Date from = null;
         Date to = null;
@@ -68,82 +70,5 @@ public class SubscriptionStatistics extends Statistics{
         return chart;
     }
     */
-
-
-    public JPanel subActiveLineGraph(String dateFrom, String dateTo){
-        ArrayList<String[]> subscription = stats.getSubDates();
-        Date from = null;
-        Date to = null;
-        JPanel chart = null;
-        ArrayList<String> xValues = new ArrayList<String>();
-        ArrayList<Object> yValues = new ArrayList<>();
-
-
-        try {
-            from = getFormatter().parse(dateFrom);
-            to = getFormatter().parse(dateTo);
-        }
-        catch (ParseException e){
-            System.err.println("Issue with parsing dates.");
-        }
-        int daysBetween = checkDaysBetween(to, from);
-        int subActive = 0;
-
-        if(daysBetween > MONTHLIMIT) {
-            boolean flag = true;
-            while(flag) {
-                xValues.add(getMonthName(getFormatter().format(from)));
-                for (String[] sub : subscription) {
-                    if (subs.checkSubscriptionActive(sub[0], sub[1], from)) {
-                        subActive++;
-                    }
-                }
-                yValues.add(Double.valueOf(subActive));
-                subActive = 0;
-                from = nextDate(from, Calendar.MONTH);
-                if (from.before(to)) {
-                    return ChartCreator.createLineChart("Active Subscriptions", "Months", "Amount", xValues,
-                            yValues, "active subscriptions");
-                }
-            }
-        }
-        else if(daysBetween > WEEKLIMIT) {
-            boolean flag = true;
-            while(flag) {
-                xValues.add(getWeekName(getFormatter().format(from)));
-                for (String[] sub : subscription) {
-                    if (subs.checkSubscriptionActive(sub[0], sub[1], from)) {
-                        subActive++;
-                    }
-                }
-                yValues.add(Double.valueOf(subActive));
-                subActive = 0;
-                from = nextDate(from, Calendar.WEEK_OF_YEAR);
-                if (from.before(to)) {
-                    return ChartCreator.createLineChart("Active Subscriptions", "Weeks", "Amount", xValues,
-                            yValues, "active subscriptions");
-                }
-            }
-        }
-        else {
-            boolean flag = true;
-            while(flag) {
-                xValues.add(getFormatter().format(from));
-                for (String[] sub : subscription) {
-                    if (subs.checkSubscriptionActive(sub[0], sub[1], from)) {
-                        subActive++;
-                    }
-                }
-                yValues.add(Double.valueOf(subActive));
-                subActive = 0;
-                from = nextDate(from, Calendar.WEEK_OF_YEAR);
-                if (from.before(to)) {
-                    return ChartCreator.createLineChart("Active Subscriptions", "Weeks", "Amount", xValues,
-                            yValues, "active subscriptions");
-                }
-            }
-        }
-        return null;
     }
-
 }
