@@ -238,7 +238,7 @@ public class OrderManagement extends Management {
                 prep.setString(4, note);
                 prep.setString(5, time);
                 prep.setInt(6, subId);
-
+                System.out.println(prep.toString());
                 rowChanged = prep.executeUpdate(); //Legger inn orderen med status aktiv.
                 int orderID = 0;
 
@@ -262,7 +262,8 @@ public class OrderManagement extends Management {
                 for (Object[] name : recipes) { //[0] = quantity, [1] = name
                     prep = conn.prepareStatement(sqlCreateOrderSub2);
                     System.out.println(Arrays.toString(name));
-                    prep.setObject(1, name[0]);
+                    prep.setObject(1, name[1]);
+                    System.out.println(prep.toString());
 
                     res = prep.executeQuery();
 
@@ -278,7 +279,8 @@ public class OrderManagement extends Management {
                     prep = conn.prepareStatement(sqlCreateOrderSub3);
                     prep.setInt(1, orderID);
                     prep.setInt(2, recipeIDs.get(i));
-                    prep.setObject(3, recipes.get(i)[1]);
+                    prep.setObject(3, recipes.get(i)[0]);
+                    System.out.println(prep.toString());
 
                     rowChanged = prep.executeUpdate();
 

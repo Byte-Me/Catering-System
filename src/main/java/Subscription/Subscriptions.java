@@ -92,8 +92,8 @@ public class Subscriptions {
             ArrayList<Object[]> recipes = new ArrayList<>();
             for (int i = 0; i < obj[0].length; i++) {
                 Object[] tmp = new Object[2];
-                tmp[0] = obj[0][i];
-                tmp[1] = obj[1][i];
+                tmp[1] = obj[0][i];
+                tmp[0] = obj[1][i];
                 recipes.add(tmp);
             }
             prevDate = findFirstDate((Integer) obj[2][0], prevDate, dateTo);
@@ -108,8 +108,8 @@ public class Subscriptions {
                 ArrayList<Object[]> recipes = new ArrayList<>();
                 for (int i = 0; i < obj[0].length; i++) {
                     Object[] tmp = new Object[2];
-                    tmp[0] = obj[0][i];
-                    tmp[1] = obj[1][i];
+                    tmp[1] = obj[0][i];
+                    tmp[0] = obj[1][i];
                     recipes.add(tmp);
 
                 }
