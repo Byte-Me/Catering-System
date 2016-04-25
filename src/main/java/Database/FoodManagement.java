@@ -694,7 +694,7 @@ public class FoodManagement extends Management{
         int out = -1;
         if(setUp()){
             try{
-                conn.getAutoCommit();
+                conn = getConnection();
                 prep = conn.prepareStatement("SELECT price FROM recipe WHERE name = ?;");
                 prep.setString(1, name);
                 res = prep.executeQuery();
