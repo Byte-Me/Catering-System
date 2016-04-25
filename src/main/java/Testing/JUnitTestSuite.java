@@ -15,8 +15,6 @@ import org.junit.runners.Suite;
         TestJUnitDB.class,
         TestJUnitEncryption.class,
         TestJUnitDelivery.class,
-        TestJUnitGraph.class,
-        TestJUnitFood.class
 })
 public class JUnitTestSuite {
 
