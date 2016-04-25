@@ -19,6 +19,9 @@ public class LoginManagement extends Management{
 
     private String loginQuery = "SELECT username, first_name, last_name, email, phone, hash, salt, access_level, status FROM user WHERE username = ?;";
 
+    /**
+     * Constructor to the LoginManagement.
+     */
     public LoginManagement(){
         super();
     }
@@ -31,6 +34,18 @@ public class LoginManagement extends Management{
         login returns an int, which is their access-level, if -1 is
         returned, their password or username was wrong.
 
+     */
+
+    /**
+     * Users are stored in their own table in the database.
+     * They have information such as username, password(Hash and salt) as well as
+     * access-level.
+     *
+     * login returns an int, which is their access-level, if -1 is
+     * returned, their password or username was wrong.
+     * @param user Username.
+     * @param pass Password.
+     * @return User object.
      */
     public Object[] login(String user, String pass){
 
