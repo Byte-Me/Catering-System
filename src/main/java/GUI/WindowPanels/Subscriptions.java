@@ -71,17 +71,19 @@ public class Subscriptions {
         });
 
         deleteSubscriptionButton.addActionListener(e -> {
-            try {
-                int yes = showConfirmDialog(null, "Delete subscription for " +
-                        subscriptionsTable.getValueAt(subscriptionsTable.getSelectedRow(),nameColumnNr)+"?", null, JOptionPane.YES_NO_OPTION);
-                if (yes == YES_OPTION) {
-                    int id = (Integer) subscriptionsTable.getValueAt(subscriptionsTable.getSelectedRow(), idColumnNr);
-                    subscriptionManagement.deleteSubscription(id);
+            if (subscriptionsTable.getSelectedRow() > 0) {
+                try {
+                    int yes = showConfirmDialog(null, "Delete subscription for " +
+                            subscriptionsTable.getValueAt(subscriptionsTable.getSelectedRow(),nameColumnNr)+"?", null, JOptionPane.YES_NO_OPTION);
+                    if (yes == YES_OPTION) {
+                        int id = (Integer) subscriptionsTable.getValueAt(subscriptionsTable.getSelectedRow(), idColumnNr);
+                        subscriptionManagement.deleteSubscription(id);
+                    }
+                    updateSubscriptions();
                 }
-                updateSubscriptions();
-            }
-            catch (NumberFormatException e1){
-                //canceled
+                catch (NumberFormatException e1){
+                    //canceled
+                }
             }
 
         });
@@ -102,22 +104,23 @@ public class Subscriptions {
                 }
             }
         });
-        popupMenu.add(new AbstractAction("Delete Util.Subscription") {
+        popupMenu.add(new AbstractAction("Delete Subscription") {
             @Override
             public void actionPerformed(ActionEvent e) {
-                try {
-                    int yes = showConfirmDialog(null, "Delete subscription for " +
-                            subscriptionsTable.getValueAt(subscriptionsTable.getSelectedRow(),nameColumnNr)+"?", null, JOptionPane.YES_NO_OPTION);
-                    if (yes == YES_OPTION) {
-                        int id = (Integer) subscriptionsTable.getValueAt(subscriptionsTable.getSelectedRow(), idColumnNr);
-                        subscriptionManagement.deleteSubscription(id);
+                if (subscriptionsTable.getSelectedRow() > 0) {
+                    try {
+                        int yes = showConfirmDialog(null, "Delete subscription for " +
+                                subscriptionsTable.getValueAt(subscriptionsTable.getSelectedRow(),nameColumnNr)+"?", null, JOptionPane.YES_NO_OPTION);
+                        if (yes == YES_OPTION) {
+                            int id = (Integer) subscriptionsTable.getValueAt(subscriptionsTable.getSelectedRow(), idColumnNr);
+                            subscriptionManagement.deleteSubscription(id);
+                        }
+                        updateSubscriptions();
                     }
-                    updateSubscriptions();
+                    catch (NumberFormatException e1){
+                        //canceled
+                    }
                 }
-                catch (NumberFormatException e1){
-                    //canceled
-                }
-
             }
         });
 

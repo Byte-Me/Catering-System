@@ -49,10 +49,12 @@ public class Customers {
         deleteCustomerButton.addActionListener(e1 -> deleteCustomer());
 
         reactivateCustomerButton.addActionListener(e -> {
-            String customerEmail = (String) inactiveCustomerTable.getValueAt(inactiveCustomerTable.getSelectedRow(), emailColumnNr);
-            customerManagement.updateCustomerStatus(customerEmail, CustomerManagement.CustStatus.ACTIVE.getValue()); //FIXME: What happens with corporation?
-            updateCustomer();
-            updateInactiveCustomer();
+            if (inactiveCustomerTable.getSelectedRow() > 0) {
+                String customerEmail = (String) inactiveCustomerTable.getValueAt(inactiveCustomerTable.getSelectedRow(), emailColumnNr);
+                customerManagement.updateCustomerStatus(customerEmail, CustomerManagement.CustStatus.ACTIVE.getValue()); //FIXME: What happens with corporation?
+                updateCustomer();
+                updateInactiveCustomer();
+            }
         });
 
 
@@ -251,10 +253,12 @@ public class Customers {
      *
      */
     private static void deleteCustomer() {
-        String customerEmail = (String) customerTable.getValueAt(customerTable.getSelectedRow(), emailColumnNr);
-        customerManagement.deleteCustomer(customerEmail);
-        updateCustomer();
-        updateInactiveCustomer();
+        if (customerTable.getSelectedRow() > 0) {
+            String customerEmail = (String) customerTable.getValueAt(customerTable.getSelectedRow(), emailColumnNr);
+            customerManagement.deleteCustomer(customerEmail);
+            updateCustomer();
+            updateInactiveCustomer();
+        }
     }
 
 
