@@ -31,6 +31,16 @@ public class Chef {
     private OrderManagement orderManagement = new OrderManagement();
     static FoodManagement foodManagement = new FoodManagement();
 
+    /**
+     *
+     * @param prepareTable
+     * @param ingredientTable
+     * @param generateShoppingListButton
+     * @param recipesButton
+     * @param addIngredientButton
+     * @param editIngredientButton
+     * @param chefSplitPane
+     */
     public Chef(JTable prepareTable, JTable ingredientTable, JButton generateShoppingListButton, JButton recipesButton, JButton addIngredientButton, JButton editIngredientButton, JSplitPane chefSplitPane) {
         String[] prepareHeader = {"Order ID","Recipe", "Amount", "Time", "Notes", "Status", "Update"}; // Header titles
         String[] ingredientHeader = {"Ingredient", "Quantity", "Unit"}; // Header titles
@@ -184,60 +194,56 @@ public class Chef {
             boolean lookingForOrder = true;
 
             while(count < prepareTable.getRowCount() && lookingForOrder){ //blar gjennom radene
+                //finds amount of orders with same order id
+                int orderId = -1;
                 if((Boolean)prepareTable.getValueAt(count, 6)){ //er checkbox checket?
 
-                    int input = showConfirmDialog(null,"Do you want update status for orderID " +prepareTable.getValueAt(count, 0)+"?","",YES_NO_OPTION);
-                    if(input==YES_OPTION) {
-                        if (OrderType.ACTIVE == prepareTable.getValueAt(count, 5)) { //er den aktiv, sett til processsing
-                            orderManagement.updateStatus((Integer) prepareTable.getValueAt(count, 0), OrderType.PROCESSING.getValue());
+                    //get ids
+                    orderId = (Integer)prepareTable.getValueAt(count, 0);
+                    int recipeId = foodManagement.getRecipeIDPub((String)prepareModel.getValueAt(count,1));
 
-                        } else {//er den processing, set til ready
-                            orderManagement.updateStatus((Integer) prepareTable.getValueAt(count, 0), OrderType.READY.getValue());
+                    //update orderrecipe
+                    int orderCount = 0;
+                    int processingCount = 0;
 
+                    //updates table
+                    updatePrepareTable();
+
+                    //checks wether all rows with same id is checked.
+                    for(int i = 0; i<prepareModel.getRowCount();i++){
+                        if(orderId == (Integer)prepareTable.getValueAt(i, 0)){
+                            orderCount++;
                         }
-                        updatePrepareTable();
-                        lookingForOrder = false;
+                        if(FoodManagement.OrderRecipeStatus.PROCESSING == prepareTable.getValueAt(i, 5)){
+                            processingCount++;
+                        }
+                        System.out.println("OrderCount = "+orderCount+", ProcessingCount: "+processingCount);
                     }
-                    else{
-                        prepareTable.setValueAt(false, count, 6);
+                    if(orderCount-1 == processingCount && prepareTable.getValueAt(count, 5)!= FoodManagement.OrderRecipeStatus.PROCESSING){
+                        int input = showConfirmDialog(null,"Do you want set order " +prepareTable.getValueAt(count, 0)+" as ready for delivery?","",YES_NO_OPTION);
+                        if(input==YES_OPTION) {
+                            orderManagement.updateStatus((Integer) prepareTable.getValueAt(count, 0), OrderType.READY.getValue());
+                            lookingForOrder = false;
+                        }
+                        else{
+                            prepareTable.setValueAt(false, count, 6);
+                        }
                     }
+                    else {
+                        foodManagement.updateOrderRecipeStatus(orderId, recipeId, FoodManagement.OrderRecipeStatus.PROCESSING.getValue());
+                    }
+                    updatePrepareTable();
                 }
                 count++;
             }
         });
 
-        //FIXME
-        /*
-        //Search prepare-table
-        searchPrepare.getDocument().addDocumentListener(new DocumentListener() {
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                searchFieldChange();
-            }
-
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                searchFieldChange();
-            }
-
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-                searchFieldChange();
-            }
-
-            private void searchFieldChange() {
-                String searchTerm = searchPrepare.getText();
-
-                ArrayList<Object[]> searchResult = foodManagement.prepareSearch(searchTerm);
-
-                updatePrepareTable(searchResult);
-            }
-        });
-        */
 
     }
 
-
+    /**
+     *
+     */
     public static void updatePrepareTable() {
         FoodManagement foodManagement = new FoodManagement();
         ArrayList<Object[]> recipes = foodManagement.getRecipesForChef();
@@ -250,6 +256,9 @@ public class Chef {
         }
     }
 
+    /**
+     *
+     */
     public static void updateIngredients() {
         FoodManagement foodManagement = new FoodManagement();
         ArrayList<Object[]> ingredients = foodManagement.getIngredients();
@@ -260,28 +269,5 @@ public class Chef {
             ingredientModel.addRow(ingredient);
         }
     }
-
-    //FIXME
-    /*
-    public static void updateIngredients(ArrayList<Object[]> ingredients) {
-        prepareModel.setRowCount(0);
-
-        for (Object[] ingredient : ingredients) {
-            prepareModel.addRow(ingredient);
-        }
-    }
-    */
-
-    //FIXME
-    /*
-    public static void updatePrepareTable(ArrayList<Object[]> recipes) {
-        prepareModel.setRowCount(0);
-
-        for (Object[] recipe : recipes) {
-            recipe[6] = false;
-            prepareModel.addRow(recipe);
-        }
-    }
-    */
-
+    
 }

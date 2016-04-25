@@ -20,6 +20,10 @@ public class UserSettings extends JDialog {
     private JTextField password2;
     private JPanel mainPanel;
 
+    /**
+     *
+     * @param user
+     */
     public UserSettings(Object[] user) {
         setTitle("User Settings");
         setContentPane(mainPanel);

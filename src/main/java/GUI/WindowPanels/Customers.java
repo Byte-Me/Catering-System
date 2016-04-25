@@ -28,6 +28,16 @@ public class Customers {
     static JTable customerTable;
     private static int emailColumnNr = 1;
 
+    /**
+     *
+     * @param addCustomerButton
+     * @param customerTable
+     * @param inactiveCustomerTable
+     * @param searchCustomers
+     * @param deleteCustomerButton
+     * @param editCustomerButton
+     * @param reactivateCustomerButton
+     */
     public Customers(JButton addCustomerButton, final JTable customerTable, final JTable inactiveCustomerTable, final JTextField searchCustomers, JButton deleteCustomerButton, JButton editCustomerButton, JButton reactivateCustomerButton) {
 
         this.customerTable = customerTable;
@@ -174,7 +184,9 @@ public class Customers {
 
     }
 
-    // Update Customers function
+    /**
+     *
+     */
     public static void updateCustomer() {
 
         // Get customers from database
@@ -184,6 +196,10 @@ public class Customers {
 
     }
 
+    /**
+     *
+     * @param customers
+     */
     public static void updateCustomer(ArrayList<Object[]> customers) {
 
         // Empties entries of Users table
@@ -195,7 +211,9 @@ public class Customers {
         }
     }
 
-    // Update Inactive Customers function
+    /**
+     *
+     */
     public static void updateInactiveCustomer() {
 
         // Get inactive customers from database
@@ -204,6 +222,10 @@ public class Customers {
         updateInactiveCustomer(inactiveCustomers);
     }
 
+    /**
+     *
+     * @param inactiveCustomers
+     */
     public static void updateInactiveCustomer(ArrayList<Object[]> inactiveCustomers) {
 
         // Empties entries of Users table
@@ -215,6 +237,9 @@ public class Customers {
         }
     }
 
+    /**
+     *
+     */
     private static void editCustomer() {
         if (customerTable.getSelectedRow() != -1) {
             String email = (String) customerTable.getValueAt(customerTable.getSelectedRow(), emailColumnNr);
@@ -224,6 +249,9 @@ public class Customers {
         }
     }
 
+    /**
+     *
+     */
     private static void deleteCustomer() {
         String customerEmail = (String) customerTable.getValueAt(customerTable.getSelectedRow(), emailColumnNr);
         customerManagement.deleteCustomer(customerEmail);

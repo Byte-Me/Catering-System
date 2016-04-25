@@ -26,6 +26,14 @@ public class Orders {
     static MainTableModel orderModel;
     private final int idColumnNr = 0;
 
+    /**
+     *
+     * @param ordersTable
+     * @param searchOrders
+     * @param addOrderButton
+     * @param editOrderButton
+     * @param deleteOrderButton
+     */
     public Orders(JTable ordersTable, final JTextField searchOrders, JButton addOrderButton, JButton editOrderButton, JButton deleteOrderButton) {
 
         String[] headers = {"ID", "Name", "Phone", "Address", "Date", "Status"};
@@ -190,7 +198,9 @@ public class Orders {
 
     }
 
-    // Update Users function
+    /**
+     *
+     */
     public static void updateOrders() {
 
         // Get users from database
@@ -200,6 +210,10 @@ public class Orders {
 
     }
 
+    /**
+     *
+     * @param orders
+     */
     public static void updateOrders(ArrayList<Object[]> orders) {
 
         // Empties entries of Users table

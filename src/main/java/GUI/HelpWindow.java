@@ -13,6 +13,9 @@ public class HelpWindow extends JDialog{
     private JPanel mainPanel;
     Browser browser;
 
+    /**
+     *
+     */
     public HelpWindow() {
         setTitle("Help");
         setContentPane(mainPanel);

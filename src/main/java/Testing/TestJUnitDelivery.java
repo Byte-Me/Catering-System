@@ -16,6 +16,7 @@ public class TestJUnitDelivery {
     private TravelingSalesman tsp;
 
 
+
     @Before
     public void setUp()throws Exception{
         tsp = new TravelingSalesman("Oslo, Norway");

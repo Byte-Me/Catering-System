@@ -12,6 +12,12 @@ public class FinanceStatistics {
     private static StatisticsManagement stat = new StatisticsManagement();
     private static FinanceManagement finance = new FinanceManagement();
 
+    /**
+     *
+     * @param dateFromS
+     * @param dateToS
+     * @return
+     */
     public static long[] findFinanceStats(String dateFromS, String dateToS){ //[0] = income, [1] = outcome, [2]= net profit
         ArrayList<long[]> incomeOutcome = stat.getFinanceInfo(dateFromS,dateToS);
         long[] out = new long[3];

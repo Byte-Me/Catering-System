@@ -21,7 +21,10 @@ public class Subscriptions {
     private static CustomerManagement custMan = new CustomerManagement();
     private static Calendar cal = new GregorianCalendar();
 
-
+    /**
+     *
+     * @return
+     */
     public ArrayList listActiveSubs() {
         ArrayList<Object[]> subs = subMan.getSubscriptions();
         ArrayList<Object[]> activeSubs = new ArrayList<>();
@@ -33,6 +36,13 @@ public class Subscriptions {
         return activeSubs;
     }
 
+    /**
+     *
+     * @param dateFrom
+     * @param dateTo
+     * @param today
+     * @return
+     */
     public boolean checkSubscriptionActive(String dateFrom, String dateTo, Date today) {
         Date from = null;
         Date to = null;
@@ -47,6 +57,11 @@ public class Subscriptions {
         } else return false;
     }
 
+    /**
+     *
+     * @param subId
+     * @return
+     */
     private int containsSubOrder(int subId) {
         return subMan.containsSubOrder(subId);//   recipesWithDay {{"recipe1", "recipe2", "recipe3"},{3, 5, 3 }, {1}} //[recipes], [portions of recipe], [day]
     }
@@ -72,10 +87,30 @@ public class Subscriptions {
 
     note = information about each order, special needs etc.
      */
+
+    /**
+     *
+     * @param email
+     * @param dateFrom
+     * @param dateTo
+     * @param weeksBetween
+     * @param recipesWithDay
+     * @return
+     */
     public static boolean createSubscription(String email, String dateFrom, String dateTo, int weeksBetween, ArrayList<Object[][]> recipesWithDay){
         return editSubscription(email, dateFrom,dateTo,weeksBetween,recipesWithDay,-1);
     }
 
+    /**
+     *
+     * @param email
+     * @param dateFrom
+     * @param dateTo
+     * @param weeksBetween
+     * @param recipesWithDay
+     * @param subId
+     * @return
+     */
     public static boolean editSubscription(String email, String dateFrom, String dateTo, int weeksBetween, ArrayList<Object[][]> recipesWithDay, int subId) {
         Object[] cust = custMan.getSingleCustomerInfo(email);
         int custID = (Integer)cust[5];
@@ -83,17 +118,33 @@ public class Subscriptions {
         if (!(subID > 0)) {
             return false;
         }
-        String prevDate = dateFrom;
         boolean flag = true;
             // +++
         int count = 0;
-        while (flag) {
+        String prevDate = dateFrom;
+
+        for (Object[][] obj : recipesWithDay) {
+            ArrayList<Object[]> recipes = new ArrayList<>();
+            for (int i = 0; i < obj[0].length; i++) {
+                Object[] tmp = new Object[2];
+                tmp[1] = obj[0][i];
+                tmp[0] = obj[1][i];
+                recipes.add(tmp);
+            }
+            prevDate = findFirstDate((Integer) obj[2][0], prevDate, dateTo);
+            if(prevDate.equals("")) return true;
+            if (!order.createOrderSub(custID, prevDate, recipes, (String)obj[3][0], (String)obj[4][0], subID)){
+                return false;
+            }
+        }
+
+            while (flag) {
             for (Object[][] obj : recipesWithDay) {
                 ArrayList<Object[]> recipes = new ArrayList<>();
                 for (int i = 0; i < obj[0].length; i++) {
                     Object[] tmp = new Object[2];
-                    tmp[0] = obj[0][i];
-                    tmp[1] = obj[1][i];
+                    tmp[1] = obj[0][i];
+                    tmp[0] = obj[1][i];
                     recipes.add(tmp);
 
                 }
@@ -113,7 +164,14 @@ public class Subscriptions {
         return false;
     }
 
-
+    /**
+     *
+     * @param day
+     * @param prevDateS
+     * @param dateTo
+     * @param frequency
+     * @return
+     */
     private static String findNextDate(int day, String prevDateS, String dateTo, int frequency) {
         Date prevDate = null;
         try {
@@ -149,6 +207,49 @@ public class Subscriptions {
         }
         return null;
     }
+
+    /**
+     *
+     * @param day
+     * @param prevDateS
+     * @param dateTo
+     * @return
+     */
+    private static String findFirstDate(int day, String prevDateS, String dateTo) {
+        Date prevDate = null;
+        try {
+            prevDate = formatter.parse(prevDateS);
+        } catch (ParseException e) {
+            System.err.println("Issue with parsing date in subscription.");
+        }
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(prevDate);
+        if (day == 7) {
+            day = 1;
+        }               //SLIK UKEDAGENE ER SATT OPP CALENDAR.DAY_OF_WEEK
+        else {
+            day += 1;
+        }
+        int count = 0;
+
+        boolean stillNotEndOfWeek = true;
+        while (stillNotEndOfWeek) {
+            if(formatter.format(cal.getTime()).equals(dateTo)) {
+                return "";
+            }
+            cal.add(Calendar.DAY_OF_YEAR, 1);
+            if (cal.get(Calendar.DAY_OF_WEEK) == day) {
+                return formatter.format(cal.getTime());
+            }
+        }
+        return null;
+    }
+
+    /**
+     *
+     * @param subId
+     * @return
+     */
     public Object[] getSubInfoFromId(int subId){
         Object[] out = new Object[5];
         Object[] info = subMan.getSubInfoFromId(subId);
@@ -169,6 +270,12 @@ public class Subscriptions {
 
 
     }
+
+    /**
+     *
+     * @param id
+     * @return
+     */
     private ArrayList<Object[]> getRecipeInfoForSub(int id){
 
         //henter orders som er laget med en spesiell subscription
@@ -192,6 +299,12 @@ public class Subscriptions {
 
         return out;
     }
+
+    /**
+     *
+     * @param orders
+     * @return
+     */
     private ArrayList<Object[]> shortenOrders(ArrayList<Object[]> orders){
         ArrayList<Object[]> out = new ArrayList<>();
         for(Object[] order : orders){
@@ -207,6 +320,13 @@ public class Subscriptions {
         }
         return out;
     }
+
+    /**
+     *
+     * @param date1
+     * @param date2
+     * @return
+     */
     private boolean sameDay(Date date1, Date date2){
         cal.setTime(date1);
         int day1 = cal.get(Calendar.DAY_OF_WEEK);
@@ -215,6 +335,12 @@ public class Subscriptions {
         if(day1 == day2) return true;
         else return false;
     }
+
+    /**
+     *
+     * @param date
+     * @return
+     */
     private int getDayOfWeek(Date date){
         cal.setTime(date);
         int day = cal.get(Calendar.DAY_OF_WEEK);

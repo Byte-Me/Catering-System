@@ -13,13 +13,11 @@ import java.util.ArrayList;
  * Created by Evdal on 09.03.2016.
  */
 public class TestJUnitGraph {
-    private ArrayList<String> xValues = new ArrayList<String>();
-    private ArrayList<Double> yValues = new ArrayList<Double>();
+    private ArrayList<String> xValues = new ArrayList<>();
+    private ArrayList<Object> yValues = new ArrayList<>();
 
     @Ignore
     public void lineGraphTest(){
-
-
         xValues.add("January");
         xValues.add("February");
         xValues.add("March");
@@ -32,8 +30,8 @@ public class TestJUnitGraph {
         yValues.add(345.0);
         yValues.add(785.0);
 
-       // JPanel panel = ChartCreator.createLineChart("Title", "Time", "Values", xValues, yValues, "Inntekter");
-       // assertNotNull(panel);
+       JPanel panel = ChartCreator.createLineChart("Title", "Time", "Values", xValues, yValues, "Inntekter");
+       assertNotNull(panel);
     }
 
 

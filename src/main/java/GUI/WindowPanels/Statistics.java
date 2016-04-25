@@ -30,6 +30,13 @@ public class Statistics {
     JDatePickerImpl fromDate;
     JDatePickerImpl toDate;
 
+    /**
+     *
+     * @param searchStatisticsPanel
+     * @param orderStatisticsPanel
+     * @param statsPanel
+     * @param barChartPanel
+     */
     public Statistics(JPanel searchStatisticsPanel, JPanel orderStatisticsPanel, JPanel statsPanel,  JPanel barChartPanel) {
 
         this.orderStatisticsPanel = orderStatisticsPanel;
@@ -85,6 +92,10 @@ public class Statistics {
     }
 
     // TODO: This should be rewritten to only update components and not deleting and readding
+
+    /**
+     *
+     */
     public void getStatistics() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String fDate = dateFormat.format((Date)fromDate.getModel().getValue());

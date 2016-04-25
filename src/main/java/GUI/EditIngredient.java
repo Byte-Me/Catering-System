@@ -19,6 +19,10 @@ public class EditIngredient extends JDialog {
 
     FoodManagement foodManagement = new FoodManagement();
 
+    /**
+     *
+     * @param ingredient
+     */
     public EditIngredient(String ingredient) {
         setTitle("Edit Ingredient");
         setContentPane(mainPane);

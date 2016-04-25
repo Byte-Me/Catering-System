@@ -116,6 +116,11 @@ public class EditRecipe extends JDialog {
         setVisible(true);
     }
 
+    /**
+     *
+     * @param index
+     * @param left
+     */
     private void copyPasteData(int index, boolean left) {
         try {
             Object[] ingredient = new Object[3];
@@ -139,6 +144,12 @@ public class EditRecipe extends JDialog {
         } catch (Exception e){}
     }
 
+    /**
+     *
+     * @param table
+     * @param name
+     * @return
+     */
     private int existsInTable(JTable table, String name) {
         // Get row count
         int rowCount = table.getRowCount();
@@ -151,6 +162,9 @@ public class EditRecipe extends JDialog {
         return -1;
     }
 
+    /**
+     *
+     */
     private static void updateIngredients() {
         FoodManagement foodManagement = new FoodManagement();
         ArrayList<Object[]> ingredients = foodManagement.getIngredients();
@@ -162,6 +176,10 @@ public class EditRecipe extends JDialog {
         }
     }
 
+    /**
+     *
+     * @param recipeId
+     */
     private static void updateIngredientsInRecipe(int recipeId) {
         FoodManagement foodManagement = new FoodManagement();
         ArrayList<Object[]> ingredientsInRecipe = foodManagement.getRecipeIngredients(recipeId);

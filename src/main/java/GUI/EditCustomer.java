@@ -35,7 +35,11 @@ public class EditCustomer extends JDialog{
 
     public CustomerManagement customerManagement = new CustomerManagement();
 
-        public EditCustomer(String emailS) {
+    /**
+     *
+     * @param emailS
+     */
+    public EditCustomer(String emailS) {
             setTitle("Edit Customer");
             setContentPane(mainPanel);
             setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -150,7 +154,13 @@ public class EditCustomer extends JDialog{
             setModal(true);
             setVisible(true);
 
-        }
+    }
+
+    /**
+     *
+     * @param name
+     * @return
+     */
     private String[] formatName(String name) {
         String[] out = new String[2];
         String[] splitted = name.split(", ");
@@ -158,6 +168,12 @@ public class EditCustomer extends JDialog{
         out[1] = splitted[0];
         return out;
     }
+
+    /**
+     *
+     * @param address
+     * @return
+     */
     private String[] formatAdress(String address) {
         String[] out = new String[3];
         String[] tmpSplit = address.split(", ", 3); //Dont add norway.

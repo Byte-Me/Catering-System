@@ -7,17 +7,21 @@ import Subscription.Subscriptions;
 import org.junit.*;
 
 import javax.swing.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.EventListener;
 
 import static org.junit.Assert.*;
 
 /**
  * Created by Evdal on 09.03.2016.
  */
-public class TestJUnitDB{
+public class TestJUnitDB extends Management{
     private static CustomerManagement cust;
     private static DeliveryManagement deli;
     private static FoodManagement food;
@@ -31,6 +35,31 @@ public class TestJUnitDB{
 
     private final int NO_ACCESS = -1;
     private final int ACCESS = 1;
+
+    /**
+     *  Bare for testing
+     */
+    private boolean testExecuteSQL(String sql){
+        if(setUp()){
+            PreparedStatement prep = null;
+            try {
+                getConnection().setAutoCommit(false);
+                prep = getConnection().prepareStatement(sql);
+                prep.execute();
+            }catch (SQLException e){
+                e.printStackTrace();
+                rollbackStatement();
+                return false;
+            }finally {
+                finallyStatement(null, prep);
+            }
+            return true;
+        }
+        return false;
+    }
+
+
+
 
     @BeforeClass
     public static void DBsetUp(){
@@ -56,6 +85,8 @@ public class TestJUnitDB{
     }
     @Test
     public void checkActiveSubscriptions(){
+
+        // FIXME: veit ikke
         Subscriptions upt = new Subscriptions();
         assertTrue(upt.checkSubscriptionActive("2016-03-10", "2016-04-01", new Date()));
         assertFalse(upt.checkSubscriptionActive("2016-03-10", "2016-03-15", new Date()));
@@ -79,32 +110,41 @@ public class TestJUnitDB{
         }
         assertEquals(ACCESS, valid);
         assertEquals(NO_ACCESS, invalid);
-
-
-
     }
 
     @Test // fungerer bare dersom brukernavn på validUser endres til noe som ikke allerede finnes.
     public void createUser(){
         boolean validUser = false;
         boolean invalidUser = true;
-        try{
-            validUser = user.registerUser("Even", "Dalen", "EvenDalen!!", "passord", "email", "1234545", 1);
-            invalidUser = user.registerUser("Even", "Dalen", "EvenD", "passord", "email", "1234545", 1);
 
+        String fName = "Even2";
+        String lName = "Dalen2";
+        String uName = "EvenDalen!!2";
+        String pass = "passord2";
+        String email = "email2";
+        String phone= "12345452";
+        int accessLevel = 1;
+
+        try{
+            validUser = user.registerUser(fName, lName, uName, pass, email, phone, accessLevel);
+            invalidUser = user.registerUser(fName, lName, uName, pass, email, phone, accessLevel);
+            assertTrue(validUser);
+            assertFalse(invalidUser);
         }
         catch (Exception e){
             System.err.println("Issue with databaseconnections! ");
             e.printStackTrace();
+        }finally {
+            String sql = "DELETE FROM user WHERE username = '" + uName + "';";
+            testExecuteSQL(sql);
         }
-        assertTrue(validUser);
-        assertFalse(invalidUser);
+
     }
     @Test
     public void getUsers() {
         assertNotNull(user.userInfo());
     }
-    @Test // TODO: username fungerer ikke?
+    @Test
     public void updateUsers(){
         assertTrue(user.updateUserInfoFName("krisss", "Det funket"));
         assertTrue(user.updateUserInfoLName("krisss", "Aasss"));
@@ -124,15 +164,26 @@ public class TestJUnitDB{
     @Test
     public void addRecipe(){
         ArrayList<Object[]> ing = new ArrayList<Object[]>();
+
+        String name = "Test Name";
+        int price = 100;
+
         ing.add(new Object[]{"Potet", 1});
         ing.add(new Object[]{"Fisk", 2});
 
-        assertTrue(food.addRecipe("Oppskriftarererer", ing, 100));
+        assertTrue(food.addRecipe(name, ing, price));
+        String sql = "DELETE FROM recipe WHERE name = '" + name + "' AND price = '" + price + "';";
+        testExecuteSQL(sql);
     }
 
     @Test
     public void addIngredients(){
-        assertTrue(food.addIngredient("Barn", 100, "kg", 0));
+        String name = "Testern";
+
+        assertTrue(food.addIngredient(name, 69, "stk", 1));
+
+        String sql = "DELETE FROM grocery WHERE name = '" + name + "';";
+        testExecuteSQL(sql);
     }
     @Test
     public void searchUser(){
@@ -153,17 +204,19 @@ public class TestJUnitDB{
     }
     @Test
     public void addCustomer(){
-        assertTrue(cust.addCustomerPerson("Even", "Dalen", "even@dalen.no", "12345", "Toppenhaugberget 60", "1356", "Bekkestua"));
-
-        //String firstname, String lastname, String email, String phone,
-        //String streetAdress, String postCode, String city
+        String email = "test@test.test";
+        assertTrue(cust.addCustomerPerson("Even", "Dalen", email, "12345", "Toppenhaugberget 60", "1356", "Bekkestua"));
+        String sql = "DELETE FROM customer WHERE email = '" + email + "';";
+        testExecuteSQL(sql);
     }
+
     @Test
     public void getDeliverys(){
         assertNotNull(deli.getDeliveryReady());
         assertNotNull(deli.getAdressReady());
 
     }
+
     @Test
     public void updateOrderStatus(){
         assertTrue(orde.updateStatus(4, 1)); // 4 = ID, 1 = new status
@@ -229,14 +282,14 @@ public class TestJUnitDB{
       //  boolean bool = upt.createSubscription(10, "2016-03-20", "2016-05-08", 2, obj, "Bare cat ikke fish", "20:00:00");
         //assertTrue(bool);
     }
-    @Test
+    @Ignore
     public void testDeliveryRoute(){
         //assertNotNull(CreateDeliveryRoute.UseReadyOrders("Oslo, Norway"));
-        //assertNotNull(CreateDeliveryRoute.UseReadyOrdersLanLat("Oslo, Norway"));
+      /*  //assertNotNull(CreateDeliveryRoute.UseReadyOrdersLanLat("Oslo, Norway"));
         System.out.println(CreateDeliveryRoute.UseReadyOrders("Oslo, Norway"));
 
         System.out.println(CreateDeliveryRoute.UseReadyOrdersLatLng("Oslo, Norway"));
-
+*/
     }
     @After
     public void objTearDown(){
@@ -246,7 +299,6 @@ public class TestJUnitDB{
     @Test
     public void searchOrder(){
         ArrayList<Object[]> obj = orde.orderSearch("2016");
-
         assertTrue(!obj.isEmpty());
     }
     @AfterClass

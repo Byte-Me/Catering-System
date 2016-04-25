@@ -1,6 +1,7 @@
 package GUI;
 
 import Database.UserManagement;
+import Database.UserManagement.UserType;
 import GUI.WindowPanels.*;
 
 import javax.swing.*;
@@ -11,7 +12,7 @@ import java.awt.event.MouseEvent;
 
 import static Updates.UpdateHandler.startAutoUpdate;
 import static Updates.UpdateHandler.updateTab;
-import static javax.swing.JOptionPane.showMessageDialog;
+
 
 /**
  * Created by olekristianaune on 07.03.2016.
@@ -71,8 +72,13 @@ public class MainWindow extends JFrame {
     private JButton reactivateUserButton;
     private JTable inactiveUserTable;
     private JSplitPane chefSplitPane;
+    private JComboBox driverDropdown;
+    private JButton driverDetailsButton;
 
-
+    /**
+     *
+     * @param user
+     */
     public MainWindow(Object[] user) {
         setTitle("Healthy Catering LTD");
         setContentPane(mainPanel); // Set the main content panel
@@ -81,6 +87,15 @@ public class MainWindow extends JFrame {
         Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/Images/icon32.png"));
         setIconImage(icon);
 
+        // Set name of tabs
+        statistics.setName("statistics");
+        users.setName("users");
+        customers.setName("customers");
+        subscriptions.setName("subscriptions");
+        orders.setName("orders");
+        driver.setName("driver");
+        chef.setName("chef");
+
         // Setup the different panels - keep referance for possible future need.
         // Will get disposed and garbage collected when MainWindow gets closed (When application is closed)
         Statistics statisticsPanel = new Statistics(statisticsSearchPanel, orderStatisticsPanel, statsPanel, barChartPanel);
@@ -88,7 +103,7 @@ public class MainWindow extends JFrame {
         Customers customersPanel = new Customers(addCustomerButton, customerTable, inactiveCustomerTable, searchCustomers, deleteCustomersButton, editCustomerButton, reactivateCustomerButton);
         Subscriptions subscriptionsPanel = new Subscriptions(subscriptionTable, searchSubscriptions, newSubscriptionButton, showEditSubscriptionButton, deleteSubscriptionButton);
         Orders ordersPanel = new Orders(ordersTable, searchOrders, addOrderButton, editOrderButton, deleteOrderButton);
-        Driver driverPanel = new Driver(driverTable, mapPanel, generateDrivingRouteButton);
+        Driver driverPanel = new Driver(driverTable, mapPanel, generateDrivingRouteButton, driverDropdown, user);
         Chef chefPanel = new Chef(prepareTable, ingredientTable, generateShoppingListButton, recipesButton, addIngredientButton, editIngredientButton, chefSplitPane);
 
         // Get tab icon images
@@ -110,43 +125,39 @@ public class MainWindow extends JFrame {
         tabbedPane1.setIconAt(tabbedPane1.indexOfComponent(chef), new ImageIcon(chefIcon));
 
         // Remove panes the user does not have access to
-        switch (UserManagement.UserType.valueOf((int)user[5])) {
+        switch (UserType.valueOf((int)user[5])) {
             case ADMIN:
-                // Admin have access to everything, therefore remove nothing.
+                // Admin have access to everything - remove nothing.
                 break;
             case SALE:
                 // Sale
                 tabbedPane1.remove(users);
-                tabbedPane1.remove(chef);
                 tabbedPane1.remove(driver);
+                tabbedPane1.remove(chef);
                 break;
             case CHEF:
                 // Chef
                 tabbedPane1.remove(statistics);
-                tabbedPane1.remove(driver);
                 tabbedPane1.remove(users);
                 tabbedPane1.remove(customers);
                 tabbedPane1.remove(subscriptions);
                 tabbedPane1.remove(orders);
+                tabbedPane1.remove(driver);
                 break;
             case DRIVER:
                 // Driver
                 tabbedPane1.remove(statistics);
-                tabbedPane1.remove(chef);
                 tabbedPane1.remove(users);
                 tabbedPane1.remove(customers);
                 tabbedPane1.remove(subscriptions);
                 tabbedPane1.remove(orders);
+                tabbedPane1.remove(chef);
                 break;
             default:
                 // For some reason we did not get a valid userType - print error message and close window.
-                System.err.println("GUI for UserType " + UserManagement.UserType.valueOf((int)user[6]) + " not defined.");
+                System.err.println("GUI for UserType " + UserType.valueOf((int)user[6]) + " not defined.");
                 dispose();
         }
-
-        updateTab(tabbedPane1.getSelectedIndex());
-        startAutoUpdate(tabbedPane1.getSelectedIndex()); // Start autoUpdate of tabs (every 5 minutes)
-        tabbedPane1.addChangeListener(e -> updateTab(tabbedPane1.getSelectedIndex()));
 
         JPopupMenu popupMenu = new JPopupMenu();
         popupMenu.add(new AbstractAction("User Settings") {
@@ -155,7 +166,7 @@ public class MainWindow extends JFrame {
                 new UserSettings(user);
             }
         });
-        if (UserManagement.UserType.valueOf((int)user[5]) == UserManagement.UserType.ADMIN) {
+        if (UserType.valueOf((int)user[5]) == UserType.ADMIN) {
             popupMenu.add(new AbstractAction("System Settings") {
                 // Possibility to change address
                 // Also possible to change database?
@@ -178,6 +189,11 @@ public class MainWindow extends JFrame {
         helpButton.addActionListener(e -> new HelpWindow());
 
         menuBar.setRollover(true);
+
+        // Start loading content
+        startAutoUpdate(tabbedPane1); // Start autoUpdate of tabs (every 5 minutes)
+        updateTab(); // Initiate update
+        tabbedPane1.addChangeListener(e -> updateTab()); // Update on tab change
 
         pack(); // Pack the window
         setSize(1000, 600); // Set window to desired size

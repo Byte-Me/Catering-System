@@ -22,8 +22,12 @@ public class OrderStatistics extends Statistics{
         super();
     }
 
-
-
+    /**
+     *
+     * @param startDateS
+     * @param endDateS
+     * @return
+     */
     public Object[] createLineChartFromOrder(String startDateS, String endDateS) { //[0] = JFreeChart, [1] = SumOrders
         ArrayList<String> orders = stat.getDates(startDateS, endDateS, "order");
         JPanel chart = null;
@@ -69,6 +73,13 @@ public class OrderStatistics extends Statistics{
         }
         return new Object[]{chart, orders.size()};
     }
+
+    /**
+     *
+     * @param startDateS
+     * @param endDateS
+     * @return
+     */
     public JPanel createBarChartFromOrder(String startDateS, String endDateS){
         ArrayList<String> orders = stat.getDates(startDateS, endDateS, "order"); //henter ordre mellom startdate og enddate
 
@@ -114,6 +125,13 @@ public class OrderStatistics extends Statistics{
         return chart;
 
     }
+
+    /**
+     *
+     * @param startDateS
+     * @param endDateS
+     * @return
+     */
     public int getCancelledOrders(String startDateS, String endDateS){
         ArrayList<String> orders = stat.getCancelledDates(startDateS, endDateS, "order");
         return orders.size();

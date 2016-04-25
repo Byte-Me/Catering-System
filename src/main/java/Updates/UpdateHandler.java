@@ -2,80 +2,118 @@ package Updates;
 
 import javax.swing.*;
 
+import java.awt.*;
+
 import static GUI.WindowPanels.Chef.updateIngredients;
 import static GUI.WindowPanels.Chef.updatePrepareTable;
 import static GUI.WindowPanels.Customers.updateCustomer;
 import static GUI.WindowPanels.Customers.updateInactiveCustomer;
-import static GUI.WindowPanels.Driver.updateDrivingRoute;
+//import static GUI.WindowPanels.Driver.u;
 import static GUI.WindowPanels.Orders.updateOrders;
 import static GUI.WindowPanels.Subscriptions.updateSubscriptions;
 import static GUI.WindowPanels.Users.updateInactiveUsers;
 import static GUI.WindowPanels.Users.updateUsers;
+import static GUI.WindowPanels.Driver.*;
 
 /**
  * Created by olekristianaune on 05.04.2016.
  */
 public class UpdateHandler {
     private static Timer timer;
-    private static int currTab;
+    private static JTabbedPane tabbedPane;
+    private static String[] tabs;
     private static boolean autoUpdateStarted = false;
 
-    // Used for right click handler
+    /**
+     * Get index of current active tab. Used for right click handler.
+     * @return  Selected tab index
+     */
     public static int getCurrTab() {
-        return currTab;
+        return tabbedPane.getSelectedIndex();
     }
 
+    /**
+     * Starts timer for Auto-Update
+     */
     private static void startTimer() {
         timer.start();
     }
 
+    /**
+     * Restarts timer for Auto-Update
+     */
     private static void restartTimer() {
         timer.restart();
     }
 
-    // Used for updates from the GUI
-    public static void updateTab(int tabIndex) {
-        currTab = tabIndex;
-        updateTab();
+    /**
+     * Finds the title of a specified tab index.
+     *
+     * @param index Tab index
+     * @return      Name of the tab (lowercase)
+     */
+    private static String findNameOfTab(int index) {
+        tabs = new String[tabbedPane.getTabCount()];
+        for (int i = 0; i < tabs.length; i++) {
+            tabs[i] = tabbedPane.getTitleAt(i);
+        }
+        if (tabs[index] != null && index < tabs.length) {
+            return tabs[index].toLowerCase();
+        }
+        return null;
     }
 
-    private static void updateTab() {
+    /**
+     * Update code for the different tabs.
+     */
+    public static void updateTab() {
         // TODO: Do some check for database connetion
-        switch (currTab) {
-            case 0:
+
+        String currentTab = findNameOfTab(tabbedPane.getSelectedIndex());
+
+        System.out.println("Updating: " + currentTab + " with index: " + getCurrTab());
+
+        switch (currentTab) {
+            case "statistics":
                 // Statistics - NO AUTO REFRESH HERE!
                 break;
-            case 1:
+            case "users":
                 updateUsers();
                 updateInactiveUsers();
                 break;
-            case 2:
+            case "customers":
                 updateCustomer();
                 updateInactiveCustomer();
                 break;
-            case 3:
+            case "subscriptions":
                 updateSubscriptions();
                 break;
-            case 4:
+            case "orders":
                 updateOrders();
                 break;
-            case 5:
-                updateDrivingRoute();
+            case "driver":
+                updateDriverTable((String)driverDropdown.getItemAt(driverDropdown.getSelectedIndex()));
                 break;
-            case 6:
+            case "chef":
                 updatePrepareTable();
                 updateIngredients();
                 break;
             default:
                 // Something wrong??
-                System.err.println("Unknown tab selected which index " + currTab);
+                System.err.println("Unknown tab selected which index " + getCurrTab());
         }
     }
 
     // FIXME: AutoUpdate can cause problems if trying to edit a cell when update happens - either no updates directly in table or handle selected cell before autoUpdating
-    public static void startAutoUpdate(int tabIndex) {
+
+    /**
+     * Starting a timer with an interval of 5 minutes, auto-updating the current active tab.
+     *
+     * @param tabbedPane    The JTabbedPane component of the main window.
+     */
+    public static void startAutoUpdate(JTabbedPane tabbedPane) {
         if(!autoUpdateStarted) {
-            currTab = tabIndex;
+            UpdateHandler.tabbedPane = tabbedPane;
             timer = new Timer(300000, e -> {
                 updateTab();
                 restartTimer();

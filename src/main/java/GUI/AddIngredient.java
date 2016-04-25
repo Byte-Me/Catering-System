@@ -32,10 +32,12 @@ public class AddIngredient extends JDialog {
 
     FoodManagement foodManagement;
 
+    /**
+     *
+     */
     public AddIngredient() {
         setTitle("New Ingredient");
         setContentPane(mainPane);
-        setPreferredSize(new Dimension(1050, 500));
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
         Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/Images/icon32.png"));
@@ -129,6 +131,9 @@ public class AddIngredient extends JDialog {
         setVisible(true);
     }
 
+    /**
+     *
+     */
     public static void updateIngredients() {
         FoodManagement foodManagement = new FoodManagement();
         ArrayList<Object[]> ingredients = foodManagement.getIngredients();
@@ -140,6 +145,12 @@ public class AddIngredient extends JDialog {
         }
     }
 
+    /**
+     *
+     * @param table
+     * @param name
+     * @return
+     */
     private boolean existsInTable(JTable table, String name) {
         // Get row count
         int rowCount = table.getRowCount();
@@ -153,6 +164,10 @@ public class AddIngredient extends JDialog {
         return false;
     }
 
+    /**
+     *
+     * @param tf
+     */
     private void wrongInputNumber(JTextField tf) {
         int i = Integer.parseInt(tf.getText());
         if(i <= 0) {

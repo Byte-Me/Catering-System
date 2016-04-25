@@ -38,6 +38,9 @@ public class GenerateShoppingList extends JDialog {
     private FinanceManagement financeManagement = new FinanceManagement();
     private final FoodManagement foodManagement = new FoodManagement();
 
+    /**
+     *
+     */
     public GenerateShoppingList() {
         setTitle("Shopping List");
         setContentPane(mainPane);
@@ -175,6 +178,10 @@ public class GenerateShoppingList extends JDialog {
         setModal(true);
         setVisible(true);
     }
+
+    /**
+     *
+     */
     private void updateShoppingList() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String fDate = dateFormat.format((Date)fromDate.getModel().getValue());
@@ -193,6 +200,9 @@ public class GenerateShoppingList extends JDialog {
 
     }
 
+    /**
+     *
+     */
     private void editShoppingList(){
         try{
             String name = (String)shoppingTable.getValueAt(shoppingTable.getSelectedRow(),0);
