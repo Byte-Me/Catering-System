@@ -13,6 +13,13 @@ import java.util.stream.Collectors;
 
 public class CreateShoppingList {
     static NumberFormat formatter = new DecimalFormat("#0");
+
+    /**
+     * List of dates for shopping list.
+     * @param fDate From date.
+     * @param tDate To date.
+     * @return
+     */
     public static ArrayList<Object[]> withDates(String fDate, String tDate){
 
         FoodManagement food = new FoodManagement();
@@ -74,6 +81,12 @@ public class CreateShoppingList {
 
         return out;
     }
+
+    /**
+     * Finds total price.
+     * @param shoppingList List of shopping lists.
+     * @return
+     */
     public static String findTotalPrice(ArrayList<Object[]> shoppingList){
         int sum = 0;
         for(Object[] list : shoppingList){

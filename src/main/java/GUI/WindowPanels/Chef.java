@@ -90,7 +90,7 @@ public class Chef {
                     showMessageDialog(null, "Only one ingredient can be selected.");
                 }
             }
-            catch (IndexOutOfBoundsException iobe){ //Oppstår exception jeg ikke forstår, derfor bare catcher det.
+            catch (IndexOutOfBoundsException iobe){
                 showMessageDialog(null, "An ingredient needs to be selected.");
             }
         });

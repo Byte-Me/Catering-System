@@ -1,9 +1,11 @@
 package Testing;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import static org.junit.Assert.*;
 
+import Delivery.CreateDeliveryRoute;
 import Delivery.TravelingSalesman;
 import org.junit.After;
 import org.junit.Before;
@@ -38,24 +40,15 @@ public class TestJUnitDelivery {
 
         ArrayList<String> answer = new ArrayList<String>();
 
-        answer.add("Oslo, Norway");
         answer.add("London, England");
         answer.add("Madrid, Spain");
         answer.add("Paris, France");
         answer.add("Berlin, Germany");
         answer.add("Copenhagen, Denmark");
         answer.add("Stockholm, Sweden");
-        answer.add("Oslo, Norway");
 
-        ArrayList<double[]> positions = tsp.createPositionsArray(test);
-        if(positions != null) {
-            ArrayList<double[]> route = new ArrayList<double[]>();
-
-            tsp.bruteForceFindBestRoute(route, positions);
-            ArrayList<String> result = tsp.positionsToAdresses(tsp.getBestRoute(), test);
-
-            assertArrayEquals(answer.toArray(), result.toArray());
-        }
+        test = CreateDeliveryRoute.deliveryListForTest("Oslo, Norway",test);
+        assertArrayEquals(answer.toArray(), test.toArray());
     }
     @After
     public void tearDown(){

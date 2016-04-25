@@ -62,8 +62,8 @@ public class Subscriptions {
 
 
         editSubscriptionButton.addActionListener(e -> {
-            if(subscriptionsTable.getSelectedColumn() >= 0) { //TODO: sjekker ikke om flere columns er selected, velger øverste.
-                int id = (Integer)subscriptionsTable.getValueAt(subscriptionsTable.getSelectedRow(), idColumnNr); //hent username for selected row
+            if(subscriptionsTable.getSelectedColumn() >= 0) {
+                int id = (Integer)subscriptionsTable.getValueAt(subscriptionsTable.getSelectedRow(), idColumnNr); //get username for selected row
                 new EditSubscription(id);
             }
             else{

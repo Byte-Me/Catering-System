@@ -15,9 +15,9 @@ public abstract class Statistics {
     protected static int WEEKLIMIT = 20;
 
     /**
-     *
-     * @param to
-     * @param from
+     * Checks the days between the dates.
+     * @param to Date to.
+     * @param from Date from.
      * @return
      */
     protected int checkDaysBetween(Date to, Date from){
@@ -25,11 +25,7 @@ public abstract class Statistics {
         return (int) TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
     }
 
-    /**
-     *
-     * @param values
-     * @return
-     */
+
     protected ArrayList[]valuesMonth(ArrayList<String> values){
         ArrayList<Double> yValues = new ArrayList<>();
         ArrayList<String> xValues = new ArrayList<>();

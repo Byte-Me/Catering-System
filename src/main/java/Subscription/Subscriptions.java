@@ -22,7 +22,7 @@ public class Subscriptions {
     private static Calendar cal = new GregorianCalendar();
 
     /**
-     *
+     * List of active subscription.
      * @return
      */
     public ArrayList listActiveSubs() {
@@ -37,10 +37,10 @@ public class Subscriptions {
     }
 
     /**
-     *
-     * @param dateFrom
-     * @param dateTo
-     * @param today
+     * Checks if subscription is active.
+     * @param dateFrom Date from.
+     * @param dateTo Date to.
+     * @param today Date today.
      * @return
      */
     public boolean checkSubscriptionActive(String dateFrom, String dateTo, Date today) {
@@ -89,12 +89,12 @@ public class Subscriptions {
      */
 
     /**
-     *
-     * @param email
-     * @param dateFrom
-     * @param dateTo
-     * @param weeksBetween
-     * @param recipesWithDay
+     * Create new subscription.
+     * @param email New email.
+     * @param dateFrom Date from.
+     * @param dateTo Date to.
+     * @param weeksBetween Weeks between each order.
+     * @param recipesWithDay Recipes within the day.
      * @return
      */
     public static boolean createSubscription(String email, String dateFrom, String dateTo, int weeksBetween, ArrayList<Object[][]> recipesWithDay){
@@ -102,13 +102,13 @@ public class Subscriptions {
     }
 
     /**
-     *
-     * @param email
-     * @param dateFrom
-     * @param dateTo
-     * @param weeksBetween
-     * @param recipesWithDay
-     * @param subId
+     * Edits subscription.
+     * @param email Subscriptions email.
+     * @param dateFrom Subscription's start date.
+     * @param dateTo Subscription's ent date.
+     * @param weeksBetween Weeks between orders.
+     * @param recipesWithDay Recipes within the day of the subscription.
+     * @param subId Subscription ID.
      * @return
      */
     public static boolean editSubscription(String email, String dateFrom, String dateTo, int weeksBetween, ArrayList<Object[][]> recipesWithDay, int subId) {
@@ -165,11 +165,11 @@ public class Subscriptions {
     }
 
     /**
-     *
-     * @param day
-     * @param prevDateS
-     * @param dateTo
-     * @param frequency
+     * Finds next day.
+     * @param day Which day.
+     * @param prevDateS Previous date.
+     * @param dateTo Date to.
+     * @param frequency Frequency (how many weeks between orders)
      * @return
      */
     private static String findNextDate(int day, String prevDateS, String dateTo, int frequency) {
@@ -246,8 +246,8 @@ public class Subscriptions {
     }
 
     /**
-     *
-     * @param subId
+     * List of subsction info from IDs.
+     * @param subId Subscription IDs.
      * @return
      */
     public Object[] getSubInfoFromId(int subId){
@@ -272,9 +272,8 @@ public class Subscriptions {
     }
 
     /**
-     *
-     *
-     * @param id
+     * Gets recipe info from subscription.
+     * @param id Subscription ID.
      * @return
      */
     private ArrayList<Object[]> getRecipeInfoForSub(int id){
@@ -327,7 +326,6 @@ public class Subscriptions {
 
     /**
      * Check if two dates are the same
-     *
      * @param date1 First date
      * @param date2 Second date
      * @return      Returns true if the dates are the same
@@ -343,7 +341,6 @@ public class Subscriptions {
 
     /**
      * Get the value of the weekday from 1 (monday) to 7 (sunday)
-     *
      * @param date
      * @return      Weekday number 1-7
      */

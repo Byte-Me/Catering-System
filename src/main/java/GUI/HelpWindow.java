@@ -24,7 +24,7 @@ public class HelpWindow extends JDialog{
         Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/Images/icon32.png"));
         setIconImage(icon);
 
-        JButton backButton = new JButton("← Back");
+        JButton backButton = new JButton("Back");
         JPanel menu = new JPanel(new BorderLayout());
         menu.setBackground(Color.WHITE);
         menu.add(backButton, BorderLayout.WEST);

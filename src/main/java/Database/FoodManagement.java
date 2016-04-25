@@ -17,6 +17,9 @@ public class FoodManagement extends Management{
     private final String deleteRecipe = "DELETE FROM recipe_grocery WHERE recipe_id = ?;";
     private final String updateOrderRecipeStatus = "UPDATE order_recipe SET status = ? WHERE order_id = ? AND recipe_id = ?";
 
+    /**
+     * Constructor to FoodManagement.
+     */
     public FoodManagement(){
         super();
     }
@@ -59,6 +62,10 @@ public class FoodManagement extends Management{
     */
 
 
+    /**
+     * This method retrieve all the ingredients from the database.
+     * @return List of all the ingredients.
+     */
     public ArrayList<Object[]> getIngredients(){
         ArrayList<Object[]> out = new ArrayList<>();
         if(setUp()){
@@ -85,6 +92,11 @@ public class FoodManagement extends Management{
         return out;
     }
 
+    /**
+     * This method gets information on a single ingredient from the database.
+     * @param ingredient Name of the ingredient.
+     * @return An object with information on the ingredient.
+     */
     public Object[] getSingleIngredient(String ingredient){
         Object[] out = new Object[4];
         if(setUp()){
@@ -111,6 +123,12 @@ public class FoodManagement extends Management{
         return out;
     }
 
+    /**
+     * Updates the name of an ingredient.
+     * @param name Name of the ingredient.
+     * @param newData New name of the ingredient.
+     * @return True or false if the update was successful.
+     */
     public boolean updateIngredientName(String name, String newData) {
         int rowChanged = 0;
         if (setUp()) {
@@ -133,6 +151,12 @@ public class FoodManagement extends Management{
         return rowChanged > 0;
     }
 
+    /**
+     * Updates the price of an ingredient.
+     * @param name Name of ingredient.
+     * @param newData Updated price of ingredient.
+     * @return True or false if the update was successful.
+     */
     public boolean updateIngredientPrice(String name, int newData) {
         int rowChanged = 0;
         if (setUp()) {
@@ -154,6 +178,12 @@ public class FoodManagement extends Management{
         return rowChanged > 0;
     }
 
+    /**
+     * Updates the quantity of an ingredient.
+     * @param name Name of ingredient.
+     * @param newData Updated quantity of ingredient.
+     * @return True or false if the update was successful.
+     */
     public boolean updateIngredientQuantity(String name, int newData) {
         int rowChanged = 0;
         if (setUp()) {
@@ -176,6 +206,12 @@ public class FoodManagement extends Management{
         return rowChanged > 0;
     }
 
+    /**
+     * Updates the unit of an ingredients.
+     * @param name Name of ingredient.
+     * @param newData Updated unit of the ingredient.
+     * @return True or false if the update was successful.
+     */
     public boolean updateIngredientUnit(String name, String newData) {
         int rowChanged = 0;
         if (setUp()) {
@@ -198,7 +234,10 @@ public class FoodManagement extends Management{
         return rowChanged > 0;
     }
 
-
+    /**
+     * This method retrieves all the recipes from the database.
+     * @return List of recipes.
+     */
     public ArrayList<Object[]> getRecipes(){
         ArrayList<Object[]> out = new ArrayList<>();
         if(setUp()){
@@ -267,6 +306,11 @@ public class FoodManagement extends Management{
         return recipeid;
     }
 
+    /**
+     * This method retrieves the id of recipe.
+     * @param name Name of recipe.
+     * @return Id of recipe.
+     */
     public int getRecipeIDPub(String name){
         int out = -1;
         if(setUp()) {
@@ -288,6 +332,11 @@ public class FoodManagement extends Management{
         return out;
     }
 
+    /**
+     * Gets the name of a recipe.
+     * @param id Id of recipe.
+     * @return Name of the recipe.
+     */
     public String getRecipeName(int id){
         String out = null;
         if(setUp()){
@@ -310,6 +359,13 @@ public class FoodManagement extends Management{
         return out;
     }
 
+    /**
+     * Adds a recipe to the database.
+     * @param name Name of the recipe.
+     * @param ingInfo List with information on the ingredients in the recipe.
+     * @param price Price of the recipe.
+     * @return True or false if the recipe was added successfully.
+     */
     public boolean addRecipe(String name, ArrayList<Object[]> ingInfo, int price){
         int numb = 0;
 
@@ -337,7 +393,6 @@ public class FoodManagement extends Management{
                     conn.setAutoCommit(true);
                 }
 
-                ///////
 
                 try {
                     conn.setAutoCommit(false);
@@ -418,6 +473,14 @@ public class FoodManagement extends Management{
         return numb > 0;
     }
 
+    /**
+     * Updates a recipe.
+     * @param name Name of the recipe.
+     * @param ingInfo List with updated information of the ingredients in the recipe.
+     * @param price Updated price of the recipe.
+     * @param id Id of the recipe.
+     * @return True or false if the update was successful.
+     */
     public boolean updateRecipe(String name, ArrayList<Object[]> ingInfo, int price, int id){
         if(setUp()) {
             try {
@@ -437,7 +500,14 @@ public class FoodManagement extends Management{
         return true;
     }
 
-
+    /**
+     * Adds an ingredient to the database.
+     * @param name Name of the ingredient.
+     * @param price Price of the ingredient.
+     * @param unit Unit of the ingredient.
+     * @param quantity Quantity of the ingredient.
+     * @return True or false if the ingredient was added successfully.
+     */
     public boolean addIngredient(String name, int price, String unit, int quantity){
         int numb = 0;
         if(setUp()) {
@@ -460,6 +530,11 @@ public class FoodManagement extends Management{
         return numb > 0;
     }
 
+    /**
+     * Retrieves a list with information on the ingredients in a recipe.
+     * @param id Id of the recipe.
+     * @return List of ingredients in a recipe.
+     */
     public ArrayList<Object[]> getRecipeIngredients(int id){
         ArrayList<Object[]> out = new ArrayList<>();
         if(setUp()){
@@ -488,6 +563,11 @@ public class FoodManagement extends Management{
         return out;
     }
 
+    /**
+     * Retrieves a list of ingredients in storage.
+     * @param names List of ingredient names.
+     * @return List of ingredients in storage.
+     */
     public ArrayList<Object[]> getIngredientsInStorage(ArrayList<String> names){
         ArrayList<Object[]> out = new ArrayList<>();
         if(setUp()){
@@ -519,6 +599,12 @@ public class FoodManagement extends Management{
         return out;
     }
 
+    /**
+     * This method adds an ingredient to storage.
+     * @param name Name of ingredient.
+     * @param addedValue Value of what quantity of the ingredient to be added.
+     * @return True or false if the update was successful.
+     */
     public boolean addIngredientToStorage(String name, int addedValue){ //ingredients[0] = name og ingredients[1] = added values
         int numb = 0;
         if(setUp()){
@@ -549,6 +635,12 @@ public class FoodManagement extends Management{
         return numb > 0;
     }
 
+    /**
+     * This method removes an ingredient from storage.
+     * @param id Id of the ingredient.
+     * @param subtractedValue Value of what quantity of the ingredient to be subtracted.
+     * @return True or false if the update was successful.
+     */
     public boolean removeIngredientFromStorage(int id, int subtractedValue){ //ingredients[0] = name og ingredients[1] = added values
         int numb = 0;
         if(setUp()){
@@ -578,6 +670,10 @@ public class FoodManagement extends Management{
         return numb > 0;
     }
 
+    /**
+     * This method retrieves a list of recipes for the chef to prepare today.
+     * @return List of recipes.
+     */
     public ArrayList<Object[]> getRecipesForChef(){
         ArrayList<Object[]> out = new ArrayList<>();
         if(setUp()){
@@ -610,6 +706,12 @@ public class FoodManagement extends Management{
         return out;
     }
 
+    /**
+     * This method gets the ingredients needed in the shopping list.
+     * @param fDate From date.
+     * @param tDate To date.
+     * @return List of ingredients.
+     */
     public ArrayList<Object[]> getIngredientsForShoppinglist(String fDate, String tDate){
         ArrayList<Object[]> out = new ArrayList<>();
         ArrayList<Object[]> IDs = getRecipeIDs(fDate, tDate);
@@ -644,6 +746,12 @@ public class FoodManagement extends Management{
         return out;
     }
 
+    /**
+     * This method retrieves a list of recipe ids that needs to be prepared within two dates.
+     * @param fDate From date.
+     * @param tDate To date.
+     * @return List of recipes.
+     */
     public ArrayList<Object[]> getRecipeIDs(String fDate, String tDate){
         ArrayList<Object[]> out = new ArrayList<>();
         if(setUp()) {
@@ -670,6 +778,14 @@ public class FoodManagement extends Management{
         }
         return out;
     }
+
+    /**
+     * This method updates the status of the order.
+     * @param orderId Id of the order.
+     * @param recipeId Id of the recipe.
+     * @param newStatus Updated status.
+     * @return A value which indicates if the update was successful or not.
+     */
     public int updateOrderRecipeStatus(int orderId, int recipeId, int newStatus){
         int out = 0;
         if(setUp()){
@@ -692,6 +808,11 @@ public class FoodManagement extends Management{
         return out;
     }
 
+    /**
+     * Retrieves the price of a recipe.
+     * @param name Name of the recipe.
+     * @return Price of the recipe.
+     */
     public int getRecipePrice(String name){
         int out = -1;
         if(setUp()){

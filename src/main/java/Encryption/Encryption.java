@@ -13,12 +13,13 @@ import java.util.Random;
 public class Encryption {
 
     /**
-     * Check if inputted password is the same as stored password (Encrypted)
+     * Checks whether two passwords are the same using an input password,
+     * salt and a hash.
      *
-     * @param pass          Inputted password
-     * @param saltString    Salt (Stored in database)
-     * @param hashString    Hash (Stored in database)
-     * @return              True if passwords match, else false
+     * @param pass Password from user
+     * @param saltString Salt from database.
+     * @param hashString Hash from database
+     * @return boolean whether they matched.
      */
     public boolean passDecoding(String pass, String saltString, String hashString) {
         byte[] salt = stringToByte(saltString);
@@ -43,10 +44,9 @@ public class Encryption {
     }
 
     /**
-     * Encodes inputted password to hash string
-     *
-     * @param password  Inputted password string
-     * @return          Array with random salt string and generated hash from password
+     * Creates a salt and hash for storage in the database using only an input password.
+     * @param password password you want to encrypt
+     * @return a string array of the resulting hash and salt.
      */
     public String[] passEncoding(String password){
         Random rand = new Random();
@@ -84,7 +84,6 @@ public class Encryption {
 
     }
 
-    //Eks program:
 
     /**
      * Test program for encryption

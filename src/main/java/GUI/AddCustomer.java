@@ -88,7 +88,6 @@ public class AddCustomer extends JDialog{
             String pcCity = cCity.getText();
 
             boolean addedCustomer = customerManagement.addCustomerCompany(name, mail, phone, adr, pc, pcCity);
-            //TODO: company må fikses. Alle nye customers blir company, finn evt. feil.
             if (addedCustomer) {
                 // Update customer list
                 Customers.updateCustomer();

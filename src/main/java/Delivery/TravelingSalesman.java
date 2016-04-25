@@ -15,46 +15,17 @@ import java.util.List;
  * Created by Evdal on 07.03.2016.
  */
 
-/*
-Eksample program:
-
-public static void main(String[]args) throws Exception{
-
-        ArrayList<String> test = new ArrayList<String>();
-
-        test.add("Paris, France");
-        test.add("Madrid, Spain");
-        test.add("London, England");
-        test.add("Stockholm, Sweden");
-        test.add("Copenhagen, Denmark");
-        test.add("Berlin, Germany");
-        test.add("Warsaw, Poland");
-        test.add("Amsterdam, Netherlands");
-        test.add("Rome, Italy");
-        test.add("Lisbon, Portugal");
-
-        TravelingSalesman delivery = new TravelingSalesman("Oslo, Norway"); //Start and end point
-
-        ArrayList<double[]> positions = delivery.createPositionsArray(test);
-        ArrayList<double[]> route = new ArrayList<double[]>();
-
-        bruteForceFindBestRoute(route, positions);
-
-        ArrayList<String> result = positionsToAdresses(delivery.getBestRoute(), test);
-
-        for(String res : result){
-            System.out.println(res);
-        }
-    }
-
- */
-
 public class TravelingSalesman {
 
     private ArrayList<double[]> bestRoute;
     private double[] startAdress;
     private String startPoint;
 
+    /**
+     * Constructor for TravelingSalesman.
+     * @param startAdress The address the algorythm starts on.
+     * @throws Exception Throws exceptions.
+     */
     public TravelingSalesman(String startAdress) throws Exception {
 
         this.startAdress = geoCoder(startAdress, 0);
@@ -65,6 +36,13 @@ public class TravelingSalesman {
     //Hentet en del fra http://stackoverflow.com/questions/11703827/brute-force-algorithm-for-the-traveling-salesman-problem-in-java
 
     //r is current route, citiesNotInRoute are the remaining cities not added to route.
+
+    /**
+     * Brute force method to find the best route.
+     * @param r Current route.
+     * @param citiesNotInRoute Remaining cities not added to route.
+     * @throws Exception Throws exceptions.
+     */
     public void bruteForceFindBestRoute
     (ArrayList<double[]> r,
      ArrayList<double[]> citiesNotInRoute) throws Exception {
@@ -90,10 +68,13 @@ public class TravelingSalesman {
 
             }
         }
-
-
     }
 
+    /**
+     * Sums the distances of the different positions.
+     * @param positions List of positions.
+     * @return The sum of the distance between the different locations.
+     */
     public double sumDistance(ArrayList<double[]> positions) {
         if (positions == null) return 99999.9;                   //A better solution may be wanted.
         ArrayList<Double> lengths = distancesInKM(positions);
@@ -166,6 +147,12 @@ public class TravelingSalesman {
      */
 
     //Returns null if there is an issue with geocoding adresses. This needs too be handled elsewhere.
+
+    /**
+     * Creates an array list of the positions.
+     * @param adresses List of addresses.
+     * @return List of shortened addresses.
+     */
     public ArrayList<double[]> createPositionsArrayShortened(ArrayList<String> adresses){
 
         ArrayList<String> fix = new ArrayList<>();
@@ -188,12 +175,14 @@ public class TravelingSalesman {
             }
         }
         return out;
-
     }
+
+    /**
+     * Creates positions array.
+     * @param adresses List of addresses.
+     * @return List of positions.
+     */
     public ArrayList<double[]> createPositionsArray(ArrayList<String> adresses){
-
-
-
         ArrayList<double[]> out = new ArrayList<>();
 
         for (int i = 0; i < adresses.size(); i++) {
@@ -207,8 +196,14 @@ public class TravelingSalesman {
         }
 
         return out;
-
     }
+
+    /**
+     * Changes the positions to shortened addresses.
+     * @param inPositions List of positions.
+     * @param originAdressList List of original address list.
+     * @return List of shortened addresses.
+     */
     public ArrayList<String> positionsToAdressesShortened(ArrayList<double[]> inPositions,
                                                  ArrayList<String> originAdressList) {
         ArrayList<String> fix = new ArrayList<>();
@@ -219,6 +214,13 @@ public class TravelingSalesman {
         }
         return positionsToAdresses(inPositions,fix);
     }
+
+    /**
+     * Changes the positions to addresses.
+     * @param inPositions List of positions.
+     * @param originAdressList List of addresses.
+     * @return List of adresses.
+     */
     public ArrayList<String> positionsToAdresses(ArrayList<double[]> inPositions,
                                                  ArrayList<String> originAdressList) {
 
@@ -236,14 +238,26 @@ public class TravelingSalesman {
 
     }
 
+    /**
+     * Gets the start address.
+     * @return Start address.
+     */
     public String getStartAdress() {
         return startPoint;
     }
 
+    /**
+     * Sets the start address.
+     * @param startAdress Start address.
+     */
     public void setStartAdress(String startAdress) {
         this.startPoint = startAdress;
     }
 
+    /**
+     * Gets the best route.
+     * @return List of positions.
+     */
     public ArrayList<double[]> getBestRoute() {
         return bestRoute;
     }

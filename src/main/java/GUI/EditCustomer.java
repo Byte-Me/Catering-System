@@ -164,7 +164,7 @@ public class EditCustomer extends JDialog{
     private String[] formatName(String name) {
         String[] out = new String[2];
         String[] splitted = name.split(", ");
-        out[0] = splitted[1]; //fornavn, etternavn, bytter rekkefølge.
+        out[0] = splitted[1];
         out[1] = splitted[0];
         return out;
     }

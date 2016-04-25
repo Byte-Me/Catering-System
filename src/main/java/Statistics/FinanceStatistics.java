@@ -13,9 +13,9 @@ public class FinanceStatistics {
     private static FinanceManagement finance = new FinanceManagement();
 
     /**
-     *
-     * @param dateFromS
-     * @param dateToS
+     * Finds finance statistics.
+     * @param dateFromS From date.
+     * @param dateToS To date.
      * @return
      */
     public static long[] findFinanceStats(String dateFromS, String dateToS){ //[0] = income, [1] = outcome, [2]= net profit

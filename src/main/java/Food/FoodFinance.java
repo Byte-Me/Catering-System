@@ -10,6 +10,12 @@ import java.util.Arrays;
  */
 public class FoodFinance {
     private static FinanceManagement financeManagement = new FinanceManagement();
+
+    /**
+     * Finds order price.
+     * @param orderId Order ID.
+     * @return
+     */
     public static double findOrderPrice(int orderId){
         double out = 0;
         ArrayList<Object[]> recipePrices = financeManagement.getOrderRecipeInfo(orderId);
