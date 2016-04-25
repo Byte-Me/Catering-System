@@ -36,8 +36,8 @@ public class EditCustomer extends JDialog{
     public CustomerManagement customerManagement = new CustomerManagement();
 
     /**
-     *
-     * @param emailS
+     * Constructor to the EditCustomer graphical user interface.
+     * @param emailS Email of the customer.
      */
     public EditCustomer(String emailS) {
             setTitle("Edit Customer");

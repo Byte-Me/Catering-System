@@ -33,7 +33,7 @@ public class AddIngredient extends JDialog {
     FoodManagement foodManagement;
 
     /**
-     *
+     * Constructor to the AddIngredient graphical user interface.
      */
     public AddIngredient() {
         setTitle("New Ingredient");
@@ -132,7 +132,7 @@ public class AddIngredient extends JDialog {
     }
 
     /**
-     *
+     * Updates the in storage table with ingredients from the database.
      */
     public static void updateIngredients() {
         FoodManagement foodManagement = new FoodManagement();
@@ -146,10 +146,10 @@ public class AddIngredient extends JDialog {
     }
 
     /**
-     *
-     * @param table
-     * @param name
-     * @return
+     * Checks if a ingredient name already exists in the table.
+     * @param table The table that the method checks against.
+     * @param name Name of ingredient to check.
+     * @return True or false if the ingredient name exists.
      */
     private boolean existsInTable(JTable table, String name) {
         // Get row count

@@ -35,7 +35,7 @@ public class AddCustomer extends JDialog{
     public CustomerManagement customerManagement = new CustomerManagement();
 
     /**
-     *
+     * Constructor to the AddCustomer graphical user interface.
      */
     public AddCustomer() {
         setTitle("New Customer");
