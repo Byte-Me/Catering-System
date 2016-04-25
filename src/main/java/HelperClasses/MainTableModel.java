@@ -8,6 +8,7 @@ import javax.swing.table.DefaultTableModel;
 public class MainTableModel extends DefaultTableModel {
 
     /**
+     * Defines that no cells are editable
      *
      * @param row
      * @param column
@@ -19,6 +20,7 @@ public class MainTableModel extends DefaultTableModel {
     }
 
     /**
+     * Returns the class type of the column. Helps with sorting correctly for different data types
      *
      * @param column
      * @return
