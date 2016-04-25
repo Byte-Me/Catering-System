@@ -1,0 +1,42 @@
+<!-- Only used for easier editing of the html, the actual page is loaded from a String in _Map.java. Would be cool to be able to convert this file to string tho
+ HTML copied from Google Maps implementation help page-->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no"/>
+    <style type="text/css">
+        html { height: 100% }
+        body { height: 100%; margin: 0; padding: 0 }
+        #map-canvas { height: 100% }
+    </style>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDCG0JH_Eb0FhZLNsQSDU7D_jbaFMl_3sY"></script>
+    <script type="text/javascript">
+        var directionsDisplay;
+        var directionsService = new google.maps.DirectionsService();
+        var map;
+
+        var startLatLng;
+        var endLatLng;
+        var waypts = [];
+
+        function initialize() {
+            var mapOptions = {
+                center: new google.maps.LatLng(63.4187191,10.3687231), // Trondheim
+                zoom: 12
+            };
+            map = new google.maps.Map(document.getElementById("map-canvas"), mapOptions);
+
+            directionsDisplay = new google.maps.DirectionsRenderer({
+                map: map
+            });
+
+        }
+
+        google.maps.event.addDomListener(window, 'load', initialize);
+    </script>
+</head>
+<body>
+    <div id="map-canvas"></div>
+</body>
+</html>
