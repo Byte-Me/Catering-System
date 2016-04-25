@@ -77,8 +77,8 @@ public class MainWindow extends JFrame {
     private JButton driverDetailsButton;
 
     /**
-     *
-     * @param user
+     * Constructor for MainWindow.
+     * @param user Object list of users.
      */
     public MainWindow(Object[] user) {
         setTitle("Healthy Catering LTD");

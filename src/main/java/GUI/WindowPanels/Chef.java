@@ -33,14 +33,14 @@ public class Chef {
     static FoodManagement foodManagement = new FoodManagement();
 
     /**
-     *
-     * @param prepareTable
-     * @param ingredientTable
-     * @param generateShoppingListButton
-     * @param recipesButton
-     * @param addIngredientButton
-     * @param editIngredientButton
-     * @param chefSplitPane
+     * Construrctor for the window panel Chef.
+     * @param prepareTable                  JTable with all orders that are ready to prepare.
+     * @param ingredientTable               JTable with ingredients.
+     * @param generateShoppingListButton    JButton that generates a shopping list.
+     * @param recipesButton                 JButton that shows the recipes.
+     * @param addIngredientButton           JButton that opens a new ingredient interface.
+     * @param editIngredientButton          JButton that opens a edit ingredient interface.
+     * @param chefSplitPane                 JSplitPane that contains both prepareTable and ingredientTable.
      */
     public Chef(JTable prepareTable, JTable ingredientTable, JButton generateShoppingListButton, JButton recipesButton, JButton addIngredientButton, JButton editIngredientButton, JSplitPane chefSplitPane) {
         String[] prepareHeader = {"Order ID","Recipe", "Amount", "Time", "Notes", "Status", "Update"}; // Header titles
@@ -71,7 +71,6 @@ public class Chef {
         prepareTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
         ingredientTable.setAutoCreateRowSorter(true);
-        prepareTable.setAutoCreateRowSorter(true);
 
         chefSplitPane.setResizeWeight(0.50);
 
@@ -242,7 +241,7 @@ public class Chef {
     }
 
     /**
-     *
+     * Updates the prepare table from the database.
      */
     public static void updatePrepareTable() {
         FoodManagement foodManagement = new FoodManagement();
@@ -258,7 +257,7 @@ public class Chef {
     }
 
     /**
-     *
+     * Updates the ingredient table from the database.
      */
     public static void updateIngredients() {
         FoodManagement foodManagement = new FoodManagement();

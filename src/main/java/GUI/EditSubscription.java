@@ -239,6 +239,14 @@ public class EditSubscription extends JDialog{
 
     }
 
+    private int existsInTable(JTable table, String entry) {
+        for (int i = 0; i < table.getRowCount(); i++) {
+            if (table.getValueAt(i, 0).equals(entry)) {
+                return i;
+            }
+        }
+        return -1;
+    }
 
 
     /**
@@ -259,7 +267,6 @@ public class EditSubscription extends JDialog{
 
      */
     private void createUIComponents() {
-        // TODO: place custom component creation code here
 
         // Date Pickers start
         UtilDateModel fModel = new UtilDateModel();

@@ -39,7 +39,7 @@ public class GenerateShoppingList extends JDialog {
     private final FoodManagement foodManagement = new FoodManagement();
 
     /**
-     *
+     * Constructor for GenerateShoppingList.
      */
     public GenerateShoppingList() {
         setTitle("Shopping List");
@@ -180,7 +180,7 @@ public class GenerateShoppingList extends JDialog {
     }
 
     /**
-     *
+     * Updates the shopping list.
      */
     private void updateShoppingList() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -201,7 +201,7 @@ public class GenerateShoppingList extends JDialog {
     }
 
     /**
-     *
+     * Edits the shopping list.
      */
     private void editShoppingList(){
         try{

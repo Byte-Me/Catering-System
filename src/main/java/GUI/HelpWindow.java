@@ -14,7 +14,7 @@ public class HelpWindow extends JDialog{
     Browser browser;
 
     /**
-     *
+     * Constructor for HelpWindow.
      */
     public HelpWindow() {
         setTitle("Help");

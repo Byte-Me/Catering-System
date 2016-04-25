@@ -28,7 +28,7 @@ public class Recipes extends JDialog {
     static FoodManagement foodManagement = new FoodManagement();
 
     /**
-     *
+     * Constructor for Recipes.
      */
     public Recipes() {
         setTitle("Recipes");
@@ -91,7 +91,7 @@ public class Recipes extends JDialog {
     }
 
     /**
-     *
+     * Updates recipes.
      */
     public static void updateRecipes() {
         ArrayList<Object[]> recipes = foodManagement.getRecipes();

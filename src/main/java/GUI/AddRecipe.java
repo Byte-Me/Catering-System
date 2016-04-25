@@ -30,7 +30,7 @@ public class AddRecipe extends JDialog {
     FoodManagement foodManagement;
 
     /**
-     *
+     * Constructor to the AddRecipe graphical user interface.
      */
     public AddRecipe() {
         setTitle("New Recipe");
@@ -184,7 +184,7 @@ public class AddRecipe extends JDialog {
     }
 
     /**
-     *
+     * Updates the the in storage table with ingredients from the database.
      */
     public static void updateIngredients() {
         FoodManagement foodManagement = new FoodManagement();

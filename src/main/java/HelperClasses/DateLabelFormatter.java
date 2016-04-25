@@ -14,9 +14,10 @@ public class DateLabelFormatter extends JFormattedTextField.AbstractFormatter {
     private SimpleDateFormat dateFormatter = new SimpleDateFormat(datePattern);
 
     /**
+     * Parse text string with format yyyy-MM-dd to Date object
      *
-     * @param text
-     * @return
+     * @param text              Input date text string
+     * @return                  Date object
      * @throws ParseException
      */
     @Override
@@ -25,9 +26,10 @@ public class DateLabelFormatter extends JFormattedTextField.AbstractFormatter {
     }
 
     /**
+     * Format Calendar object to text string (yyyy-MM-dd)
      *
-     * @param value
-     * @return
+     * @param value             Calendar object
+     * @return                  Text string of type yyyy-MM-dd
      * @throws ParseException
      */
     @Override

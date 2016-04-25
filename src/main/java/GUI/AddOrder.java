@@ -53,7 +53,7 @@ public class AddOrder extends JDialog{
     private ArrayList<Object[]> customers;
 
     /**
-     *
+     * Constructor to the AddOrder graphical user interface.
      */
     public AddOrder() {
         setTitle("New Order");
@@ -238,7 +238,7 @@ public class AddOrder extends JDialog{
 
             boolean isAdded = orderManagement.createOrder((String)selectedCustomer[1], selectedDateString, selectedRecipes, comment, selectedTimeString);
             if(!isAdded) {
-                showMessageDialog(null, "Kunne ikke legge til order.");
+                showMessageDialog(null, "Could not add order.");
             }
 
             updateOrders();
@@ -254,7 +254,7 @@ public class AddOrder extends JDialog{
     }
 
     /**
-     *
+     * Creates the various UI components.
      */
     private void createUIComponents() { // Creates the JDatePicker
         // Date Pickers start
@@ -273,10 +273,10 @@ public class AddOrder extends JDialog{
     }
 
     /**
-     *
-     * @param table
-     * @param entry
-     * @return
+     * Check if an order already exists in the order table.
+     * @param table Table that contains the orders.
+     * @param entry Entry to check against all the different orders.
+     * @return The value of the index where the entry exists.
      */
     private int existsInTable(JTable table, String entry) {
         for (int i = 0; i < table.getRowCount(); i++) {
@@ -288,7 +288,7 @@ public class AddOrder extends JDialog{
     }
 
     /**
-     *
+     * Updates the dropdown menu.
      */
     private void updateDropdown(){
         customerDropdown.removeAllItems();

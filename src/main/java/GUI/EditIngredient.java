@@ -20,8 +20,8 @@ public class EditIngredient extends JDialog {
     FoodManagement foodManagement = new FoodManagement();
 
     /**
-     *
-     * @param ingredient
+     * Constructor to the EditIngredient graphical user interface.
+     * @param ingredient Name of the ingredient.
      */
     public EditIngredient(String ingredient) {
         setTitle("Edit Ingredient");

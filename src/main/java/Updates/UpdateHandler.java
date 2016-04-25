@@ -71,8 +71,6 @@ public class UpdateHandler {
 
         String currentTab = findNameOfTab(tabbedPane.getSelectedIndex());
 
-        System.out.println("Updating: " + currentTab + " with index: " + getCurrTab());
-
         switch (currentTab) {
             case "statistics":
                 // Statistics - NO AUTO REFRESH HERE!

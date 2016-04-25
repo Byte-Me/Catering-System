@@ -21,7 +21,7 @@ public class Login extends JFrame{
     private LoginManagement dbconnect;
 
     /**
-     *
+     * Constructor for Login
      */
     public Login() {
         setTitle("Login");

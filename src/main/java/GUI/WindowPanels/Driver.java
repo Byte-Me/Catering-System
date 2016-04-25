@@ -52,12 +52,12 @@ public class Driver {
     private String username;
 
     /**
-     *
-     * @param driverTable
-     * @param mapPanel
-     * @param generateDrivingRouteButton
-     * @param driverDropdown
-     * @param currentUser
+     * Construrctor for the window panel Customers.
+     * @param driverTable                   JTable containing all the drivers.
+     * @param mapPanel                      JPanel containing the map with the plugin JxBrowser.
+     * @param generateDrivingRouteButton    JButton that uses an algorythm to generate the best suited driving route.
+     * @param driverDropdown                JComboBox with a dropdown menu of all the diferent drivers.
+     * @param currentUser                   The current user for a driving route.
      */
     public Driver(final JTable driverTable, JPanel mapPanel, JButton generateDrivingRouteButton, JComboBox driverDropdown, Object[] currentUser) {
 
@@ -96,7 +96,6 @@ public class Driver {
             boolean lookingForOrder = true;
             int input = 0;
             while(count < driverTable.getRowCount() && lookingForOrder){
-                System.out.println("Rows: "+driverTable.getRowCount()+", count: "+count);
                 if((Boolean)driverTable.getValueAt(count, 4)){
                     if(isDrivingLimitReached(username)) {
                         showMessageDialog(null, limitReachedErrorMessage);
@@ -158,10 +157,10 @@ public class Driver {
     }
 
     /**
-     *
-     * @param mapPanel
-     * @param generateDrivingRouteButton
-     * @throws IOException
+     * Creates a map with the JxBrowser plugin.
+     * @param mapPanel JPanel that contains the map.
+     * @param generateDrivingRouteButton JButton that generates a driving route.
+     * @throws IOException Exception if map is not loaded properly.
      */
     public void createMap(JPanel mapPanel, JButton generateDrivingRouteButton) throws IOException {
 
@@ -201,15 +200,13 @@ public class Driver {
     }
 
     /**
-     *
-     * @return
+     * Get the driving route for the drivers.
+     * @return Driving route for driver.
      */
     private static String getDrivingRoute() {
-        System.out.println(cateringAdress); // DEBUG
 
         ArrayList<double[]> coords = UseReadyOrdersLatLng(cateringAdress, getAddresses());
         try {
-            // TODO - make more robust, coords may be empty and return null !IMPORTANT
             String startPoint = "new google.maps.LatLng(" + coords.get(0)[0] + "," + coords.get(0)[1] + ")";
             String endPoint = "new google.maps.LatLng(" + coords.get(coords.size()-1)[0] + "," + coords.get(coords.size()-1)[1] + ")";
             String waypts = "[";
@@ -239,7 +236,7 @@ public class Driver {
     }
 
     /**
-     *
+     * Updates the dropdown menu with drivers from the database.
      */
     private void updateDropdown(){
         driverDropdown.removeAllItems();
@@ -251,8 +248,8 @@ public class Driver {
     }
 
     /**
-     *
-     * @param username
+     * Updates the driver table specific to the driver.
+     * @param username Current driver assigned to the task.
      */
     public static void updateDriverTable(String username){
         driverModel.setRowCount(0);
@@ -264,8 +261,8 @@ public class Driver {
     }
 
     /**
-     *
-     * @param username
+     * Updates and sort the driver table specific to the driver.
+     * @param username Current driver assigned to the task.
      */
     public static void updateDriverTableSorted(String username){
         ArrayList<Object[]> sortedOrders = CreateDeliveryRoute.orderListForTable(cateringAdress,getAddresses());
@@ -277,8 +274,8 @@ public class Driver {
     }
 
     /**
-     *
-     * @return
+     * Get the addresses from the table.
+     * @return List of addresses.
      */
     private static ArrayList<String> getAddresses(){
         ArrayList<String> out = new ArrayList<>();
@@ -289,9 +286,9 @@ public class Driver {
     }
 
     /**
-     *
-     * @param username
-     * @return
+     * Checks if the driving limit is reached for a specific driver.
+     * @param username Username of the driver.
+     * @return True or false if the driving limit is reached.
      */
     private boolean isDrivingLimitReached(String username){
         int limit = 8;
