@@ -394,6 +394,7 @@ public class AddSubscription extends JDialog{
 
             setVisible(false);
             dispose();
+            GUI.WindowPanels.Subscriptions.updateSubscriptions();
         });
 
         pack();

@@ -184,23 +184,45 @@ public class Chef {
             boolean lookingForOrder = true;
 
             while(count < prepareTable.getRowCount() && lookingForOrder){ //blar gjennom radene
+                //finds amount of orders with same order id
+                int orderId = -1;
                 if((Boolean)prepareTable.getValueAt(count, 6)){ //er checkbox checket?
 
-                    int input = showConfirmDialog(null,"Do you want update status for orderID " +prepareTable.getValueAt(count, 0)+"?","",YES_NO_OPTION);
-                    if(input==YES_OPTION) {
-                        if (OrderType.ACTIVE == prepareTable.getValueAt(count, 5)) { //er den aktiv, sett til processsing
-                            orderManagement.updateStatus((Integer) prepareTable.getValueAt(count, 0), OrderType.PROCESSING.getValue());
+                    //get ids
+                    orderId = (Integer)prepareTable.getValueAt(count, 0);
+                    int recipeId = foodManagement.getRecipeIDPub((String)prepareModel.getValueAt(count,1));
 
-                        } else {//er den processing, set til ready
-                            orderManagement.updateStatus((Integer) prepareTable.getValueAt(count, 0), OrderType.READY.getValue());
+                    //update orderrecipe
+                    int orderCount = 0;
+                    int processingCount = 0;
 
+                    //updates table
+                    updatePrepareTable();
+
+                    //checks wether all rows with same id is checked.
+                    for(int i = 0; i<prepareModel.getRowCount();i++){
+                        if(orderId == (Integer)prepareTable.getValueAt(i, 0)){
+                            orderCount++;
                         }
-                        updatePrepareTable();
-                        lookingForOrder = false;
+                        if(FoodManagement.OrderRecipeStatus.PROCESSING == prepareTable.getValueAt(i, 5)){
+                            processingCount++;
+                        }
+                        System.out.println("OrderCount = "+orderCount+", ProcessingCount: "+processingCount);
                     }
-                    else{
-                        prepareTable.setValueAt(false, count, 6);
+                    if(orderCount-1 == processingCount && prepareTable.getValueAt(count, 5)!= FoodManagement.OrderRecipeStatus.PROCESSING){
+                        int input = showConfirmDialog(null,"Do you want set order " +prepareTable.getValueAt(count, 0)+" as ready for delivery?","",YES_NO_OPTION);
+                        if(input==YES_OPTION) {
+                            orderManagement.updateStatus((Integer) prepareTable.getValueAt(count, 0), OrderType.READY.getValue());
+                            lookingForOrder = false;
+                        }
+                        else{
+                            prepareTable.setValueAt(false, count, 6);
+                        }
                     }
+                    else {
+                        foodManagement.updateOrderRecipeStatus(orderId, recipeId, FoodManagement.OrderRecipeStatus.PROCESSING.getValue());
+                    }
+                    updatePrepareTable();
                 }
                 count++;
             }

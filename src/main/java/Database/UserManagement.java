@@ -116,6 +116,31 @@ public class UserManagement extends Management {
             return out;
         } else return null;
     }
+    public ArrayList<Object[]> getDrivers() {
+        ArrayList<Object[]> out = new ArrayList<>();
+        if (setUp()) {
+            try {
+                conn = getConnection();
+                prep = conn.prepareStatement("select username from user WHERE status = ? AND access_level = ? order by username;");
+                prep.setInt(1,1); //ACTIVE
+                prep.setInt(2,UserType.DRIVER.getValue());
+                res = prep.executeQuery();
+
+                while (res.next()) {
+                    Object[] obj = new Object[1];
+                    obj[0] = res.getString("username");
+                    out.add(obj);
+                }
+            } catch (SQLException e) {
+                System.err.println("Issue with executing SQL scentence.");
+                return null;
+            } finally {
+                finallyStatement(res, prep);
+            }
+            return out;
+        } else return null;
+
+    }
 
 
     public ArrayList<Object[]> userInfo() {

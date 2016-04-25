@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import static Database.OrderManagement.OrderType;
 
@@ -104,11 +105,11 @@ public class SubscriptionManagement extends Management{
 
         obj[0] = res.getInt("sub_id");
         obj[1] = res.getString("name");
-        obj[2] = res.getString("date_to");
-        obj[3] = res.getString("date_from");
+        obj[2] = res.getString("date_from");
+        obj[3] = res.getString("date_to");
         obj[4] = res.getInt("sub_type"); // frequency.
-
         return obj;
+
     }
 
     public ArrayList<Object[]> subscriptionSearch(String searchTerm){

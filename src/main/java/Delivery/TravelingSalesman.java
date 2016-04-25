@@ -64,11 +64,18 @@ public class TravelingSalesman {
     }
 
     //Hentet en del fra http://stackoverflow.com/questions/11703827/brute-force-algorithm-for-the-traveling-salesman-problem-in-java
+
+    //r is current route, citiesNotInRoute are the remaining cities not added to route.
     public void bruteForceFindBestRoute
     (ArrayList<double[]> r,
      ArrayList<double[]> citiesNotInRoute) throws Exception {
+
+        //checks wether there are cities not yet added to route.
         if (!citiesNotInRoute.isEmpty()) {
+            //goes through the routes not added.
             for (int i = 0; i < citiesNotInRoute.size(); i++) {
+
+                System.out.println("Route = "+r.size()+", NotInRoute = "+citiesNotInRoute.size());
                 double[] justRemoved = citiesNotInRoute.remove(0);
                 ArrayList<double[]> newRoute = (ArrayList<double[]>) r.clone();
                 newRoute.add(justRemoved);

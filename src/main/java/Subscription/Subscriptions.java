@@ -84,17 +84,33 @@ public class Subscriptions {
         if (!(subID > 0)) {
             return false;
         }
-        String prevDate = dateFrom;
         boolean flag = true;
             // +++
         int count = 0;
-        while (flag) {
+        String prevDate = dateFrom;
+
+        for (Object[][] obj : recipesWithDay) {
+            ArrayList<Object[]> recipes = new ArrayList<>();
+            for (int i = 0; i < obj[0].length; i++) {
+                Object[] tmp = new Object[2];
+                tmp[1] = obj[0][i];
+                tmp[0] = obj[1][i];
+                recipes.add(tmp);
+            }
+            prevDate = findFirstDate((Integer) obj[2][0], prevDate, dateTo);
+            if(prevDate.equals("")) return true;
+            if (!order.createOrderSub(custID, prevDate, recipes, (String)obj[3][0], (String)obj[4][0], subID)){
+                return false;
+            }
+        }
+
+            while (flag) {
             for (Object[][] obj : recipesWithDay) {
                 ArrayList<Object[]> recipes = new ArrayList<>();
                 for (int i = 0; i < obj[0].length; i++) {
                     Object[] tmp = new Object[2];
-                    tmp[0] = obj[0][i];
-                    tmp[1] = obj[1][i];
+                    tmp[1] = obj[0][i];
+                    tmp[0] = obj[1][i];
                     recipes.add(tmp);
 
                 }
@@ -146,6 +162,35 @@ public class Subscriptions {
                 else{
                     count++;
                 }
+            }
+        }
+        return null;
+    }
+    private static String findFirstDate(int day, String prevDateS, String dateTo) {
+        Date prevDate = null;
+        try {
+            prevDate = formatter.parse(prevDateS);
+        } catch (ParseException e) {
+            System.err.println("Issue with parsing date in subscription.");
+        }
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(prevDate);
+        if (day == 7) {
+            day = 1;
+        }               //SLIK UKEDAGENE ER SATT OPP CALENDAR.DAY_OF_WEEK
+        else {
+            day += 1;
+        }
+        int count = 0;
+
+        boolean stillNotEndOfWeek = true;
+        while (stillNotEndOfWeek) {
+            if(formatter.format(cal.getTime()).equals(dateTo)) {
+                return "";
+            }
+            cal.add(Calendar.DAY_OF_YEAR, 1);
+            if (cal.get(Calendar.DAY_OF_WEEK) == day) {
+                return formatter.format(cal.getTime());
             }
         }
         return null;
