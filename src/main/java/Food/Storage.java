@@ -18,7 +18,11 @@ public class Storage {
     private static FoodManagement foodManagement = new FoodManagement();
     private static FinanceManagement financeManagement = new FinanceManagement();
 
-
+    /**
+     * Removes ingredient from storage.
+     * @param orderID Order ID.
+     * @return
+     */
     public static boolean removeFromStorage(int orderID){
         ArrayList<Object[]> recipeInfo = orderManagement.getRecipesFromOrder(orderID); //0 = name, 1 = portion, 2 = id
         //get

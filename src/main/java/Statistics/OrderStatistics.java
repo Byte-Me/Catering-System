@@ -18,14 +18,17 @@ import java.util.Date;
 public class OrderStatistics extends Statistics{
     StatisticsManagement stat = new StatisticsManagement();
 
+    /**
+     * Constructor for OrderStatistics.
+     */
     public OrderStatistics(){
         super();
     }
 
     /**
-     *
-     * @param startDateS
-     * @param endDateS
+     * Creates a line chart from order.
+     * @param startDateS Start date.
+     * @param endDateS End date.
      * @return
      */
     public Object[] createLineChartFromOrder(String startDateS, String endDateS) { //[0] = JFreeChart, [1] = SumOrders
@@ -75,9 +78,9 @@ public class OrderStatistics extends Statistics{
     }
 
     /**
-     *
-     * @param startDateS
-     * @param endDateS
+     * Creates a bar chart from order.
+     * @param startDateS Start date.
+     * @param endDateS End date.
      * @return
      */
     public JPanel createBarChartFromOrder(String startDateS, String endDateS){
@@ -127,9 +130,9 @@ public class OrderStatistics extends Statistics{
     }
 
     /**
-     *
-     * @param startDateS
-     * @param endDateS
+     * Gets cancelled orders.
+     * @param startDateS Start date.
+     * @param endDateS End date.
      * @return
      */
     public int getCancelledOrders(String startDateS, String endDateS){

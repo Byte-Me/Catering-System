@@ -12,6 +12,9 @@ import java.util.ArrayList;
 public class UserManagement extends Management {
 
     // Defines the User Types
+    /**
+     * enum for UserType.
+     */
     public enum UserType {
         ADMIN, SALE, DRIVER, CHEF;
 
@@ -36,6 +39,9 @@ public class UserManagement extends Management {
 
     }
 
+    /**
+     * Constructor for UserManagement.
+     */
 
     public UserManagement() {
         super();
@@ -45,6 +51,17 @@ public class UserManagement extends Management {
     PreparedStatement prep = null;
     ResultSet res = null;
 
+    /**
+     * Checks if user is registered
+     * @param firstname String for user's first name.
+     * @param lastname String for user's last name.
+     * @param username String for user's username.
+     * @param password Strign for user's password.
+     * @param email String for user's email.
+     * @param phone String for user's phone number.
+     * @param accessLevel int for user's access level.
+     * @return Rows changed.
+     */
     public boolean registerUser(String firstname, String lastname, String username,
                                 String password, String email, String phone, int accessLevel) {
         Encryption enc = new Encryption();
@@ -87,6 +104,10 @@ public class UserManagement extends Management {
         }
         return rowChanged > 0;
     }
+
+    /**
+     * Gets a list of deleted users.
+     */
     public ArrayList<Object[]> getDeletedUsers() {
         ArrayList<Object[]> out = new ArrayList<>();
         if (setUp()) {
@@ -116,6 +137,9 @@ public class UserManagement extends Management {
             return out;
         } else return null;
     }
+    /**
+     * Gets a list of drivers.
+     */
     public ArrayList<Object[]> getDrivers() {
         ArrayList<Object[]> out = new ArrayList<>();
         if (setUp()) {
@@ -142,7 +166,9 @@ public class UserManagement extends Management {
 
     }
 
-
+    /**
+     * Gets a list of user info.
+     */
     public ArrayList<Object[]> userInfo() {
         ArrayList<Object[]> out = new ArrayList<>();
         if (setUp()) {
@@ -171,7 +197,10 @@ public class UserManagement extends Management {
         } else return null;
 
     }
-
+    /**
+     * Gets a single user's info.
+     * @param username String of user's username.
+     */
     public Object[] getSingleUserInfo(String username){
         Object[] out = new Object[6];
         if(setUp()){
@@ -201,6 +230,11 @@ public class UserManagement extends Management {
     }
 
 
+    /**
+     * Adds transactions to the update sentences so none can change anything when they update.
+     * @param username String of user's username.
+     * @param newData String of new data.
+    */
     public boolean updateUserInfoFName(String username, String newData) {
         int rowChanged = 0;
         if (setUp()) {
@@ -223,6 +257,12 @@ public class UserManagement extends Management {
         return rowChanged > 0;
     }
 
+    /**
+     * Updates user's password.
+     * @param username Strign of user's password.
+     * @param newData String of the new password.
+     * @return Rows changed.
+     */
     public boolean updateUserPass(String username, String newData) {
         int rowChanged = 0;
         if (setUp()) {
@@ -248,7 +288,12 @@ public class UserManagement extends Management {
         return rowChanged > 0;
     }
 
-
+    /**
+     * Updates the user's last name.
+     * @param username String of user's username.
+     * @param newData String of the new last name.
+     * @return Rows changed.
+     */
     public boolean updateUserInfoLName(String username, String newData) {
         int rowChanged = 0;
         if (setUp()) {
@@ -270,6 +315,12 @@ public class UserManagement extends Management {
         return rowChanged > 0;
     }
 
+    /**
+     * Updates the user's username.
+     * @param username String of user's username.
+     * @param newData String of the new username.
+     * @return Rows changed.
+     */
     public boolean updateUserInfoUsername(String username, String newData) {
         int rowChanged = 0;
         if (setUp()) {
@@ -291,6 +342,12 @@ public class UserManagement extends Management {
         return rowChanged > 0;
     }
 
+    /**
+     * Updates the user's phone number.
+     * @param username String of user's username.
+     * @param newData String of the new phone number.
+     * @return Rows changed.
+     */
     public boolean updateUserInfoPhone(String username, String newData) {
         int rowChanged = 0;
         if (setUp()) {
@@ -313,6 +370,12 @@ public class UserManagement extends Management {
         return rowChanged > 0;
     }
 
+    /**
+     * Updates the user's email address.
+     * @param username String of user's username.
+     * @param newData String of user's new email address.
+     * @return Rows changed.
+     */
     public boolean updateUserInfoEmail(String username, String newData) {
         int rowChanged = 0;
         if (setUp()) {
@@ -333,6 +396,13 @@ public class UserManagement extends Management {
         }
         return rowChanged > 0;
     }
+
+    /**
+     * Updates the user's access level.
+     * @param username String of the user's username.
+     * @param newData int of the new access level.
+     * @return Rows changed.
+     */
     public boolean updateUserInfoAccessLevel(String username, int newData) {
         int rowChanged = 0;
         if (setUp()) {
@@ -353,6 +423,12 @@ public class UserManagement extends Management {
         }
         return rowChanged > 0;
     }
+
+    /**
+     * List of user search.
+     * @param searchTerm String of the written search.
+     * @return
+     */
     public ArrayList<Object[]> userSearch(String searchTerm){
         ArrayList<Object[]> out = new ArrayList<>();
         if(setUp()) {
@@ -389,6 +465,12 @@ public class UserManagement extends Management {
         else return null;
     }
 
+    /**
+     * Updates user's status.
+     * @param username String of user's username.
+     * @param status int of user's status.
+     * @return Rows changed.
+     */
     public boolean updateUserStatus(String username, int status) {
         int rowChanged = 0;
         if (setUp()) {
@@ -410,10 +492,20 @@ public class UserManagement extends Management {
         return rowChanged > 0;
     }
 
+    /**
+     * Deletes user.
+     * @param username String of user's username.
+     * @return
+     */
     public boolean deleteUser(String username){
         return updateUserStatus(username, 0);
     }
 
+    /**
+     * Reactivates user.
+     * @param username String of user's username.
+     * @return
+     */
     public boolean reactivateUser(String username){
         return updateUserStatus(username, 1);
     }

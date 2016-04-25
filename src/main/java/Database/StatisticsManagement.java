@@ -12,6 +12,10 @@ import java.util.ArrayList;
  * Created by Evdal on 15.03.2016.
  */
 public class StatisticsManagement extends Management{
+
+    /**
+     * Constructor of StatisticsManagement.
+     */
     public StatisticsManagement(){
         super();
     }
@@ -25,6 +29,12 @@ public class StatisticsManagement extends Management{
     ResultSet res = null;
     PreparedStatement prep = null;
 
+    /**
+     * List of finance info.
+     * @param firstDate First date.
+     * @param lastDate Last date.
+     * @return
+     */
     public ArrayList<long[]> getFinanceInfo(String firstDate, String lastDate){
         ArrayList<long[]> out = new ArrayList<>();
         if(setUp()) {
@@ -50,6 +60,14 @@ public class StatisticsManagement extends Management{
         }
         return out;
     }
+
+    /**
+     * List of dates.
+     * @param firstDate First date.
+     * @param lastDate Last date.
+     * @param name Name.
+     * @return
+     */
     public ArrayList<String> getDates(String firstDate, String lastDate, String name){
         ArrayList<String> out = new ArrayList<>();
         if(setUp()) {
@@ -71,6 +89,14 @@ public class StatisticsManagement extends Management{
         }
         return out;
     }
+
+    /**
+     * Gets cancelled dates.
+     * @param firstDate First date.
+     * @param lastDate Last date.
+     * @param name Name.
+     * @return
+     */
     public ArrayList<String> getCancelledDates(String firstDate, String lastDate, String name){
         ArrayList<String> out = new ArrayList<>();
         if(setUp()) {
@@ -93,6 +119,10 @@ public class StatisticsManagement extends Management{
         return out;
     }
 
+    /**
+     * Gets subscription dates.
+     * @return
+     */
     public ArrayList<String[]> getSubDates(){
         ArrayList<String[]> out = new ArrayList<>();
         if(setUp()){
