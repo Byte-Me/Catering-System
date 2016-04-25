@@ -29,6 +29,21 @@ public class CreateDeliveryRoute {
 
         return out;
     }
+    public static ArrayList<String> deliveryListForTest(String startAdress, ArrayList<String> adressNames) {
+        ArrayList<String> out = null;
+        try {
+            TravelingSalesman tsp = new TravelingSalesman(startAdress);
+            //  ArrayList<String> adressNames = dm.getAdressReady();
+            System.out.println(adressNames);
+            ArrayList<double[]> positions = tsp.createPositionsArrayShortened(adressNames);
+            tsp.bruteForceFindBestRoute(new ArrayList<>(), positions);
+            out = tsp.positionsToAdresses(tsp.getBestRoute(), adressNames);
+        } catch (Exception e) {
+
+        }
+        return out;
+    }
+
 
     public static ArrayList<Object[]> orderListForTable(String startAdress, ArrayList<String> adressNames){
         ArrayList<Object[]> out;
@@ -40,9 +55,10 @@ public class CreateDeliveryRoute {
             ArrayList<double[]> positions = tsp.createPositionsArrayShortened(adressNames);
             tsp.bruteForceFindBestRoute(new ArrayList<>(), positions);
             ArrayList<String> tmp = tsp.positionsToAdresses(tsp.getBestRoute(), adressNames);
-            System.out.println(tmp);
             ArrayList<double[]> br = tsp.getBestRoute();
             out = dev.getDeliveryInfo(tmp);
+            System.out.println(out);
+
         }
         catch (Exception e){
             System.err.println("Issue with creating delivery route.");

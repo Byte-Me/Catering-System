@@ -13,6 +13,8 @@ import java.util.stream.Collectors;
 
 public class CreateShoppingList {
     static NumberFormat formatter = new DecimalFormat("#0");
+
+
     public static ArrayList<Object[]> withDates(String fDate, String tDate){
 
         FoodManagement food = new FoodManagement();

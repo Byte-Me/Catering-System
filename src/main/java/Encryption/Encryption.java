@@ -11,7 +11,15 @@ import java.util.Random;
  * Created by M/ed on 07.03.2016.
  */
 public class Encryption {
-
+    /**
+     * Checks whether to passwords are the same using an input password,
+     * salt and a hash.
+     *
+     * @param pass Password from user
+     * @param saltString Salt from database.
+     * @param hashString Hash from database
+     * @return boolean whether they matched.
+     */
     public boolean passDecoding(String pass, String saltString, String hashString) {
         byte[] salt = stringToByte(saltString);
 
@@ -34,6 +42,11 @@ public class Encryption {
 
     }
 
+    /**
+     * Creates a salt and hash for storage in the database using only an input password.
+     * @param password password you want to encrypt
+     * @return a string array of the resulting hash and salt.
+     */
     public String[] passEncoding(String password){
         Random rand = new Random();
         byte[] salt = new byte[16];
@@ -64,15 +77,4 @@ public class Encryption {
 
     }
 
-//}
-
-
-    //Eks program:
-
-    public static void main(String[] args) throws Exception {
-        Encryption en = new Encryption();
-        String[] passInfo = en.passEncoding("password");
-        if (en.passDecoding("password", "2oUGF8AAgobU1E3rcAtyiw==", "oQaZgG266KjDzEkGTgXYMQ=="));
-        //}*/
-    }
 }
