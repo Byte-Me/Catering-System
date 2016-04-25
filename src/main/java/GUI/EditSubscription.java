@@ -67,8 +67,16 @@ public class EditSubscription extends JDialog{
     private Subscriptions subs = new Subscriptions();
 
     /**
-     * Constructor for EditSubscription.
-     * @param subId int for the subscription ID.
+     * A constructor generating a window with automaticallt
+     * filled in input fields needed to edit a subscription.
+     *
+     * There is some non-dynamic logic used to create the  checkboxes
+     * and corresponding order-input fields.
+     *
+     * Also includes actionlisteners for an add subscription button. Which
+     * sends the information to the database.
+     *
+     * @param subId The id of subscription to be edited, used to fill inn information.
      */
     public EditSubscription(int subId) {
         setTitle("Edit Subscription");
@@ -231,7 +239,6 @@ public class EditSubscription extends JDialog{
 
     }
 
-
     private int existsInTable(JTable table, String entry) {
         for (int i = 0; i < table.getRowCount(); i++) {
             if (table.getValueAt(i, 0).equals(entry)) {
@@ -242,6 +249,9 @@ public class EditSubscription extends JDialog{
     }
 
 
+    /**
+     * Updates the dropdown of customers, used when window is opened and if a new customer is added.
+     */
     private void updateDropdown(){
         customerDropdown.removeAllItems();
         customers = customerManagement.getCustomers();
@@ -252,7 +262,10 @@ public class EditSubscription extends JDialog{
 
     }
 
+    /**
+     * Creates JDatePicker with correct dates. Needed to create a custom palette from form.
 
+     */
     private void createUIComponents() {
 
         // Date Pickers start
@@ -277,6 +290,10 @@ public class EditSubscription extends JDialog{
         endDatePick = new JDatePickerImpl(toPanel, new DateLabelFormatter());
     }
 
+    /**
+     * Private method used by the constructor to fill in subscription information.
+     * @param id Subscription id to know which subscription to update.
+     */
     private void fillSubInfo(int id){
         Object[] info = subs.getSubInfoFromId(id);
         ArrayList<Object[]> panelInfo = (ArrayList<Object[]>)info[0];
@@ -337,7 +354,9 @@ public class EditSubscription extends JDialog{
 
     }
 
-
+    /**
+     * private method to add a spesific panel to the window.
+     */
     private void addMonPanel(){
         if(monPanel == null) {
             monPanel = new PanelForSubs(1);
@@ -354,7 +373,10 @@ public class EditSubscription extends JDialog{
         }
     }
 
+    /**
+     * private method to add a spesific panel to the window.
 
+     */
     private void addTuePanel(){
         if(tuePanel == null) {
             tuePanel = new PanelForSubs(2);
@@ -382,7 +404,10 @@ public class EditSubscription extends JDialog{
         }
     }
 
+    /**
+     * private method to add a spesific panel to the window.
 
+     */
     private void addWedPanel(){
         if(wedPanel == null) {
             wedPanel = new PanelForSubs(3);
@@ -414,7 +439,10 @@ public class EditSubscription extends JDialog{
         }
     }
 
+    /**
+     * private method to add a spesific panel to the window.
 
+     */
     private void addThuPanel(){
         if(thuPanel == null) {
             thuPanel = new PanelForSubs(4);
@@ -449,7 +477,10 @@ public class EditSubscription extends JDialog{
         }
     }
 
+    /**
+     * private method to add a spesific panel to the window.
 
+     */
     private void addFriPanel(){
         if(friPanel == null) {
             friPanel = new PanelForSubs(5);
@@ -488,6 +519,10 @@ public class EditSubscription extends JDialog{
         dayTabbedPane.revalidate();
     }
 
+    /**
+     * private method to add a spesific panel to the window.
+
+     */
     private void addSatPanel(){
         if(satPanel == null) {
             satPanel = new PanelForSubs(6);
@@ -527,7 +562,10 @@ public class EditSubscription extends JDialog{
         }
     }
 
+    /**
+     * private method to add a spesific panel to the window.
 
+     */
     private void addSunPanel(){
         if(sunPanel == null) {
             sunPanel = new PanelForSubs(7);
@@ -570,22 +608,6 @@ public class EditSubscription extends JDialog{
             }
         }
 
-    }
-    private ArrayList<Object[]> orderList(ArrayList<Object[]> list) {
-        ArrayList<Object[]> out = new ArrayList<>();
-        while(!list.isEmpty()) {
-            int smallestValue = 7;
-            int index = 0;
-            for (int i = 0; i < list.size(); i++) {
-                if ((Integer) list.get(i)[2] < smallestValue) {
-                    smallestValue = (Integer) list.get(i)[2];
-                    index = i;
-                }
-            }
-            out.add(list.get(index));
-            list.remove(index);
-        }
-        return out;
     }
 
 

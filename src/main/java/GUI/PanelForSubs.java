@@ -49,8 +49,8 @@ public class PanelForSubs extends JPanel {
     private final String seconds = ":00";
 
     /**
-     *
-     * @param day
+     * Panel created as a new tab for each day added to a subscription.
+     * @param day which day the panel should be added for. 0-7, where 0 is sunday.
      */
     public PanelForSubs(int day){
 
@@ -211,16 +211,17 @@ public class PanelForSubs extends JPanel {
     }
 
     /**
-     *
-     * @return
+     * A method for adding the panel as a tab.
+     * @return return the panel created.
      */
     public JPanel getMainPanel(){
         return mainPanel;
     }
 
     /**
-     *
-     * @return
+     * A method to get the information inputted in the panel for use
+     * in creating a new subscription.
+     * @return returns all the recipes, as well as a comment for the day, which time and
      */
     public Object[][] getValues(){
         Date selectedTime = (Date)timeSpinner.getValue();

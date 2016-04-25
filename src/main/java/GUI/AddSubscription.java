@@ -74,7 +74,15 @@ public class AddSubscription extends JDialog{
     private ArrayList<Object[]> customers;
 
     /**
-     * Constructor to the AddSubscription graphical user interface.
+     * A constructor generating a window with input fields needed
+     * to create a new subscription.
+     *
+     * There is some non-dynamic logic used to create the  checkboxes
+     * and corresponding order-input fields.
+     *
+     * Also includes actionlisteners for an add subscription button. Which
+     * sends the information to the database.
+     *
      */
     public AddSubscription() {
         setTitle("New Subscription");
@@ -405,22 +413,7 @@ public class AddSubscription extends JDialog{
     }
 
     /**
-     *
-     * @param table
-     * @param entry
-     * @return
-     */
-    private int existsInTable(JTable table, String entry) {
-        for (int i = 0; i < table.getRowCount(); i++) {
-            if (table.getValueAt(i, 0).equals(entry)) {
-                return i;
-            }
-        }
-        return -1;
-    }
-
-    /**
-     *
+     * Updates the dropdown of customers, used when window is opened and if a new customer is added.
      */
     private void updateDropdown(){
         customerDropdown.removeAllItems();
@@ -433,6 +426,7 @@ public class AddSubscription extends JDialog{
     }
 
     /**
+     * Creates JDatePicker with correct dates. Needed to create a custom palette from form.
      *
      */
     private void createUIComponents() {
