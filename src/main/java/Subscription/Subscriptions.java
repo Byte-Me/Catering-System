@@ -33,6 +33,7 @@ public class Subscriptions {
         return activeSubs;
     }
 
+
     public boolean checkSubscriptionActive(String dateFrom, String dateTo, Date today) {
         Date from = null;
         Date to = null;
