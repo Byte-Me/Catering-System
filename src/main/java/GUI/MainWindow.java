@@ -1,6 +1,5 @@
 package GUI;
 
-import Database.UserManagement;
 import Database.UserManagement.UserType;
 import GUI.WindowPanels.*;
 
@@ -10,8 +9,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import static Updates.UpdateHandler.startAutoUpdate;
-import static Updates.UpdateHandler.updateTab;
+import static Util.Updates.UpdateHandler.startAutoUpdate;
+import static Util.Updates.UpdateHandler.updateTab;
 
 
 /**

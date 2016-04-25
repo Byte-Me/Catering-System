@@ -1,7 +1,6 @@
 package Database;
 
-import Encryption.Encryption;
-import org.apache.commons.dbutils.DbUtils;
+import Util.Encryption.Encryption;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -258,7 +257,7 @@ public class UserManagement extends Management {
     }
 
     /**
-     * Updates user's password.
+     * Util.Updates user's password.
      * @param username Strign of user's password.
      * @param newData String of the new password.
      * @return Rows changed.
@@ -289,7 +288,7 @@ public class UserManagement extends Management {
     }
 
     /**
-     * Updates the user's last name.
+     * Util.Updates the user's last name.
      * @param username String of user's username.
      * @param newData String of the new last name.
      * @return Rows changed.
@@ -316,7 +315,7 @@ public class UserManagement extends Management {
     }
 
     /**
-     * Updates the user's username.
+     * Util.Updates the user's username.
      * @param username String of user's username.
      * @param newData String of the new username.
      * @return Rows changed.
@@ -343,7 +342,7 @@ public class UserManagement extends Management {
     }
 
     /**
-     * Updates the user's phone number.
+     * Util.Updates the user's phone number.
      * @param username String of user's username.
      * @param newData String of the new phone number.
      * @return Rows changed.
@@ -371,7 +370,7 @@ public class UserManagement extends Management {
     }
 
     /**
-     * Updates the user's email address.
+     * Util.Updates the user's email address.
      * @param username String of user's username.
      * @param newData String of user's new email address.
      * @return Rows changed.
@@ -398,7 +397,7 @@ public class UserManagement extends Management {
     }
 
     /**
-     * Updates the user's access level.
+     * Util.Updates the user's access level.
      * @param username String of the user's username.
      * @param newData int of the new access level.
      * @return Rows changed.
@@ -466,7 +465,7 @@ public class UserManagement extends Management {
     }
 
     /**
-     * Updates user's status.
+     * Util.Updates user's status.
      * @param username String of user's username.
      * @param status int of user's status.
      * @return Rows changed.

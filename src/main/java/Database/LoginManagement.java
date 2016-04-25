@@ -1,7 +1,7 @@
 package Database;
 
 
-import Encryption.Encryption;
+import Util.Encryption.Encryption;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

@@ -2,7 +2,7 @@ package GUI;
 
 import Database.FoodManagement;
 import GUI.WindowPanels.Chef;
-import HelperClasses.MainTableModel;
+import Util.HelperClasses.MainTableModel;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -132,7 +132,7 @@ public class AddIngredient extends JDialog {
     }
 
     /**
-     * Updates the in storage table with ingredients from the database.
+     * Util.Updates the in storage table with ingredients from the database.
      */
     public static void updateIngredients() {
         FoodManagement foodManagement = new FoodManagement();

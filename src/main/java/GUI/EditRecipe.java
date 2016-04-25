@@ -1,7 +1,7 @@
 package GUI;
 
 import Database.FoodManagement;
-import HelperClasses.MainTableModel;
+import Util.HelperClasses.MainTableModel;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;

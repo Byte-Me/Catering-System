@@ -1,4 +1,4 @@
-package Delivery;
+package Util.Delivery;
 
 import com.google.code.geocoder.Geocoder;
 import com.google.code.geocoder.GeocoderRequestBuilder;
@@ -8,7 +8,6 @@ import com.google.code.geocoder.model.GeocoderResult;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**

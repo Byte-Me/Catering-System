@@ -1,4 +1,4 @@
-package Statistics;
+package Util.Statistics;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

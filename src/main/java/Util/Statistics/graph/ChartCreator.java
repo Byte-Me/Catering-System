@@ -1,4 +1,4 @@
-package Statistics.graph;
+package Util.Statistics.graph;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;

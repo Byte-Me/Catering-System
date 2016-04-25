@@ -1,7 +1,7 @@
-package Statistics;
+package Util.Statistics;
 
 import Database.StatisticsManagement;
-import Statistics.graph.ChartCreator;
+import Util.Statistics.graph.ChartCreator;
 
 import javax.swing.*;
 import java.text.ParseException;

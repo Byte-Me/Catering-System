@@ -181,7 +181,7 @@ public class SubscriptionManagement extends Management{
 
     /**
      * Container of subscription orders.
-     * @param subId Subscription ID
+     * @param subId Util.Subscription ID
      * @return
      */
     public int containsSubOrder(int subId){
@@ -213,7 +213,7 @@ public class SubscriptionManagement extends Management{
      * @param dateFrom Date when subscription starts.
      * @param dateTo Date when subscription ends.
      * @param frequency Frequency of the orders in the subscription (how many weeks between each order).
-     * @param subId Subscription ID
+     * @param subId Util.Subscription ID
      * @return
      */
     public int createSubscription(int custID, String dateFrom, String dateTo, int frequency, int subId){ //subid = -1 if not exists
@@ -252,7 +252,7 @@ public class SubscriptionManagement extends Management{
 
     /**
      * Gets subscription info from ID.
-     * @param subId Subscription ID.
+     * @param subId Util.Subscription ID.
      * @return
      */
     public Object[] getSubInfoFromId(int subId){
@@ -313,7 +313,7 @@ public class SubscriptionManagement extends Management{
 
     /**
      * Gets recipe info from subscription ID and date.
-     * @param subId Subscription ID.
+     * @param subId Util.Subscription ID.
      * @param date Date.
      * @return
      */
@@ -359,7 +359,7 @@ public class SubscriptionManagement extends Management{
 
     /**
      * Deletes subscription.
-     * @param subId Subscription ID.
+     * @param subId Util.Subscription ID.
      * @return
      */
     public boolean deleteSubscription(int subId){

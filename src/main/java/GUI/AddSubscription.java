@@ -2,25 +2,16 @@ package GUI;
 
 import Database.CustomerManagement;
 import Database.FoodManagement;
-import Database.OrderManagement;
-import Database.SubscriptionManagement;
-import GUI.WindowPanels.Driver;
-import HelperClasses.DateLabelFormatter;
-import Subscription.Subscriptions;
-import javafx.scene.layout.Pane;
+import Util.HelperClasses.DateLabelFormatter;
+import Util.Subscription.Subscriptions;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.MaskFormatter;
-import javax.swing.text.html.ObjectView;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -413,7 +404,7 @@ public class AddSubscription extends JDialog{
     }
 
     /**
-     * Updates the dropdown of customers, used when window is opened and if a new customer is added.
+     * Util.Updates the dropdown of customers, used when window is opened and if a new customer is added.
      */
     private void updateDropdown(){
         customerDropdown.removeAllItems();

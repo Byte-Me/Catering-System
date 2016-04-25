@@ -1,12 +1,10 @@
-package Food;
+package Util.Food;
 
 import Database.FinanceManagement;
 import Database.FoodManagement;
 import Database.OrderManagement;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Objects;
 
 /**
  * Created by Evdal on 15.03.2016.

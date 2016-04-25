@@ -2,23 +2,19 @@ package GUI.WindowPanels;
 
 import Database.FoodManagement;
 import Database.OrderManagement;
-import Food.Storage;
 import GUI.AddIngredient;
 import GUI.EditIngredient;
 import GUI.GenerateShoppingList;
 import GUI.Recipes;
-import HelperClasses.MainTableModel;
-import HelperClasses.ToggleSelectionModel;
+import Util.HelperClasses.MainTableModel;
+import Util.HelperClasses.ToggleSelectionModel;
 
 import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import static Database.OrderManagement.OrderType;
 import static javax.swing.JOptionPane.*;
@@ -241,7 +237,7 @@ public class Chef {
     }
 
     /**
-     * Updates the prepare table from the database.
+     * Util.Updates the prepare table from the database.
      */
     public static void updatePrepareTable() {
         FoodManagement foodManagement = new FoodManagement();
@@ -257,7 +253,7 @@ public class Chef {
     }
 
     /**
-     * Updates the ingredient table from the database.
+     * Util.Updates the ingredient table from the database.
      */
     public static void updateIngredients() {
         FoodManagement foodManagement = new FoodManagement();

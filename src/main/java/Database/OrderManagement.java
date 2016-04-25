@@ -1,6 +1,6 @@
 package Database;
 
-import Food.FoodFinance;
+import Util.Food.FoodFinance;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -113,7 +113,7 @@ public class OrderManagement extends Management {
     }
 
     /**
-     * Updates status for specified order id
+     * Util.Updates status for specified order id
      * @param orderID order id you want to change the status to
      * @param newStatus the new status the order id will be changed to
      * @return true when update is successful
@@ -433,7 +433,7 @@ public class OrderManagement extends Management {
     }
 
     /**
-     * Updates the order date
+     * Util.Updates the order date
      * @param orderDate The new date the order will recive
      * @param orderID The id to the order that will be changed
      * @return True or false depending on if the update was successful
@@ -443,7 +443,7 @@ public class OrderManagement extends Management {
     }
 
     /**
-     * Updates the order time
+     * Util.Updates the order time
      * @param orderTime The new time the order will recive
      * @param orderID The id to the order that will be changed
      * @return True or false depending on if the update was successful
@@ -453,7 +453,7 @@ public class OrderManagement extends Management {
     }
 
     /**
-     * Updates the customer to a order
+     * Util.Updates the customer to a order
      * @param orderID The id to the order that will be changed
      * @param newCustId The new id to the customer that it will be changed to
      * @return True or false depending on if the update was successful
@@ -480,7 +480,7 @@ public class OrderManagement extends Management {
     }
 
     /**
-     * Updates the recipes to a order
+     * Util.Updates the recipes to a order
      * @param orderID The id to the order that will be changed
      * @param recipes The recipes that will be updated
      * @return True or false depending on if the update was successful
@@ -515,7 +515,7 @@ public class OrderManagement extends Management {
     }
 
     /**
-     * Updates the comment to an specified order
+     * Util.Updates the comment to an specified order
      * @param comment The new comment the order will have
      * @param orderID The id to the order that will be changed
      * @return True or false depending on if the update was successful

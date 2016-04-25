@@ -3,7 +3,7 @@ package GUI;
 import Database.CustomerManagement;
 import Database.FoodManagement;
 import Database.OrderManagement;
-import HelperClasses.DateLabelFormatter;
+import Util.HelperClasses.DateLabelFormatter;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
@@ -12,7 +12,6 @@ import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.text.MaskFormatter;
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -288,7 +287,7 @@ public class AddOrder extends JDialog{
     }
 
     /**
-     * Updates the dropdown menu.
+     * Util.Updates the dropdown menu.
      */
     private void updateDropdown(){
         customerDropdown.removeAllItems();
