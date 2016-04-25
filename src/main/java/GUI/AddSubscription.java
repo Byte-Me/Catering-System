@@ -74,7 +74,7 @@ public class AddSubscription extends JDialog{
     private ArrayList<Object[]> customers;
 
     /**
-     *
+     * Constructor to the AddSubscription graphical user interface.
      */
     public AddSubscription() {
         setTitle("New Subscription");

@@ -157,10 +157,10 @@ public class Driver {
     }
 
     /**
-     *
-     * @param mapPanel
-     * @param generateDrivingRouteButton
-     * @throws IOException
+     * Creates a map with the JxBrowser plugin.
+     * @param mapPanel JPanel that contains the map.
+     * @param generateDrivingRouteButton JButton that generates a driving route.
+     * @throws IOException Exception if map is not loaded properly.
      */
     public void createMap(JPanel mapPanel, JButton generateDrivingRouteButton) throws IOException {
 
