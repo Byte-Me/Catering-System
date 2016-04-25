@@ -62,7 +62,10 @@ public class EditOrder extends JDialog {
 
     private UtilDateModel model; // DatePicker model
 
-
+    /**
+     *
+     * @param orderId
+     */
     public EditOrder(int orderId) {
         setTitle("Edit Order");
         setContentPane(mainPanel);
@@ -311,6 +314,9 @@ public class EditOrder extends JDialog {
         setVisible(true);
     }
 
+    /**
+     *
+     */
     private void createUIComponents() { // Creates the JDatePicker
         // Date Pickers start
         model = new UtilDateModel();
@@ -327,6 +333,12 @@ public class EditOrder extends JDialog {
         datePicker = new JDatePickerImpl(datePanel, new DateLabelFormatter());
     }
 
+    /**
+     *
+     * @param table
+     * @param entry
+     * @return
+     */
     private int existsInTable(JTable table, String entry) {
         for (int i = 0; i < table.getRowCount(); i++) {
             if (table.getValueAt(i, 0).equals(entry)) {
@@ -335,6 +347,10 @@ public class EditOrder extends JDialog {
         }
         return -1;
     }
+
+    /**
+     *
+     */
     public void updateDropdown(){
         customerDropdown.removeAllItems();
         customers = customerManagement.getCustomers();

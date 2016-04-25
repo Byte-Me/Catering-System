@@ -51,7 +51,14 @@ public class Driver {
 
     private String username;
 
-
+    /**
+     *
+     * @param driverTable
+     * @param mapPanel
+     * @param generateDrivingRouteButton
+     * @param driverDropdown
+     * @param currentUser
+     */
     public Driver(final JTable driverTable, JPanel mapPanel, JButton generateDrivingRouteButton, JComboBox driverDropdown, Object[] currentUser) {
 
         driverModel = new DefaultTableModel(){
@@ -149,20 +156,13 @@ public class Driver {
         });
 
     }
-/*
-    public static void updateDrivingRoute() {
-        ArrayList<Object[]> orders = orderListForTable(cateringAdress, getAddresses());
 
-        // Empties entries of Users table
-        driverModel.setRowCount(0);
-
-        // Add users from arraylist to table
-        for (Object[] order : orders) {
-            order[4] = false;
-            driverModel.addRow(order);
-        }
-    }
-*/
+    /**
+     *
+     * @param mapPanel
+     * @param generateDrivingRouteButton
+     * @throws IOException
+     */
     public void createMap(JPanel mapPanel, JButton generateDrivingRouteButton) throws IOException {
 
         // Reduce logging -- doesn't work?
@@ -200,6 +200,10 @@ public class Driver {
         });
     }
 
+    /**
+     *
+     * @return
+     */
     private static String getDrivingRoute() {
         System.out.println(cateringAdress); // DEBUG
 
@@ -233,6 +237,10 @@ public class Driver {
         return "";
 
     }
+
+    /**
+     *
+     */
     private void updateDropdown(){
         driverDropdown.removeAllItems();
         ArrayList<Object[]> drivers = userManagement.getDrivers();
@@ -241,6 +249,11 @@ public class Driver {
             driverDropdown.addItem(driver[0]);
         }
     }
+
+    /**
+     *
+     * @param username
+     */
     public static void updateDriverTable(String username){
         driverModel.setRowCount(0);
         ArrayList<Object[]> orders = deliveryManagement.getOrdersForDriver(username);
@@ -249,6 +262,11 @@ public class Driver {
             driverModel.addRow(order);
         }
     }
+
+    /**
+     *
+     * @param username
+     */
     public static void updateDriverTableSorted(String username){
         ArrayList<Object[]> sortedOrders = CreateDeliveryRoute.orderListForTable(cateringAdress,getAddresses());
         driverModel.setRowCount(0);
@@ -257,6 +275,11 @@ public class Driver {
             driverModel.addRow(order);
         }
     }
+
+    /**
+     *
+     * @return
+     */
     private static ArrayList<String> getAddresses(){
         ArrayList<String> out = new ArrayList<>();
         for(int i = 0; i<driverModel.getRowCount();i++){
@@ -264,6 +287,12 @@ public class Driver {
         }
         return out;
     }
+
+    /**
+     *
+     * @param username
+     * @return
+     */
     private boolean isDrivingLimitReached(String username){
         int limit = 8;
         int count = deliveryManagement.countDriverDeliveries(username);

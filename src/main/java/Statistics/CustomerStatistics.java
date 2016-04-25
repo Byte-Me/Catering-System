@@ -12,8 +12,15 @@ import java.util.Date;
  * Created by Evdal on 18.03.2016.
  */
 public class CustomerStatistics extends Statistics{
-    //TODO: Customers må ha en dato for når de ble opprettet.
+
     private StatisticsManagement stats = new StatisticsManagement();
+
+    /**
+     *
+     * @param dateFrom
+     * @param dateTo
+     * @return
+     */
     public JPanel customerLineGraph(String dateFrom, String dateTo){
         ArrayList<String> customers = stats.getDates(dateFrom,dateTo,"customer");
         Date from = null;

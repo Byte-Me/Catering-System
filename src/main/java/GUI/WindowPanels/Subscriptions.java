@@ -30,6 +30,14 @@ public class Subscriptions {
     private final int idColumnNr = 0;
     private final int nameColumnNr = 1;
 
+    /**
+     *
+     * @param subscriptionsTable
+     * @param searchSubscriptions
+     * @param addSubscriptionButton
+     * @param editSubscriptionButton
+     * @param deleteSubscriptionButton
+     */
     public Subscriptions(JTable subscriptionsTable, final JTextField searchSubscriptions, JButton addSubscriptionButton, JButton editSubscriptionButton, JButton deleteSubscriptionButton) {
 
         String[] headers = {"ID", "Name", "Date From", "Date To", "Frequency in weeks"};
@@ -180,6 +188,11 @@ public class Subscriptions {
         });
 
     }
+
+    /**
+     *
+     * @param searchTerm
+     */
     private static void updateFromSearch(String searchTerm){
         // Empties entries of Users table
         ArrayList<Object[]> searchResult = subscriptionManagement.subscriptionSearch(searchTerm);
@@ -191,7 +204,9 @@ public class Subscriptions {
         }
     }
 
-    // Update Subscription function
+    /**
+     *
+     */
     public static void updateSubscriptions() {
 
         // Get users from database

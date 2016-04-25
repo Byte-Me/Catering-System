@@ -16,6 +16,9 @@ public class SystemSettings extends JDialog {
     private JTextField city;
     private JTextField country;
 
+    /**
+     *
+     */
     public SystemSettings() {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
         setContentPane(mainPanel);

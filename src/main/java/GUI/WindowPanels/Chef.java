@@ -31,6 +31,16 @@ public class Chef {
     private OrderManagement orderManagement = new OrderManagement();
     static FoodManagement foodManagement = new FoodManagement();
 
+    /**
+     *
+     * @param prepareTable
+     * @param ingredientTable
+     * @param generateShoppingListButton
+     * @param recipesButton
+     * @param addIngredientButton
+     * @param editIngredientButton
+     * @param chefSplitPane
+     */
     public Chef(JTable prepareTable, JTable ingredientTable, JButton generateShoppingListButton, JButton recipesButton, JButton addIngredientButton, JButton editIngredientButton, JSplitPane chefSplitPane) {
         String[] prepareHeader = {"Order ID","Recipe", "Amount", "Time", "Notes", "Status", "Update"}; // Header titles
         String[] ingredientHeader = {"Ingredient", "Quantity", "Unit"}; // Header titles
@@ -228,38 +238,12 @@ public class Chef {
             }
         });
 
-        //FIXME
-        /*
-        //Search prepare-table
-        searchPrepare.getDocument().addDocumentListener(new DocumentListener() {
-            @Override
-            public void insertUpdate(DocumentEvent e) {
-                searchFieldChange();
-            }
-
-            @Override
-            public void removeUpdate(DocumentEvent e) {
-                searchFieldChange();
-            }
-
-            @Override
-            public void changedUpdate(DocumentEvent e) {
-                searchFieldChange();
-            }
-
-            private void searchFieldChange() {
-                String searchTerm = searchPrepare.getText();
-
-                ArrayList<Object[]> searchResult = foodManagement.prepareSearch(searchTerm);
-
-                updatePrepareTable(searchResult);
-            }
-        });
-        */
 
     }
 
-
+    /**
+     *
+     */
     public static void updatePrepareTable() {
         FoodManagement foodManagement = new FoodManagement();
         ArrayList<Object[]> recipes = foodManagement.getRecipesForChef();
@@ -272,6 +256,9 @@ public class Chef {
         }
     }
 
+    /**
+     *
+     */
     public static void updateIngredients() {
         FoodManagement foodManagement = new FoodManagement();
         ArrayList<Object[]> ingredients = foodManagement.getIngredients();
@@ -282,28 +269,5 @@ public class Chef {
             ingredientModel.addRow(ingredient);
         }
     }
-
-    //FIXME
-    /*
-    public static void updateIngredients(ArrayList<Object[]> ingredients) {
-        prepareModel.setRowCount(0);
-
-        for (Object[] ingredient : ingredients) {
-            prepareModel.addRow(ingredient);
-        }
-    }
-    */
-
-    //FIXME
-    /*
-    public static void updatePrepareTable(ArrayList<Object[]> recipes) {
-        prepareModel.setRowCount(0);
-
-        for (Object[] recipe : recipes) {
-            recipe[6] = false;
-            prepareModel.addRow(recipe);
-        }
-    }
-    */
-
+    
 }

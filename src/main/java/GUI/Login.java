@@ -20,6 +20,9 @@ public class Login extends JFrame{
 
     private LoginManagement dbconnect;
 
+    /**
+     *
+     */
     public Login() {
         setTitle("Login");
         setContentPane(mainPane);

@@ -46,6 +46,16 @@ public class ChartCreator extends JFrame {
 
     */
 
+    /**
+     *
+     * @param title
+     * @param xTitle
+     * @param yTitle
+     * @param xValues
+     * @param yValues
+     * @param dataInfo
+     * @return
+     */
     public static ChartPanel createLineChart(String title, String xTitle,
                                              String yTitle, ArrayList<String> xValues, ArrayList<Object> yValues, String dataInfo ) {
 
@@ -95,6 +105,13 @@ public class ChartCreator extends JFrame {
             returns NULL if not equal size.
          */
 
+    /**
+     *
+     * @param xValues
+     * @param yValues
+     * @param dataInfo
+     * @return
+     */
     private static DefaultCategoryDataset createDataset(ArrayList<String> xValues, //kan bare sende inn double eller int
                                                         ArrayList<Object> yValues, String dataInfo) {
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
@@ -118,6 +135,17 @@ public class ChartCreator extends JFrame {
 
         return dataset;
     }
+
+    /**
+     *
+     * @param title
+     * @param xTitle
+     * @param yTitle
+     * @param xValues
+     * @param yValues
+     * @param dataInfo
+     * @return
+     */
     public static ChartPanel createBarChart(String title, String xTitle,
                                              String yTitle, ArrayList<String> xValues, ArrayList<Object> yValues, String dataInfo ) {
 

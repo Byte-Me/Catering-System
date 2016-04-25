@@ -24,6 +24,9 @@ public class AddUser extends JDialog {
 
     UserManagement userManagement;
 
+    /**
+     *
+     */
     public AddUser() {
         setTitle("New User");
         setContentPane(mainPane);

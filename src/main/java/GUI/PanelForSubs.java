@@ -48,6 +48,10 @@ public class PanelForSubs extends JPanel {
     private final String defaultTimeValue = "12:00";
     private final String seconds = ":00";
 
+    /**
+     *
+     * @param day
+     */
     public PanelForSubs(int day){
 
 
@@ -190,6 +194,13 @@ public class PanelForSubs extends JPanel {
         rightButton.addActionListener(e -> recipeTableModel.removeRow(recipeTable.getSelectedRow()));
         setVisible(true);
     }
+
+    /**
+     *
+     * @param table
+     * @param entry
+     * @return
+     */
     private int existsInTable(JTable table, String entry) {
         for (int i = 0; i < table.getRowCount(); i++) {
             if (table.getValueAt(i, 0).equals(entry)) {
@@ -198,9 +209,19 @@ public class PanelForSubs extends JPanel {
         }
         return -1;
     }
+
+    /**
+     *
+     * @return
+     */
     public JPanel getMainPanel(){
         return mainPanel;
     }
+
+    /**
+     *
+     * @return
+     */
     public Object[][] getValues(){
         Date selectedTime = (Date)timeSpinner.getValue();
         DateFormat tFormat = new SimpleDateFormat("HH:mm:ss");
@@ -220,6 +241,10 @@ public class PanelForSubs extends JPanel {
 
     }
 
+    /**
+     *
+     * @param values
+     */
     public void addValues(Object[] values){
         SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
         for(Object[] obj : (ArrayList<Object[]>)values[0]){

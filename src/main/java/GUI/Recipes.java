@@ -27,6 +27,9 @@ public class Recipes extends JDialog {
 
     static FoodManagement foodManagement = new FoodManagement();
 
+    /**
+     *
+     */
     public Recipes() {
         setTitle("Recipes");
         setContentPane(mainPane);
@@ -87,6 +90,9 @@ public class Recipes extends JDialog {
         setVisible(true);
     }
 
+    /**
+     *
+     */
     public static void updateRecipes() {
         ArrayList<Object[]> recipes = foodManagement.getRecipes();
 

@@ -52,9 +52,9 @@ public class AddOrder extends JDialog{
     private CustomerManagement customerManagement = new CustomerManagement();
     private ArrayList<Object[]> customers;
 
-
-
-
+    /**
+     *
+     */
     public AddOrder() {
         setTitle("New Order");
         setContentPane(mainPanel);
@@ -253,6 +253,9 @@ public class AddOrder extends JDialog{
         setVisible(true);
     }
 
+    /**
+     *
+     */
     private void createUIComponents() { // Creates the JDatePicker
         // Date Pickers start
         UtilDateModel model = new UtilDateModel();
@@ -269,6 +272,12 @@ public class AddOrder extends JDialog{
         datePicker = new JDatePickerImpl(datePanel, new DateLabelFormatter());
     }
 
+    /**
+     *
+     * @param table
+     * @param entry
+     * @return
+     */
     private int existsInTable(JTable table, String entry) {
         for (int i = 0; i < table.getRowCount(); i++) {
             if (table.getValueAt(i, 0).equals(entry)) {
@@ -277,6 +286,10 @@ public class AddOrder extends JDialog{
         }
         return -1;
     }
+
+    /**
+     *
+     */
     private void updateDropdown(){
         customerDropdown.removeAllItems();
         customers = customerManagement.getCustomers();

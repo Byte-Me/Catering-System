@@ -27,7 +27,16 @@ public class Users {
     static MainTableModel inactiveUserModel;
     static DefaultListSelectionModel listSelectionModel;
 
-    // Create Users Pane
+    /**
+     *
+     * @param addUserButton
+     * @param userTable
+     * @param inactiveUserTable
+     * @param searchUsers
+     * @param deleteUsersButton
+     * @param editUserButton
+     * @param reactivateUserButton
+     */
     public Users(JButton addUserButton, final JTable userTable, JTable inactiveUserTable, final JTextField searchUsers, JButton deleteUsersButton, JButton editUserButton, JButton reactivateUserButton) {
 
         final int usernameColumnNr = 4;
@@ -194,9 +203,9 @@ public class Users {
 
     }
 
-    // TODO: Make generic update function (also make generic table model with right click menu)
-
-    // Update Users function
+    /**
+     *
+     */
     public static void updateUsers() {
 
         //clears selection in row, important
@@ -208,6 +217,10 @@ public class Users {
         updateUsers(users);
     }
 
+    /**
+     *
+     * @param users
+     */
     public static void updateUsers(ArrayList<Object[]> users) {
 
         // Empties entries of Users table
@@ -219,6 +232,9 @@ public class Users {
         }
     }
 
+    /**
+     *
+     */
     public static void updateInactiveUsers() {
 
         ArrayList<Object[]> inactiveUsers = userManagement.getDeletedUsers();
@@ -226,6 +242,10 @@ public class Users {
         updateInactiveUsers(inactiveUsers);
     }
 
+    /**
+     *
+     * @param inactiveUsers
+     */
     public static void updateInactiveUsers(ArrayList<Object[]> inactiveUsers) {
 
         // Empties entries of Users table

@@ -73,9 +73,9 @@ public class AddSubscription extends JDialog{
     private CustomerManagement customerManagement = new CustomerManagement();
     private ArrayList<Object[]> customers;
 
-
-
-
+    /**
+     *
+     */
     public AddSubscription() {
         setTitle("New Subscription");
         setContentPane(mainPanel);
@@ -404,6 +404,12 @@ public class AddSubscription extends JDialog{
 
     }
 
+    /**
+     *
+     * @param table
+     * @param entry
+     * @return
+     */
     private int existsInTable(JTable table, String entry) {
         for (int i = 0; i < table.getRowCount(); i++) {
             if (table.getValueAt(i, 0).equals(entry)) {
@@ -412,6 +418,10 @@ public class AddSubscription extends JDialog{
         }
         return -1;
     }
+
+    /**
+     *
+     */
     private void updateDropdown(){
         customerDropdown.removeAllItems();
         customers = customerManagement.getCustomers();
@@ -422,6 +432,9 @@ public class AddSubscription extends JDialog{
 
     }
 
+    /**
+     *
+     */
     private void createUIComponents() {
         // TODO: place custom component creation code here
 

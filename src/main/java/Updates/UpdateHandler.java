@@ -24,19 +24,34 @@ public class UpdateHandler {
     private static String[] tabs;
     private static boolean autoUpdateStarted = false;
 
-    // Used for right click handler
+    /**
+     * Get index of current active tab. Used for right click handler.
+     * @return  Selected tab index
+     */
     public static int getCurrTab() {
         return tabbedPane.getSelectedIndex();
     }
 
+    /**
+     * Starts timer for Auto-Update
+     */
     private static void startTimer() {
         timer.start();
     }
 
+    /**
+     * Restarts timer for Auto-Update
+     */
     private static void restartTimer() {
         timer.restart();
     }
 
+    /**
+     * Finds the title of a specified tab index.
+     *
+     * @param index Tab index
+     * @return      Name of the tab (lowercase)
+     */
     private static String findNameOfTab(int index) {
         tabs = new String[tabbedPane.getTabCount()];
         for (int i = 0; i < tabs.length; i++) {
@@ -48,6 +63,9 @@ public class UpdateHandler {
         return null;
     }
 
+    /**
+     * Update code for the different tabs.
+     */
     public static void updateTab() {
         // TODO: Do some check for database connetion
 
@@ -89,8 +107,9 @@ public class UpdateHandler {
     // FIXME: AutoUpdate can cause problems if trying to edit a cell when update happens - either no updates directly in table or handle selected cell before autoUpdating
 
     /**
+     * Starting a timer with an interval of 5 minutes, auto-updating the current active tab.
      *
-     * @param tabbedPane
+     * @param tabbedPane    The JTabbedPane component of the main window.
      */
     public static void startAutoUpdate(JTabbedPane tabbedPane) {
         if(!autoUpdateStarted) {
