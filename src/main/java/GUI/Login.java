@@ -42,17 +42,21 @@ public class Login extends JFrame{
 
             dbconnect = new LoginManagement();
             Object[] user = dbconnect.login(inputUsr, inputPass);
-            int status = (int) user[6];
+            int status;
+            if (user[6] != null) {
+                status = (int) user[6];
 
+                if (status == 1) {
+                    // Successful login
 
-            if (status == 1) {
-                // Logged in :)
+                    // Open the main window
+                    new MainWindow(user);
 
-                // Open the main window
-                new MainWindow(user);
-
-                Login.this.setVisible(false); //you can't see me!
-                Login.this.dispose(); //Destroy the JFrame object
+                    setVisible(false); //you can't see me!
+                    dispose(); //Destroy the JFrame object
+                } else {
+                    showMessageDialog(null, "User deactivated. Contact admin.");
+                }
             } else {
                 showMessageDialog(null, "Wrong username or password");
             }
