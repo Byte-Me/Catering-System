@@ -272,6 +272,7 @@ public class Subscriptions {
     }
 
     /**
+     * 
      *
      * @param id
      * @return
@@ -279,7 +280,7 @@ public class Subscriptions {
     private ArrayList<Object[]> getRecipeInfoForSub(int id){
 
         //henter orders som er laget med en spesiell subscription
-        ArrayList<Object[]> out = new ArrayList<Object[]>();
+        ArrayList<Object[]> out = new ArrayList<>();
         ArrayList<Object[]> orders = subMan.getOrderInfoFromSub(id); //lagt til ekstra plass for å si hvilken dag
         //finner like ordere og forkorter slik at hver dag bare kommer en gang
 
@@ -301,9 +302,12 @@ public class Subscriptions {
     }
 
     /**
+     * Takes a list of all orders and shortens by wether an order is
+     * on the same day. Is used to find which days a subscription
+     * consists if and their corresponding information.
      *
-     * @param orders
-     * @return
+     * @param orders    Full list of orders
+     * @return          Shortened list of orders
      */
     private ArrayList<Object[]> shortenOrders(ArrayList<Object[]> orders){
         ArrayList<Object[]> out = new ArrayList<>();
@@ -322,10 +326,11 @@ public class Subscriptions {
     }
 
     /**
+     * Check if two dates are the same
      *
-     * @param date1
-     * @param date2
-     * @return
+     * @param date1 First date
+     * @param date2 Second date
+     * @return      Returns true if the dates are the same
      */
     private boolean sameDay(Date date1, Date date2){
         cal.setTime(date1);
@@ -337,9 +342,10 @@ public class Subscriptions {
     }
 
     /**
+     * Get the value of the weekday from 1 (monday) to 7 (sunday)
      *
      * @param date
-     * @return
+     * @return      Weekday number 1-7
      */
     private int getDayOfWeek(Date date){
         cal.setTime(date);
