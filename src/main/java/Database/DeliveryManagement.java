@@ -37,6 +37,12 @@ public class DeliveryManagement extends Management{
     ResultSet res = null;
     PreparedStatement prep = null;
 
+    /**
+     * Gets information of the delivery
+     * @param adresses Arraylist of every adress
+     * @return In a specific order and what adress that needs to be deliverd to
+     */
+
     public ArrayList<Object[]> getDeliveryInfo(ArrayList<String> adresses){
         if(setUp()) {
             ArrayList<Object[]> out = new ArrayList<>();
@@ -71,6 +77,10 @@ public class DeliveryManagement extends Management{
     }
 
 
+    /**
+     * Gets what delivery is ready to be deliverd
+     * @return Every delivery that is ready to be deliverd
+     */
     public ArrayList<Object[]> getDeliveryReady(){
         if(setUp()) {
             ArrayList<Object[]> out = new ArrayList<>();
@@ -95,6 +105,12 @@ public class DeliveryManagement extends Management{
         }
         else return null;
     }
+
+    /**
+     * Gets orders for each driver
+     * @param username The username of the driver
+     * @return Arraylist with objects that contains the order id, name, phone number and adress
+     */
     public ArrayList<Object[]> getOrdersForDriver(String username){
         ArrayList<Object[]> out = new ArrayList<>();
         if(setUp()) {
@@ -138,6 +154,10 @@ public class DeliveryManagement extends Management{
         else return null;
     }
 
+    /**
+     * Gets every adress that the delivery is ready to deliver
+     * @return Arraylist with every adress that is ready to deliver to
+     */
     public ArrayList<String> getAdressReady(){
         if(setUp()) {
             ArrayList<String> out = new ArrayList<>();
@@ -160,6 +180,13 @@ public class DeliveryManagement extends Management{
         }
         else return null;
     }
+
+    /**
+     * Connects a driver to a order
+     * @param username The username of the driver
+     * @param orderId The order id of the orders ready to deliver
+     * @return True or false depending if the method was successful
+     */
     public boolean connectDriverToOrder(String username, int orderId){
         int res = 0;
         if(setUp()) {
@@ -179,6 +206,12 @@ public class DeliveryManagement extends Management{
         }
         return res > 0;
     }
+
+    /**
+     * Count every order deliverd by driver
+     * @param username The username of the driver
+     * @return The number of deliverd deliveries
+     */
     public int countDriverDeliveries(String username){
         int out = 0;
         if(setUp()) {

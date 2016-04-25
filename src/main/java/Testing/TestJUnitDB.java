@@ -33,7 +33,7 @@ public class TestJUnitDB extends Management{
     private String[] validUser = new String[2];
     private String[] invalidUser = new String[2];
 
-    private final int NO_ACCESS = -1;
+    private final int NO_ACCESS = 0;
     private final int ACCESS = 1;
 
     /**
@@ -79,21 +79,20 @@ public class TestJUnitDB extends Management{
     }
     @Before
     public void objSetUp(){
-        validUser = new String[]{"Even","passord"};  //Accesslvl 1
-        invalidUser = new String[]{"bruker", "pass"}; //accesslvl -1
+        validUser = new String[]{"test","test"};  //Accesslvl 1
+        invalidUser = new String[]{"failed", "test"}; //accesslvl -1
 
     }
     @Test
     public void checkActiveSubscriptions(){
 
-        // FIXME: veit ikke
         Subscriptions upt = new Subscriptions();
-        assertTrue(upt.checkSubscriptionActive("2016-03-10", "2016-04-01", new Date()));
-        assertFalse(upt.checkSubscriptionActive("2016-03-10", "2016-03-15", new Date()));
+        assertTrue(upt.checkSubscriptionActive("2016-01-01", "2017-01-01", new Date()));
+        assertFalse(upt.checkSubscriptionActive("2015-01-01", "2015-01-02", new Date()));
 
     }
     @Test
-    public void loginTest(){
+    public void loginTest() throws SQLException{
         int valid = 0;
         int invalid = 0;
 
@@ -105,8 +104,6 @@ public class TestJUnitDB extends Management{
 
         }
         catch (Exception e){
-            System.err.println("Issue with databaseconnections.");
-            e.printStackTrace();
         }
         assertEquals(ACCESS, valid);
         assertEquals(NO_ACCESS, invalid);
@@ -146,12 +143,21 @@ public class TestJUnitDB extends Management{
     }
     @Test
     public void updateUsers(){
-        assertTrue(user.updateUserInfoFName("krisss", "Det funket"));
-        assertTrue(user.updateUserInfoLName("krisss", "Aasss"));
-        assertTrue(user.updateUserInfoUsername("krisss", "krisss"));
-        assertTrue(user.updateUserInfoPhone("krisss", "000800"));
-        assertTrue(user.updateUserInfoEmail("krisss", "Kristaffer@kris.chrisP"));
-        assertTrue(user.updateUserInfoAccessLevel("krisss", 3));
+        assertTrue(user.updateUserInfoFName("test", "test1"));
+        assertTrue(user.updateUserInfoLName("test", "test1"));
+        assertTrue(user.updateUserInfoUsername("test", "test1"));
+        assertTrue(user.updateUserInfoPhone("test1", "87654321"));
+        assertTrue(user.updateUserInfoEmail("test1", "new@test.test"));
+        assertTrue(user.updateUserInfoAccessLevel("test1", 3));
+
+        //Bytter tilbake slik det ikke skal bli feil
+        user.updateUserInfoFName("test1", "test");
+        user.updateUserInfoLName("test1", "test");
+        user.updateUserInfoUsername("test1", "test");
+        user.updateUserInfoPhone("test", "12345678");
+        user.updateUserInfoEmail("test", "test@test.test");
+        user.updateUserInfoAccessLevel("test", 1);
+
     }
     @Test
     public void getCustomers(){
@@ -218,10 +224,6 @@ public class TestJUnitDB extends Management{
     }
 
     @Test
-    public void updateOrderStatus(){
-        assertTrue(orde.updateStatus(4, 1)); // 4 = ID, 1 = new status
-    }
-    @Test
     public void getOrders(){
         ArrayList<Object[]> obj = orde.getOrders();
         assertTrue(!obj.isEmpty());
@@ -238,31 +240,11 @@ public class TestJUnitDB extends Management{
         ArrayList<Object[]> obj = food.getRecipes();
         assertTrue(!obj.isEmpty());
     }
-    @Ignore
-    public void getIngredientsFromRecipes(){
-       // ArrayList<Object[]> obj = food.getRecipeIngredients();
-      //  assertTrue(!obj.isEmpty());
-    }
     @Test
     public void ingredientToStorage(){
-        assertTrue(food.addIngredientToStorage("Potet", 1));
+        assertTrue(food.addIngredientToStorage("Potato", 1));
     }
-    @Test
-    public void removeIngredientFromStorage(){
-     //   assertTrue(food.removeIngredientFromStorage("Barn", 1));
-    }
-    @Test
-    public void getIngredientsToChef(){
-        ArrayList<Object[]> obj = food.getRecipesForChef();
-        assertTrue(!obj.isEmpty());
-    }
-    @Test
-    public void addOrder(){
-        ArrayList<Object[]> obj = new ArrayList<>();
-        obj.add(new Object[]{"Catfish", 5});
-        obj.add(new Object[]{"Potatodog", 2});
-        assertTrue(orde.createOrder("Test@Test", "2016-03-21", obj, "Uten makrell", "20:00:00"));
-    }
+
     @Test
     public void getDeliveryInfo(){
         ArrayList<String> adresses = new ArrayList<>();
@@ -282,15 +264,7 @@ public class TestJUnitDB extends Management{
       //  boolean bool = upt.createSubscription(10, "2016-03-20", "2016-05-08", 2, obj, "Bare cat ikke fish", "20:00:00");
         //assertTrue(bool);
     }
-    @Ignore
-    public void testDeliveryRoute(){
-        //assertNotNull(CreateDeliveryRoute.UseReadyOrders("Oslo, Norway"));
-      /*  //assertNotNull(CreateDeliveryRoute.UseReadyOrdersLanLat("Oslo, Norway"));
-        System.out.println(CreateDeliveryRoute.UseReadyOrders("Oslo, Norway"));
 
-        System.out.println(CreateDeliveryRoute.UseReadyOrdersLatLng("Oslo, Norway"));
-*/
-    }
     @After
     public void objTearDown(){
         validUser = null;
