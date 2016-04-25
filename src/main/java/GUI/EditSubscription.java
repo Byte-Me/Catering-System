@@ -67,8 +67,8 @@ public class EditSubscription extends JDialog{
     private Subscriptions subs = new Subscriptions();
 
     /**
-     *
-     * @param subId
+     * Constructor for EditSubscription.
+     * @param subId int for the subscription ID.
      */
     public EditSubscription(int subId) {
         setTitle("Edit Subscription");
@@ -231,12 +231,7 @@ public class EditSubscription extends JDialog{
 
     }
 
-    /**
-     *
-     * @param table
-     * @param entry
-     * @return
-     */
+
     private int existsInTable(JTable table, String entry) {
         for (int i = 0; i < table.getRowCount(); i++) {
             if (table.getValueAt(i, 0).equals(entry)) {
@@ -246,9 +241,7 @@ public class EditSubscription extends JDialog{
         return -1;
     }
 
-    /**
-     *
-     */
+
     private void updateDropdown(){
         customerDropdown.removeAllItems();
         customers = customerManagement.getCustomers();
@@ -259,11 +252,8 @@ public class EditSubscription extends JDialog{
 
     }
 
-    /**
-     *
-     */
+
     private void createUIComponents() {
-        // TODO: place custom component creation code here
 
         // Date Pickers start
         UtilDateModel fModel = new UtilDateModel();
@@ -287,10 +277,6 @@ public class EditSubscription extends JDialog{
         endDatePick = new JDatePickerImpl(toPanel, new DateLabelFormatter());
     }
 
-    /**
-     *
-     * @param id
-     */
     private void fillSubInfo(int id){
         Object[] info = subs.getSubInfoFromId(id);
         ArrayList<Object[]> panelInfo = (ArrayList<Object[]>)info[0];
@@ -351,9 +337,7 @@ public class EditSubscription extends JDialog{
 
     }
 
-    /**
-     *
-     */
+
     private void addMonPanel(){
         if(monPanel == null) {
             monPanel = new PanelForSubs(1);
@@ -370,9 +354,7 @@ public class EditSubscription extends JDialog{
         }
     }
 
-    /**
-     *
-     */
+
     private void addTuePanel(){
         if(tuePanel == null) {
             tuePanel = new PanelForSubs(2);
@@ -400,9 +382,7 @@ public class EditSubscription extends JDialog{
         }
     }
 
-    /**
-     *
-     */
+
     private void addWedPanel(){
         if(wedPanel == null) {
             wedPanel = new PanelForSubs(3);
@@ -434,9 +414,7 @@ public class EditSubscription extends JDialog{
         }
     }
 
-    /**
-     *
-     */
+
     private void addThuPanel(){
         if(thuPanel == null) {
             thuPanel = new PanelForSubs(4);
@@ -471,9 +449,7 @@ public class EditSubscription extends JDialog{
         }
     }
 
-    /**
-     *
-     */
+
     private void addFriPanel(){
         if(friPanel == null) {
             friPanel = new PanelForSubs(5);
@@ -512,9 +488,6 @@ public class EditSubscription extends JDialog{
         dayTabbedPane.revalidate();
     }
 
-    /**
-     *
-     */
     private void addSatPanel(){
         if(satPanel == null) {
             satPanel = new PanelForSubs(6);
@@ -554,9 +527,7 @@ public class EditSubscription extends JDialog{
         }
     }
 
-    /**
-     *
-     */
+
     private void addSunPanel(){
         if(sunPanel == null) {
             sunPanel = new PanelForSubs(7);

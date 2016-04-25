@@ -63,8 +63,8 @@ public class EditOrder extends JDialog {
     private UtilDateModel model; // DatePicker model
 
     /**
-     *
-     * @param orderId
+     * Constructor for EditOrder.
+     * @param orderId int for the order ID.
      */
     public EditOrder(int orderId) {
         setTitle("Edit Order");

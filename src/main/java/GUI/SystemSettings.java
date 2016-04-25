@@ -17,7 +17,7 @@ public class SystemSettings extends JDialog {
     private JTextField country;
 
     /**
-     *
+     * Constructor for SystemSettings.
      */
     public SystemSettings() {
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
