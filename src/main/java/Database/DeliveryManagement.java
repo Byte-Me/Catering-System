@@ -45,7 +45,7 @@ public class DeliveryManagement extends Management{
                 for(String adress : adresses) {
 
                     prep = conn.prepareStatement("SELECT `order`.order_id, customer.name, customer.phone, customer.adress FROM `order`, customer WHERE " +
-                            "`order`.status = 3 AND `order`.customer_id = customer.customer_id AND customer.adress = ?;");
+                            "`order`.status = 2 AND `order`.customer_id = customer.customer_id AND customer.adress = ?;");
                     prep.setString(1, adress);
                     res = prep.executeQuery();
 
