@@ -3,14 +3,12 @@ package GUI.WindowPanels;
 import Database.CustomerManagement;
 import GUI.AddCustomer;
 import GUI.EditCustomer;
-import HelperClasses.MainTableModel;
+import Util.HelperClasses.MainTableModel;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -185,7 +183,7 @@ public class Customers {
     }
 
     /**
-     * Updates the active customer table from the database.
+     * Util.Updates the active customer table from the database.
      */
     public static void updateCustomer() {
 
@@ -197,7 +195,7 @@ public class Customers {
     }
 
     /**
-     * Updates the active customer table from the database.
+     * Util.Updates the active customer table from the database.
      * @param customers List of active customers.
      */
     public static void updateCustomer(ArrayList<Object[]> customers) {
@@ -212,7 +210,7 @@ public class Customers {
     }
 
     /**
-     * Updates the inactive customer table from the database.
+     * Util.Updates the inactive customer table from the database.
      */
     public static void updateInactiveCustomer() {
 
@@ -223,7 +221,7 @@ public class Customers {
     }
 
     /**
-     * Updates the inactive customer table from the database.
+     * Util.Updates the inactive customer table from the database.
      * @param inactiveCustomers List of inactive customers
      */
     public static void updateInactiveCustomer(ArrayList<Object[]> inactiveCustomers) {

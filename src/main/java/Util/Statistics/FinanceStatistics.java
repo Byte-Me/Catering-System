@@ -1,4 +1,4 @@
-package Statistics;
+package Util.Statistics;
 
 import Database.FinanceManagement;
 import Database.StatisticsManagement;

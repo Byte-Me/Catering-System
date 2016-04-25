@@ -271,7 +271,7 @@ public class CustomerManagement extends Management{
     }
 
     /**
-     * Updates the first- and last name of a customer
+     * Util.Updates the first- and last name of a customer
      * @param email The email of the customer
      * @param fName The new first name to the customer
      * @param lName The new last name to the customer
@@ -283,7 +283,7 @@ public class CustomerManagement extends Management{
     }
 
     /**
-     * Updates the name of a customer
+     * Util.Updates the name of a customer
      * @param email The email of the customer
      * @param newData The new name of the customer
      * @return True or false depending if the method was successful
@@ -310,7 +310,7 @@ public class CustomerManagement extends Management{
     }
 
     /**
-     * Updates the email to the customer
+     * Util.Updates the email to the customer
      * @param email The existing email to the customer
      * @param newData The new email to the customer
      * @return True or false depending if the method was successful
@@ -338,7 +338,7 @@ public class CustomerManagement extends Management{
     }
 
     /**
-     * Updates the phone number to the customer
+     * Util.Updates the phone number to the customer
      * @param email The email of the customer
      * @param newData The new phone number of the customer
      * @return True or false depending if the method was successful
@@ -398,7 +398,7 @@ public class CustomerManagement extends Management{
     }
 
     /**
-     * Updates the adress to the customer
+     * Util.Updates the adress to the customer
      * @param email The email of the customer
      * @param street The street adress of the customer
      * @param postCode The postal code of the customer
@@ -429,7 +429,7 @@ public class CustomerManagement extends Management{
     }
 
     /**
-     * Updates the status of the customer
+     * Util.Updates the status of the customer
      * @param email The email of the customer
      * @param newData The new status of the customer
      * @return True or false depending if the method was successful

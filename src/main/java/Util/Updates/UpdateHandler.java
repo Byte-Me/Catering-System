@@ -1,8 +1,6 @@
-package Updates;
+package Util.Updates;
 
 import javax.swing.*;
-
-import java.awt.*;
 
 import static GUI.WindowPanels.Chef.updateIngredients;
 import static GUI.WindowPanels.Chef.updatePrepareTable;
@@ -73,7 +71,7 @@ public class UpdateHandler {
 
         switch (currentTab) {
             case "statistics":
-                // Statistics - NO AUTO REFRESH HERE!
+                // Util.Statistics - NO AUTO REFRESH HERE!
                 break;
             case "users":
                 updateUsers();

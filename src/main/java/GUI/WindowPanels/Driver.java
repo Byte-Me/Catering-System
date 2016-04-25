@@ -4,8 +4,8 @@ import Database.DeliveryManagement;
 import Database.OrderManagement;
 import Database.SettingsManagement;
 import Database.UserManagement;
-import Delivery.CreateDeliveryRoute;
-import HelperClasses.ToggleSelectionModel;
+import Util.Delivery.CreateDeliveryRoute;
+import Util.HelperClasses.ToggleSelectionModel;
 import com.teamdev.jxbrowser.chromium.Browser;
 import com.teamdev.jxbrowser.chromium.JSValue;
 import com.teamdev.jxbrowser.chromium.LoggerProvider;
@@ -16,11 +16,10 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.logging.Level;
 
-import static Delivery.CreateDeliveryRoute.UseReadyOrdersLatLng;
-import static Delivery.DeliveryRoute.geoCoder;
+import static Util.Delivery.CreateDeliveryRoute.UseReadyOrdersLatLng;
+import static Util.Delivery.DeliveryRoute.geoCoder;
 import static javax.swing.JOptionPane.*;
 
 /**
@@ -110,7 +109,7 @@ public class Driver {
                         }
                         input = showConfirmDialog(null, "Do you want update status for orderID " + driverTable.getValueAt(count, 0) + "?", null, YES_NO_OPTION);
                         if (input == YES_OPTION) {
-                            int id = (Integer) driverTable.getValueAt(count, 0);
+                            int id = Integer.parseInt(driverTable.getValueAt(count, 0).toString());
                             deliveryManagement.connectDriverToOrder(username, id); //username
                             orderManagement.updateStatus(id, type.getValue());
                             updateDriverTable((String) driverDropdown.getItemAt(driverDropdown.getSelectedIndex()));
@@ -236,7 +235,7 @@ public class Driver {
     }
 
     /**
-     * Updates the dropdown menu with drivers from the database.
+     * Util.Updates the dropdown menu with drivers from the database.
      */
     private void updateDropdown(){
         driverDropdown.removeAllItems();
@@ -248,7 +247,7 @@ public class Driver {
     }
 
     /**
-     * Updates the driver table specific to the driver.
+     * Util.Updates the driver table specific to the driver.
      * @param username Current driver assigned to the task.
      */
     public static void updateDriverTable(String username){
@@ -261,7 +260,7 @@ public class Driver {
     }
 
     /**
-     * Updates and sort the driver table specific to the driver.
+     * Util.Updates and sort the driver table specific to the driver.
      * @param username Current driver assigned to the task.
      */
     public static void updateDriverTableSorted(String username){

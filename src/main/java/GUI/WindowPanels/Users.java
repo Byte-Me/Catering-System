@@ -3,14 +3,12 @@ package GUI.WindowPanels;
 import Database.UserManagement;
 import GUI.AddUser;
 import GUI.EditUser;
-import HelperClasses.MainTableModel;
+import Util.HelperClasses.MainTableModel;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -204,7 +202,7 @@ public class Users {
     }
 
     /**
-     * Updates the active user table from the database.
+     * Util.Updates the active user table from the database.
      */
     public static void updateUsers() {
 
@@ -218,7 +216,7 @@ public class Users {
     }
 
     /**
-     * Updates the active user table from the database.
+     * Util.Updates the active user table from the database.
      * @param users List of active users.
      */
     public static void updateUsers(ArrayList<Object[]> users) {
@@ -233,7 +231,7 @@ public class Users {
     }
 
     /**
-     * Updates the inactive user table from the database.
+     * Util.Updates the inactive user table from the database.
      */
     public static void updateInactiveUsers() {
 
@@ -243,7 +241,7 @@ public class Users {
     }
 
     /**
-     * Updates the inactive user table from the database.
+     * Util.Updates the inactive user table from the database.
      * @param inactiveUsers List of inactive users.
      */
     public static void updateInactiveUsers(ArrayList<Object[]> inactiveUsers) {

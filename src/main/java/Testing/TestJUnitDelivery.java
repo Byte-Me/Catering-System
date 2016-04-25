@@ -1,12 +1,11 @@
 package Testing;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 import static org.junit.Assert.*;
 
-import Delivery.CreateDeliveryRoute;
-import Delivery.TravelingSalesman;
+import Util.Delivery.CreateDeliveryRoute;
+import Util.Delivery.TravelingSalesman;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

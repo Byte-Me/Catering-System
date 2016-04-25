@@ -1,11 +1,8 @@
 package Database;
 
-import Food.FoodFinance;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 
 /**
  * Created by olekristianaune on 20.04.2016.

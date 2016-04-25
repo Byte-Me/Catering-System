@@ -1,9 +1,9 @@
-package Statistics;
+package Util.Statistics;
 
 import Database.StatisticsManagement;
 import Database.SubscriptionManagement;
-import Statistics.graph.ChartCreator;
-import Subscription.Subscriptions;
+import Util.Statistics.graph.ChartCreator;
+import Util.Subscription.Subscriptions;
 
 import javax.swing.*;
 import java.text.ParseException;

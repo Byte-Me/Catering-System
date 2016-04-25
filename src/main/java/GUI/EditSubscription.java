@@ -2,8 +2,8 @@ package GUI;
 
 import Database.CustomerManagement;
 import Database.FoodManagement;
-import HelperClasses.DateLabelFormatter;
-import Subscription.Subscriptions;
+import Util.HelperClasses.DateLabelFormatter;
+import Util.Subscription.Subscriptions;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
@@ -250,7 +250,7 @@ public class EditSubscription extends JDialog{
 
 
     /**
-     * Updates the dropdown of customers, used when window is opened and if a new customer is added.
+     * Util.Updates the dropdown of customers, used when window is opened and if a new customer is added.
      */
     private void updateDropdown(){
         customerDropdown.removeAllItems();

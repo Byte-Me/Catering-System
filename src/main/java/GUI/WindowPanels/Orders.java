@@ -3,7 +3,7 @@ package GUI.WindowPanels;
 import Database.OrderManagement;
 import GUI.AddOrder;
 import GUI.EditOrder;
-import HelperClasses.MainTableModel;
+import Util.HelperClasses.MainTableModel;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -199,7 +199,7 @@ public class Orders {
     }
 
     /**
-     * Updates the order from the database.
+     * Util.Updates the order from the database.
      */
     public static void updateOrders() {
 
@@ -211,7 +211,7 @@ public class Orders {
     }
 
     /**
-     * Updates the order from the database.
+     * Util.Updates the order from the database.
      * @param orders List of orders.
      */
     public static void updateOrders(ArrayList<Object[]> orders) {

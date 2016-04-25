@@ -1,9 +1,8 @@
-package Food;
+package Util.Food;
 
 import Database.FinanceManagement;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * Created by Evdal on 14.04.2016.

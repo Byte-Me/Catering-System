@@ -124,7 +124,7 @@ public class FoodManagement extends Management{
     }
 
     /**
-     * Updates the name of an ingredient.
+     * Util.Updates the name of an ingredient.
      * @param name Name of the ingredient.
      * @param newData New name of the ingredient.
      * @return True or false if the update was successful.
@@ -152,7 +152,7 @@ public class FoodManagement extends Management{
     }
 
     /**
-     * Updates the price of an ingredient.
+     * Util.Updates the price of an ingredient.
      * @param name Name of ingredient.
      * @param newData Updated price of ingredient.
      * @return True or false if the update was successful.
@@ -179,7 +179,7 @@ public class FoodManagement extends Management{
     }
 
     /**
-     * Updates the quantity of an ingredient.
+     * Util.Updates the quantity of an ingredient.
      * @param name Name of ingredient.
      * @param newData Updated quantity of ingredient.
      * @return True or false if the update was successful.
@@ -207,7 +207,7 @@ public class FoodManagement extends Management{
     }
 
     /**
-     * Updates the unit of an ingredients.
+     * Util.Updates the unit of an ingredients.
      * @param name Name of ingredient.
      * @param newData Updated unit of the ingredient.
      * @return True or false if the update was successful.
@@ -474,7 +474,7 @@ public class FoodManagement extends Management{
     }
 
     /**
-     * Updates a recipe.
+     * Util.Updates a recipe.
      * @param name Name of the recipe.
      * @param ingInfo List with updated information of the ingredients in the recipe.
      * @param price Updated price of the recipe.

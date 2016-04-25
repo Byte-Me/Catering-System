@@ -1,10 +1,9 @@
-package Delivery;
+package Util.Delivery;
 
 
 import Database.DeliveryManagement;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * Created by Evdal on 14.03.2016.

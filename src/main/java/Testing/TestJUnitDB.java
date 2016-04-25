@@ -1,20 +1,15 @@
 package Testing;
 
 import Database.*;
-import Delivery.CreateDeliveryRoute;
-import Statistics.*;
-import Subscription.Subscriptions;
+import Util.Statistics.*;
+import Util.Subscription.Subscriptions;
 import org.junit.*;
 
-import javax.swing.*;
-import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import java.util.EventListener;
 
 import static org.junit.Assert.*;
 

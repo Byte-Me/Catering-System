@@ -3,7 +3,7 @@ package GUI;
 import Database.CustomerManagement;
 import Database.FoodManagement;
 import Database.OrderManagement;
-import HelperClasses.DateLabelFormatter;
+import Util.HelperClasses.DateLabelFormatter;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;

@@ -3,9 +3,8 @@ package GUI.WindowPanels;
 import Database.SubscriptionManagement;
 import GUI.AddOrder;
 import GUI.AddSubscription;
-import GUI.EditOrder;
 import GUI.EditSubscription;
-import HelperClasses.MainTableModel;
+import Util.HelperClasses.MainTableModel;
 
 import javax.swing.*;
 import javax.swing.event.DocumentEvent;
@@ -88,13 +87,13 @@ public class Subscriptions {
         });
         // Right Click Menu
         JPopupMenu popupMenu = new JPopupMenu("Subscriptions");
-        popupMenu.add(new AbstractAction("New Subscription") {
+        popupMenu.add(new AbstractAction("New Util.Subscription") {
             @Override
             public void actionPerformed(ActionEvent e) {
                 new AddOrder();
             }
         });
-        popupMenu.add(new AbstractAction("Edit Subscription") {
+        popupMenu.add(new AbstractAction("Edit Util.Subscription") {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (subscriptionsTable.getSelectedRow() != -1) {
@@ -103,7 +102,7 @@ public class Subscriptions {
                 }
             }
         });
-        popupMenu.add(new AbstractAction("Delete Subscription") {
+        popupMenu.add(new AbstractAction("Delete Util.Subscription") {
             @Override
             public void actionPerformed(ActionEvent e) {
                 try {

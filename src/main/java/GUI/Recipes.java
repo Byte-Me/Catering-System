@@ -1,7 +1,7 @@
 package GUI;
 
 import Database.FoodManagement;
-import HelperClasses.MainTableModel;
+import Util.HelperClasses.MainTableModel;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -91,7 +91,7 @@ public class Recipes extends JDialog {
     }
 
     /**
-     * Updates recipes.
+     * Util.Updates recipes.
      */
     public static void updateRecipes() {
         ArrayList<Object[]> recipes = foodManagement.getRecipes();

@@ -1,11 +1,9 @@
-package Subscription;
+package Util.Subscription;
 
 import Database.CustomerManagement;
 import Database.OrderManagement;
 import Database.SubscriptionManagement;
-import sun.util.resources.cldr.rm.CalendarData_rm_CH;
 
-import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -104,11 +102,11 @@ public class Subscriptions {
     /**
      * Edits subscription.
      * @param email Subscriptions email.
-     * @param dateFrom Subscription's start date.
-     * @param dateTo Subscription's ent date.
+     * @param dateFrom Util.Subscription's start date.
+     * @param dateTo Util.Subscription's ent date.
      * @param weeksBetween Weeks between orders.
      * @param recipesWithDay Recipes within the day of the subscription.
-     * @param subId Subscription ID.
+     * @param subId Util.Subscription ID.
      * @return
      */
     public static boolean editSubscription(String email, String dateFrom, String dateTo, int weeksBetween, ArrayList<Object[][]> recipesWithDay, int subId) {
@@ -247,7 +245,7 @@ public class Subscriptions {
 
     /**
      * List of subsction info from IDs.
-     * @param subId Subscription IDs.
+     * @param subId Util.Subscription IDs.
      * @return
      */
     public Object[] getSubInfoFromId(int subId){
@@ -273,7 +271,7 @@ public class Subscriptions {
 
     /**
      * Gets recipe info from subscription.
-     * @param id Subscription ID.
+     * @param id Util.Subscription ID.
      * @return
      */
     private ArrayList<Object[]> getRecipeInfoForSub(int id){

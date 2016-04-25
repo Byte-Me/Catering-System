@@ -2,10 +2,9 @@ package GUI;
 
 import Database.FinanceManagement;
 import Database.FoodManagement;
-import Food.CreateShoppingList;
-import HelperClasses.DateLabelFormatter;
-import HelperClasses.MainTableModel;
-import org.jdatepicker.JDatePicker;
+import Util.Food.CreateShoppingList;
+import Util.HelperClasses.DateLabelFormatter;
+import Util.HelperClasses.MainTableModel;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
@@ -180,7 +179,7 @@ public class GenerateShoppingList extends JDialog {
     }
 
     /**
-     * Updates the shopping list.
+     * Util.Updates the shopping list.
      */
     private void updateShoppingList() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");

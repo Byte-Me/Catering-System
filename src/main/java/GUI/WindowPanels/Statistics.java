@@ -1,7 +1,7 @@
 package GUI.WindowPanels;
 
-import HelperClasses.DateLabelFormatter;
-import Statistics.*;
+import Util.HelperClasses.DateLabelFormatter;
+import Util.Statistics.*;
 import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
@@ -16,7 +16,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Properties;
 
-import static Statistics.FinanceStatistics.findFinanceStats;
+import static Util.Statistics.FinanceStatistics.findFinanceStats;
 
 /**
  * Created by olekristianaune on 13.03.2016.
