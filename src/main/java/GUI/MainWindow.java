@@ -73,6 +73,7 @@ public class MainWindow extends JFrame {
     private JTable inactiveUserTable;
     private JSplitPane chefSplitPane;
     private JComboBox driverDropdown;
+    private JButton fileButton;
     private JButton driverDetailsButton;
 
     /**
@@ -159,15 +160,33 @@ public class MainWindow extends JFrame {
                 dispose();
         }
 
-        JPopupMenu popupMenu = new JPopupMenu();
-        popupMenu.add(new AbstractAction("User Settings") {
+        JPopupMenu fileMenu = new JPopupMenu();
+        fileMenu.add(new AbstractAction("Log Out") {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                new Login();
+                setVisible(false);
+                dispose();
+            }
+        });
+
+        fileButton.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mousePressed(MouseEvent e) {
+                fileMenu.show(fileButton, 0, fileButton.getHeight());
+            }
+        });
+
+
+        JPopupMenu settingsMenu = new JPopupMenu();
+        settingsMenu.add(new AbstractAction("User Settings") {
             @Override
             public void actionPerformed(ActionEvent e) {
                 new UserSettings(user);
             }
         });
         if (UserType.valueOf((int)user[5]) == UserType.ADMIN) {
-            popupMenu.add(new AbstractAction("System Settings") {
+            settingsMenu.add(new AbstractAction("System Settings") {
                 // Possibility to change address
                 // Also possible to change database?
                 // Is this saved locally to file?
@@ -182,7 +201,7 @@ public class MainWindow extends JFrame {
 
         settingsButton.addMouseListener(new MouseAdapter() {
             public void mousePressed(MouseEvent e) {
-                popupMenu.show(settingsButton, 0, settingsButton.getHeight());
+                settingsMenu.show(settingsButton, 0, settingsButton.getHeight());
             }
         });
 
