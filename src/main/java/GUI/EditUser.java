@@ -25,8 +25,8 @@ public class EditUser extends JDialog{
     UserManagement userManagement = new UserManagement(); //TODO: Dette må testes, db var nede 09.04.2016
 
     /**
-     *
-     * @param username
+     * Constructor for EditUser.
+     * @param username String for the username.
      */
     public EditUser(String username) {
         setTitle("Edit User");

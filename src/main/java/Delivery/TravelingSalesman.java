@@ -60,7 +60,6 @@ public class TravelingSalesman {
         this.startAdress = geoCoder(startAdress, 0);
         startPoint = startAdress;
 
-
     }
 
     //Hentet en del fra http://stackoverflow.com/questions/11703827/brute-force-algorithm-for-the-traveling-salesman-problem-in-java
@@ -74,8 +73,6 @@ public class TravelingSalesman {
         if (!citiesNotInRoute.isEmpty()) {
             //goes through the routes not added.
             for (int i = 0; i < citiesNotInRoute.size(); i++) {
-
-                System.out.println("Route = "+r.size()+", NotInRoute = "+citiesNotInRoute.size());
                 double[] justRemoved = citiesNotInRoute.remove(0);
                 ArrayList<double[]> newRoute = (ArrayList<double[]>) r.clone();
                 newRoute.add(justRemoved);

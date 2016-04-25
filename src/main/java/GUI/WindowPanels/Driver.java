@@ -96,7 +96,6 @@ public class Driver {
             boolean lookingForOrder = true;
             int input = 0;
             while(count < driverTable.getRowCount() && lookingForOrder){
-                System.out.println("Rows: "+driverTable.getRowCount()+", count: "+count);
                 if((Boolean)driverTable.getValueAt(count, 4)){
                     if(isDrivingLimitReached(username)) {
                         showMessageDialog(null, limitReachedErrorMessage);
@@ -205,11 +204,9 @@ public class Driver {
      * @return Driving route for driver.
      */
     private static String getDrivingRoute() {
-        System.out.println(cateringAdress); // DEBUG
 
         ArrayList<double[]> coords = UseReadyOrdersLatLng(cateringAdress, getAddresses());
         try {
-            // TODO - make more robust, coords may be empty and return null !IMPORTANT
             String startPoint = "new google.maps.LatLng(" + coords.get(0)[0] + "," + coords.get(0)[1] + ")";
             String endPoint = "new google.maps.LatLng(" + coords.get(coords.size()-1)[0] + "," + coords.get(coords.size()-1)[1] + ")";
             String waypts = "[";

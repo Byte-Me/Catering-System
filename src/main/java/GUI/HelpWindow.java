@@ -14,7 +14,7 @@ public class HelpWindow extends JDialog{
     Browser browser;
 
     /**
-     *
+     * Constructor for HelpWindow.
      */
     public HelpWindow() {
         setTitle("Help");
@@ -24,13 +24,25 @@ public class HelpWindow extends JDialog{
         Image icon = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/Images/icon32.png"));
         setIconImage(icon);
 
+        JButton backButton = new JButton("← Back");
+        JPanel menu = new JPanel(new BorderLayout());
+        menu.setBackground(Color.WHITE);
+        menu.add(backButton, BorderLayout.WEST);
+
         browser = new Browser();
         BrowserView browserView = new BrowserView(browser);
 
         mainPanel.setLayout(new BorderLayout());
+        mainPanel.add(menu, BorderLayout.NORTH);
         mainPanel.add(browserView, BorderLayout.CENTER);
 
         browser.loadURL("http://byte-me.github.io/Catering-System/");
+
+        backButton.addActionListener(e -> {
+            if (browser.getCurrentNavigationEntryIndex() > 1) {
+                browser.goBack();
+            }
+        });
 
         pack();
         setSize(700, 500);

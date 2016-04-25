@@ -12,6 +12,14 @@ import java.util.Random;
  */
 public class Encryption {
 
+    /**
+     * Check if inputted password is the same as stored password (Encrypted)
+     *
+     * @param pass          Inputted password
+     * @param saltString    Salt (Stored in database)
+     * @param hashString    Hash (Stored in database)
+     * @return              True if passwords match, else false
+     */
     public boolean passDecoding(String pass, String saltString, String hashString) {
         byte[] salt = stringToByte(saltString);
 
@@ -34,6 +42,12 @@ public class Encryption {
 
     }
 
+    /**
+     * Encodes inputted password to hash string
+     *
+     * @param password  Inputted password string
+     * @return          Array with random salt string and generated hash from password
+     */
     public String[] passEncoding(String password){
         Random rand = new Random();
         byte[] salt = new byte[16];
@@ -57,6 +71,12 @@ public class Encryption {
         return out;
     }
 
+    /**
+     * Converts String to byte array
+     *
+     * @param string
+     * @return
+     */
     private byte[] stringToByte(String string) {
         Base64.Decoder dec = Base64.getDecoder();
         return dec.decode(string);
@@ -64,15 +84,17 @@ public class Encryption {
 
     }
 
-//}
-
-
     //Eks program:
 
+    /**
+     * Test program for encryption
+     *
+     * @param args
+     * @throws Exception
+     */
     public static void main(String[] args) throws Exception {
         Encryption en = new Encryption();
         String[] passInfo = en.passEncoding("password");
         if (en.passDecoding("password", "2oUGF8AAgobU1E3rcAtyiw==", "oQaZgG266KjDzEkGTgXYMQ=="));
-        //}*/
     }
 }

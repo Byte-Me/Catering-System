@@ -21,8 +21,8 @@ public class UserSettings extends JDialog {
     private JPanel mainPanel;
 
     /**
-     *
-     * @param user
+     * Constructor for UserSettings.
+     * @param user List of the object user.
      */
     public UserSettings(Object[] user) {
         setTitle("User Settings");
