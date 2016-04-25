@@ -28,14 +28,14 @@ public class Users {
     static DefaultListSelectionModel listSelectionModel;
 
     /**
-     *
-     * @param addUserButton
-     * @param userTable
-     * @param inactiveUserTable
-     * @param searchUsers
-     * @param deleteUsersButton
-     * @param editUserButton
-     * @param reactivateUserButton
+     * Constructor for the window panel Users.
+     * @param addUserButton         JButton that opens the interface to add a new user.
+     * @param userTable             JTable with all the active users.
+     * @param inactiveUserTable     JTable with all the inactive users.
+     * @param searchUsers           JTextField that allows the user to search through the users.
+     * @param deleteUsersButton     JButton that deletes the selected user.
+     * @param editUserButton        JButton that opens the interface to edit the selected user.
+     * @param reactivateUserButton  JButton that reactivates an inactive user.
      */
     public Users(JButton addUserButton, final JTable userTable, JTable inactiveUserTable, final JTextField searchUsers, JButton deleteUsersButton, JButton editUserButton, JButton reactivateUserButton) {
 
@@ -204,7 +204,7 @@ public class Users {
     }
 
     /**
-     *
+     * Updates the active user table from the database.
      */
     public static void updateUsers() {
 
@@ -218,8 +218,8 @@ public class Users {
     }
 
     /**
-     *
-     * @param users
+     * Updates the active user table from the database.
+     * @param users List of active users.
      */
     public static void updateUsers(ArrayList<Object[]> users) {
 
@@ -233,7 +233,7 @@ public class Users {
     }
 
     /**
-     *
+     * Updates the inactive user table from the database.
      */
     public static void updateInactiveUsers() {
 
@@ -243,8 +243,8 @@ public class Users {
     }
 
     /**
-     *
-     * @param inactiveUsers
+     * Updates the inactive user table from the database.
+     * @param inactiveUsers List of inactive users.
      */
     public static void updateInactiveUsers(ArrayList<Object[]> inactiveUsers) {
 
