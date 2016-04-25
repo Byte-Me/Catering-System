@@ -82,7 +82,7 @@ public class EditRecipe extends JDialog {
                     ingInfo.add(obj);
                 }
 
-                if(foodManagement.updateRecipe(recipeName, ingInfo, recipePrice, recipeId) && !recipeName.isEmpty() && recipePrice > 0) {
+                if(!recipeName.isEmpty() && recipePrice > 0 && foodManagement.updateRecipe(recipeName, ingInfo, recipePrice, recipeId)) {
                     JOptionPane.showMessageDialog(null, "Success!");
                     Recipes.updateRecipes();
                     setVisible(false);
