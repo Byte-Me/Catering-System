@@ -75,7 +75,10 @@ public class MainWindow extends JFrame {
     private JComboBox driverDropdown;
     private JButton driverDetailsButton;
 
-
+    /**
+     *
+     * @param user
+     */
     public MainWindow(Object[] user) {
         setTitle("Healthy Catering LTD");
         setContentPane(mainPanel); // Set the main content panel

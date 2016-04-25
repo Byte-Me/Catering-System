@@ -21,7 +21,7 @@ import static GUI.WindowPanels.Driver.*;
 public class UpdateHandler {
     private static Timer timer;
     private static JTabbedPane tabbedPane;
-    private static Component[] tabs;
+    private static String[] tabs;
     private static boolean autoUpdateStarted = false;
 
     // Used for right click handler
@@ -38,9 +38,12 @@ public class UpdateHandler {
     }
 
     private static String findNameOfTab(int index) {
-        tabs = tabbedPane.getComponents();
+        tabs = new String[tabbedPane.getTabCount()];
+        for (int i = 0; i < tabs.length; i++) {
+            tabs[i] = tabbedPane.getTitleAt(i);
+        }
         if (tabs[index] != null && index < tabs.length) {
-            return tabs[index].getName().toLowerCase();
+            return tabs[index].toLowerCase();
         }
         return null;
     }
@@ -50,7 +53,7 @@ public class UpdateHandler {
 
         String currentTab = findNameOfTab(tabbedPane.getSelectedIndex());
 
-        System.out.println("Updating: " + currentTab);
+        System.out.println("Updating: " + currentTab + " with index: " + getCurrTab());
 
         switch (currentTab) {
             case "statistics":
