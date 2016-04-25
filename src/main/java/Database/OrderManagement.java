@@ -112,6 +112,13 @@ public class OrderManagement extends Management {
 
     }
 
+    /**
+     * Updates status for specified order id
+     * @param orderID order id you want to change the status to
+     * @param newStatus the new status the order id will be changed to
+     * @return true when update is successful
+     */
+
     public boolean updateStatus(int orderID, int newStatus) {
         int rowChanged = 0;
         if (newStatus < OrderType.INACTIVE.getValue() || newStatus > OrderType.DELIVERED.getValue()) {
@@ -138,32 +145,14 @@ public class OrderManagement extends Management {
         return rowChanged > 0;
     }
 
-    public ArrayList<Object[]> getDeletedOrders() {
-        ArrayList<Object[]> out = new ArrayList<>();
-        if (setUp()) {
-            //Henter info fra ordre der ordren er merket som inaktiv.
-            conn = getConnection();
-            try {
-                prep = conn.prepareStatement(sqlGetDeletedOrders);
-                prep.setInt(1, OrderType.INACTIVE.getValue());
-                res = prep.executeQuery();
-                while (res.next()) {
-                    out.add(createList(res));
-                }
-            } catch (Exception e) {
-                System.err.println("ERROR 005: Issue with fetching orders");
-            } finally {
-                finallyStatement(res, prep);
-            }
-        }
-        return out;
-    }
-
+    /**
+     * Gets orders from database
+     * @return Arraylist with order id, name, phone, adress and date
+     */
     public ArrayList<Object[]> getOrders() {
         ArrayList<Object[]> out = new ArrayList<>();
         if (setUp()) {
             conn = getConnection();
-            //Henter info fra ordre der ordren ikke er merket som inaktiv.
             try {
                 prep = conn.prepareStatement(sqlGetOrders);
                 prep.setInt(1, OrderType.ACTIVE.getValue());
@@ -190,6 +179,12 @@ public class OrderManagement extends Management {
         obj[5] = OrderType.valueOf(res.getInt("status"));
         return obj;
     }
+
+    /**
+     * Search within the order table in the database
+     * @param searchTerm What you want to search for
+     * @return
+     */
 
     public ArrayList<Object[]> orderSearch(String searchTerm) {
         ArrayList<Object[]> out = new ArrayList<>();
@@ -220,6 +215,16 @@ public class OrderManagement extends Management {
         return out;
     }
 
+    /**
+     * Create a order with an subscription
+     * @param id The id of the customer who creates the subscription order
+     * @param date The date the customer wants the order deliverd
+     * @param recipes List of recipes that the order consists off
+     * @param note A comment for the order, can be null
+     * @param time The time the customer wants the order to be deliverd
+     * @param subId The subscription id of the order
+     * @return true or false depending on if the subscription order was successfully registerd
+     */
     public boolean createOrderSub(int id, String date, ArrayList<Object[]> recipes, String note, String time, int subId) { // recipes[0] = name, recipes[1] = portions.
         int rowChanged;
         if (setUp()) {
@@ -299,6 +304,15 @@ public class OrderManagement extends Management {
         return true;
     }
 
+    /**
+     * Create a order
+     * @param email A unique email is used to get the customer id
+     * @param date The date the customer wants the order deliverd
+     * @param recipes List of recipes that the order consists off
+     * @param note A comment for the order, can be null
+     * @param time The time the customer wants the order to be deliverd
+     * @return true or false depending on if the order was successfully registerd
+     */
     public boolean createOrder(String email, String date, ArrayList<Object[]> recipes, String note, String time) {
         int id = -1;
         try {
@@ -325,6 +339,12 @@ public class OrderManagement extends Management {
         return true;
     }
 
+
+    /**
+     * Gets information from order id
+     * @param orderId The order you want to retrive information from
+     * @return An object[] with name, date, time and comment
+     */
     public Object[] getOrderInfoFromId(int orderId) {
         Object[] out = new Object[6];
         if (setUp()) {
@@ -351,6 +371,11 @@ public class OrderManagement extends Management {
         return out;
     }
 
+    /**
+     * Gets recipes from order and number of portions
+     * @param orderId
+     * @return Arraylist with name and portions
+     */
     public ArrayList<Object[]> getRecipesFromOrder(int orderId) {
         ArrayList<Object[]> out = new ArrayList<>();
         if (setUp()) {
@@ -376,9 +401,15 @@ public class OrderManagement extends Management {
 
 
     // Sletter/ setter en ordre til inaktiv
+
+    /**
+     * Sets the order id to inactive
+     * @param orderID the order id that will be set to inactive
+     */
     public void deleteOrder(int orderID) {
         updateStatus(orderID, OrderType.INACTIVE.getValue());
     }
+
 
     private boolean updateDatabase(String sql, int orderID, String input, String errorMessage) {
         int rowChanged = 0;
@@ -401,36 +432,32 @@ public class OrderManagement extends Management {
         return rowChanged > 0;
     }
 
-    private boolean updateDatabase(String sql, int orderID, int input1, int input2, String errorMessage) {
-        int rowChanged = 0;
-        if (setUp()) {
-            conn = getConnection();
-            try {
-                conn.setAutoCommit(false);
-                prep = conn.prepareStatement(sql);
-                prep.setInt(1, input1);
-                prep.setInt(2, orderID);
-                prep.setInt(3, input2);
-                rowChanged = prep.executeUpdate();
-            } catch (SQLException sqle) {
-                System.err.println(errorMessage);
-                rollbackStatement();
-                return false;
-            } finally {
-                finallyStatement(res, prep);
-            }
-        }
-        return rowChanged > 0;
-    }
-
+    /**
+     * Updates the order date
+     * @param orderDate The new date the order will recive
+     * @param orderID The id to the order that will be changed
+     * @return True or false depending on if the update was successful
+     */
     public boolean updateOrderDate(String orderDate, int orderID) {
         return updateDatabase(sqlUpdateOrderDate, orderID, orderDate, "Issue with updating order date");
     }
 
+    /**
+     * Updates the order time
+     * @param orderTime The new time the order will recive
+     * @param orderID The id to the order that will be changed
+     * @return True or false depending on if the update was successful
+     */
     public boolean updateOrderTime(String orderTime, int orderID) {
         return updateDatabase(sqlUpdateOrderTime, orderID, orderTime, "Issue with updating order time");
     }
 
+    /**
+     * Updates the customer to a order
+     * @param orderID The id to the order that will be changed
+     * @param newCustId The new id to the customer that it will be changed to
+     * @return True or false depending on if the update was successful
+     */
     public boolean updateOrderCustomer(int orderID, int newCustId) {
         int rowChanged = 0;
         if (setUp()) {
@@ -452,7 +479,12 @@ public class OrderManagement extends Management {
         return rowChanged > 0;
     }
 
-
+    /**
+     * Updates the recipes to a order
+     * @param orderID The id to the order that will be changed
+     * @param recipes The recipes that will be updated
+     * @return True or false depending on if the update was successful
+     */
     public boolean updateOrderRecipes(int orderID, ArrayList<Object[]> recipes) { //obj[1] = recipe_id, obj[0] = portions
         int rowChanged = 0;
         if (setUp()) {
@@ -482,10 +514,12 @@ public class OrderManagement extends Management {
 
     }
 
-    public boolean updateRecipePortions(int newPortions, int recipeID, int orderID) {
-        return updateDatabase(sqlUpdateOrderPortions, orderID, newPortions, recipeID, "Issue with updating order portions");
-    }
-
+    /**
+     * Updates the comment to an specified order
+     * @param comment The new comment the order will have
+     * @param orderID The id to the order that will be changed
+     * @return True or false depending on if the update was successful
+     */
     public boolean updateOrderComment(String comment, int orderID) {
         return updateDatabase(sqlUpdateOrderComment, orderID, comment, "Issue with updating order comment");
     }

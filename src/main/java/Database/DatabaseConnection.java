@@ -19,6 +19,7 @@ public class DatabaseConnection {
             "?user=" + username + "&password=" + password;
     private Connection connection = null;
 
+
     public DatabaseConnection() {
 
         try {
@@ -30,6 +31,11 @@ public class DatabaseConnection {
             System.err.println("Issue with connecting to database.");
         }
     }
+
+    /**
+     * Gets the current connection
+     * @return The current database connection
+     */
     public Connection getConnection(){
         return connection;
     }

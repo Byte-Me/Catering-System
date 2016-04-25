@@ -8,6 +8,7 @@ import static org.junit.Assert.*;
 
 /**
  * Created by Evdal on 09.03.2016.
+ * ALL GOOD DON'T CHANGE ANYTHING
  */
 public class TestJUnitEncryption {
     private Encryption en;

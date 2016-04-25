@@ -14,6 +14,9 @@ import java.util.Arrays;
 /**
  * Created by Evdal on 15.03.2016.
  */
+
+    // FIXME
+
 public class TestJUnitFood {
     CreateShoppingList csList;
     @BeforeClass
@@ -22,10 +25,8 @@ public class TestJUnitFood {
     }
     @Test
     public void createShoppingList(){
-        ArrayList<Object[]> test = CreateShoppingList.withDates("2015-04-22", "2016-04-22");
+        ArrayList<Object[]> test = CreateShoppingList.withDates("2015-01-01", "2017-01-01");
         assertNotNull(test);
         assertFalse(test.isEmpty());
-
-
     }
 }
