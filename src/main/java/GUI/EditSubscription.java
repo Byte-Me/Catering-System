@@ -67,8 +67,16 @@ public class EditSubscription extends JDialog{
     private Subscriptions subs = new Subscriptions();
 
     /**
+     * A constructor generating a window with automaticallt
+     * filled in input fields needed to edit a subscription.
      *
-     * @param subId
+     * There is some non-dynamic logic used to create the  checkboxes
+     * and corresponding order-input fields.
+     *
+     * Also includes actionlisteners for an add subscription button. Which
+     * sends the information to the database.
+     *
+     * @param subId The id of subscription to be edited, used to fill inn information.
      */
     public EditSubscription(int subId) {
         setTitle("Edit Subscription");
@@ -231,23 +239,10 @@ public class EditSubscription extends JDialog{
 
     }
 
-    /**
-     *
-     * @param table
-     * @param entry
-     * @return
-     */
-    private int existsInTable(JTable table, String entry) {
-        for (int i = 0; i < table.getRowCount(); i++) {
-            if (table.getValueAt(i, 0).equals(entry)) {
-                return i;
-            }
-        }
-        return -1;
-    }
+
 
     /**
-     *
+     * Updates the dropdown of customers, used when window is opened and if a new customer is added.
      */
     private void updateDropdown(){
         customerDropdown.removeAllItems();
@@ -260,7 +255,8 @@ public class EditSubscription extends JDialog{
     }
 
     /**
-     *
+     * Creates JDatePicker with correct dates. Needed to create a custom palette from form.
+
      */
     private void createUIComponents() {
         // TODO: place custom component creation code here
@@ -288,8 +284,8 @@ public class EditSubscription extends JDialog{
     }
 
     /**
-     *
-     * @param id
+     * Private method used by the constructor to fill in subscription information.
+     * @param id Subscription id to know which subscription to update.
      */
     private void fillSubInfo(int id){
         Object[] info = subs.getSubInfoFromId(id);
@@ -352,7 +348,7 @@ public class EditSubscription extends JDialog{
     }
 
     /**
-     *
+     * private method to add a spesific panel to the window.
      */
     private void addMonPanel(){
         if(monPanel == null) {
@@ -371,7 +367,8 @@ public class EditSubscription extends JDialog{
     }
 
     /**
-     *
+     * private method to add a spesific panel to the window.
+
      */
     private void addTuePanel(){
         if(tuePanel == null) {
@@ -401,7 +398,8 @@ public class EditSubscription extends JDialog{
     }
 
     /**
-     *
+     * private method to add a spesific panel to the window.
+
      */
     private void addWedPanel(){
         if(wedPanel == null) {
@@ -435,7 +433,8 @@ public class EditSubscription extends JDialog{
     }
 
     /**
-     *
+     * private method to add a spesific panel to the window.
+
      */
     private void addThuPanel(){
         if(thuPanel == null) {
@@ -472,7 +471,8 @@ public class EditSubscription extends JDialog{
     }
 
     /**
-     *
+     * private method to add a spesific panel to the window.
+
      */
     private void addFriPanel(){
         if(friPanel == null) {
@@ -513,7 +513,8 @@ public class EditSubscription extends JDialog{
     }
 
     /**
-     *
+     * private method to add a spesific panel to the window.
+
      */
     private void addSatPanel(){
         if(satPanel == null) {
@@ -555,7 +556,8 @@ public class EditSubscription extends JDialog{
     }
 
     /**
-     *
+     * private method to add a spesific panel to the window.
+
      */
     private void addSunPanel(){
         if(sunPanel == null) {
@@ -599,22 +601,6 @@ public class EditSubscription extends JDialog{
             }
         }
 
-    }
-    private ArrayList<Object[]> orderList(ArrayList<Object[]> list) {
-        ArrayList<Object[]> out = new ArrayList<>();
-        while(!list.isEmpty()) {
-            int smallestValue = 7;
-            int index = 0;
-            for (int i = 0; i < list.size(); i++) {
-                if ((Integer) list.get(i)[2] < smallestValue) {
-                    smallestValue = (Integer) list.get(i)[2];
-                    index = i;
-                }
-            }
-            out.add(list.get(index));
-            list.remove(index);
-        }
-        return out;
     }
 
 

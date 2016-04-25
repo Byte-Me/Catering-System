@@ -31,12 +31,14 @@ public class Subscriptions {
     private final int nameColumnNr = 1;
 
     /**
+     * A tab that consists of a subscription panel. Constrctor creates model for table
+     * and sets up actionlistener. Sends calls to other classes as actions are performed.
      *
-     * @param subscriptionsTable
-     * @param searchSubscriptions
-     * @param addSubscriptionButton
-     * @param editSubscriptionButton
-     * @param deleteSubscriptionButton
+     * @param subscriptionsTable the main table where all subscriptions are shown.
+     * @param searchSubscriptions a tekst field for searching the main table.
+     * @param addSubscriptionButton a button to create a new subscription.
+     * @param editSubscriptionButton a button to edit existing subscription.
+     * @param deleteSubscriptionButton a button to delete existing subscription, also deletes corresponding orders.
      */
     public Subscriptions(JTable subscriptionsTable, final JTextField searchSubscriptions, JButton addSubscriptionButton, JButton editSubscriptionButton, JButton deleteSubscriptionButton) {
 
@@ -190,8 +192,10 @@ public class Subscriptions {
     }
 
     /**
+     * Sends a call to the database with a searchterm, then updates the subscritions table
+     * with information matching the searchterm.
      *
-     * @param searchTerm
+     * @param searchTerm a string of what to search for.
      */
     private static void updateFromSearch(String searchTerm){
         // Empties entries of Users table
@@ -205,6 +209,12 @@ public class Subscriptions {
     }
 
     /**
+     * a general method to update the subscription table, sends a call for all
+     * subscriptions in the database and updates the subscription table with this
+     * information.
+     *
+     * The method is usually called when an update is made, a new subscription is added or
+     * through the auto updater.
      *
      */
     public static void updateSubscriptions() {
