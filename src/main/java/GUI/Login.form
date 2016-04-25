@@ -60,7 +60,7 @@
                   </grid>
                 </constraints>
                 <properties>
-                  <text value="Ole"/>
+                  <text value=""/>
                 </properties>
               </component>
               <hspacer id="90931">
@@ -94,7 +94,7 @@
                   </grid>
                 </constraints>
                 <properties>
-                  <text value="pass"/>
+                  <text value=""/>
                 </properties>
               </component>
               <hspacer id="b053e">
