@@ -235,12 +235,12 @@ public class OrderManagement extends Management {
                 prep.setString(5, time);
                 prep.setInt(6, subId);
                 System.out.println(prep.toString());
-                rowChanged = prep.executeUpdate(); //Legger inn orderen med status aktiv.
+                rowChanged = prep.executeUpdate();
                 int orderID = 0;
 
                 if (rowChanged > 0) {
-                    try {    // Må ikke bruke prep siden brukeren ikke kan endre input
-                        res = getScentence().executeQuery(sqlCreateOrderSub1); // Henter den autoinkrementerte verdien.
+                    try {
+                        res = getScentence().executeQuery(sqlCreateOrderSub1);
                         if (res.next()) {
                             orderID = res.getInt("id");
                         }
@@ -264,7 +264,7 @@ public class OrderManagement extends Management {
                     res = prep.executeQuery();
 
                     if (res.next()) {
-                        recipeIDs.add(res.getInt("recipe_id")); //Henter oppskrifts IDer for å koble oppskrifter med ordre.
+                        recipeIDs.add(res.getInt("recipe_id"));
                     } else {
                         rollbackStatement();
                         return false;
@@ -298,28 +298,6 @@ public class OrderManagement extends Management {
         }
         return true;
     }
-/*
-    public int getOrderID(String email){
-        int id = -1;
-        if(setUp()){
-            try {
-                conn = getConnection();
-                prep = conn.prepareStatement(sqlGetEmail);
-                prep.setString(1, email);
-                res = prep.executeQuery();
-
-                if (res.next()) {
-                    id = res.getInt("customer_id");
-                }
-            }catch (SQLException sqle){
-                System.err.println("ERROR 014: Issue with finding order id");
-            }finally {
-                finallyStatement();
-            }
-        }
-        return id;
-    }*/
-
 
     public boolean createOrder(String email, String date, ArrayList<Object[]> recipes, String note, String time) {
         int id = -1;
@@ -333,13 +311,10 @@ public class OrderManagement extends Management {
                 if (res.next()) {
                     id = res.getInt("customer_id");
                 }
-                //Metode ment for GUI, her slipper man å sende inn en subscription id, og metoden finner Customer ID selv.
-                //Deretter kalles create order for subscription med de nye verdiene.
             }
             if (!createOrderSub(id, date, recipes, note, time, -1)) {
                 return false;
             }
-            //-1 er verdien som blir satt dersom det ikke finnes en subscription.
 
         } catch (SQLException e) {
             System.err.println("ERROR 011: Issue with registering order.");
@@ -350,10 +325,6 @@ public class OrderManagement extends Management {
         return true;
     }
 
-
-    /*.getOrderInfoFromId(orderId);
-        ArrayList<Object[]> orderRecipes = orderManagement.getRecipesFromOrder(orderId);
-        */
     public Object[] getOrderInfoFromId(int orderId) {
         Object[] out = new Object[6];
         if (setUp()) {

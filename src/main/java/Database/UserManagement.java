@@ -201,13 +201,6 @@ public class UserManagement extends Management {
     }
 
 
-
-
-    /**
-     * Legger til transakjoner til update setningene
-     * sånn ingen kan endre de når man updater!
-    */
-
     public boolean updateUserInfoFName(String username, String newData) {
         int rowChanged = 0;
         if (setUp()) {
@@ -425,30 +418,5 @@ public class UserManagement extends Management {
         return updateUserStatus(username, 1);
     }
 
-    /*
-
-    public boolean deleteUser(){
-        ResultSet res = null;
-        if(setUp()){
-            try{
-                res = getScentence().executeUpdate("UPDATE user SET active = ")
-            }
-            catch (Exception e){
-                System.err.println("Issue with deleting user.");
-            }
-        }
-    }*/
 
 }
-
-
-
-/*
-    public static void main(String[] args){
-        UserManagement test = new UserManagement();
-        if(test.connected()) {
-            if (test.registerUser("Even", "pass", "ed@do.set", 2)) System.out.println("Success!");
-        }
-    }
-}
-*/

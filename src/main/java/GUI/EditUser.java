@@ -22,7 +22,7 @@ public class EditUser extends JDialog{
     private JTextField phone;
     private JRadioButton changePasswordRadioButton;
 
-    UserManagement userManagement = new UserManagement(); //TODO: Dette må testes, db var nede 09.04.2016
+    UserManagement userManagement = new UserManagement();
 
     /**
      * Constructor for EditUser.

@@ -46,9 +46,6 @@ public class FinanceManagement extends Management{
         return true;
     }
 
-    /**
-     *  Hadde bare lyst så jeg laget en add metode
-     */
 
     public boolean addIncomeToDatabase(double income){
         return addDoubleToDatabase(sqlAddIncome, income, "Issue with adding income to database");

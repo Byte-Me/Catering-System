@@ -41,7 +41,7 @@ public class EditIngredient extends JDialog {
 
         ingredientAmount.requestFocus();
 
-        editIngredientButton.addActionListener(e -> { // Rar bug med å edite både navn og unit sammen, alle andre kombinasjoner funker (virker det som).
+        editIngredientButton.addActionListener(e -> {
             try {
                 String name = ingredientName.getText();
                 int price = Integer.parseInt(ingredientPrice.getText());

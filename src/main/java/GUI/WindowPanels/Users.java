@@ -65,8 +65,8 @@ public class Users {
 
         editUserButton.addActionListener(e ->{
             try {
-                if (userTable.getSelectedRows().length == 1 ) { //TODO: sjekker ikke om flere columns er selected, velger øverste.
-                    String username = (String) userTable.getValueAt(userTable.getSelectedRow(), usernameColumnNr); //hent username for selected row
+                if (userTable.getSelectedRows().length == 1 ) {
+                    String username = (String) userTable.getValueAt(userTable.getSelectedRow(), usernameColumnNr); //get username for selected row
                     new EditUser(username);
                 } else if(userTable.getSelectedRows().length < 1){
                     showMessageDialog(null, "A user needs to be selected.");
@@ -75,7 +75,7 @@ public class Users {
                     showMessageDialog(null, "Only one user can be selected.");
                 }
             }
-            catch (IndexOutOfBoundsException iobe){ //Oppstår exception jeg ikke forstår, derfor bare catcher det.
+            catch (IndexOutOfBoundsException iobe){
                 showMessageDialog(null, "A user needs to be selected.");
             }
 

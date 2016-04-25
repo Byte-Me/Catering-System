@@ -137,7 +137,7 @@ public class AddSubscription extends JDialog{
         customerDropdown.addActionListener(e -> { //if value in dropdown is changed
             if (customerDropdown.getSelectedIndex() == customerDropdown.getItemCount()-1) { //if selected value is last index
                 new AddCustomer(); //call addCustomer method.
-                updateDropdown(); //FIXME: Denne oppdaterer for fort? ny kunde vises ikke før den oppdateres senere...
+                updateDropdown();
             }
         });
 
@@ -389,7 +389,7 @@ public class AddSubscription extends JDialog{
                     Object[][] info = panelList.get(i).getValues();
                     panelValues.add(info);
                 }
-            }//FIXME: legger bare inn første dag!!!
+            }
 
             for(Object[][] obj : panelValues){
                 for(int i = 0; i<obj.length;i++){

@@ -230,7 +230,7 @@ public class SubscriptionManagement extends Management{
         }
         return out;
     }
-    public ArrayList<Object[]> getOrderInfoFromSub(int subId){ //DENNE MÅ ENDRES TODO
+    public ArrayList<Object[]> getOrderInfoFromSub(int subId){
         ArrayList<Object[]> out = new ArrayList<>();
         if(setUp()){
             try{
