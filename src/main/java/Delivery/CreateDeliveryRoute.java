@@ -10,6 +10,13 @@ import java.util.Arrays;
  * Created by Evdal on 14.03.2016.
  */
 public class CreateDeliveryRoute {
+
+    /**
+     * List of orders ready for delivery.
+     * @param startAdress Start address.
+     * @param adressNames Address names.
+     * @return
+     */
     public static ArrayList<Object[]> UseReadyOrders(String startAdress, ArrayList<String> adressNames){
         ArrayList<Object[]> out;
         DeliveryManagement dev = new DeliveryManagement();
@@ -30,6 +37,12 @@ public class CreateDeliveryRoute {
         return out;
     }
 
+    /**
+     * List of orders for table.
+     * @param startAdress Start address.
+     * @param adressNames Address names.
+     * @return
+     */
     public static ArrayList<Object[]> orderListForTable(String startAdress, ArrayList<String> adressNames){
         ArrayList<Object[]> out;
         DeliveryManagement dev = new DeliveryManagement();
@@ -53,6 +66,12 @@ public class CreateDeliveryRoute {
     }
 
 
+    /**
+     * Calculates the fastest route for the driver.
+     * @param startAdress Start address.
+     * @param adressNames Address names.
+     * @return Returns the addresses as latitudes and longitudes instead of actual addresses.
+     */
     public static ArrayList<double[]> UseReadyOrdersLatLng(String startAdress, ArrayList<String> adressNames){
 
         ArrayList<double[]> out;

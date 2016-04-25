@@ -21,9 +21,9 @@ public class SubscriptionStatistics extends Statistics{
     private Subscriptions subs = new Subscriptions();
 
     /**
-     *
-     * @param dateFrom
-     * @param dateTo
+     * Gets subscription count.
+     * @param dateFrom Date from.
+     * @param dateTo Date to.
      * @return
      */
     public int getSubCount(String dateFrom, String dateTo) {
@@ -32,9 +32,9 @@ public class SubscriptionStatistics extends Statistics{
     }
 
     /**
-     *
-     * @param dateFrom
-     * @param dateTo
+     * Gets cancelled subscription count.
+     * @param dateFrom From date.
+     * @param dateTo To date.
      * @return
      */
     public int getCancelledSubCount(String dateFrom, String dateTo) {
@@ -43,9 +43,9 @@ public class SubscriptionStatistics extends Statistics{
     }
 
     /**
-     *
-     * @param dateFrom
-     * @param dateTo
+     * Gets active subscription count.
+     * @param dateFrom Date from.
+     * @param dateTo Date to.
      * @return
      */
     public int getActiveSubCount(String dateFrom, String dateTo) {
@@ -60,9 +60,9 @@ public class SubscriptionStatistics extends Statistics{
     }
 
     /**
-     *
-     * @param dateFrom
-     * @param dateTo
+     * JPanel to active subscription graph.
+     * @param dateFrom Date from.
+     * @param dateTo Date to.
      * @return
      */
     public JPanel subActiveLineGraph(String dateFrom, String dateTo){

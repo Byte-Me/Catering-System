@@ -44,6 +44,12 @@ public class DeliveryRoute {/*
     }
 */
 
+    /**
+     * Turn address names into longitude and latitude.
+     * @param adress Adress name.
+     * @param index Index.
+     * @return
+     */
     public static double[] geoCoder(String adress, int index){
         double[] out = new double[3];
         final Geocoder geocoder = new Geocoder();
@@ -88,6 +94,11 @@ public class DeliveryRoute {/*
 
     }
 
+    /**
+     * List calculated orders.
+     * @param positions Position.
+     * @return
+     */
     public static ArrayList<double[]> calculateOrder(ArrayList<double[]> positions){
         ArrayList<Integer> indexed = new ArrayList<>();
         ArrayList<double[]> out = new ArrayList<>();
@@ -132,6 +143,11 @@ public class DeliveryRoute {/*
 
     }
 
+    /**
+     * Lists the distances in longitude and latitude.
+     * @param positions Positions
+     * @return
+     */
     public static ArrayList distancesInLanLat(ArrayList<double[]> positions){
         ArrayList ut = new ArrayList();
         for(int i = 0; i<positions.size()-1;i++){

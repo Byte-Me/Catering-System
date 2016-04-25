@@ -16,9 +16,9 @@ public class CustomerStatistics extends Statistics{
     private StatisticsManagement stats = new StatisticsManagement();
 
     /**
-     *
-     * @param dateFrom
-     * @param dateTo
+     * JPanel for customer line graph.
+     * @param dateFrom From date.
+     * @param dateTo To date.
      * @return
      */
     public JPanel customerLineGraph(String dateFrom, String dateTo){
