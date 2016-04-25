@@ -52,12 +52,12 @@ public class Driver {
     private String username;
 
     /**
-     *
-     * @param driverTable
-     * @param mapPanel
-     * @param generateDrivingRouteButton
-     * @param driverDropdown
-     * @param currentUser
+     * Construrctor for the window panel Customers.
+     * @param driverTable                   JTable containing all the drivers.
+     * @param mapPanel                      JPanel containing the map with the plugin JxBrowser.
+     * @param generateDrivingRouteButton    JButton that uses an algorythm to generate the best suited driving route.
+     * @param driverDropdown                JComboBox with a dropdown menu of all the diferent drivers.
+     * @param currentUser                   The current user for a driving route.
      */
     public Driver(final JTable driverTable, JPanel mapPanel, JButton generateDrivingRouteButton, JComboBox driverDropdown, Object[] currentUser) {
 
@@ -201,8 +201,8 @@ public class Driver {
     }
 
     /**
-     *
-     * @return
+     * Get the driving route for the drivers.
+     * @return Driving route for driver.
      */
     private static String getDrivingRoute() {
         System.out.println(cateringAdress); // DEBUG
@@ -239,7 +239,7 @@ public class Driver {
     }
 
     /**
-     *
+     * Updates the dropdown menu with drivers from the database.
      */
     private void updateDropdown(){
         driverDropdown.removeAllItems();
@@ -251,8 +251,8 @@ public class Driver {
     }
 
     /**
-     *
-     * @param username
+     * Updates the driver table specific to the driver.
+     * @param username Current driver assigned to the task.
      */
     public static void updateDriverTable(String username){
         driverModel.setRowCount(0);
@@ -264,8 +264,8 @@ public class Driver {
     }
 
     /**
-     *
-     * @param username
+     * Updates and sort the driver table specific to the driver.
+     * @param username Current driver assigned to the task.
      */
     public static void updateDriverTableSorted(String username){
         ArrayList<Object[]> sortedOrders = CreateDeliveryRoute.orderListForTable(cateringAdress,getAddresses());
@@ -277,8 +277,8 @@ public class Driver {
     }
 
     /**
-     *
-     * @return
+     * Get the addresses from the table.
+     * @return List of addresses.
      */
     private static ArrayList<String> getAddresses(){
         ArrayList<String> out = new ArrayList<>();
@@ -289,9 +289,9 @@ public class Driver {
     }
 
     /**
-     *
-     * @param username
-     * @return
+     * Checks if the driving limit is reached for a specific driver.
+     * @param username Username of the driver.
+     * @return True or false if the driving limit is reached.
      */
     private boolean isDrivingLimitReached(String username){
         int limit = 8;
