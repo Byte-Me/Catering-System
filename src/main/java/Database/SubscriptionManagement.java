@@ -32,16 +32,31 @@ public class SubscriptionManagement extends Management{
     PreparedStatement prep = null;
     ResultSet res = null;
 
+    /**
+     * Constructor of SubscriptionManagement.
+     */
     public SubscriptionManagement(){super();}
 
+    /**
+     * enum of SupType.
+     */
     // Defines the User Types
     public enum SubType {
         INACTIVE, ACTIVE;
 
+        /**
+         * Gets value.
+         * @return
+         */
         public int getValue() {
             return super.ordinal();
         }
 
+        /**
+         * Finds value of enum.
+         * @param subTypeNr The supscription type number
+         * @return
+         */
         public static SubType valueOf(int subTypeNr) {
             for (SubType type : SubType.values()) {
                 if (type.ordinal() == subTypeNr) {
@@ -52,6 +67,10 @@ public class SubscriptionManagement extends Management{
         }
     }
 
+    /**
+     * Gets a list of subscriptions.
+     * @return
+     */
     public ArrayList<Object[]> getSubscriptions(){
         ArrayList<Object[]> out = new ArrayList<>();
         if(setUp()){
@@ -76,6 +95,11 @@ public class SubscriptionManagement extends Management{
         }
         return out;
     }
+
+    /**
+     * List of deleted subscriptions.
+     * @return
+     */
     public ArrayList<Object[]> getDeletedSubscriptions(){
         ArrayList<Object[]> out = new ArrayList<Object[]>();
         if(setUp()){
@@ -100,6 +124,7 @@ public class SubscriptionManagement extends Management{
         }
         return out;
     }
+
     private Object[] createObj(ResultSet res)throws Exception{
         Object[] obj = new Object[5];
 
@@ -112,6 +137,11 @@ public class SubscriptionManagement extends Management{
 
     }
 
+    /**
+     * List of subscription searches.
+     * @param searchTerm String of the search.
+     * @return
+     */
     public ArrayList<Object[]> subscriptionSearch(String searchTerm){
         ArrayList<Object[]> out = new ArrayList<>();
         if(setUp()) {
@@ -149,6 +179,11 @@ public class SubscriptionManagement extends Management{
         else return null;
     }
 
+    /**
+     * Container of subscription orders.
+     * @param subId Subscription ID
+     * @return
+     */
     public int containsSubOrder(int subId){
         int orders = 0;
         if(setUp()){
@@ -172,6 +207,15 @@ public class SubscriptionManagement extends Management{
         return orders;
     }
 
+    /**
+     * Creates a subscription.
+     * @param custID Customer ID.
+     * @param dateFrom Date when subscription starts.
+     * @param dateTo Date when subscription ends.
+     * @param frequency Frequency of the orders in the subscription (how many weeks between each order).
+     * @param subId Subscription ID
+     * @return
+     */
     public int createSubscription(int custID, String dateFrom, String dateTo, int frequency, int subId){ //subid = -1 if not exists
         int subid = -1;
         if(setUp()){
@@ -206,6 +250,11 @@ public class SubscriptionManagement extends Management{
         return subid;
     }
 
+    /**
+     * Gets subscription info from ID.
+     * @param subId Subscription ID.
+     * @return
+     */
     public Object[] getSubInfoFromId(int subId){
         Object[] out = new Object[4];
         if(setUp()){
@@ -230,6 +279,12 @@ public class SubscriptionManagement extends Management{
         }
         return out;
     }
+
+    /**
+     * Gets order info from subscription ID.
+     * @param subId subscription ID.
+     * @return
+     */
     public ArrayList<Object[]> getOrderInfoFromSub(int subId){ //DENNE MÅ ENDRES TODO
         ArrayList<Object[]> out = new ArrayList<>();
         if(setUp()){
@@ -255,6 +310,13 @@ public class SubscriptionManagement extends Management{
         }
         return out;
     }
+
+    /**
+     * Gets recipe info from subscription ID and date.
+     * @param subId Subscription ID.
+     * @param date Date.
+     * @return
+     */
     public Object[] getRecipeInfoFromSubAndDate(int subId, String date){
         Object[] out = new Object[4];
         if(setUp()){
@@ -294,6 +356,12 @@ public class SubscriptionManagement extends Management{
         }
         return out;
     }
+
+    /**
+     * Deletes subscription.
+     * @param subId Subscription ID.
+     * @return
+     */
     public boolean deleteSubscription(int subId){
         if(setUp()){
             try{

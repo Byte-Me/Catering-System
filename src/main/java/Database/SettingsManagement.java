@@ -12,6 +12,9 @@ import java.sql.SQLException;
  */
 public class SettingsManagement extends Management {
 
+    /**
+     * Constructor of SettingsManagement.
+     */
     public SettingsManagement() {
         super();
     }
@@ -39,6 +42,10 @@ public class SettingsManagement extends Management {
     PreparedStatement prep = null;
     ResultSet res = null;
 
+    /**
+     * Gets system adress.
+     * @return
+     */
     public String getSystemAddress() {
         String out = null;
         if (setUp()) {
@@ -61,6 +68,11 @@ public class SettingsManagement extends Management {
 
     }
 
+    /**
+     * Set new system adress.
+     * @param newValue New adress value.
+     * @return
+     */
     public boolean setSystemAddress(String newValue) {
         int rowChanged = 0;
         if (setUp()) {
@@ -83,6 +95,10 @@ public class SettingsManagement extends Management {
 
     }
 
+    /**
+     * Gets system city.
+     * @return
+     */
     public String getSystemCity() {
         String out = null;
         if (setUp()) {
@@ -105,6 +121,11 @@ public class SettingsManagement extends Management {
 
     }
 
+    /**
+     * Sets new system city.
+     * @param newValue New system city value.
+     * @return
+     */
     public boolean setSystemCity(String newValue) {
         int rowChanged = 0;
         if (setUp()) {
@@ -127,7 +148,10 @@ public class SettingsManagement extends Management {
 
     }
 
-
+    /**
+     * Gets system country.
+     * @return
+     */
     public String getSystemCountry() {
         String out = null;
         if (setUp()) {
@@ -150,6 +174,11 @@ public class SettingsManagement extends Management {
 
     }
 
+    /**
+     * Sets new system country.
+     * @param newValue New system country value.
+     * @return
+     */
     public boolean setSystemCountry(String newValue) {
         int rowChanged = 0;
         if (setUp()) {
