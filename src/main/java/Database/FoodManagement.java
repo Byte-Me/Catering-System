@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 
 /**
@@ -583,7 +584,7 @@ public class FoodManagement extends Management{
             try {
                 conn = getConnection();
                 prep = conn.prepareStatement("SELECT recipe.name, order_recipe.portions, `order`.time, " +
-                        "`order`.order_id, `order`.note, `order`.status FROM recipe, `order`, order_recipe WHERE " +
+                        "`order`.order_id, `order`.note, `order_recipe`.status FROM recipe, `order`, order_recipe WHERE " +
                         "`order`.order_id = order_recipe.order_id AND order_recipe.recipe_id = recipe.recipe_id " +
                         "AND `order`.status = 1 AND `order`.date = CURRENT_DATE ORDER BY `time` DESC;");
                 res = prep.executeQuery();
@@ -594,7 +595,8 @@ public class FoodManagement extends Management{
                     obj[2] = res.getString("portions");
                     obj[3] = res.getString("time");
                     obj[4] = res.getString("note");
-                    obj[5] = OrderRecipeStatus.valueOf(res.getInt("status"));
+                    int status = res.getInt("status");
+                    obj[5] = OrderRecipeStatus.valueOf(status);
                     out.add(obj);
                 }
             }catch (Exception e){

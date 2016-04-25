@@ -18,6 +18,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import static Database.OrderManagement.OrderType;
 import static javax.swing.JOptionPane.*;
@@ -217,7 +218,6 @@ public class Chef {
                         if(FoodManagement.OrderRecipeStatus.PROCESSING == prepareTable.getValueAt(i, 5)){
                             processingCount++;
                         }
-                        System.out.println("OrderCount = "+orderCount+", ProcessingCount: "+processingCount);
                     }
                     if(orderCount-1 == processingCount && prepareTable.getValueAt(count, 5)!= FoodManagement.OrderRecipeStatus.PROCESSING){
                         int input = showConfirmDialog(null,"Do you want set order " +prepareTable.getValueAt(count, 0)+" as ready for delivery?","",YES_NO_OPTION);
@@ -254,6 +254,7 @@ public class Chef {
             row[6] = false;
             prepareModel.addRow(row);
         }
+
     }
 
     /**
