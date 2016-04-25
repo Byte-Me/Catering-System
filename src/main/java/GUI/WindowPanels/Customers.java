@@ -29,14 +29,14 @@ public class Customers {
     private static int emailColumnNr = 1;
 
     /**
-     *
-     * @param addCustomerButton
-     * @param customerTable
-     * @param inactiveCustomerTable
-     * @param searchCustomers
-     * @param deleteCustomerButton
-     * @param editCustomerButton
-     * @param reactivateCustomerButton
+     * Construrctor for the window panel Customers.
+     * @param addCustomerButton         JButton that allows the user to add a new customer.
+     * @param customerTable             JTable that display active customers.
+     * @param inactiveCustomerTable     JTable that display inactive customers.
+     * @param searchCustomers           JTextField that allows the user to search through customers.
+     * @param deleteCustomerButton      JButton that deletes the selected user.
+     * @param editCustomerButton        JButton that allows the user to edit the selected user.
+     * @param reactivateCustomerButton  JButton that reactivates the selected user in the inactive users table.
      */
     public Customers(JButton addCustomerButton, final JTable customerTable, final JTable inactiveCustomerTable, final JTextField searchCustomers, JButton deleteCustomerButton, JButton editCustomerButton, JButton reactivateCustomerButton) {
 
@@ -185,7 +185,7 @@ public class Customers {
     }
 
     /**
-     *
+     * Updates the active customer table from the database.
      */
     public static void updateCustomer() {
 
@@ -197,8 +197,8 @@ public class Customers {
     }
 
     /**
-     *
-     * @param customers
+     * Updates the active customer table from the database.
+     * @param customers List of active customers.
      */
     public static void updateCustomer(ArrayList<Object[]> customers) {
 
@@ -212,7 +212,7 @@ public class Customers {
     }
 
     /**
-     *
+     * Updates the inactive customer table from the database.
      */
     public static void updateInactiveCustomer() {
 
@@ -223,8 +223,8 @@ public class Customers {
     }
 
     /**
-     *
-     * @param inactiveCustomers
+     * Updates the inactive customer table from the database.
+     * @param inactiveCustomers List of inactive customers
      */
     public static void updateInactiveCustomer(ArrayList<Object[]> inactiveCustomers) {
 
