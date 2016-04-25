@@ -176,23 +176,14 @@ public class Driver {
         mapPanel.setLayout(new BorderLayout());
         mapPanel.add(browserView, BorderLayout.CENTER);
 
-        // Load website
-        browser.loadURL(getClass().getResource("/Map/map.html").toExternalForm());
+        browser.loadURL("http://byte-me.github.io/Catering-System/Map/map.html");
 
         // Generate driving route
         generateDrivingRouteButton.addActionListener(e -> {
             updateDriverTable((String)driverDropdown.getItemAt(driverDropdown.getSelectedIndex()));
 
-            JSValue loaded = browser.executeJavaScriptAndReturnValue(getDrivingRoute());
+            browser.executeJavaScript(getDrivingRoute());
 
-            // FIXME: The following executes before the new map is generated.
-            if(!loaded.isUndefined()) {
-                double mapLat = browser.executeJavaScriptAndReturnValue("map.getCenter().lat();").getNumberValue();
-                double mapLng = browser.executeJavaScriptAndReturnValue("map.getCenter().lng();").getNumberValue();
-                int mapZoom = (int) browser.executeJavaScriptAndReturnValue("map.getZoom();").getNumberValue();
-
-                mapCenter = new Number[]{mapLat, mapLng, mapZoom};
-            }
             updateDriverTableSorted((String)driverDropdown.getItemAt(driverDropdown.getSelectedIndex()));
 
         });
