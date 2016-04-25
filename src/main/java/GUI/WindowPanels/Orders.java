@@ -27,12 +27,12 @@ public class Orders {
     private final int idColumnNr = 0;
 
     /**
-     *
-     * @param ordersTable
-     * @param searchOrders
-     * @param addOrderButton
-     * @param editOrderButton
-     * @param deleteOrderButton
+     * Constructor for window panel orders.
+     * @param ordersTable JTable with the different orders from the database.
+     * @param searchOrders JTextField to search orders.
+     * @param addOrderButton JButton that starts the process to add a new order.
+     * @param editOrderButton JButton that starts the process to edit an order.
+     * @param deleteOrderButton JButton that starts the process to delete an order.
      */
     public Orders(JTable ordersTable, final JTextField searchOrders, JButton addOrderButton, JButton editOrderButton, JButton deleteOrderButton) {
 
@@ -199,7 +199,7 @@ public class Orders {
     }
 
     /**
-     *
+     * Updates the order from the database.
      */
     public static void updateOrders() {
 
@@ -211,8 +211,8 @@ public class Orders {
     }
 
     /**
-     *
-     * @param orders
+     * Updates the order from the database.
+     * @param orders List of orders.
      */
     public static void updateOrders(ArrayList<Object[]> orders) {
 

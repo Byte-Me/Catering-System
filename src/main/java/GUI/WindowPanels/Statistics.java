@@ -31,11 +31,11 @@ public class Statistics {
     JDatePickerImpl toDate;
 
     /**
-     *
-     * @param searchStatisticsPanel
-     * @param orderStatisticsPanel
-     * @param statsPanel
-     * @param barChartPanel
+     * Constructor for window panel statistics.
+     * @param searchStatisticsPanel JPanel for the dates in the statistics panel.
+     * @param orderStatisticsPanel JPanel for the Orders in the statistics panel.
+     * @param statsPanel JPanel for the statistics in the statistics panel.
+     * @param barChartPanel JPanel for the bar chart in the statistics panel.
      */
     public Statistics(JPanel searchStatisticsPanel, JPanel orderStatisticsPanel, JPanel statsPanel,  JPanel barChartPanel) {
 
@@ -91,10 +91,9 @@ public class Statistics {
 
     }
 
-    // TODO: This should be rewritten to only update components and not deleting and readding
 
     /**
-     *
+     * Gets statistics needed for the statistics panel.
      */
     public void getStatistics() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
