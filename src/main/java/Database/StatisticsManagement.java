@@ -2,6 +2,8 @@ package Database;
 
 import org.apache.commons.dbutils.DbUtils;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -17,15 +19,21 @@ public class StatisticsManagement extends Management{
     Antall kunder per tid;
     Inntekter per tid
     Antall ordre per tid
-
 */
+
+    Connection conn = null;
+    ResultSet res = null;
+    PreparedStatement prep = null;
+
     public ArrayList<long[]> getFinanceInfo(String firstDate, String lastDate){
-        ResultSet res;
         ArrayList<long[]> out = new ArrayList<>();
         if(setUp()) {
             try {
-                res = getScentence().executeQuery("SELECT income, outcome from `finance` where `date` >= DATE '" + firstDate +
-                        "' AND `date` <= DATE '" + lastDate + "' order by date;");
+                conn = getConnection();
+                prep = conn.prepareStatement("SELECT income, outcome from `finance` where `date` >= ? AND `date` <= ? order by date;");
+                prep.setString(1, firstDate);
+                prep.setString(2, lastDate);
+                res = prep.executeQuery();
 
                 while (res.next()) {
                     long[] dou = new long[2];
@@ -37,19 +45,20 @@ public class StatisticsManagement extends Management{
                 System.err.println("Issue with getting finance from db");
                 return null;
             } finally {
-                closeConnection();
+                finallyStatement(res, prep);
             }
         }
         return out;
     }
     public ArrayList<String> getDates(String firstDate, String lastDate, String name){
-        ResultSet res;
         ArrayList<String> out = new ArrayList<>();
         if(setUp()) {
             try {
-                res = getScentence().executeQuery("SELECT `"+name+"`.date from `"+name+"` where `date` >= DATE '" + firstDate +
-                        "' AND `date` <= DATE '" + lastDate + "' AND status > 0 order by date;");
-
+                conn = getConnection();                         // User can't set name of database
+                prep = conn.prepareStatement("SELECT date FROM `" + name + "` WHERE date >= ? AND date <= ? AND status > 0 ORDER BY date");
+                prep.setString(1, firstDate);
+                prep.setString(2, lastDate);
+                res = prep.executeQuery();
                 while (res.next()) {
                     out.add(res.getString("date"));
                 }
@@ -57,19 +66,20 @@ public class StatisticsManagement extends Management{
                 System.err.println("Issue with getting dates");
                 return null;
             } finally {
-                closeConnection();
+                finallyStatement(res, prep);
             }
         }
         return out;
     }
     public ArrayList<String> getCancelledDates(String firstDate, String lastDate, String name){
-        ResultSet res;
         ArrayList<String> out = new ArrayList<>();
         if(setUp()) {
             try {
-                res = getScentence().executeQuery("SELECT `"+name+"`.date from `"+name+"` where `date` >= DATE '" + firstDate +
-                        "' AND `date` <= DATE '" + lastDate + "' AND status = 0 order by date;");
-
+                conn = getConnection();
+                prep = conn.prepareStatement("SELECT date from `" + name + "` where `date` >= ? AND `date` <= ? AND status = 0 order by date;");
+                prep.setString(1, firstDate);
+                prep.setString(2, lastDate);
+                res = prep.executeQuery();
                 while (res.next()) {
                     out.add(res.getString("date"));
                 }
@@ -77,7 +87,7 @@ public class StatisticsManagement extends Management{
                 System.err.println("Issue with getting dates");
                 return null;
             } finally {
-                closeConnection();
+                finallyStatement(res, prep);
             }
         }
         return out;
@@ -87,7 +97,9 @@ public class StatisticsManagement extends Management{
         ArrayList<String[]> out = new ArrayList<>();
         if(setUp()){
             try{
-                ResultSet res = getScentence().executeQuery("SELECT date_from, date_to FROM subscription;");
+                conn = getConnection();
+                prep = conn.prepareStatement("SELECT date_from, date_to FROM subscription;");
+                res = prep.executeQuery();
                 while(res.next()){
                     out.add(new String[]{res.getString("date_from"), res.getString("date_to")});
                 }
@@ -97,7 +109,7 @@ public class StatisticsManagement extends Management{
                 return null;
             }
             finally {
-                closeConnection();
+                finallyStatement(res, prep);
             }
         }
         return out;

@@ -2,6 +2,8 @@ package Database;
 
 import org.apache.commons.dbutils.DbUtils;
 
+
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -31,13 +33,22 @@ public class DeliveryManagement extends Management{
     private final String sqlConnectDriverToOrder = "UPDATE `order` SET driver_username = ? WHERE order_id = ?";
     private final String sqlCountDriverDeliveries = "SELECT count(*) AS x FROM `order` WHERE driver_username = ? AND status = ?;";
 
+    Connection conn = null;
+    ResultSet res = null;
+    PreparedStatement prep = null;
+
     public ArrayList<Object[]> getDeliveryInfo(ArrayList<String> adresses){
         if(setUp()) {
             ArrayList<Object[]> out = new ArrayList<>();
             try {
+                conn = getConnection();
                 for(String adress : adresses) {
-                    ResultSet res = getScentence().executeQuery("SELECT `order`.order_id, customer.name, customer.phone, customer.adress FROM `order`, customer WHERE " +
-                            "(`order`.status = 2 OR `order`.status = 3) AND `order`.customer_id = customer.customer_id AND customer.adress = '"+adress+"';");
+
+                    prep = conn.prepareStatement("SELECT `order`.order_id, customer.name, customer.phone, customer.adress FROM `order`, customer WHERE " +
+                            "`order`.status = 3 AND `order`.customer_id = customer.customer_id AND customer.adress = ?;");
+                    prep.setString(1, adress);
+                    res = prep.executeQuery();
+
                     while (res.next()) {
                         Object[] obj = new Object[5];
                         obj[0] = res.getString("order_id");
@@ -47,15 +58,12 @@ public class DeliveryManagement extends Management{
                         out.add(obj);
                     }
                 }
-
             } catch (Exception e) {
                 System.err.println("Issue with getting customer information.");
                 e.printStackTrace();
                 return null;
             } finally {
-                DbUtils.closeQuietly(getScentence());
-                DbUtils.closeQuietly(getConnection());
-
+                finallyStatement(res, prep);
             }
             return out;
         }
@@ -64,34 +72,30 @@ public class DeliveryManagement extends Management{
 
 
     public ArrayList<Object[]> getDeliveryReady(){
-        ResultSet res;
         if(setUp()) {
             ArrayList<Object[]> out = new ArrayList<>();
-
             try {
-                res = getScentence().executeQuery("SELECT customer.phone, customer.adress FROM `order`, customer WHERE " +
+                conn = getConnection();
+                prep = conn.prepareStatement("SELECT customer.phone, customer.adress FROM `order`, customer WHERE " +
                         "`order`.status = 3 AND `order`.customer_id = customer.customer_id;");
+                res = prep.executeQuery();
                 while (res.next()) {
                     Object[] obj = new Object[2];
                     obj[0] = res.getString("adress");
                     obj[1] = res.getString("phone");
                     out.add(obj);
                 }
-
             } catch (Exception e) {
                 System.err.println("Issue with getting today's orders.");
                 return null;
             } finally {
-                DbUtils.closeQuietly(getScentence());
-                DbUtils.closeQuietly(getConnection());
-
+                finallyStatement(res, prep);
             }
             return out;
         }
         else return null;
     }
     public ArrayList<Object[]> getOrdersForDriver(String username){
-        ResultSet res;
         ArrayList<Object[]> out = new ArrayList<>();
         if(setUp()) {
             try {
@@ -126,8 +130,7 @@ public class DeliveryManagement extends Management{
                 System.err.println("Issue with getting drivers orders.");
                 return null;
             } finally {
-                DbUtils.closeQuietly(getScentence());
-                DbUtils.closeQuietly(getConnection());
+                finallyStatement(res, prep);
 
             }
             return out;
@@ -136,25 +139,22 @@ public class DeliveryManagement extends Management{
     }
 
     public ArrayList<String> getAdressReady(){
-        ResultSet res;
         if(setUp()) {
             ArrayList<String> out = new ArrayList<>();
-
             try {
-                res = getScentence().executeQuery("SELECT customer.adress FROM `order`, customer WHERE "+
+                conn = getConnection();
+                prep = conn.prepareStatement("SELECT customer.adress FROM `order`, customer WHERE "+
                         "`order`.status = 3 AND `order`.customer_id = customer.customer_id;");
+                res = prep.executeQuery();
+
                 while (res.next()) {
                     out.add(res.getString("adress"));
                 }
-
-
             } catch (Exception e) {
                 System.err.println("Issue with getting today's orders.");
                 return null;
             } finally {
-                DbUtils.closeQuietly(getScentence());
-                DbUtils.closeQuietly(getConnection());
-
+                finallyStatement(res, prep);
             }
             return out;
         }
@@ -173,8 +173,7 @@ public class DeliveryManagement extends Management{
                 System.err.println("Issue with updating order.");
                 return false;
             } finally {
-                DbUtils.closeQuietly(getScentence());
-                DbUtils.closeQuietly(getConnection());
+                finallyStatement(null, prep);
 
             }
         }
@@ -196,8 +195,7 @@ public class DeliveryManagement extends Management{
                 System.err.println("Issue with updating order.");
                 return -1;
             } finally {
-                DbUtils.closeQuietly(getScentence());
-                DbUtils.closeQuietly(getConnection());
+                finallyStatement(res, prep);
 
             }
         }

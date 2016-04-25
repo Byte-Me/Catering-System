@@ -39,33 +39,6 @@ public class SettingsManagement extends Management {
     PreparedStatement prep = null;
     ResultSet res = null;
 
-    public void rollbackStatement() {
-        try {
-            if (!conn.getAutoCommit()) {
-                conn.rollback();
-                conn.setAutoCommit(true);
-            }
-        } catch (SQLException ee) {
-            System.err.println("Rollback Statement failed");
-        }
-    }
-
-    public void finallyStatement() {
-        try {
-            if (!conn.getAutoCommit()) {
-                conn.commit();
-                conn.setAutoCommit(true);
-            }
-            if (res != null && !res.isClosed()) res.close();
-            if (res != null && !prep.isClosed()) prep.close();
-        } catch (SQLException sqle) {
-            System.err.println("Finally Statement failed");
-            sqle.printStackTrace();
-        }
-        closeConnection();
-    }
-
-
     public String getSystemAddress() {
         String out = null;
         if (setUp()) {
@@ -81,7 +54,7 @@ public class SettingsManagement extends Management {
                 System.err.println("ERROR 101: Issue with getting system address.");
                 return null;
             } finally {
-                finallyStatement();
+                finallyStatement(res, prep);
             }
         }
         return out;
@@ -101,7 +74,7 @@ public class SettingsManagement extends Management {
                 System.err.println("ERROR 102: Issue with updating system address.");
                 return false;
             } finally {
-                finallyStatement();
+                finallyStatement(res, prep);
 
             }
         }
@@ -125,7 +98,7 @@ public class SettingsManagement extends Management {
                 System.err.println("ERROR 103: Issue with getting system city.");
                 return null;
             } finally {
-                finallyStatement();
+                finallyStatement(res, prep);
             }
         }
         return out;
@@ -145,7 +118,7 @@ public class SettingsManagement extends Management {
                 System.err.println("ERROR 104: Issue with updating system city.");
                 return false;
             } finally {
-                finallyStatement();
+                finallyStatement(res, prep);
 
             }
         }
@@ -170,7 +143,7 @@ public class SettingsManagement extends Management {
                 System.err.println("ERROR 105: Issue with getting system country.");
                 return null;
             } finally {
-                finallyStatement();
+                finallyStatement(res, prep);
             }
         }
         return out;
@@ -190,7 +163,7 @@ public class SettingsManagement extends Management {
                 System.err.println("ERROR 106: Issue with updating system country.");
                 return false;
             } finally {
-                finallyStatement();
+                finallyStatement(res, prep);
 
             }
         }

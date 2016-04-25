@@ -140,5 +140,4 @@ public class SubscriptionStatistics extends Statistics{
         }
         return null;
     }
-
 }
