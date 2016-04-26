@@ -7,7 +7,6 @@ import Database.UserManagement;
 import Util.Delivery.CreateDeliveryRoute;
 import Util.HelperClasses.ToggleSelectionModel;
 import com.teamdev.jxbrowser.chromium.Browser;
-import com.teamdev.jxbrowser.chromium.JSValue;
 import com.teamdev.jxbrowser.chromium.LoggerProvider;
 import com.teamdev.jxbrowser.chromium.swing.BrowserView;
 
@@ -37,16 +36,15 @@ public class Driver {
     private static DeliveryManagement deliveryManagement = new DeliveryManagement();
 
     Browser browser;
-    private static Number[] mapCenter;
 
     public static JComboBox driverDropdown;
 
-    private static final String[] readyHeader = {"ID", "Name", "Phone", "Address","Update"}; // Header titles
+    private static final String[] readyHeader = {"ID", "Name", "Phone", "Address", "Drive Order"}; // Header titles
     private static final String readyString = "Ready For Delivery";
     private static final int adressColumn = 3;
 
-    private final String limitReachedErrorMessage = "Your limit for amount of deliveries per trip is reached. Update orders to delivered " +
-            "to register more orders.";
+    private final String limitReachedErrorMessage = "Your limit for amount of deliveries per trip is reached. " +
+            "Update orders to delivered to register more orders.";
 
     private String username;
 
@@ -87,7 +85,7 @@ public class Driver {
 
         this.driverDropdown = driverDropdown;
         updateDropdown();
-        updateDriverTable("Ready For Delivery");
+        updateDriverTable(readyString);
 
         //updating orderstatus
         driverModel.addTableModelListener(e ->{
@@ -133,11 +131,8 @@ public class Driver {
         driverTable.getSelectionModel().addListSelectionListener(e -> {
             if (!e.getValueIsAdjusting()) { // Ensures value changed only fires once on change completed
                 if (driverTable.getSelectionModel().isSelectionEmpty()) {
-                    // FIXME
-                    /*
-                    browser.executeJavaScript("map.panTo(new google.maps.LatLng(" + mapCenter[0] + "," + mapCenter[1] + "));" +
-                            "map.setZoom(" + mapCenter[2] + ");");
-                    */
+                    // zoom out to full map
+                    browser.executeJavaScript(getDrivingRoute());
                 } else {
                     double[] geoLocation = geoCoder((String) driverTable.getValueAt(driverTable.getSelectedRow(), 3), 0); // Get the value (ie. address) of the selected row and geocode it
 
@@ -149,8 +144,11 @@ public class Driver {
         });
         driverDropdown.addActionListener(e ->{
             //oppdaterer table om driver endres
+            driverTable.clearSelection();
+            driverTable.getColumnModel().getColumn(4).setHeaderValue( driverDropdown.getSelectedIndex() == 0 ? "Drive Order" : "Delivered");
             String username = (String)driverDropdown.getItemAt(driverDropdown.getSelectedIndex());
             updateDriverTable(username);
+            driverTable.updateUI();
         });
 
     }
@@ -231,7 +229,7 @@ public class Driver {
     private void updateDropdown(){
         driverDropdown.removeAllItems();
         ArrayList<Object[]> drivers = userManagement.getDrivers();
-        driverDropdown.addItem("Ready For Delivery");
+        driverDropdown.addItem(readyString);
         for (Object[] driver : drivers) {
             driverDropdown.addItem(driver[0]);
         }
