@@ -202,7 +202,7 @@ public class TravelingSalesman {
      * @param inPositions List of positions.
      * @param originAdressList List of original address list.
      * @return List of shortened addresses.
-     */
+     *//*
     public ArrayList<String> positionsToAdressesShortened(ArrayList<double[]> inPositions,
                                                  ArrayList<String> originAdressList) {
         ArrayList<String> fix = new ArrayList<>();
@@ -213,27 +213,27 @@ public class TravelingSalesman {
         }
         return positionsToAdresses(inPositions,fix);
     }
-
+*/
     /**
      * Changes the positions to addresses.
      * @param inPositions List of positions.
-     * @param originAdressList List of addresses.
+     * @param orderIds List of orderIds in original sequenceq.
      * @return List of adresses.
      */
-    public ArrayList<String> positionsToAdresses(ArrayList<double[]> inPositions,
-                                                 ArrayList<String> originAdressList) {
+    public ArrayList<Integer> positionsToAdresses(ArrayList<double[]> inPositions,ArrayList<Integer> orderIds) {
 
-        ArrayList<String> out = new ArrayList<>();
+        ArrayList<Integer> out = new ArrayList<>();
         ArrayList<double[]> positions = (ArrayList<double[]>) inPositions.clone();
         positions.remove(0);
         positions.remove(positions.size() - 1);
         positions.trimToSize();
     //    out.add(startPoint);
         for (double[] pos : positions) {
-            out.add(originAdressList.get((int) pos[2])); //TODO: STARTPOINT, IS IT NEEDED?
+            out.add(orderIds.get((int) pos[2]));
         }
  //       out.add(startPoint);
         return out;
+
 
     }
 
