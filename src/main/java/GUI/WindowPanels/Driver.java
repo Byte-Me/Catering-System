@@ -255,7 +255,17 @@ public class Driver {
      * @param username Current driver assigned to the task.
      */
     public static void updateDriverTableSorted(String username){
-        ArrayList<Object[]> sortedOrders = CreateDeliveryRoute.orderListForTable(cateringAdress,getAddresses());
+        //gets orders assigned to the current driver.
+        ArrayList<Object[]> orders = deliveryManagement.getOrdersForDriver(username);
+        //creates arraylist of adresses and orderIds
+        ArrayList<String> addresses = new ArrayList<>();
+        ArrayList<Integer> orderIds = new ArrayList<>();
+        for(Object[] order : orders){
+            addresses.add((String)order[3]); //adress, orderid
+            orderIds.add((Integer)order[0]); //adress, orderid
+
+        }
+        ArrayList<Object[]> sortedOrders = CreateDeliveryRoute.orderListForTable(cateringAdress,addresses,orderIds);
         driverModel.setRowCount(0);
         for(Object[] order : sortedOrders){
             order[order.length-1] = false;

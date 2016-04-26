@@ -39,21 +39,20 @@ public class DeliveryManagement extends Management{
 
     /**
      * Gets information of the delivery
-     * @param adresses Arraylist of every adress
+     * @param orderIds Arraylist of every orderId
      * @return In a specific order and what adress that needs to be deliverd to
      */
 
-    public ArrayList<Object[]> getDeliveryInfo(ArrayList<String> adresses){
+    public ArrayList<Object[]> getDeliveryInfo(ArrayList<Integer> orderIds){
         if(setUp()) {
             ArrayList<Object[]> out = new ArrayList<>();
             try {
                 conn = getConnection();
-                for(String adress : adresses) {
+                for(Integer id : orderIds) {
 
                     prep = conn.prepareStatement("SELECT `order`.order_id, customer.name, customer.phone, customer.adress FROM `order`, customer WHERE " +
-                            "`order`.status = 2 AND `order`.customer_id = customer.customer_id AND customer.adress = ?;");
-                    prep.setString(1, adress);
-                    System.out.println(prep.toString());
+                            "`order`.customer_id = customer.customer_id AND `order`.order_id = ?;");
+                    prep.setInt(1, id);
                     res = prep.executeQuery();
 
                     while (res.next()) {

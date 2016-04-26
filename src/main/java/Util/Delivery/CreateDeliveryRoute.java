@@ -16,24 +16,7 @@ public class CreateDeliveryRoute {
      * @param adressNames Address names.
      * @return
      */
-    public static ArrayList<Object[]> UseReadyOrders(String startAdress, ArrayList<String> adressNames){
-        ArrayList<Object[]> out;
-        DeliveryManagement dev = new DeliveryManagement();
-        try {
-            TravelingSalesman tsp = new TravelingSalesman(startAdress);
-            DeliveryManagement dm = new DeliveryManagement();
-            ArrayList<double[]> positions = tsp.createPositionsArrayShortened(adressNames);
-            tsp.bruteForceFindBestRoute(new ArrayList<>(), positions);
-            ArrayList<String> tmp = tsp.positionsToAdressesShortened(tsp.getBestRoute(), adressNames);
-            out = dev.getDeliveryInfo(tmp);
-        }
-        catch (Exception e){
-            System.err.println("Issue with creating delivery route.");
-            return null;
-        }
-
-        return out;
-    }
+/*
     public static ArrayList<String> deliveryListForTest(String startAdress, ArrayList<String> adressNames) {
         ArrayList<String> out = null;
         try {
@@ -47,7 +30,7 @@ public class CreateDeliveryRoute {
 
         }
         return out;
-    }
+    }*/
 
 
     /**
@@ -56,17 +39,16 @@ public class CreateDeliveryRoute {
      * @param adressNames Address names.
      * @return
      */
-    public static ArrayList<Object[]> orderListForTable(String startAdress, ArrayList<String> adressNames){
+    public static ArrayList<Object[]> orderListForTable(String startAdress, ArrayList<String> adressNames, ArrayList<Integer> orderIds){
         ArrayList<Object[]> out;
         DeliveryManagement dev = new DeliveryManagement();
         try {
             TravelingSalesman tsp = new TravelingSalesman(startAdress);
-            ArrayList<double[]> positions = tsp.createPositionsArrayShortened(adressNames);
+            ArrayList<double[]> positions = tsp.createPositionsArray(adressNames);
             tsp.bruteForceFindBestRoute(new ArrayList<>(), positions);
-            ArrayList<String> tmp = tsp.positionsToAdresses(tsp.getBestRoute(), adressNames);
+            ArrayList<Integer> tmp = tsp.positionsToAdresses(tsp.getBestRoute(), orderIds);
             ArrayList<double[]> br = tsp.getBestRoute();
             out = dev.getDeliveryInfo(tmp);
-            System.out.println(out);
 
         }
         catch (Exception e){
